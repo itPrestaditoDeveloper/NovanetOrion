@@ -1,0 +1,268 @@
+﻿@{
+	ViewBag.Title = "VendedorExterno";
+}
+
+<h2>Vendedor Externo</h2>
+
+<div class="panel">
+	<div class="panel-hdr">
+		<h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Bandeja de mis Comisiones</h2>
+	</div>
+	<div class="col-lg-12">
+		<div class="row" style="padding-bottom:10px;">
+			<div class="col-lg-12 col-md-8 col-sm-12 col-12">
+				<div class="row">
+					<div class="col-lg-3 col-md-3 col-sm-12 col-12">
+						<label class="col-form-label">Búsqueda por Oficial</label>
+						<select id="ddlOficial" class="form-control form-control-sm">
+							<option value="">Seleccionar</option>
+						</select>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-12">
+						<label class="col-form-label">Búsqueda por Depto</label>
+						<select id="ddlDepto" class="form-control form-control-sm">
+							<option value="">Seleccionar</option>
+						</select>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-12">
+						<label class="col-form-label">Fecha Inicio</label>
+						<input type="date" id="fechaInicio" class="form-control form-control-sm" />
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-12 col-12">
+						<label class="col-form-label">Fecha Fin</label>
+						<input type="date" id="fechaFin" class="form-control form-control-sm" />
+					</div>
+					<div class="col-lg-12 d-flex justify-content-end mt-2">
+						<button id="btnFiltrar" class="btn btn-primary btn-sm">Filtrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+			<div class="col-lg-12">
+				<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaComisionesVendedor">
+					<thead>
+						<tr>
+							<th>Solicitud</th>
+							<th>Tipo Solicitud</th>
+							<th>Cliente</th>
+							<th>Fecha Ingreso</th>
+							<th>Cuota $</th>
+							<th>Cuota en Lps</th>
+							<th>Nombre del Paquete</th>
+							<th>Oficial</th>
+							<th>Depto</th>
+							<th>Fecha Instalacion</th>
+							<th>Comision</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+					<tfoot>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>Total:</td>
+							<td id="TotalComisionesD"></td>
+							<td id="TotalComisionesL"></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script> <!-- Ensure moment.js is included -->
+
+	<script>
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        function GenerarListaPartidasFiltradas() {
+            tablaPrincipal.ajax.reload(null, false);
+        }
+
+        var tablaPrincipal = $('#BandejaComisionesVendedor').DataTable({
+            autoWidth: true,
+            responsive: true,
+            "aoColumnDefs": [
+                { "bSortable": false, "aTargets": [0, 1, 2, 3] },
+                { "bSearchable": false, "aTargets": [0, 1, 2, 3] }
+            ],
+            "ordering": false,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            pageLength: -1,
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarEstadoCuentaVendedor", "PrecalificaCliente")',
+                method: "Get",
+                dataSrc: function (data) {
+                    var opt = '';
+                    var optDepto = '';
+                    var oficiales = new Set();
+                    var departamentos = new Set();
+
+                    data.forEach(item => {
+                        if (item.NombreOficial) oficiales.add(item.NombreOficial);
+                        if (item.DepartamentoVenta) departamentos.add(item.DepartamentoVenta);
+                    });
+
+                    oficiales.forEach(item => opt += `<option value="${item}">${item}</option>`);
+                    departamentos.forEach(item => optDepto += `<option value="${item}">${item}</option>`);
+
+                    $('#ddlOficial').append(opt);
+                    $('#ddlDepto').append(optDepto);
+                    return data;
+                }
+            },
+            columns: [
+                { data: 'fiIDSolicitud' },
+                { data: 'fcOperacionTipoSolicitud' },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcIdentidad + ' | ' + data.fcNombre;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacionSolicitud).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDMoneda == 2) {
+                            return data.fnCuotaMensual;
+                        } else {
+                            return '';
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fnCuotaMensualMonedaNacional;
+                    }
+                },
+                { data: 'fcPaquete' },
+                { data: 'NombreOficial' },
+                { data: 'DepartamentoVenta' },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    className: 'text-right',
+                    render: function (data) {
+                        return ConvertirADecimal(data.fnComision);
+                    }
+                },
+                { data: 'fiIDMoneda', visible: false }
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    messageTop: "Mis Comisiones",
+                    filename: "Mis Comisiones",
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    titleAttr: 'Generate CSV',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copy',
+                    titleAttr: 'Copy to clipboard',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    titleAttr: 'Print Table',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ],
+            initComplete: function () {
+                updateTotals();
+            },
+            drawCallback: function () {
+                updateTotals();
+            }
+        });
+
+        function updateTotals() {
+            var tabla = $.fn.dataTable.Api('#BandejaComisionesVendedor');
+            var dataDolares = tabla.rows({ search: 'applied' }).data().toArray()
+                .filter(x => x.fiIDMoneda == 2)
+                .map(x => x.fnCuotaMensual || 0);
+            var dataLempiras = tabla.rows({ search: 'applied' }).data().toArray()
+                .map(x => x.fnCuotaMensualMonedaNacional || 0);
+
+            // Handle empty arrays to avoid reduce on empty array error
+            $('#TotalComisionesD').text((dataDolares.reduce((x, y) => x + y, 0) || 0).toFixed(2) + " $");
+            $('#TotalComisionesL').text((dataLempiras.reduce((x, y) => x + y, 0) || 0).toFixed(2) + " L");
+        }
+
+        function ConvertirADecimal(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        $('#ddlOficial').on('change', function () {
+            tablaPrincipal.columns(7).search(this.value).draw();
+        });
+
+        $('#ddlDepto').on('change', function () {
+            var value = $(this).val().trim();
+            tablaPrincipal.columns(8).search(value ? '^' + value + '$' : '', true, false).draw();
+        });
+
+        $('#btnFiltrar').on('click', function () {
+            var fechaInicio = $('#fechaInicio').val();
+            var fechaFin = $('#fechaFin').val();
+
+            tablaPrincipal.ajax.url('@Url.Action("CargarEstadoCuentaVendedor", "PrecalificaCliente")' +
+                `?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`).load();
+        });
+	</script>
+}

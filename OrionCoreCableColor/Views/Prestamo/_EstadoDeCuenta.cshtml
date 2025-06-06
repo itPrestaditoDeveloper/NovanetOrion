@@ -1,0 +1,89 @@
+﻿@model List<OrionCoreCableColor.Models.Prestamo.CustomerStatementDetailViewModel>
+
+<style>
+	.bord-success {
+		border: 2px solid green;
+	}
+
+	.bord-primary {
+		border: 1px solid lightgrey;
+	}
+</style>
+
+<br />
+<div class="pad-top">
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover" style="width:100%;" id="TablaDetalleEstadoCuenta">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Documentos</th>
+					<th>Operador</th>
+					<th>Fecha</th>
+					<th>Referencia</th>
+					<th>Otros Cargos</th>
+					<th>Seguro 1</th>
+					<th>Seguro 2</th>
+					<th>Servicios</th>
+					<th>Interés Ord</th>
+					<th>Intereses mora</th>
+					<th>Capital</th>
+					<th>Total</th>
+					<th>Balance</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					decimal totOtrosCargos = 0m;
+					decimal totSegurouno = 0m;
+					decimal totSegurodos = 0m;
+					decimal totServicio = 0m;
+					decimal totInteresOrdinario = 0m;
+					decimal totInteresMora = 0m;
+					decimal totCapital = 0m;
+				}
+				@foreach (var item in Model)
+				{
+					totOtrosCargos += item.fnOtrosCargos;
+					totSegurouno += item.fnSegurosDeuda;
+					totSegurodos += item.fnSegurosDanos;
+					totServicio += item.fnServicio1;
+					totInteresOrdinario += item.fnInteresOrdinario;
+					totInteresMora += item.fnInteresMoratorio;
+					totCapital += item.fnCapital;
+
+					<tr @(item.fnTotal < 0 ? "class=success" : "")>
+						<td>@item.ItemNumber</td>
+						<td>@item.fcDocumento</td>
+						<td>@item.fcOperador</td>
+						<td>@(item.fdFechaTran == DateTime.MinValue ? "" : item.fdFechaTran.ToString("yyyy/MM/dd"))</td>
+						<td>@item.fcReferencia</td>
+						<td class="text-right">@item.fnOtrosCargos</td>
+						<td class="text-right">@item.fnSegurosDeuda</td>
+						<td class="text-right">@item.fnSegurosDanos</td>
+						<td class="text-right">@item.fnServicio1</td>
+						<td class="text-right">@item.fnInteresOrdinario</td>
+						<td class="text-right">@item.fnInteresMoratorio</td>
+						<td class="text-right">@item.fnCapital</td>
+						<td class="text-right">@item.fnTotal</td>
+						<td class="text-right"><b>@item.SaldoDelPeriodo</b></td>
+					</tr>
+				}
+			</tbody>
+			<tfoot>
+				<tr class="info">
+					<th colspan="5">SALDOS</th>
+					<th class="text-right">@totOtrosCargos.ToString("N2")</th>
+					<th class="text-right">@totSegurouno.ToString("N2")</th>
+					<th class="text-right">@totSegurodos.ToString("N2")</th>
+					<th class="text-right">@totServicio.ToString("N2")</th>
+					<th class="text-right">@totInteresOrdinario.ToString("N2")</th>
+					<th class="text-right">@totInteresMora.ToString("N2")</th>
+					<th class="text-right">@totCapital.ToString("N2")</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

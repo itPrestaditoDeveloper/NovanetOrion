@@ -1,0 +1,937 @@
+﻿
+@{
+	ViewBag.Title = "Orden de Trabajo";
+}
+
+<h2>Ordenes de Trabajo</h2>
+<div class="panel">
+	<br />
+	<div class="panel-content">
+
+		<ul class="nav nav-pills" role="tablist">
+			<li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#nav_pills_default-1">En proceso <span><i class="fal fa-cogs"></i></span></a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-2">Pendientes <span><i class="fal fa-alarm-clock"></i></span></a></li>
+			<li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-3">Cancelados <span><i class="fal fa-ban"></i></span></a></li>
+
+		</ul>
+		<div class="tab-content py-3">
+			<div class="tab-pane fade active show" id="nav_pills_default-1" role="tabpanel">
+				<div class="col-lg-12">
+					<h5>Ordenes en proceso</h5>
+					<div class="row">
+						<div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+							<label class="col-form-label">Búsqueda por Tecnico</label>
+							<select id="ddltecnicos" class="form-control form-control-sm">
+								<option value="">Seleccionar</option>
+							</select>
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+							<label class="col-form-label">Búsqueda por Fecha</label>
+							<input class="form-control" id="ddlfechaorden" type="date" name="date" value="">
+						</div>
+					</div>
+
+					<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaOrdenesenProceso">
+						<thead>
+							<tr>
+								<th>Accciones</th>
+								<th>Solicitud</th>
+								<th>Número de Orden</th>
+								<th>Codigo Cliente</th>
+								<th>Cliente</th>
+								<th>Departamento</th>
+								<th>Articulos</th>
+								<th>Agencia</th>
+								<th>Tecnico</th>
+								<th>Tipo de Instalación</th>
+								<th>Fecha Orden de Trabajo</th>
+								<th>Comentario</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="nav_pills_default-2" role="tabpanel">
+				<div class="col-lg-12">
+					<h5>Ordenes pendientes</h5>
+					<div class="row">
+						<div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+							<label class="col-form-label">Búsqueda por Tecnico</label>
+							<select id="ddltecnicos2" class="form-control form-control-sm">
+								<option value="">Seleccionar</option>
+							</select>
+
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+							<label class="col-form-label">Búsqueda por Fecha</label>
+							<input class="form-control" id="ddlfechaorden2" type="date" name="date" value="">
+						</div>
+					</div>
+
+					<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudesPendientes">
+						<thead>
+							<tr>
+								<th>Accciones</th>
+								<th>Solicitud</th>
+								<th>Número de Orden</th>
+								<th>Codigo Cliente</th>
+								<th>Cliente</th>
+								<th>Departamento</th>
+								<th>Articulos</th>
+								<th>Agencia</th>
+								<th>Tecnico</th>
+								<th>Tipo de Instalación</th>
+								<th>Fecha Orden de Trabajo</th>
+								<th>Comentario</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="tab-pane fade" id="nav_pills_default-3" role="tabpanel">
+				<div class="col-lg-12">
+					<h5>Ordenes Canceladas</h5>
+					<div class="row" style="padding-bottom:10px;">
+						<div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+							<label class="col-form-label">Búsqueda por Tecnico</label>
+							<select id="ddltecnicos2" class="form-control form-control-sm">
+								<option value="">Seleccionar</option>
+							</select>
+						</div>
+					</div>
+					<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudesCanceladas">
+						<thead>
+							<tr>
+								<th>Acciones</th>
+								<th></th>
+								<th>Solicitud</th>
+								<th>Número de Orden</th>
+								<th>Codigo Cliente</th>
+								<th>Cliente</th>
+								<th>Departamento</th>
+								<th>Articulos</th>
+								<th>Agencia</th>
+								<th>Tecnico</th>
+								<th>Tipo de Instalación</th>
+								<th>Fecha instalación</th>
+								<th>Comentario</th>
+								<th>Estado</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+
+@section Scripts{
+
+
+	<script>
+
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+
+
+        function ModalVerDetalleSolicitud(idsolicitudinstalacion) {
+             $.ajax({
+                url: "@Url.Action("ModalDetalleInstalacion", "Contratista")",
+                method: "get",
+                 data: { idSolicitudInstalacion: idsolicitudinstalacion},
+                success: function (resp) {
+                    ShowModalBigScroll(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        function ModalCambioEstado(idsol) {
+            $.ajax({
+                url: "@Url.Action("ViewEditarDatosEstadoInstalacion", "Contratista")",
+                type: "POST",
+                data: { piIDContratistaSolicitud: idsol},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        }
+
+
+        //tabla en proceso
+        var tablaPrincipal = $('#BandejaOrdenesenProceso').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("ListaSolicitudesOrdenTrabajo", "Tenico")',
+                method: "Get",
+                dataSrc: function (data) {
+                    //console.log(data);
+                    var opt = ''
+                    var unico = new Set();
+                    for (const item of data) {
+                        unico.add(item.fcNombreTecnico);
+                    }
+                    for (const item of unico) {
+                        if (item == null) {
+
+                        } else {
+                            opt += `<option value="${item}">${item}</option>`
+                        }
+                    }
+
+                    $(`#ddltecnicos`).append(opt);
+
+                    return data;
+                }
+            },
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data) {
+                        //console.log(data);
+                        let cliente = "'" + data.fcNombreCliente + "'";
+                        let ubicacion = "'" + data.fcubicacion + "'";
+
+                        var opt = ``;
+                        opt += `<div class='dropdown d-inline-block dropleft'>
+                                <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='Mas Opciones'><i class=\"fal fa-ellipsis-v\"></i></a>
+                                <div class='dropdown-menu'>
+                                <a onclick = "ModalVerDetalleSolicitud(${data.fiIDSolicitudInstalacion})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Detalle</a>`
+
+						opt += `<a onclick = "ModalCrearNotas(${data.fiIDSolicitudInstalacion})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Gestion de Notas</a>`
+
+                        opt += data.fcDescripcion == 'Pendiente' ? `<a href="javascript:void(0)" onclick="ModalConfirmacion('${data.fiIDSolicitudInstalacion}','${data.fiIDContratista}','${cliente}','${ubicacion}','${ubicacion}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i> Asignar Tecnico </a>` : ``;
+                        opt +=  `<a href="javascript:void(0)" onclick="ModalCambioEstado('${data.fiIDSolicitudInstalacion}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i> Cambiar Estado </a>`;
+
+
+                        if (data.fcDescripcion == `Asignado`) {
+                            opt += `<a href="javascript:void(0)" onclick="CambiarContratista('${data.fiIDSolicitudInstalacion}')" class="dropdown-item" ><i class="fal fa-plus fa-fw"></i> Cambiar Contratista</a>`;
+                        }
+
+                        //var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        //opciones += '<div class="dropdown-menu">';
+
+                        //opciones += data.fcDescripcion == 'Pendiente' ? '<a href="javascript:void(0)" onclick="ModalConfirmacion(' + data.fiIDSolicitudInstalacion + ',' + data.fiIDContratista + ',' + cliente + ',' + ubicacion + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Tecnico</a>' : '';
+
+
+                        if (data.fcDescripcion == 'Validacion') {
+
+                        } else if (data.fcDescripcion == 'Revicion') {
+                            opt += `<a href="@(Url.Action("ViewDetalleInstalacionVista", "Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}&idSolicitud=${data.fiIDSolicitud}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Visualizar Instalación</a>`;
+                        }
+                        opt += `<a href="@(Url.Action("ViewOrdenDeTrabajo","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}&idOperacion=${1}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver documentos</a>`;
+
+                        opt += '</div></div>';
+                        return opt;
+                    }
+                },
+
+                {
+                    data: 'fiIDSolicitud'
+                },
+				// {
+				//     data: 'fiNoOrden'
+				// },
+                  {
+                    data: null,
+                    render: function (data) {
+                        return '00'+data.fiNoOrden;
+                    }
+
+                },
+                //{
+                //    data: 'fcNumeroOrdenCfeus'
+                //},
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcCodigoCliente;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreCliente + "<br>" + data.fcTelefonoCliente;
+                    }
+
+                },
+                {
+                    data: "fcDepartamento"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcArticulosdelContrato;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreEmpresa;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreTecnicoAsignado;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        if (data.fiIDTipoSolicitud == 1) {
+                            return `<span class="btn-sm btn-block badge badge-success text-white">INSFIBRA</span>`;
+
+                        }
+                        else if (data.fiIDTipoSolicitud == 2) {
+                            return `<span class="btn-sm btn-block badge badge-primary text-white">SOPFIBRA</span>`;
+
+                        }
+						else if (data.fiIDTipoSolicitud == 3) {
+							return `<span class="btn-sm btn-block badge badge-primary text-white">CAMBIO DE SERVICIO</span>`;
+
+						}
+                        else {
+                            return `<span class="btn-sm btn-block badge badge-secondary text-white">N/D</span>`;
+
+                        }
+
+
+
+
+                        //else if (data.fiIDEstado == 2) {
+                        //    return '<div class="badge badge-success">Aprobado</div>';
+                        //}
+                    },
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaInstalacion).format("DD/MM/YYYY hh:mm A");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcComentario;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        if (data.fcDescripcion == "Instalado") {
+                            return `<div class="badge badge-${data.fcClase} text-white">Revicion</div>`;
+                        } else {
+                            return `<div class="badge badge-${data.fcClase} text-white">${data.fcDescripcion}</div>`;
+                        }
+                    }
+                }
+            ]
+
+        });
+
+
+        //tabla pendientes
+        var tablaPrincipal2 = $('#BandejaSolicitudesPendientes').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("ListaOrdenesdeTrabajoPendiente")',
+                method: "Get",
+                dataSrc: function (data) {
+                    console.log(data);
+                    var opt = ''
+                    var unico = new Set();
+                    for (const item of data) {
+                        unico.add(item.fcNombreTecnico);
+                    }
+                    for (const item of unico) {
+                        if (item == null) {
+
+                        } else {
+                            opt += `<option value="${item}">${item}</option>`
+                        }
+                    }
+                    $(`#ddltecnicos2`).append(opt);
+
+
+                    return data;
+                }
+            },
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data) {
+                        let cliente = "'" + data.fcNombreCliente + "'";
+                        let ubicacion = "'" + data.fcubicacion + "'";
+
+                        @*var opt = `<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>
+                                    <div class="dropdown-menu">
+                                        <a onclick = "ModalVerDetalleSolicitud(${data.fiIDSolicitudInstalacion})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Detalle</a>`;
+
+                        opt += data.fcDescripcion == 'Pendiente' && data.fiIdEmpresa == 0 ? `<a href="javascript:void(0)" onclick="ModalConfirmacionAsignacionContratista('${data.fiIDSolicitudInstalacion}','${cliente}','${data.fiIDSolicitud}'class="dropdown-item")"> <i class="fal fa-plus fa-fw"></i> Asignar Contratista</a>` : "";
+
+                        opt += data.fiIdEmpresa != 0 ? '<a href="javascript:void(0)" onclick="ModalConfirmacion(' + data.fiIDSolicitudInstalacion + ',' + data.fiIDContratista + ',' + cliente + ',' + ubicacion + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Tecnico</a>' : '';
+                        opt += 10 != 11 ? `<a href="@(Url.Action("ViewDetalleInstalacion","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Instalación</a>` : '';
+                        opt += 10 != 11 ? `<a href="@(Url.Action("ViewBitacora","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Bitacoras</a>` : '';
+                        opt += `</div></div>`;*@
+
+
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+
+                        if (data.fiIDContratista != 0) {
+
+                            opciones += `<a href="javascript:void(0)" onclick="CambiarContratista('${data.fiIDSolicitudInstalacion}')" class="dropdown-item" ><i class="fal fa-plus fa-fw"></i> Cambiar Contratista</a>`;
+                        }
+
+                        opciones += data.fcDescripcion == 'Pendiente' && data.fiIdEmpresa == 0 ? '<a href="javascript:void(0)" onclick="ModalConfirmacionAsignacionContratista(' + data.fiIDSolicitudInstalacion + ',' +  cliente  + ',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Contratista</a>' : '';
+                        opciones += data.fiIdEmpresa != 0 ? '<a href="javascript:void(0)" onclick="ModalConfirmacion(' + data.fiIDSolicitudInstalacion + ',' + data.fiIDContratista + ',' + cliente + ',' + ubicacion + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Tecnico</a>': '';
+                        opciones += 10 != 11 ? `<a href="@(Url.Action("ViewDetalleInstalacion","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Instalación</a>` : '';
+                        opciones += 10 != 11 ? `<a href="@(Url.Action("ViewBitacora","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Bitacoras</a>` : '';
+
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+
+                {
+                    data: 'fiIDSolicitud'
+                },
+                // {
+                //     data: 'fiNoOrden'
+                // },
+                {
+                    data: null,
+                    render: function (data) {
+                        return '00'+data.fiNoOrden;
+                    }
+
+                },
+                //{
+                //    data: 'fcNumeroOrdenCfeus'
+                //},
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcCodigoCliente;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreCliente + "<br>" + data.fcTelefonoCliente;
+                    }
+
+                },
+                {
+                    data: "fcDepartamento"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        //return data.fcPaquete;
+                        return data.fcArticulosdelContrato;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreEmpresa;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreTecnicoAsignado;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        if (data.fiIDTipoSolicitud == 1) {
+                            return `<span class="btn-sm btn-block badge badge-success text-white">INSFIBRA</span>`;
+
+                        }
+                        else if (data.fiIDTipoSolicitud == 2) {
+                            return `<span class="btn-sm btn-block badge badge-primary text-white">SOPFIBRA</span>`;
+
+                        }
+						else if (data.fiIDTipoSolicitud == 3) {
+							return `<span class="btn-sm btn-block badge badge-primary text-white">CAMBIO DE SERVICIO</span>`;
+
+						}
+                        else {
+                            return `<span class="btn-sm btn-block badge badge-secondary text-white">N/D</span>`;
+
+                        }
+
+
+
+
+                        //else if (data.fiIDEstado == 2) {
+                        //    return '<div class="badge badge-success">Aprobado</div>';
+                        //}
+                    },
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaInstalacion).format("DD/MM/YYYY hh:mm A");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcComentario;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+
+                        return `<div class="badge badge-${data.fcClase} text-white">${data.fcDescripcion}</div>`;
+
+                    }
+
+                }
+            ]
+
+        });
+
+
+                var tablaPrincipal3 = $('#BandejaSolicitudesCanceladas').DataTable({
+
+    autoWidth: true,
+    responsive: true,
+    language: {
+        "emptyTable": "No se encontraron resultados.",
+        //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+        "paginate": {
+            first: "Primero",
+            previous: "Anterior",
+            next: "Siguiente",
+            last: "Ultimo"
+        },
+        "lengthMenu": " _MENU_ ",
+        "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+        "infoEmpty": "No hay registros para mostrar.",
+    },
+    dom: `<"row"<"col-sm-12"fBl>>rtip`,
+    order: [[1, "desc"]],
+    ajax: {
+        url: '@Url.Action("ListaOrdenesdeTrabajoCanceladas")',
+        method: "Get",
+        dataSrc: function (data) {
+            console.log(data);
+            var opt = ''
+            var unico = new Set();
+            for (const item of data) {
+                unico.add(item.fcNombreTecnico);
+            }
+            for (const item of unico) {
+                if (item == null) {
+
+                } else {
+                    opt += `<option value="${item}">${item}</option>`
+                }
+            }
+            $(`#ddltecnicos2`).append(opt);
+
+
+            return data;
+        }
+    },
+    columns: [
+
+        {
+	        data: null,
+	        render: function (data) {
+		        return `<div class='dropdown d-inline-block dropleft'>
+					        <a href='#' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>
+						        <i class="fal fa-ellipsis-v"></i>
+					        </a>
+					        <div class='dropdown-menu'>
+						        <a href="@Url.Action("ViewBitacora", "Contratista")?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item">
+							        <i class="fal fa-plus fa-fw"></i>Bitacoras
+						        </a>
+					        </div>
+				        </div>`;
+	        }
+        },
+        {
+            data: null,
+            className: "text-center",
+            render: function (data) {
+                var opt = "";
+                opt = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)" ><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                return opt;
+            }
+        },
+        {
+            data: 'fiIDSolicitud'
+        },
+        // {
+        //     data: 'fiNoOrden'
+        // },
+        {
+                    data: null,
+                    render: function (data) {
+                        return '00'+data.fiNoOrden;
+                    }
+
+                },
+        //{
+        //    data: 'fcNumeroOrdenCfeus'
+        //},
+        {
+            data: null,
+            render: function (data) {
+                return data.fcCodigoCliente;
+            }
+
+        },
+        {
+            data: null,
+            render: function (data) {
+                return data.fcNombreCliente;
+            }
+
+        },
+        {
+            data: "fcDepartamento"
+        },
+        {
+            data: null,
+            render: function (data) {
+                return data.fcArticulosdelContrato;
+                //return data.fcArticulosdelContrato;
+            }
+
+        },
+        {
+            data: null,
+            render: function (data) {
+                return data.fcNombreEmpresa;
+            }
+
+        },
+        //{
+        //    data: null,
+        //    render: function (data) {
+        //        return 'Prueba'
+        //    }
+
+        //},
+
+        //{
+        //    data: null,
+        //    render: function (data) {
+        //        return 'User';
+        //    }
+
+        //},
+        {
+            data: null,
+            render: function (data) {
+                return data.fcNombreTecnicoAsignado;
+            }
+        },
+        {
+            data: null,
+            render: function (data) {
+
+                if (data.fiIDTipoSolicitud == 1) {
+                    return `<span class="btn-sm btn-block badge badge-success text-white">INSFIBRA</span>`;
+
+                }
+                else if (data.fiIDTipoSolicitud ==2) {
+                    return `<span class="btn-sm btn-block badge badge-primary text-white">SOPFIBRA</span>`;
+
+                }
+				else if (data.fiIDTipoSolicitud == 3) {
+					return `<span class="btn-sm btn-block badge badge-primary text-white">CAMBIO DE SERVICIO</span>`;
+
+				}
+                else {
+                    return `<span class="btn-sm btn-block badge badge-secondary text-white">N/D</span>`;
+
+                }
+
+
+
+
+                //else if (data.fiIDEstado == 2) {
+                //    return '<div class="badge badge-success">Aprobado</div>';
+                //}
+            },
+        },
+        {
+            data: null,
+            render: function (data) {
+                return moment(data.fdFechaInstalacion).format("DD/MM/YYYY hh:mm A");
+            }
+
+        },
+        {
+            data: null,
+            render: function (data) {
+                return data.fcComentario;
+            }
+
+        }
+        ,
+
+
+        {
+            data: null,
+            render: function (data) {
+
+
+                return `<span class="btn-sm btn-block badge badge-${data.fcClase} text-white">${data.fcDescripcion}</span>`;
+
+
+
+
+                //else if (data.fiIDEstado == 2) {
+                //    return '<div class="badge badge-success">Aprobado</div>';
+                //}
+            }
+
+        }
+
+
+
+
+
+    ]
+
+});
+
+ function ModalCrearNotas(idsolicitudinstalacion) {
+              $.ajax({
+                 url: "@Url.Action("SolicitudInstalacionNotas", "Contratista")",
+                 method: "get",
+				  data: { fiIDContratistaSolicitud: idsolicitudinstalacion},
+                 success: function (resp) {
+
+                     ShowModalBigScroll(resp);
+                 },
+                 error: function (resp) {
+                     AlertaError();
+                 }
+             });
+         }
+
+        function ModalConfirmacion(fiIDSolicitudInstalacion, fiIDContratista,cliente,ubicacion) {
+
+            VerModalConObjetoDeParametro({ fiIDSolicitudInstalacion: fiIDSolicitudInstalacion,fiIDContratista:fiIDContratista,cliente:cliente,ubicacion:ubicacion }, "@Url.Action("ShowAsignacionContratistaOrden")");
+
+        }
+        function ModalConfirmacionAsignacionContratista(fiIDSolicitudInstalacion, cliente , fiSolicitud) {
+
+            VerModalConObjetoDeParametro({ fiIDSolicitudInstalacion: fiIDSolicitudInstalacion, cliente : cliente,  fiSolicitud: fiSolicitud }, "@Url.Action("ShowAsignacionContratistaSOP")");
+
+        }
+        function ModalConfirmacionCrearPrestamo(IdCliente, Identidad, IDSolicitud) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ConfirmacionPrestamo", "Solicitudes")",
+                method: "get",
+                data: { IdCliente: IdCliente, Identidad: Identidad, IDSolicitud: IDSolicitud},
+                success: function (resp) {
+                    //ShowModalBig(resp);
+                    ShowModalSmall(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function ModalDetalleCliente(Nombre, Telefono, IDFirma) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ModalDetalleCliente", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function ModalEnviarLinkPago(Nombre, Telefono, IDFirma) {
+            debugger;
+            // VerModalSmConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma }, "@Url.Action("ConfrimacionNumero", "Solicitudes")");
+            $.ajax({
+                url: "@Url.Action("ModalEnviarLinkPago", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function IrAMaps(Localizacion) {
+            let Latitud = Localizacion.split(',')[0];
+            let Longitud = Localizacion.split(',')[1];
+            let link = `https://www.google.com/maps?z=12&t=k&q=${Latitud},${Longitud}`;
+            let a = `<a class="btn btn-sm bg-success text-white" href="${link}" target="_blank"><i class="fal fa-map-marker-alt"></i>${Latitud},${Longitud}</a>`;
+            //<i class="fa fa-google fa-fw"></i>
+            return a;
+        }
+
+        $('#ddltecnicos').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(8).search(this.value).draw();
+        });
+        $('#ddltecnicos2').on('change', function () {
+            debugger;
+            tablaPrincipal2.columns(8).search(this.value).draw();
+        });
+
+        $('#ddlfechaorden').on('change', function () {
+            debugger;
+            var fec = moment(this.value).format("DD/MM/YYYY hh:mm A");
+            tablaPrincipal.columns(9).search(fec).draw();
+        });
+
+        $('#ddlfechaorden2').on('change', function () {
+            debugger;
+            tablaPrincipal2.columns(9).search(this.value).draw();
+        });
+        $("#ddltecnicos, #ddltecnicos2").select2();
+
+
+
+
+        function CambiarContratista(fiIdcontratista) {
+            $.ajax({
+                url: "@Url.Action("VistaCambiarContratistaInstalacionYOrdenTrabajo", "Contratista")",
+                data: { fiIdConstratistaSolicitud: fiIdcontratista},
+                type: "POST",
+                success: function (datas) {
+
+                    ShowModal(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Cambiar Contratista", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        }
+
+
+
+        //Signal R para apartado de ordenes de trabajo
+
+        chat.client.ModificarFilaOrdenTrabajo = function (tecnicoViewModel) {
+            console.log(tecnicoViewModel);
+            var tabla = $.fn.dataTable.Api("#BandejaOrdenesenProceso");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIDSolicitudInstalacion == tecnicoViewModel.fiIDSolicitudInstalacion);
+            tabla.row(node).data(tecnicoViewModel).draw(false);
+
+        }
+
+
+        //Signal R de la Bandeja de los contratista
+        chat.client.ModificarFilacontratista = function (tecnicoViewModel) {
+            console.log(tecnicoViewModel);
+            var tabla = $.fn.dataTable.Api("#BandejaSolicitudesPendientes");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIDSolicitudInstalacion == tecnicoViewModel.fiIDSolicitudInstalacion);
+            tabla.row(node).data(tecnicoViewModel).draw(false);
+
+
+            var tablados = $.fn.dataTable.Api("#BandejaOrdenesenProceso");
+            var nodesdos = tablados.rows().nodes().toArray();
+            var nodedos = nodesdos.find(x => tablados.row(x).data().fiIDSolicitudInstalacion == tecnicoViewModel.fiIDSolicitudInstalacion);
+            tablados.row(nodedos).data(tecnicoViewModel).draw(false);
+
+
+        }
+
+
+
+	</script>
+}
+
+

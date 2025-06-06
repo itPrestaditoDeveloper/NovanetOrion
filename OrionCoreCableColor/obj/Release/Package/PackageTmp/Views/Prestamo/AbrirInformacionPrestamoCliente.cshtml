@@ -1,0 +1,377 @@
+﻿
+@model OrionCoreCableColor.Models.Prestamo.InformacionClientePrincipalViewModel
+
+
+<style>
+    .dl-horizontal dt {
+        text-align: left !important;
+        padding: 5px;
+    }
+
+    .dl-horizontal dd {
+        text-align: left !important;
+        padding: 5px;
+        border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+
+    .nav-tabs li a {
+        color: #337ab7;
+    }
+</style>
+
+
+
+<div class="text-center">
+    <h3 style="margin-top:0px;"><i class="fal fa-user"></i><b>@Model.fcIdentidad </b>&nbsp @Model.fcNombreSAF </h3>
+    <br />
+    <p class="text-main">
+        <span style="border-right:1px solid grey;">&nbsp<i class="fal fa-mobile"></i><b>Teléfono móvil :</b>  @Model.fcTelefonos   &nbsp</span>
+        <span class="text-main" id="labelStatusLoan"></span>
+
+    </p>
+
+</div>
+<div class="file-toolbar bord-btm" style="display:none;">
+
+
+
+</div>
+
+<div class="col-lg-12">
+
+    <br />
+
+    <ul class="nav nav-pills nav-justified" role="tablist">
+        <li class="active">
+            <a class="nav-link active" data-toggle="pill" href="#lft-tab-PersonalInfo">Info. de crédito <span><i class="fal fa-cogs"></i></span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#lft-tab-LoanInfo">Info. de Pago <span><i class="fal fa-money-bill"></i></span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#lft-tab-Bitacora">Bitacora <span><i class="fal fa-history"></i></span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#lft-tab-Attachment">Archivos <span><i class="fal fa-file"></i></span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#lft-tab-Email">Enviar correo <span><i class="fal fa-envelope"></i></span></a>
+        </li>
+
+
+    </ul>
+
+    <!--Tabs Content-->
+    <div class="tab-content">
+        <div id="lft-tab-PersonalInfo" class="tab-pane fade active show">
+
+
+            <br />
+            <!--Nav Tabs-->
+            <ul class="nav nav-pills text-info">
+                <li class="active">
+                    <a class="nav-link" data-toggle="pill" href="#lft-tab-LoanCreditInfo">Info. del servicio <span><i class="fal fa-file"></i></span></a>
+                </li>
+
+                <li class="">
+                    <a class="nav-link" data-toggle="pill" href="#lft-tab-PersonalCustomerInfo">Info. Personal <span><i class="fal fa-user"></i></span></a>
+                </li>
+
+            </ul>
+
+            <!--Tabs Content-->
+            <div class="tab-content">
+                <div id="lft-tab-LoanCreditInfo" class="tab-pane fade active show">
+
+                    <div class="panel mar-top">
+                        @{
+                            Html.RenderAction("MostrarDetalleCreditoCliente", "Prestamo", new { idCustomer = Model.fcIDPrestamo, idLoan = Model.fcIdentidad });
+                        }
+                    </div>
+
+                </div>
+
+                <div id="lft-tab-PersonalCustomerInfo" class="tab-pane fade in">
+                    <div class="row mt-3 mb-0">
+                        <div class="col-6">
+                            <div class="table-responsive">
+                                <table class="table tableInfoTop" style="margin-bottom: 0px;">
+
+                                    <tbody>
+                                        <tr>
+
+                                            <td><span class="text-info text-bold"> Información personal</span></td>
+                                            <td></td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><span class="text-main">Teléfono</span></td>
+                                            <td>@Model.fcTelefonos</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td><span class="text-main">Nombre cónyuge</span></td>
+                                            @*<td>@Model.fcTelefonos</td>*@
+                                            <td>N/A</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><span class="text-main">Identidad</span></td>
+                                            <td>@Model.fcIdentidad</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td><span class="text-main">Ciudad</span></td>
+                                            <td>@Model.fcMunicipio</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><span class="text-main">Colonia</span></td>
+                                            <td>@Model.fcBarrio</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td><span class="text-main">Dirección</span></td>
+                                            <td>@Model.fcDireccionDetallada</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td><span class="text-main">Correo cliente</span></td>
+                                            <td>@Model.fcCorreo</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><span class="text-main"> </span></td>
+                                            <td></td>
+
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-6">
+                            <div class="table-responsive">
+                                <table class="table tableInfoTop" style="margin-bottom: 0px;">
+
+                                    <tbody>
+                                        <tr>
+
+                                            <td><span class="text-info text-bold">Información de trabajo</span></td>
+                                            <td></td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td><span class="text-main">Teléfono de compañía</span></td>
+                                            <td>N/A</td>
+
+                                        </tr>
+                                        <tr>
+
+                                            <td><span class="text-main">Nombre empresa</span></td>
+                                            <td>@Model.fcLugarTrabajo</td>
+
+                                        </tr>
+
+                                        <tr>
+                                            <td><span class="text-main"> Ocupación</span></td>
+                                            <td>N/A</td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><span class="text-main">Cargo</span></td>
+                                            <td>N/A</td>
+
+                                        </tr>
+
+                                        <tr>
+
+                                            <td><span class="text-main">Colonia</span></td>
+                                            <td>N/A</td>
+
+                                        </tr>
+
+
+                                        <tr>
+
+                                            <td><span class="text-main">Rango salarian</span></td>
+                                            <td>@Model.fcDescripcion_RangosSalariales</td>
+
+                                        </tr>
+
+
+                                        <tr>
+
+                                            <td><span class="text-main">Antiguedad</span></td>
+                                            <td>@Model.fcDescripcionAntiguedad</td>
+
+                                        </tr>
+
+
+                                        <tr>
+                                            <td><span class="text-main"> </span></td>
+                                            <td></td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm-12">
+                        @{
+                            //Html.RenderAction("ShowCustomerReference", "CustomerManagement", new { idCustomer = Model.fcIDCliente });
+                        }
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+        <div id="lft-tab-Bitacora" class="tab-pane fade">
+
+        </div>
+        <div id="lft-tab-LoanInfo" class="tab-pane fade">
+
+        </div>
+
+        <div id="lft-tab-Email" class="tab-pane fade">
+
+        </div>
+
+        <div id="lft-tab-Attachment" class="tab-pane fade">
+
+            <br />
+            <div id="contentCustomerDocument">
+
+
+            </div>
+            <div id="contentCustomerDocumentSAF">
+
+            </div>
+
+
+        </div>
+
+        <br>
+        <div id="lft-tab-GPS" class="tab-pane fade">
+
+
+        </div>
+        <div id="lft-tab-Seguro" class="tab-pane fade">
+
+
+        </div>
+    </div>
+
+
+</div>
+@*}*@
+
+
+<script>
+    function ShowCreateBitacora(id) {
+        VerModalConObjetoDeParametro({ idCustomer: id }, "/CustomerManagement/CreateBitacoraCustomer");
+    }
+
+    ReloadBitacora('@Model.idSolicitud');
+    function ReloadBitacora(idSolicitud) {
+        $.ajax({
+            url: "@Url.Action("ShowBitacoraCustomer", "Prestamo")",
+          //  url: '/Prestamo/ShowBitacoraCustomer',
+            type: 'get',
+            data: { idSolicitud: idSolicitud },
+            success: function (data) {
+                $("#lft-tab-Bitacora").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                AlertaError();
+            }
+        });
+    }
+        LoadShowPaymentLoanInfo();
+    function LoadShowPaymentLoanInfo() {
+        $.ajax({
+            url: "@Url.Action("AbrirInformacionDePago", "Prestamo")",
+          //  url: '/Prestamo/AbrirInformacionDePago',
+            type: 'get',
+            data: { idCustomer: '@Model.fcIdentidad', idLoan: '@Model.fcIDPrestamo', idClienteSAF: '@Model.fcClienteSAF' },
+            success: function (data) {
+                debugger;
+                $("#lft-tab-LoanInfo").html(data);
+            },
+            error: function (data) {
+                debugger;
+                console.log(data);
+                AlertaError();
+            }
+        });
+    }
+
+       ReloadCustomerDocument('@Model.idSolicitud');
+    function ReloadCustomerDocument(idSolicitud) {
+        $.ajax({
+           // url: '/Prestamo/AbrirDocumentos',
+            url: "@Url.Action("AbrirDocumentos", "Prestamo")",
+            type: 'get',
+            data: { idSolicitud: idSolicitud },
+            success: function (data) {
+                $("#contentCustomerDocument").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                AlertaError();
+            }
+        });
+    }
+
+    @*ReloadCustomerDocumentPersonales('@Model.idSolicitud');
+    function ReloadCustomerDocumentPersonales(idSolicitud) {
+        $.ajax({
+           // url: '/Prestamo/AbrirDocumentos',
+            url: "@Url.Action("AbrirDocumentosPersonales", "Prestamo")",
+            type: 'get',
+            data: { idSolicitud: idSolicitud },
+            success: function (data) {
+                $("#contentCustomerDocument").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                AlertaError();
+            }
+        });
+    }*@
+
+
+</script>
+

@@ -1,0 +1,268 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    color: black;
+    text-align: left;
+    padding: 15px;
+    font-size:17px;
+   /* font-weight: bold;*/
+    border-bottom: 2px solid #29597f;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.section {
+    flex: 1;
+    min-width: 300px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.info {
+    margin-bottom: 10px;
+}
+
+    .info span {
+        font-weight: bold;
+    }
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+    .input-group input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .input-group button {
+        padding: 8px 15px;
+        background-color: #29597f;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: 0.3s;
+    }
+
+        .input-group button:hover {
+            background-color: #1f4566;
+        }
+
+.team-list table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.team-list th, .team-list td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.input-group-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+    .input-group-inline select {
+        flex-grow: 1;
+        padding: 8px;
+    }
+
+    .input-group-inline button {
+        padding: 8px 15px;
+        background-color: #29597f;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+        .input-group-inline button:hover {
+            background-color: #1f4566;
+        }
+
+.btn-submit {
+    background-color: #29597f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+    .btn-submit:hover {
+        background-color: #1f4566;
+    }
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .section {
+        width: 100%;
+    }
+
+    .input-group-inline {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+        .input-group-inline button {
+            width: 100%;
+        }
+
+    .btn-submit {
+        font-size: 14px;
+    }
+}
+
+/* Personalización del radio button */
+.solicitudSeleccionada {
+    display: none;
+}
+
+    .solicitudSeleccionada + label {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #6200EA;
+        border-radius: 50%;
+        background-color: #EDE7F6;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 0 8px rgba(98, 0, 234, 0.4);
+    }
+
+    .solicitudSeleccionada:checked + label {
+        background-color: #6200EA;
+        border: 2px solid #6200EA;
+        box-shadow: 0 0 12px rgba(98, 0, 234, 0.6);
+    }
+
+        .solicitudSeleccionada:checked + label::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+
+.boton-deshabilitado {
+    background-color: #a3bccf !important; /* Cambia el color de fondo */
+    color: white !important; /* Cambia el color del texto */
+    cursor: not-allowed; /* Cambia el cursor */
+    opacity: 0.6; /* Hace que se vea deshabilitado */
+}
+
+
+
+/* Separar los inputs y los botones */
+.input-group {
+    margin-bottom: 15px;
+}
+
+/* Separar las tablas */
+.team-list {
+    margin-top: 15px;
+}
+
+/* Botón más grande y con espaciado */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+}
+
+/* Espaciado para el contenedor de subir archivo */
+.file-upload {
+    text-align: center;
+    padding: 15px;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: 0.3s;
+}
+
+    .file-upload:hover {
+        background: #e9ecef;
+    }
+
+/* Botón de subir archivo con más margen */
+.file-label {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Vista previa de la imagen */
+.preview-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-top: 10px;
+}
+
+.preview-image {
+    max-width: 150px; 
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.remove-btn {
+    margin-top: 10px; 
+    width: auto;
+    text-align: center;
+}
+
+element.style {
+    display: none !important;
+    margin-top: 10% !important;
+    margin-left: 49% !important;
+}

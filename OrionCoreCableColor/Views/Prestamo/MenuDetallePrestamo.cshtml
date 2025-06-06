@@ -1,0 +1,43 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionClientePrincipalViewModel
+
+<div class="panel">
+    <div class="panel-heading">
+        <div class="panel-control">
+            <a onclick="ExportHtmlToPdf('#myContentToPrint','DetailReport')" class="btn btn-success"><i class="fa fa-print fa-fw"></i> @*Print*@Imprimir </a>
+            <a href="/Prestamo/Bandeja_Credito" class="btn btn-primary"> @*Back to list*@Volver a la lista </a>
+
+        </div>
+
+    </div>
+
+    <div class="panel-body" id="myContentToPrint">
+        <div id="ContenidoInformacion">
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+            url: "@Url.Action("AbrirInformacionPrestamoCliente", "Prestamo")",
+            //url: '/Prestamo/AbrirInformacionPrestamoCliente',
+            type: 'get',
+            data: { id: '@Model.idSolicitud', idPrestamo: '@Model.idPrestamo', idIDentidad: '@Model.fcIdentidad', fcClienteSAF: '@Model.fcClienteSAF'  },
+            success: function (data) {
+                console.log(data);
+                $("#ContenidoInformacion").html(data);
+            },
+            error: function (data) {
+                console.log(data);
+                //AlertaError();
+            }
+        });
+
+    });
+    </script>
+
+}

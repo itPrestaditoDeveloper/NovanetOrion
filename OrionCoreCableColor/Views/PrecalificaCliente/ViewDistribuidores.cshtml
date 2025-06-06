@@ -1,0 +1,393 @@
+﻿
+@{
+    ViewBag.Title = "Lista Distribuidores";
+}
+<style>
+    #TablaPrincipal tbody td:nth-child(3),
+    #TablaPrincipal tbody td:nth-child(4) {
+        cursor: pointer;
+    }
+
+    #TablaPrincipal tbody td:active:nth-child(3),
+    #TablaPrincipal tbody td:active:nth-child(4) {
+        background-color: #e0e0e0;
+        border: 2px solid #007bff;
+        transition: background-color 0.1s ease;
+    }
+</style>
+
+<div class="panel">
+
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Listatado de Distribuidores</h2>
+
+        <div class="panel-toolbar" role="menu">
+            <button onclick="EnviarFormulario()" class="btn btn-success mr-2"> <i class="fal fa-plus fa-fw"></i> Enviar Formulario </button>
+            @if (!User.IsInRole("Orion_Admin_Ventas_Distribuidor"))         
+             {
+                    <button onclick="MostrarCrear()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Agregar Distribuidor</button>
+             }
+
+            </div>
+
+
+    </div>
+
+
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th>Identidad</th>
+                        <th>Nombre Representante</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Empresa</th>
+                        <th>RTN</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Activo</th>
+                        <th>Firma</th>
+                        <th>Firmado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+
+
+    <div class="panel" id="panelVendedores" style="display:none;">
+        <div class="panel-hdr">
+            <h2><i class="fal fa-users fa-fw"></i> Vendedores del Distribuidor</h2>
+        </div>
+        <div class="panel-container">
+            <h5 id="tituloDistribuidor" class="text-primary pl-3 pt-2"></h5>
+            <table class="table table-bordered table-hover w-100" id="tablaVendedores">
+                <thead>
+                    <tr>
+                        <th>Acciones</th>
+                        <th>#</th>
+                        <th>Nombre Vendedor</th>
+                        <th>Identidad</th>
+                        <th>Correo</th>
+                        <th>Ciudad</th>
+                        <th>Dirección</th>
+                        <th>Fecha Nacimiento</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+  var esAdminDistribuidor = false;
+       function MostrarCrear() {
+           $.ajax({
+               url: "@Url.Action("ModalActulizarDistribuidor", "PrecalificaCliente")",
+               method: "get",
+               success: function (resp) {
+                   ShowModalBig(resp);
+               },
+               error: function (resp) {
+                   alert("Error");
+               }
+           });
+       }
+
+        function MostrarEditar(id) {
+            $.ajax({
+                url: "@Url.Action("ModalActulizarDistribuidor", "PrecalificaCliente")",
+                method: "get",
+                data: { fiIDDistribuidor: id },
+                success: function (data) {
+                    ShowModalBig(data);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+         function Desactivar(id) {
+         $.ajax({
+             url: "@Url.Action("DeshabilitarDistribuidor", "PrecalificaCliente")",
+             method: "post",
+             data: { fiIDDistribuidor: id },
+             success: function (data) {
+                 if (data.Estado) {
+                     tablaPrincipal.ajax.reload().draw(false);
+                 }
+                 AlertaAjax(data);
+             },
+             error: function (resp) {
+                 AlertaError();
+             }
+          });
+         }
+
+        function EnviarFormulario()
+         {
+            VerModalMdConObjetoDeParametro({},"@Url.Action("ViewEnviarFormularioVendedor", "PrecalificaCliente")");
+        }
+
+        function CrearUsuario(fiIDDistribuidor) {
+            window.location.href = '@Url.Action("CrearUsuarioDistribuidor", "Usuario")' + '?fiIDDistribuidor=' + fiIDDistribuidor;
+          }
+
+
+          function EnviarCorreo(fiIDDistribuidor) {
+            $.ajax({
+                url: '@Url.Action("EnviarSolicitudFirmaDistribuidor", "PrecalificaCliente")',
+                type: 'POST',
+                data: { fiIDDistribuidor: fiIDDistribuidor },
+                success: function (data) {
+                    if (data.Estado) {
+                        AlertaAjax(data);
+                        tablaPrincipal.ajax.reload().draw(false);
+                    }
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    AlertaError();
+                }
+            });
+        }
+
+         function Detalle(fiIDDistribuidor) {
+          debugger;
+             VerModalConObjetoDeParametro({ fiIDDistribuidor: fiIDDistribuidor },"@Url.Action("DetalleDistribuidor", "PrecalificaCliente")");
+        }
+
+        function CrearUsuarioVendedor(fiIDVendedorRepartidor) {
+            debugger
+              window.location.href = '@Url.Action("CrearUsuarioAgente", "Usuario")' + '?fiIDVendedorRepartidor=' + fiIDVendedorRepartidor;
+        }
+       function EditarVendedor(fiIDVendedorRepartidor) {
+           debugger;
+           VerModalConObjetoDeParametro({ fiIDVendedorRepartidor: fiIDVendedorRepartidor },"@Url.Action("EditarVendedoresCalle", "PrecalificaCliente")");
+       }
+
+       function DetalleVendedor(fiIDVendedorRepartidor) {
+            debugger;
+            VerModalConObjetoDeParametro({ fiIDVendedorRepartidor: fiIDVendedorRepartidor },"@Url.Action("DetalleVendedor", "PrecalificaCliente")");
+      }
+
+
+     var tablaPrincipal = $('#TablaPrincipal').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaDistribuidores", "PrecalificaCliente")',
+                method: "Get",
+                dataSrc: function (data) {
+                    console.log(data)
+                    return data;
+                }
+            },
+
+            columns: [
+                        {
+                    data: null,
+                  
+                render: function (data) {
+                    var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false" ' + (!data.fiIDEstado ? 'disabled' : "") + '> Acciones </button>';
+                    opciones += '<div class="dropdown-menu">';
+
+                    if (!@Json.Encode(User.IsInRole("Orion_Admin_Ventas_Distribuidor"))) {
+                        opciones += '<a class="dropdown-item" href="javascript:void(0)" onclick="MostrarEditar(' + data.fiIDDistribuidor + ')"> Editar</a>';
+                        opciones += '<a class="dropdown-item" href="javascript:void(0)" onclick="Desactivar(' + data.fiIDDistribuidor + ')"> Deshabilitar </a>';
+                        opciones += data.fiIDEstadoFirma == null || data.fiIDEstadoFirma == 0 ? `<a onclick="EnviarCorreo('${data.fiIDDistribuidor}')" class="dropdown-item"><i class="fal fa-pen-nib fa-fw"></i>Enviar a firma</a>` : " ";
+                        opciones += data.fiIDFirmado == 1 ? `<a onclick="CrearUsuario('${data.fiIDDistribuidor}')" class="dropdown-item"><i class="fal fa-user"></i>Crear Usuario</a>` : " ";
+                        opciones += `<a onclick="Detalle('${data.fiIDDistribuidor}')" class="dropdown-item"><i class="fal fa-file-alt fa-fw"></i>Detalle Distribuidor</a>`;
+                    } else {
+                        opciones += `<a onclick="Detalle('${data.fiIDDistribuidor}')" class="dropdown-item"><i class="fal fa-file-alt fa-fw"></i>Detalle Distribuidor</a>`;
+                    }
+                   
+                    
+                    opciones += '</div></div>';
+                    return opciones;
+
+                }
+               },
+
+                {
+                    data: 'fiIDDistribuidor'
+                },
+                {
+                    data: 'fcIdentidadRepresentante'
+                },
+                {
+                    data: 'NombreRepresentante'
+                },
+                {
+                    data: 'fcTelefonoMovil'
+                },
+                {
+                    data: 'fcCorreoElectronico'
+                },
+                {
+                    data: 'fcNombreComercial'
+                },
+                {
+                    data: 'fcRTN'
+                },
+                {
+                    data: 'fcDireccion'
+                },
+                {
+                    data: 'fcTelefono'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDEstado == 1) {
+                            return '<div class="badge badge-success">Si</div>';
+                        } else {
+                            return '<div class="badge badge-danger">No</div>';
+                        }
+
+                    }
+                },
+                {
+                     data: null,
+                     render: function (data) {
+                         if (data.fiIDEstadoFirma == 1) {
+                             return '<div class="badge badge-success">Enviado</div>';
+                         } else {
+                             return '<div class="badge badge-danger">No Enviado</div>';
+                         }
+
+                     }
+                 },
+                  {
+                      data: null,
+                      render: function (data) {
+                          if (data.fiIDFirmado == 1) {
+                              return '<div class="badge badge-success">Si</div>';
+                          } else {
+                              return '<div class="badge badge-danger">No</div>';
+                          }
+
+                      }
+                  },
+
+
+            ]
+
+        });
+
+
+
+     function CargarVendedoresDistribuidor(fiIDDistribuidor) {
+            $('#panelVendedores').show();
+
+            if ($.fn.DataTable.isDataTable('#tablaVendedores')) {
+                $('#tablaVendedores').DataTable().clear().destroy();
+            }
+
+            $('#tablaVendedores').DataTable({
+                autoWidth: true,
+                responsive: true,
+                destroy: true,
+                language: {
+                    emptyTable: "No se encontraron vendedores.",
+                    paginate: {
+                        first: "Primero", previous: "Anterior", next: "Siguiente", last: "Último"
+                    },
+                    lengthMenu: " _MENU_ ",
+                    info: "Mostrando registros del _START_ al _END_ de _TOTAL_.",
+                    infoEmpty: "No hay registros."
+                },
+                ajax: {
+                    url: '@Url.Action("VendedoresPorDistribuidor", "PrecalificaCliente")',
+                    method: "GET",
+                    data: { fiIDDistribuidor: fiIDDistribuidor },
+                    dataSrc: function (data) {
+                        return data;
+                    }
+                },
+                columns: [
+
+                    {
+                        data: null,
+                        render: function (data) {
+                            var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                            opciones += '<div class="dropdown-menu">';
+                            opciones += data.fiIDTipoVendedor == 2 ? `<a onclick="DetalleVendedor('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-file-alt fa-fw"></i>Detalle Vendedor</a>` : "";
+                            opciones += `<a onclick="EditarVendedor('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-edit fa-fw"></i>Editar</a>`;
+                            opciones += `<a onclick="CrearUsuarioVendedor('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-user"></i>Crear Usuario</a>`;
+
+                            opciones += '</div></div>';
+                            return opciones;
+                        }
+                    },
+                    { data: 'fiIDVendedorRepartidor' },
+                    { data: 'fcNombreVendedor' },
+                    { data: 'fcIdentidadVendedor' },
+                    { data: 'fcCorreo' },
+                    { data: 'fcCiudad' },
+                    { data: 'fcDireccionExacta' },
+                    {
+                        data: 'fdFechaNacimiento',
+                        render: function (d) {
+                            return d ? moment(d).format('YYYY-MM-DD') : '';
+                        }
+                    },
+
+                ]
+            });
+    }
+
+
+        $('#TablaPrincipal tbody').on('click', 'td', function () {
+            const colIndex = tablaPrincipal.cell(this).index().column;
+            const columnasClick = [2, 3];
+
+            if (columnasClick.includes(colIndex)) {
+                const rowData = tablaPrincipal.row($(this).closest('tr')).data();
+
+                $('#tituloDistribuidor').text(`Vendedores de: ${rowData.NombreRepresentante} (${rowData.fcNombreComercial})`);
+                $('#panelVendedores').show();
+
+                CargarVendedoresDistribuidor(rowData.fiIDDistribuidor);
+            }
+        });
+
+
+
+    </script>
+}
+

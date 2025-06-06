@@ -1,0 +1,73 @@
+﻿
+@model int
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="tbHistoricoProductos-@Model" style="width:100%;">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Serie 1</th>
+            <th>Serie2 / Mac</th>
+            <th>Cantidad</th>
+            <th>Referencia</th>
+            <th>Ubicacion</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+    </tbody>
+</table>
+
+
+
+<script>
+    var tablaPrincipal = $('#tbHistoricoProductos-@Model').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        //dom: 'Bfrtip',
+        ajax: {
+            url: '@Url.Action("CargarListaInventarioDetalle", "Productos")',
+            method: "Get",
+            data: { fiIDMovimientoMaestro: @Model},
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: null,
+                render: function (data) {
+                    var opciones = `<div class='toggle d-inline-block dropdown'>
+                                        <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>\n\t\t\t\t\t\t\t\t<i class=\"fal fa-ellipsis-v\"></i>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t
+                                    <div class='dropdown-menu'>`;
+
+                    opciones += `<a href="javascript:void(0)" onclick="EditarMaestro(${data.fiIDMovimiento})" class="dropdown-item">Editar Ubicacion Factura</a>`;
+
+                    opciones += '</div></div>';
+                    return opciones;
+                }
+            },
+            { data: "fcProducto" },
+            { data: "fcPrecios" },
+            { data: "fcCodigoSerie1" },
+            { data: "fcCodigoSerie2" },
+            { data: "fnCantidad" },
+            { data: "fcReferenciaMovimiento" },
+            { data: "fcUbicacion" }
+        ]
+
+    });
+</script>

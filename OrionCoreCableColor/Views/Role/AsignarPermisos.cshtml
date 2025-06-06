@@ -1,0 +1,126 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h4 class="modal-title text-white">Seleccionar Permisos para Rol: <b>@ViewBag.Nombre</b></h4>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times-circle fa-fw fa-lg"></i></span>
+    </button>
+</div>
+
+<div class="modal-body">
+
+    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tablaDetalle-@ViewBag.Id">
+        <thead>
+            <tr>
+                @*<th><div class="smart-form"> <label class="checkbox"><input type="checkbox" id="CheckAll"><i></i></label></div></th>*@
+                @*<th style="width:10px;"></th>*@
+                <th style="width:100%;">Permiso</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="modal-footer">
+
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" class="btn btn-link waves-effect waves-themed float-right btn-lg text-success" onclick="GuardarSeleccion()"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+        
+    </div>
+
+</div>
+
+<script>
+
+    //$('#CheckAll').change(function () {
+    //    var Estado = this.checked;
+
+    //        var rows = tablaDetalle.rows({ 'page': 'All', search: 'applied' });
+    //        $('input[name="checkboxItem"]', rows.nodes()).prop('checked', Estado);
+    //        rows.every(function (rowIdx, tableLoop, rowLoop) {
+    //            this.data().Seleccionado = Estado;
+    //        });
+
+    //    });
+
+    $("#tablaDetalle-@ViewBag.Id"+" tbody").on('click', 'input[type="checkbox"]', function (e) {
+        var $row = $(this).closest('tr');
+        var data = tablaDetalle.row($row).data();
+        data.Seleccionado = this.checked
+        e.stopPropagation();
+    });
+
+
+
+    function GuardarSeleccion() {
+        var ListaDetalle = [];
+        var tabla = $.fn.dataTable.Api('#tablaDetalle-@ViewBag.Id');
+        tabla.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            ListaDetalle.push(this.data());
+        });
+
+            $.ajax({
+                url: "@Url.Action("GuardarSeleccionPermisosPorRol", "Role")",
+                type: 'POST',
+                data: { Id: "@ViewBag.Id", ListaPermisos : ListaDetalle },
+               // data: JSON.stringify({ ListaProveedor: ListaDetalle }),
+              //  contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.Estado) { CerrarModal();}
+                    AlertaAjax(data);
+                },
+                error: function (data) {
+                    AlertaError();
+                },
+            });
+
+
+
+    }
+
+
+
+    var tablaDetalle= $('#tablaDetalle-'+'@ViewBag.Id').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[0, "asc"]],
+        ajax: {
+            url: '@Url.Action("GetListaSeleccionPermisosPorRol", "Role")',
+            global: false,
+            data: { id: '@ViewBag.Id' },
+            method: "Get",
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+        {
+            data: null,
+            render: function (data) {
+
+                return '<div class="custom-control custom-checkbox"> <input id="check-' + data.Id + '"  class="custom-control-input" type="checkbox" ' + (data.Seleccionado ? 'checked' : '') + ' name="checkboxItem"><label class="custom-control-label" for="check-' + data.Id +'">' + data.Nombre +'</label> </div>';
+            }
+        },
+        //{
+        //    data:'Nombre'
+        //},
+        ]
+
+    });
+
+
+</script>

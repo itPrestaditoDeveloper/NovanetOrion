@@ -1,0 +1,572 @@
+﻿@model OrionCoreCableColor.Models.Tecnico.InstalacionViewModel
+
+@{ ViewBag.Title = "ViewDetalleInstalacion"; }
+
+<h2 class="text-center">Detalle de instalación</h2>
+
+<div class="card p-3">
+
+    <div class="row">
+
+        <!-- Estado de la Instalación -->
+        <div class="col-lg-12">
+            <div class="form-group text-center">
+                <a class="btn btn-@Model.FcClase text-white w-100">Estado Actual Instalación: <b>@Model.FcDescripcion</b> </a>
+            </div>
+        </div>
+
+        <!-- Cliente -->
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+            <div class="form-group">
+                
+                <br />
+                <label class="control-label font-12">Nombre Cliente</label>
+
+                <div class="input-group">
+                    @Html.EditorFor(model => model.FcNombre, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                </div>
+            </div>
+        </div>
+
+        <!-- Artículos Asignados -->
+        <div class="col-lg-8 col-md-6 col-sm-12 mb-3">
+            <div class="form-group">
+           
+                <br />
+                <label class="control-label font-12">Articulos del Cliente</label>
+                <div class="input-group">
+                    @Html.EditorFor(model => model.FcArticulosdelContrato, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs centrados -->
+    <div class="d-flex justify-content-center">
+        <ul class="nav nav-tabs mt-2" id="installationTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="productos-tab" data-toggle="tab" href="#productos" role="tab" aria-controls="productos" aria-selected="true">Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="imagenes-tab" data-toggle="tab" href="#imagenes" role="tab" aria-controls="imagenes" aria-selected="false">Imágenes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="false">Resumen</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="tab-content mt-4" id="installationTabsContent">
+
+        <!-- Tab de Productos -->
+        <div class="tab-pane fade show active" id="productos" role="tabpanel" aria-labelledby="productos-tab">
+            <div class="row">
+                @foreach (var item in Model.flListaMaterialesList)
+                {
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            <label>Cantidad @item.FcProducto</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-router fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => item.fnCantidad, new { htmlAttributes = new { @class = "form-control", id = "cantidad-" + item.FiIDProducto, @onchange = "updateSummary(); codigobarra('" + item.FbCodigo + "','" + item.FiIDProducto + "')" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => item.fnCantidad, "", new { @class = "text-danger" })
+                        </div>
+                        @if (item.FbCodigo)
+                        {
+                            <div id="divcodigoproducto-@item.FiIDProducto"></div>
+                        }
+                        </div>
+                }
+            </div>
+        </div>
+
+        <!-- Tab de Imágenes -->
+        <div class="tab-pane fade" id="imagenes" role="tabpanel" aria-labelledby="imagenes-tab">
+            <div class="row">
+                @foreach (var item in Model.flListadoFotosList)
+                {
+                    <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            <label>@item.FcDescripcion</label>
+                            <div class="container">
+                                <button class="btn btn-success w-100" onclick="document.getElementById('getFile2-@item.FiIDCatalogo_FotosInstalacion').click()">Tomar o subir foto</button>
+                                <input type="file" accept="image/*" capture="camera" id="getFile2-@item.FiIDCatalogo_FotosInstalacion" name="@item.FiIDCatalogo_FotosInstalacion" style="display:none" onchange="previewImage(@item.FiIDCatalogo_FotosInstalacion)" />
+                            </div>
+                            <img src="#" style="width: 100%; display: none" alt="@item.FcDescripcion" id="fotoprevia-@item.FiIDCatalogo_FotosInstalacion" class="img-thumbnail mt-2" />
+                            <canvas style="display: none" alt="@item.FcDescripcion" id="fotopreviacanva-@item.FiIDCatalogo_FotosInstalacion" class="img-thumbnail"></canvas>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Tab de Resumen -->
+        <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div class="form-group">
+                        <label>Viñeta del Cliente</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-router fa-fw"></i></span>
+                            </div>
+                            @Html.TextAreaFor(model => model.fcVinietaCliente, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcVinietaCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div class="form-group">
+                        <label>Comentario de Instalación</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-router fa-fw"></i></span>
+                            </div>
+                            @Html.TextAreaFor(model => model.fcComentarioInstalacion, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcComentarioInstalacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!-- Resumen de Productos -->
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div class="form-group">
+                        <label>Resumen de Productos</label>
+                        <ul id="summary-products">
+                            <!-- Aquí se actualizarán los productos -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Resumen de Imágenes -->
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                    <div class="form-group">
+                        <label>Resumen de Imágenes</label>
+                        <div id="summary-images" class="row">
+                            <!-- Aquí se mostrarán las imágenes cargadas -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de Finalizar -->
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <button id="btnGuardarForm" type="button" class="btn btn-primary w-100" onclick="Finalizar()">Enviar a Validar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script src="~/Content/js/loading/loading.js"></script>
+    <script>
+        var listadoFotos = JSON.parse('@Html.Raw(Json.Encode(Model.flListadoFotosList))')
+        var listadoMateriales = JSON.parse('@Html.Raw(Json.Encode(Model.flListaMaterialesList))')
+        var listaCodigoBarras = JSON.parse('@Html.Raw(Json.Encode(ViewBag.CodigoBarra))')
+        var listaCodigoBarrasSend = [];
+        var fotosredimencionadas = [];
+
+        for (var i = 0; i < listadoFotos.length; i++) {
+        debugger
+        let name = i + 1;
+
+            window['myDropzone' + name] = $('#Imagen-dropzone-' + listadoFotos[i].FiIDCatalogo_FotosInstalacion).dropzone({
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            maxFiles: 1,
+            init: function () {
+                var myDropzone = this;
+                myDropzone.on('maxfilesexceeded', function (file) {
+                    AlertaMensaje("Remueva una imagen para colocar uno nuevo");
+                    var _ref = file.previewElement;
+                    if (_ref != null) {
+                        _ref.parentNode.removeChild(file.previewElement);
+                    }
+                    return;
+                });
+
+
+                myDropzone.on('thumbnail', function (file, dataURL) {
+                    RedimencionarImagen(`fotopreviacanva-${name}`, file, "fotoprevia2");
+                });
+
+            },
+            removedfile: function (file) {
+
+                var _ref = file.previewElement;
+                if (_ref != null) {
+                    var divImagenes = $("#imagenesPrevias").children().toArray();
+                    $(divImagenes.find(x => x.id == file.name)).remove();
+                    this.files = this.files.filter(x => x != file);
+                }
+                return _ref != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+            }
+        });
+
+        }
+        var ListadoMaterialesSEND = [];
+        for (var i = 0; i < listadoMateriales.length; i++) {
+            debugger;
+            //let name = i + 1;
+            ListadoMaterialesSEND.push({
+                fiIDMarca: listadoMateriales[i].FiIDMarca, fiIDProducto: listadoMateriales[i].FiIDProducto,
+                fcProducto: listadoMateriales[i].FcProducto, fnCantidad: $("#cantidad-" + listadoMateriales[i].FiIDProducto).val()
+            });
+
+            if (listadoMateriales[i].FbCodigo) {
+                codigobarra(`${listadoMateriales[i].FbCodigo}`, `${listadoMateriales[i].FiIDProducto}`);
+
+            }
+        }
+
+        // Actualizar el resumen de productos e imágenes
+        function updateSummary() {
+            // Actualizar el resumen de productos
+            var summaryProducts = document.getElementById("summary-products");
+            summaryProducts.innerHTML = ""; // Limpiar el resumen actual
+            listadoMateriales.forEach(function (item) {
+                var cantidad = document.getElementById("cantidad-" + item.FiIDProducto).value;
+                var li = document.createElement("li");
+                li.textContent = item.FcProducto + ": " + cantidad + " unidades";
+                summaryProducts.appendChild(li); // Agregar cada producto al resumen
+            });
+
+            // Actualizar el resumen de imágenes cargadas usando fotosredimencionadas
+            var summaryImages = document.getElementById("summary-images");
+            summaryImages.innerHTML = ""; // Limpiar el resumen actual
+            fotosredimencionadas.forEach(function (item) {
+                var col = document.createElement("div");
+                col.classList.add("col-lg-4", "col-md-6", "col-sm-12", "mb-3");
+
+                var img = document.createElement("img");
+                img.src = item.basesesentaycuatro;  // Usar la imagen redimensionada en base64
+                img.classList.add("img-thumbnail");
+                img.style.width = "100%";
+
+                col.appendChild(img);
+                summaryImages.appendChild(col); // Agregar la imagen al resumen
+            });
+        }
+
+        function previewImage(id) {
+            const input = document.getElementById('getFile2-' + id);
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const base64String = reader.result;
+
+                    // Redimensionar la imagen y agregar a fotosredimencionadas
+                    RedimencionarImagen(`fotopreviacanva-${id}`, file, base64String, file.name, id);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function Finalizar()
+        {
+            debugger;
+            H5_loading.show();
+            var model = @Html.Raw(Json.Encode(Model));
+            $("#btnGuardarForm").hide();
+            let listadoFotosSend = [];
+
+            var comentario = $(`#fcComentarioInstalacion`).val();
+
+            if (comentario = "" || comentario == null) {
+                $("#btnGuardarForm").show();
+                H5_loading.hide();
+                return ToastrError("Error", "Escriba un comentario");
+            }
+
+
+            var listaMateriales = [];
+            for (const item of listadoMateriales) {
+                let seriesArray = []; // Usamos un array para las series
+
+                if (item.FbCodigo) {
+                    for (let j = 0; j < $("#cantidad-" + item.FiIDProducto).val(); j++) {
+                        let exis = $(`#codigobarra-${item.FiIDProducto}-${j}`).val();
+
+                        if (!exis)// para validar si es null, undefined o ""
+                        {
+                            $("#btnGuardarForm").show();
+                            return ToastrError("Error", "Hay Materiales que requieren series, en caso de que no, coloque la cantidad en 0");
+                        } else {
+                            seriesArray.push({
+                                "FiProducto": item.FiIDProducto,
+                                "Serie": exis
+                            });
+                        }
+                    }
+                }
+
+                // Agregamos el objeto actual al array de listaMateriales
+                listaMateriales.push({
+                    "FiProducto": item.FiIDProducto,
+                    "FcProducto": item.FcProducto,
+                    "Cantidad": parseFloat(document.getElementById("cantidad-" + item.FiIDProducto).value),
+                    "FbCodigo": item.FbCodigo,
+                    "Series": seriesArray.length > 0 ? JSON.stringify(seriesArray) : '[]' // Serializamos solo si hay series
+                });
+            }
+
+            // Convertimos la lista a JSON
+            var listaMaterialesJSON = JSON.stringify(listaMateriales);
+
+            var listaimagenes = [];//`[`
+            for (const item of fotosredimencionadas) {
+                listaimagenes.push({
+                    "FiIDCatalogo_FotosInstalacion":  item.numimagen,
+                    "FcNombreFoto": item.nombreArchivo,
+                    "base64": item.basesesentaycuatro
+                });
+            }
+            var listaimagenesJSON = JSON.stringify(listaimagenes);
+
+            var modeloEnviarcontrolador = {
+
+                "FiIDContratistaSolicitud": '@Model.FiIDContratistaSolicitud',
+                "FiIDSolicitud": @Model.FiIDSolicitud,
+                "fcComentarioInstalacion": `${$("#fcComentarioInstalacion").val()}`,
+                "fcVinietaCliente": `${document.getElementById("fcVinietaCliente").value}`,
+                "ListaMateriales": listaMaterialesJSON,
+                "ListadoFotos": listaimagenesJSON
+            }
+
+            console.log(modeloEnviarcontrolador);
+            @*var form_data = new FormData();
+            form_data.append("fiIDSolicitudContratista", '@Model.FiIDContratistaSolicitud');
+            form_data.append("fiIDEstadoInstalacion", 6);
+            //form_data.append("fnMetrosFibra", 0);
+            form_data.append("fcVinietaCliente", document.getElementById("fcVinietaCliente").value)
+            form_data.append("fcComentarioInstalacion", document.getElementById("fcComentarioInstalacion").value)
+           // form_data.append("listadoMateriales", ListadoMaterialesSEND);
+            var imagen = 0;*@
+
+            //procedimiento antes como Dennis lo hacia...
+            //for (var i = 0; i < listadoMateriales.length; i++) {
+            //    debugger
+            //    let name = i + 1;
+            //    //  listadoFotosSend.push({ fiIDCatalogo_FotosInstalacion: i + 1, Archivo: window['myDropzone' + name][0].dropzone.files[0] })
+            //    form_data.append(`listadoMateriales[${i}].fiIDProducto`, listadoMateriales[i].FiIDProducto)
+            //    form_data.append(`listadoMateriales[${i}].fnCantidad`, document.getElementById("cantidad-" + listadoMateriales[i].FiIDProducto).value)
+            //    //form_data.append(`listadoMateriales[${i}].fbCodigo`,false)
+            //    //form_data.append(`listadoMateriales[${i}].fbCodigo`, false)
+            //    var arreglardespues = false;
+            //    if (listadoMateriales[i].fbCodigo) {
+            //        //if (arreglardespues) {
+            //        form_data.append(`listadoMateriales[${i}].fbCodigo`, true)
+            //        if ($("#cantidad-" + listadoMateriales[i].FiIDProducto).val() > 0) {
+            //            for (var j = 0; j < $("#cantidad-" + listadoMateriales[i].FiIDProducto).val(); j++) {
+            //                var exis = $(`#codigobarra-${listadoMateriales[i].FiIDProducto}-${j}`).val();
+
+            //                if (exis == "undefined" || exis == null || exis == "") {
+            //                    $("#btnGuardarForm").show();
+            //                    return ToastrError("Error", "Hay Materiales que requieren series, en caso de que no, coloque la cantidad en 0");
+            //                } else {
+
+            //                    form_data.append(`listadoMateriales[${i}].CodigoBarra[${j}].fiIDProducto`, listadoMateriales[i].FiIDProducto)
+            //                    form_data.append(`listadoMateriales[${i}].CodigoBarra[${j}].fiIDMovimiento`, exis)
+            //                    //form_data.append(`listadoMateriales[${i}].CodigoBarra[${j}].serie`, textoSeleccionado)
+
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
+            //creo que ya no se esta usando la verdad
+            //for (const item of fotosredimencionadas) {
+            //    debugger
+            //    var fil = dataURLtoFile(item.basesesentaycuatro, item.nombreArchivo);
+            //}
+            //SubirFotos1a1('@Model.FiIDContratistaSolicitud', 0, fil, 0);
+
+
+            //if (imagen == 0) { // aqui valido el dropzone
+            if (fotosredimencionadas.length == 0) {
+                $("#btnGuardarForm").show();
+                H5_loading.hide();
+                return ToastrError("Error", "Suba las Fotografias Requeridas");
+            } else {
+
+                $.ajax({
+                    url: '@Url.Action("TerminarInstalacion", "Tenico")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(modeloEnviarcontrolador),
+                    success: function (data) {
+                        H5_loading.hide();
+                        ToastrSuccess("Listo!", data.Titulo);
+                        EsperarParaEjecutarFuncion(3, function () { RedireccionarAPagina("Tenico", "BandejaSolicitudesAsignadasTecnico") });
+                    }, error: function () {
+                        ToastrError("Error", resp.Mensaje);
+
+                    }
+                });
+
+            }
+
+        }
+
+        function RedireccionarAPagina(controlador, vista) {
+            window.location = '@Url.Action("BandejaSolicitudesAsignadasTecnico","Tenico")';
+
+        }
+
+        function EsperarParaEjecutarFuncion(segundos, Callbackfuncion) {
+            setTimeout(() => {
+                Callbackfuncion();
+            }, segundos*1000);
+        }
+
+        //function IsNullOrEmptyOr0(valor)
+        //{
+        //    if (typeof valor == "string") {
+        //        valor = valor.trim();
+        //    }
+
+        //    if (valor == "" || valor == null || valor == 0 || valor == "0")
+        //    {
+        //        return true;
+        //    } else {
+        //        return false;
+        //    }
+        //}
+
+        function RedimencionarImagen(idcanva, eimagencaptada, base64string, NombreArchivo, numeroimagen) {
+            debugger;
+            var ctx = document.getElementById(idcanva).getContext('2d');
+            var img = new Image;
+            img.src = base64string;
+            img.onload = function () {
+                var canvas = document.getElementById(idcanva);
+                var maxAncho = 900;
+                var maxAlto = 1500;
+
+                var proporcion = Math.min(maxAncho / img.width, maxAlto / img.height);
+                var ancho = img.width * proporcion;
+                var alto = img.height * proporcion;
+
+                canvas.width = ancho;
+                canvas.height = alto;
+
+                ctx.drawImage(img, 0, 0, ancho, alto);
+
+                // Guardar la imagen redimensionada en fotosredimencionadas
+                fotosredimencionadas.push({ canva: idcanva, basesesentaycuatro: canvas.toDataURL('image/jpeg', 0.7), nombreArchivo: NombreArchivo, numimagen: numeroimagen });
+
+                // Actualizar la vista previa de la imagen
+                var imgPreview = document.getElementById('fotoprevia-' + numeroimagen);
+                imgPreview.src = canvas.toDataURL('image/jpeg', 0.7);
+                imgPreview.style.display = 'block';
+
+                // Actualizar el resumen de imágenes
+                updateSummary();
+            }
+        }
+
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL();
+            return dataURL;
+        }
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[arr.length - 1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        function codigobarra(codigobarra, idproducto) {
+            //console.log(listaCodigoBarras);
+            if (codigobarra) {
+                var opt = "";
+                $(`#divcodigoproducto-${idproducto}`).empty();
+                var cont = $(`#cantidad-${idproducto}`).val();
+                var opselect = "";
+
+
+                $.ajax({
+                    url: "@Url.Action("Listadocodigobarra", "LlenarCampos")",
+                    data: { fiIdProducto: idproducto },
+                    type: "GET",
+                    success: function (respuesta) {
+                        console.log(respuesta);
+                        //var selectcategoria = $("#seleccategoria");
+
+                        //selectcategoria.empty();
+                        //selectcategoria.append($('<option>', {
+                        //    value: 0,
+                        //    text: 'Defina un Tipo Incidencia'
+                        //}));
+                        //$("#seleccategoria").select2({ dropdownParent: $("#MyModalBig") }).val(null).trigger("change");
+                        //$.each(respuesta, function(index, item) {
+                        //    selectcategoria.append($('<option>', {
+                        //        value: item.fiIDTipoRequerimiento,
+                        //        text: item.fcTipoRequerimiento
+                        //    }));
+                        //});
+                    },
+                    error: function (respuesta) {
+                        console.log(respuesta);
+                    }
+                });
+
+
+                for (const item of listaCodigoBarras) {
+                    if (item.fiIDProducto == idproducto) {
+                        opselect += `<option value ="${item.fiIDMovimiento}">${item.Serie}</option>`
+                    }
+                }
+
+                for (var i = 0; i < cont; i++) {
+                    opt = $(`<div class="row">
+                            <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                                <br />
+
+                                    <div class="form-group">
+                                        Codigo Barra #${i + 1}
+                                        <div class="input-group mar-btm" style="width:100%;">
+
+                                            <select id="codigobarra-${idproducto}-${i}" class="form-control select2" >
+                                                ${opselect}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                            </div>
+                        </div>`);
+
+                    $(`#divcodigoproducto-${idproducto}`).append(opt);
+                }
+
+                for (const intem of $(".select2").toArray()) {
+                    $(intem).select2();
+                }
+            }
+        }
+
+    </script>
+}

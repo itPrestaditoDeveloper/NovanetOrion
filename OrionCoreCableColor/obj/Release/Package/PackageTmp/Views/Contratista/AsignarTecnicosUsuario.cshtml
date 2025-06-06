@@ -1,0 +1,121 @@
+﻿
+<h2>Tecnicos Por Contratista</h2>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Tecnicos Por Contratista</h2>
+        <div class="panel-toolbar " role="menu">
+            <a onclick="NuenoRegistro()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Nuevo Registro</a>
+        </div>
+    </div>
+
+    <div id="panelprincipal" class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudes">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th>Acciones</th>
+                        <th>Contratista</th>
+                        <th>Tecnico</th>
+                        <th>EStado</th>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        var tablaPrincipal = $('#BandejaSolicitudes').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[3, "desc"]],
+              ajax: {
+                  url: "@Url.Action("ListaTecnicosPorContratista", "Contratista")",
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return "";
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return data.fcContratista;
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return data.fcTecnico;
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return data.fiEstadoTecnicoPorContratista;
+
+                    }
+
+                }
+            ]
+        });
+
+        function NuenoRegistro() {
+            $.ajax({
+                url: "@Url.Action("AsignarUsuarioContratista", "Contratista")",
+                type: "GET",
+                success: function (respuesta) {
+                    ShowModal(respuesta);
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,225 @@
+﻿
+@{
+    ViewBag.Title = "MensajeriaMasiva";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Mesajeria Masiva</h2>
+
+    </div>
+    <div class="panel-container row" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-8">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                    <input class="form-control" type="file" id="input" accept=".xls,.xlsx">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" id="button">Subir Data</button>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success" id="button" onclick="MandarMasivo()">Mandar</button>
+                </div>
+                <div class="col-md-12">
+                    <pre id="jsondata"></pre>
+                </div>
+            </div>
+
+            <table id="control" class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Telefono</th>
+                        <th>Mensaje</th>
+                        <th>Tipo Conversación</th>
+                        <th>Variable</th>
+                        <th>Grupo Conversación</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div class="col-4">
+            <div id="selfievalidacion" class="container">
+                <button class="btn btn-success centrado" onclick="document.getElementById('getFile2').click()">Subir foto</button>
+                <input type="file" accept="image/*" capture="camera" id="getFile2" style="display:none">
+            </div>
+
+            <img src="#" style="height: 300px; width: 350px; display: none" alt="Mi identidad" id="fotoprevia2" class="img-thumbail centrado" />
+            <canvas src="#" style="display: none" alt="Mi identidad" id="fotopreviacanva2" class="img-thumbail"></canvas>
+            <br />
+           
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/excel/xlsx.mini.js"></script>
+    <script>
+        let rowObject = "";
+        $(document).ready(function () {
+
+        });
+
+            let selectedFile;
+            console.log(window.XLSX);
+            document.getElementById('input').addEventListener("change", (event) => {
+                selectedFile = event.target.files[0];
+            })
+
+            let data = [{
+                "name": "jayanth",
+                "data": "scd",
+                "abc": "sdef"
+            }]
+
+
+            document.getElementById('button').addEventListener("click", () => {
+                XLSX.utils.json_to_sheet(data, 'out.xlsx');
+                if (selectedFile) {
+                    let fileReader = new FileReader();
+                    fileReader.readAsBinaryString(selectedFile);
+                    fileReader.onload = (event) => {
+                        let data = event.target.result;
+                        let workbook = XLSX.read(data, { type: "binary" });
+                        console.log(workbook);
+                        workbook.SheetNames.forEach(sheet => {
+                            debugger;
+                            rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+                            $('#control').DataTable({
+                                autoWidth: true,
+                                responsive: true,
+                                destroy: true,
+                                dom:'rtip',
+                                data: rowObject,
+                                columns: [
+
+                                    { data: "Telefono" },
+                                    { data: "Mensaje" },
+                                    { data: "IDTipoConversasion" },
+                                    { data: "pcVariable" },
+                                    { data: "pcGrupoConversasion" }
+                                ]
+                            });
+                            debugger;
+                            for (var i = 0; i < rowObject.length; i++) {
+                                
+                                rowObject[i].Mensaje = rowObject[i].Mensaje.replaceAll("<br/>", '\n');
+                            }
+
+                        });
+                    }
+                }
+            });
+
+
+        document.getElementById("getFile2").addEventListener("change", function (e) {
+            debugger
+            RedimencionarImagen(`fotopreviacanva2`, e.target.files[0], "fotoprevia2");
+
+
+            const [file] = this.files
+            if (file) {
+                document.getElementById("fotoprevia2").style.display = "block";
+                document.getElementById("fotoprevia2").src = URL.createObjectURL(file)
+            }
+        })
+
+        function RedimencionarImagen(idcanva, eimagencaptada, idimg) {
+
+            var ctx = document.getElementById(idcanva).getContext('2d'); // capturamos el id del camva para ponerlo la imagen oculta ahi y asi poder tomar esa imagen y no la que se esta mostrando
+            var img = new Image;
+            img.src = URL.createObjectURL(eimagencaptada); // insertamos la imagen que el cliente subio para posteriormente hacer la reduccion
+            img.onload = function () {
+                var canvas = document.getElementById(idcanva);
+                var maxAncho = 900; //aqui le ponemos unas medidas estandar que pueden cambiar en un futuro,
+                var maxAlto = 1500;
+
+                var proporcion = Math.min(maxAncho / img.width, maxAlto / img.height); // aqui hacemos una proporcion de las imagenes con respecto al tamaño de la imagen original y al estandar que tenemos nosotros aqui adentro
+                var propdos = img.width / img.height;
+                var ancho = img.width * proporcion;
+                var alto = img.height * proporcion;
+
+                canvas.width = (img.width / propdos); // ponemos el tamaño en el canva oculto
+                canvas.height = (img.height / propdos);
+
+                ctx.drawImage(img, 0, 0, (img.width / propdos), (img.height / propdos));
+                //console.log(canvas.toDataURL('image/jpeg', 0.7)); // tira el base 64
+
+                var urlbase64 = getBase64Image(img); // tira el base 64
+
+                document.getElementById(idimg).src = canvas.toDataURL('image/jpeg', 0.9); // el 07 es la calidad de la imagen si no estoy mal eso decia en la documentacion
+                //document.getElementById(idcanva).style.display = "block"; //mostrar la imagen que esta oculta
+            }
+        }
+
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL();
+            return dataURL;
+        }
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[arr.length - 1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
+
+        function MandarMasivo()
+        {
+            debugger;
+            var form_data = new FormData();
+
+            for (var i = 0; i< rowObject.length; i++) {
+                form_data.append(`Excel[${i}].Telefono`, rowObject[i].Telefono);
+                form_data.append(`Excel[${i}].Mensaje`, rowObject[i].Mensaje.replaceAll("<br/>", '\n'));      
+                form_data.append(`Excel[${i}].IDTipoConversasion`, rowObject[i].IDTipoConversasion);
+                form_data.append(`Excel[${i}].pcVariable`, rowObject[i].pcVariable.replaceAll("<br/>", '\n'));      
+                form_data.append(`Excel[${i}].pcGrupoConversasion`, rowObject[i].pcGrupoConversasion.replaceAll("<br/>", '\n'));      
+            }
+
+            let name = i + 1;
+            console.log(document.getElementById('getFile' + name))
+            var canvas = document.getElementById(`fotopreviacanva${name}`);
+            form_data.append("img", $("#getFile2")[0].files[0]);
+            if (rowObject=="")
+            {
+                ToastrError("Error", "Falta subir la data para el envio Masivo");
+                return;
+            }
+            $.ajax({
+                url: "@Url.Action("smsMasivoPromos", "Base")",
+                type: 'POST',
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (data) {
+                    ToastrSuccess("Listo!", "Subido correctamente");
+
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 3000);
+
+
+                }, error: function () {
+                    ToastrError("Error", "Falta subir la data para el envio Masivo");
+
+                    
+                }
+            });
+        }
+    </script>
+}
+

@@ -1,0 +1,215 @@
+﻿@model OrionCoreCableColor.Models.Productos.ListMovimientoDetalleViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Editar Inventario @Model.fcProducto
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label class="control-label">Ubicacion Inicial</label>
+                <div class="input-group mar-btm">
+                    @Html.DropDownList("ubicacionInicial", new SelectList(ViewBag.Ubicaciones, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fiIDUbicacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="control-label">Solicitudes Inicial</label>
+                <div class="input-group mar-btm">
+                    <select id="solicitudesInicio" class="form-control input-lg" style="width:100%;"></select>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label">Cantidad</label>
+                <div class="input-group mar-btm">
+                    <input type="number" id="cantidadInicial" readonly class="form-control" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="control-label">Ubicacion Destino</label>
+                <div class="input-group mar-btm">
+                    @Html.DropDownList("ubicacionDestino", new SelectList(ViewBag.Ubicaciones, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fiIDUbicacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                <label class="control-label">Solicitudes Destino</label>
+                <div class="input-group mar-btm">
+                    <select id="solicitudesDestino" class="form-control input-lg" style="width:100%;"></select>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="control-label">Cantidad Actual</label>
+                <div class="input-group mar-btm">
+                    <input type="number" id="cantidadActualDestino" readonly class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="control-label">Cantidad Agregar</label>
+                <div class="input-group mar-btm">
+                    <input type="number" id="cantidadAgregar"  class="form-control InputDecimal" data_class="ClaseDecimal" min="0" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarConsumibles()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $("#ubicacionInicial, #ubicacionDestino").select2({ dropdownParent: $("#MyModalBig") }).val(0).trigger("change.select2");
+
+    $("#ubicacionInicial").change(function () {
+        $.ajax({
+            url: "@Url.Action("GetSolicitudesPorUbicacion","Productos")",
+            method: "Get",
+            data: { fiIDUbicacion: $(this).val() },
+            success: function (resp) {
+                debugger;
+                var i = resp[0].id;
+                $("#solicitudesInicio").empty().select2({ data: resp, dropdownParent: $("#MyModalBig") }).val(i).trigger('change');
+                ObtenerExistenciaProd("#cantidadInicial", $("#ubicacionInicial").val(), $("#solicitudesInicio").val() ?? 0);
+            }
+        });
+
+    });
+
+    $("#solicitudesInicio").change(function(){
+        ObtenerExistenciaProd("#cantidadInicial", $("#ubicacionInicial").val(), $("#solicitudesInicio").val());
+    });
+
+    $("#ubicacionDestino").change(function () {
+        $.ajax({
+            url: "@Url.Action("GetSolicitudesPorUbicacion","Productos")",
+            method: "Get",
+            data: { fiIDUbicacion: $(this).val() },
+            success: function (resp) {
+                debugger;
+                var i = resp[0].id;
+               
+                $("#solicitudesDestino").empty().select2({ data: resp, dropdownParent: $("#MyModalBig") }).val(i).trigger('change');
+                ObtenerExistenciaProd("#cantidadActualDestino", $("#ubicacionDestino").val(), $("#solicitudesDestino").val() ?? 0);
+               
+                
+            }
+        });
+    });
+
+    $("#solicitudesDestino").change(function () {
+        ObtenerExistenciaProd("#cantidadActualDestino", $("#ubicacionDestino").val(), $("#solicitudesDestino").val());
+    });
+
+
+    function ObtenerExistenciaProd(txtCampo,fiIDUbicacion, fiIDSolicitud) {
+        $.ajax({
+            url: "@Url.Action("GetCantidadConsumible","Productos")",
+            method: "Get",
+            data: { fiIDProducto: @Model.fiIDProducto, fiIDUbicacion: fiIDUbicacion, fiIDSolicitud: fiIDSolicitud  },
+            success: function (resp) { 
+                $(txtCampo).val(resp); //cantidadInicial
+            }
+        });
+    }
+
+
+
+
+    $("#cantidadAgregar").keyup(function () {
+
+        if (parseFloat($("#cantidadInicial").val()) < parseFloat($("#cantidadAgregar").val())) {
+            ToastrWarning("Advertencia", "Cantidad agregar pasa la cantidad del lugar inicial");
+            return;
+        }
+
+        if (parseFloat($("#cantidadAgregar").val()) < 0) {
+            ToastrWarning("Advertencia", "Cantidad no puede ser menor a 0");
+            return;
+        }
+    });
+
+    function GuardarConsumibles()
+    {
+
+        $("#btnGuardarForm").hide();
+        if ($("#ubicacionInicial").val() == (null || 0)) {
+            ToastrWarning("Advertencia", "Seleccione una ubicacion inicial");
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+        if ($("#ubicacionDestino").val() == (null || 0)) {
+            ToastrWarning("Advertencia", "Seleccione una ubicacion destino");
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+        if (parseFloat($("#cantidadInicial").val()) < parseFloat($("#cantidadAgregar").val())) {
+            ToastrWarning("Advertencia", "Cantidad agregar pasa la cantidad del lugar inicial");
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+        if (parseFloat($("#cantidadAgregar").val()) < 0) {
+            ToastrWarning("Advertencia", "Cantidad no puede ser menor a 0");
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+        var model = {
+            fiIDProducto: @Model.fiIDProducto,
+            fiIDUbicacionIncial: $("#ubicacionInicial").val(),
+            fiIDSolicitudInicial: $("#solicitudesInicio").val() ?? 0,
+            fiIDUbicacionDestino: $("#ubicacionDestino").val(),
+            fiIDSolicitudDestino: $("#solicitudesDestino").val() ?? 0,
+            fnCantidad: $("#cantidadAgregar").val()
+        };
+
+        $.ajax({
+            url: "@Url.Action("EditarConsumible","Productos")",
+            method: "Post",
+            data: { model: model },
+            success: function (resp) {
+                if (resp.Estado) {
+                    tablaPrincipal.ajax.reload();
+                    CerrarModal();
+                    ToastrSuccess("Inventario", resp.Mensaje);
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            }
+        });
+    }
+
+</script>

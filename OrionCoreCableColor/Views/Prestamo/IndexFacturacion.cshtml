@@ -1,0 +1,227 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-shopping-cart fa-fw"></i> Facturacion</h2>
+        <div class="panel-toolbar " role="menu">
+            <a href="@Url.Action("CrearFacturacion")" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Registrar Factura</a>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Factura</th>
+                        <th>Fecha Transaccion</th>
+                        <th>Cliente</th>
+                        <th>Sinopsis</th>
+                        <th>Total</th>
+                        <th>Partida</th>
+                        <th>Facturado</th>
+                        <th>Pagado</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+
+
+        function EditarFacturacion(fiIDFacturacionMaestro)
+        {
+            location.href = "@Url.Action("EditarFacturacion", "Prestamo")?fiIDFacturacionMaestro=" + fiIDFacturacionMaestro;
+        }
+
+
+
+
+
+        function CambiarStatus(fiIDFacturacionMaestro, fiEstadoFacturacion, fcFactura) {
+            Swal.fire({
+                //type: "warning",
+                title: `¿Seguro que desea ${fiEstadoFacturacion == 1 ? "deshabilitar" : "Habilitar"} la factura #${fcFactura}?`,
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                confirmButtonColor: '#d33',
+                cancelButtonText: 'No',
+                allowOutsideClick: () => !swal.isLoading()
+            }).then((result) => {
+
+                if (result.value == true)
+                {
+                    $.ajax({
+                        url:"@Url.Action("CambiarStatusFactura", "Prestamo")",
+                        type: "Get",
+                        data: { fiIDFacturacionMaestro: fiIDFacturacionMaestro },
+                        success: function (data) {
+                            if (fiEstadoFacturacion == 1) {
+                                ToastrSuccess("", "Factura deshabilitada exitosamente");
+                            } else {
+                                ToastrSuccess("", "Factura habilitada exitosamente");
+                            }
+
+                            var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                            tablaT.ajax.reload();
+                        }
+                    });
+                }
+
+            });
+        }
+
+        function ContabilizarFacturacion(fiIDFacturacionMaestro) {
+            VerModalScrollConObjetoDeParametro({ fiIDFacturacionMaestro: fiIDFacturacionMaestro }, "@Url.Action("ConfirmarEntrega","Prestamo")");
+        }
+
+
+        function VisualizarFactura(fiIDFacturacionMaestro)
+        {
+
+            $.ajax({
+                url: "@Url.Action("GetPDFFactura", "Prestamo")",
+                method: "Get",
+                data: { fiIDFacturacionMaestro: fiIDFacturacionMaestro },
+                success: function (resp) {
+                    window.open("@Url.Action("GetPdf", "Base")", "_blank");
+                }
+            });
+        }
+
+
+
+        function ContabilizarPago(fiIDFacturacionMaestro)
+        {
+            VerModalScrollConObjetoDeParametro({ fiIDFacturacionMaestro: fiIDFacturacionMaestro }, "@Url.Action("ContabilizarPago","Prestamo")")
+        }
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[3, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaFacturacion", "Prestamo")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += data.fiEstadoFacturacion == 1 && data.fiFacturaConfirmada != 1 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarFacturacion(' + data.fiIDFacturacionMaestro + ')">Editar</a>' : '';
+                        opciones += data.fiEstadoFacturacion == 1 && data.fiFacturaConfirmada != 1 ? `<a href="javascript:void(0)" class="dropdown-item" onclick="ContabilizarFacturacion(${data.fiIDFacturacionMaestro})">Confirmar Venta</a>` : "";
+                        opciones += data.fiFacturaConfirmada != 1 ? `<a href="javascript:void(0)" class="dropdown-item" onclick="CambiarStatus(${data.fiIDFacturacionMaestro},${data.fiEstadoFacturacion},'${data.fcReferenciaDocumento}')">${(data.fiEstadoFacturacion == 1 ? "Deshabilitar" : "Habilitar")}</a>` : "";
+                        opciones += data.fiEstadoFacturacion == 1 && data.fiFacturaConfirmada == 1 && data.fiPagoConfirmado != 1 ? `<a href="javascript:void(0)" class="dropdown-item" onclick="ContabilizarPago(${data.fiIDFacturacionMaestro})">Registrar Pago</a>` : '';
+                        opciones += `<a href="javascript:void(0)" class="dropdown-item" onclick="VisualizarFactura(${data.fiIDFacturacionMaestro})">Factura</a>`;
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opt = "";
+                        opt = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)"><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                        return opt;
+                    }
+                },
+                {
+                    data: "fcReferenciaDocumento",
+                },
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        return `<label style="display:none;">${data.fdFechaTransaccion}</label>` + moment(data.fdFechaTransaccion).format("DD/MM/YYYY")
+                    }
+                },
+                {
+                    data: "fcNombreCliente",
+                },
+                {
+                    data: "fcConcepto",
+                },
+                {
+                    data: null,
+                    className: "text-right",
+                    render: function (data) {
+                        return "$ " + ConvertirDecimal(data.fnTotalFactura);
+                    }
+                },
+                
+                {
+                    data: "fcPartidaDolares"
+                },
+                
+                {
+                    className: "text-center",
+                    data: null,
+                    render: function (data) {
+                        if (data.fiFacturaConfirmada == 1) {
+                            return `<i class="fal fa-check text-success"></i>`;
+                        } else {
+                            return `<i class="fal fa-times text-danger"></i>`;
+                        }
+                    }
+                },
+                {
+                    className: "text-center",
+                    data: null,
+                    render: function (data) {
+                        if (data.fiPagoConfirmado == 1) {
+                            return `<i class="fal fa-check text-success"></i>`;
+                        } else {
+                            return `<i class="fal fa-times text-danger"></i>`;
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoFacturacion == 1) {
+                            return '<div class="badge badge-success">Activo</div>';
+                        } else {
+                            return '<div class="badge badge-danger">Inactivo</div>';
+                        }
+                    }
+                }
+
+
+            ]
+
+        });
+
+
+
+    </script>
+}

@@ -1,0 +1,352 @@
+﻿
+
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Agregar datos</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Identidad, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Identidad, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Identidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Origen Servicio: </label>
+                        <input type="text" id="txtOrigenServicio" class="form-control" placeholder="">
+
+                    </div>
+                </div>
+                @*<div class="col-sm-6">
+                <div class="form-group">
+                    <label>Codigo Vendedor: </label>
+                    <input type="text" id="txtCodigoVendedor" class="form-control" placeholder="001">
+                </div>
+            </div>*@
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Vendedor: </label>
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDUsuario, new SelectList(ViewBag.ListaOficial, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDUsuario, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3" style="display:none" id="IDLLevaMesGratis">
+                    <div class="form-group">
+                        <label></label>
+                        <div class="frame-wrap demo">
+                            <div class="demo">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="cbMesPromocion">
+                                    <label class="custom-control-label" for="cbMesPromocion">LLeva mes internet gratis </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3" style="display:none" id="IDMesPromocion">
+                    <div class="form-group">
+                        <label>Mes Gratis: </label>
+                        <input class="form-control" id="MesPromocion" type="month" value="">
+                    </div>
+                </div>
+                <div class="col-sm-6" style="display:none" id="ComentarioPromocion">
+                    <div class="form-group">
+                        <label>Comentario: </label>
+                        <input type="text" id="txtComentarioOferta" class="form-control" placeholder="001">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label></label>
+                        <div class="frame-wrap demo">
+                            <div class="demo">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="cbPromocionCodigo">
+                                    <label class="custom-control-label" for="cbPromocionCodigo">Codigo Promocion</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4" style="display:none" id="CodigoPromocion">
+                    <div class="form-group">
+                        <label>Codigo Promocion: </label>
+                        <input type="text" id="txtCodigoPromocionVendedor" class="form-control" placeholder="001">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Tipo Cliente: </label>
+                        <select class="select2 form-control w-100" id="dllTipoPersona">
+                            <option value="1">Normal</option>
+                            <option value="2">Juridico</option>
+                        </select>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" style="display:none" id="DivTipoPersona">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Nombre Empresa: </label>
+                        <input type="text" id="txtNombreEmpresaPersonaJuridico" class="form-control">
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Rtn: </label>
+                        <input type="text" id="txtRtnPersonaJuridica" class="form-control mascara-rtn" placeholder="">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnGuardarDatosSolicitud" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    var IDCheckCodigoPromocion = 0;
+    $(".mascara-rtn").inputmask("99999999999999");
+    $("#Nombre").prop("disabled", true);
+    $("#Identidad").prop("disabled", true);
+    $("#MesPromocion").prop("disabled", true);
+    $("#cbMesPromocion").on('change', function () {        
+        let CheckPromocion = $("#cbMesPromocion").prop("checked");
+        $("#IDMesPromocion").css('display', '');
+        $("#ComentarioPromocion").css('display', '');
+        
+        if (CheckPromocion == false) {
+            $("#IDMesPromocion").css('display', 'none'); 
+            $("#ComentarioPromocion").css('display', 'none');
+            
+        }
+    });
+
+    if (@Model.fiPlazoSeleccionado == 6) {
+        debugger;
+        $("#IDLLevaMesGratis").css('display', '');
+
+    } else {
+        $("#IDLLevaMesGratis").css('display', 'none'); 
+    }
+
+    $("#cbPromocionCodigo").on('change', function () {
+        debugger;
+        let CheckPromocion = $("#cbPromocionCodigo").prop("checked");       
+        $("#CodigoPromocion").css('display', '');
+           IDCheckCodigoPromocion = 1;
+        if (CheckPromocion == false) {            
+            $("#CodigoPromocion").css('display', 'none');
+            IDCheckCodigoPromocion = 0;
+        }
+    });
+    $("#fiIDUsuario").select2({
+        dropdownParent: $("#MyModalBig")
+    });
+
+        var fecha = new Date(); 
+        var mes = fecha.getMonth() + 1; 
+        var dia = fecha.getDate(); 
+        var ano = fecha.getFullYear(); 
+        if (dia < 10)
+            dia = '0' + dia; //agrega cero si el menor de 10
+        if (mes < 10)
+            mes = '0' + mes //agrega cero si el menor de 10
+        document.getElementById('MesPromocion').value = ano + "-" + mes;
+
+
+    $("#dllTipoPersona").change(function () {
+        //$(this).parsley().validate();
+        var TipoPersona = $("#dllTipoPersona option:selected").val();
+        if (TipoPersona == 2) {
+            $("#DivTipoPersona").css('display', '');
+        } else {
+            $("#DivTipoPersona").css('display', 'none');
+        }
+
+    });
+    $("#btnGuardarDatosSolicitud").click(function () {
+
+        var OrigenServicio = $("#txtOrigenServicio").val();
+        //var CodigoVendedor = $("#txtCodigoVendedor").val();
+        var CodigoVendedor = $("#fiIDUsuario :Selected").text();
+
+        var IdTipoPersona = $("#dllTipoPersona option:selected").val();
+        var ComentarioOferta = "NLA";
+        var IDMesPromocion = 0;
+        var MesPromocion = null;
+        var NombreEmpresaTipoPersona = "";
+        var RtnEmpresaTipoPersona = "";
+        var codigoPromocion = $("#txtCodigoPromocionVendedor").val();
+
+        if (OrigenServicio == "") {
+            ToastrWarning("Campos vacios", "Debe de colocar origen del servicio")
+            return false;
+        }
+        if (CodigoVendedor == "") {
+            ToastrWarning("Campos vacios", "Debe de seleccionar el vendedor")
+            return false;
+        }
+
+        if (IdTipoPersona == 2) {
+            NombreEmpresaTipoPersona = $("#txtNombreEmpresaPersonaJuridico").val();
+            RtnEmpresaTipoPersona = $("#txtRtnPersonaJuridica").val();
+        }
+        var CheckPromocion = $("#cbMesPromocion").prop("checked");
+        debugger;
+        if (CheckPromocion == true) {
+            bootbox.confirm({
+                 title: `<i class="" fa-times-circle text-danger mr-2'></i> Ingrese Token para poder guardar los datos <span class='fw-500'></span>`,
+                message: `<input type="text" id="txtToken" class="form-control mascara-rtn" placeholder="">`,
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+
+                    if (result == true) {
+                       ComentarioOferta = $("#txtComentarioOferta").val();
+                       MesPromocion = $("#MesPromocion").val();
+                       IDMesPromocion = 1;
+                       var url = "@Url.Action("VerificarToken", "Solicitudes")";
+
+                        $.ajax({
+                            url: url,
+                            type: "Get",
+                            data: { Token: $("#txtToken").val(), Codigo: 'N002' },
+                            success: function (data) {
+                                if (data.Mensaje == "Token Autorizado!") {
+                                    ToastrSuccess("Token Autorizado!", "Token Autorizado!");
+                                    $("#fcMensaje").val("");
+                                     $.ajax({
+                                        url: "@Url.Action("GuardarDatosSolicitudCliente", "Solicitudes")",
+                                        type: "POST",
+                                        //data: { model: model, OrigenServicio: OrigenServicio, CodigoVendedor: CodigoVendedor, IdTipoPersona: IdTipoPersona, NombreEmpresaTipoPersona: NombreEmpresaTipoPersona, RtnEmpresaTipoPersona: RtnEmpresaTipoPersona, ComentarioOferta: ComentarioOferta, IDMesPromocion: IDMesPromocion },
+                                         data: { model: model, OrigenServicio: OrigenServicio, CodigoVendedor: CodigoVendedor, IdTipoPersona: IdTipoPersona, NombreEmpresaTipoPersona: NombreEmpresaTipoPersona, RtnEmpresaTipoPersona: RtnEmpresaTipoPersona, ComentarioOferta: ComentarioOferta, IDMesPromocion: IDMesPromocion, IDCodigoPromocion: IDCheckCodigoPromocion, codigoPromocion: codigoPromocion },
+                                        success: function (resp) {
+                                            if (resp.Estado) {
+
+                                                ToastrSuccess(resp.Titulo, resp.Mensaje);
+                                                CerrarModal();
+                                            } else {
+                                                ToastrError("Error", resp.Mensaje);
+                                            }
+                                        },
+                                        error: function (data) {
+                                            ToastrError("Error", "Error de Red");
+                                        },
+                                    });
+                                } else {
+                                    ToastrWarning("Advertencia", "Token Invalido");
+                                    //ToastrError("Error", data.fcMensaje);
+                                }
+                            },
+                            error: function (resp) {
+                                ToastrError("Error", resp.Mensaje);
+                            }
+                        });
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+        } else {
+            debugger;
+             $.ajax({
+                url: "@Url.Action("GuardarDatosSolicitudCliente", "Solicitudes")",
+                type: "POST",
+                //data: { model: model, OrigenServicio: OrigenServicio, CodigoVendedor: CodigoVendedor, IdTipoPersona: IdTipoPersona, NombreEmpresaTipoPersona: NombreEmpresaTipoPersona, RtnEmpresaTipoPersona: RtnEmpresaTipoPersona, ComentarioOferta: ComentarioOferta, IDMesPromocion: IDMesPromocion },
+                 data: { model: model, OrigenServicio: OrigenServicio, CodigoVendedor: CodigoVendedor, IdTipoPersona: IdTipoPersona, NombreEmpresaTipoPersona: NombreEmpresaTipoPersona, RtnEmpresaTipoPersona: RtnEmpresaTipoPersona, ComentarioOferta: ComentarioOferta, IDMesPromocion: IDMesPromocion, IDCodigoPromocion: IDCheckCodigoPromocion, codigoPromocion: codigoPromocion },
+                success: function (resp) {
+                    if (resp.Estado) {
+                        ToastrSuccess(resp.Titulo, resp.Mensaje);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                    }
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+        }
+
+
+
+    });
+</script>

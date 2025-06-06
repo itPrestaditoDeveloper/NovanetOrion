@@ -1,0 +1,337 @@
+﻿@{
+    ViewBag.Title = "ReporteClientesCortados";
+}
+
+<div class="panel">
+
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Solicitud Cortes Administrativos</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="clientesCortados">
+                <thead>
+                    <tr>
+                        <th>Acción</th>
+                        <th>Solicitud</th>
+                        <th>Cod. Equifax Cliente</th>
+                        <th>Cod. Cfeus Cliente</th>
+                        <th style="width:15%;">Cliente</th>
+                        <th>Nombre Solicitante</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Comentario</th>
+                        <th>Usuario Aplicado</th>
+                        <th>Fecha Aplicado</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalAutorizar" tabindex="-1" role="dialog" aria-labelledby="modalAutorizarLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary-600 bg-primary-gradient">
+                <h2 class="modal-title text-white" id="modalAutorizarLabel">Aprobar Solicitud</h2>
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fal fa-times-circle fa-fw fa-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <div class="btn-group btn-group-toggle col-lg-12 p-0 nav nav-pills" data-toggle="buttons"></div>
+                            <div >
+                                <input id="txtidsolicitud" class="form-control mascara-enteros text-left" value="" type="tel" style="text-align: right; display:none">
+                                <input id="txtidcliente" class="form-control mascara-enteros text-left" value="" type="tel" style="text-align: right; display:none">
+                            </div>
+                        </div>
+                        <p>¿Está seguro que desea aprobar la solicitud de cancelación de contrato para el cliente <strong id="clienteNombre"></strong>?</p>
+                        <input type="hidden" id="idSolicitud" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> No</a>
+                <button class="btn btn-success" id="btnAprobar"><i class="text-lg ion-checkmark-round"></i> Sí</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+    <script>
+
+
+        function AlertaAjax(data) {
+            swal.fire(data.Titulo, data.Mensaje, data.Estado ? 'success' : 'error');
+        }
+        function AlertaErrorMensaje(Mensaje) {
+            swal.fire(Mensaje, "", 'error');
+        }
+
+
+        var tablaPrincipal = $('#clientesCortados').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [],
+              ajax: {
+                 url: '@Url.Action("ListaClientes_Solicitud_Cortes", "Reportes")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      console.log(data);
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+
+                        if (data.fiEstadoSolicitudInstalacion !== 5) {
+                            opciones += `<button class="dropdown-item btnAutorizar" data-id="${data.FiIDSolicitudOrion}" data-nombre="${data.fcNombreCliente}" data-prestamo="${data.fcIDPrestamo}" data-codCfeus="${data.fcCodigoClienteCfeus}"><i class="fal fa-check fa-fw"></i> Aprobar Solicitud</button>`;
+                        }
+                        opciones += `<button class="dropdown-item btnEliminar" data-id="${data.fiIDSolicitudCorteAdministrativo}"><i class="fal fa-trash-alt fa-fw"></i> Eliminar</button>`;
+
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: 'FiIDSolicitudOrion'
+                },
+
+                {
+                    data: 'fiIDCliente'
+                },
+                {
+                    data: 'fcCodigoClienteCfeus'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreCliente;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.NombreSolicitante;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaSolicitud).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: 'fcComentario'
+                },
+                {
+                    data: 'UsuarioAplicado'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaSolicitudAplicado).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return `<span class="btn-sm btn-block badge badge-${data.fcClase} text-white">${data.fcDescripcion}</span>`;
+
+                    }
+
+                },
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    messageTop: "Solicitud Clientes",
+                    filename: "Clientes",
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    titleAttr: 'Generate CSV',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copy',
+                    titleAttr: 'Copy to clipboard',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    titleAttr: 'Print Table',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ],
+
+        });
+
+
+        var IDPrestamo = '';
+        var codClienteCfeus = '';
+        $(document).ready(function () {
+            $('#clientesCortados').on('click', '.btnAutorizar', function () {
+                debugger;
+                var solicitudId = $(this).data('id');
+                var clienteNombre = $(this).data('nombre');
+                codClienteCfeus = $(this).data('codcfeus'); 
+                IDPrestamo = $(this).data('prestamo');
+
+                $('#clienteNombre').text(clienteNombre);
+                $('#idSolicitud').val(solicitudId);
+
+                $('#modalAutorizar').modal('show');
+            });
+
+            $('#btnAprobar').on('click', function () {
+                var solicitudId = $('#idSolicitud').val();
+                var solicitudId = $('#idSolicitud').val();
+                $.ajax({
+                    url: '@Url.Action("AprobarSolicitudCorteAdministrativo", "Reportes")',
+                    method: 'POST',
+                    data: { idsolicitud: solicitudId, codClienteCfeus: codClienteCfeus },
+                    success: function (response) {
+                        console.log(response);
+
+                        if (response.Estado) {
+                            AlertaAjax(response);
+                            EnviarCorreoSOP(solicitudId);
+                            EnviarCorteACepheus(IDPrestamo);
+                            $('#clientesCortados').DataTable().ajax.reload();
+                        } else {
+                            AlertaAjax(response);
+                        }
+                    },
+                    error: function () {
+                        AlertaErrorMensaje("Hubo un problema con la solicitud.");
+                    }
+                });
+
+                $('#modalAutorizar').modal('hide');
+            });
+
+            $(document).on('click', '.btnEliminar', function () {
+                debugger;
+                let id = $(this).data('id');
+               $.ajax({
+                url: '@Url.Action("EliminarSolicitudCorteAdministrativo", "Reportes")',
+                method: 'POST',
+                   data: { idsolicitud: id },
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.Estado) {
+                        AlertaAjax(response);                      
+                        $('#clientesCortados').DataTable().ajax.reload();
+                    } else {
+                        AlertaAjax(response);
+                    }
+                },
+                error: function () {
+                    AlertaErrorMensaje("Error al eliminar el registro.");
+                }
+               });
+
+
+            });
+
+        });
+
+        function EnviarCorreoSOP(idSolicitud) {
+            var Comentario = "Se ha generaro corte Administrativo de este cliente se procede a generar Sop Para cancelacion del servicio y retiro de los equipos/";
+                    $.ajax({
+                            url: "@Url.Action("EnviarSolicitudTrabajoContratista", "Reportes")",
+                            type: "POST",
+                        //data: { model: model, Comentario: Comentario, idAgencia: idAgencia, idAgenciaContratista: idAgenciaContratista },
+                        data: { idSolicitud: idSolicitud, Comentario: Comentario, idAgencia: 1, idAgenciaContratista: 3 },
+                        success: function (resp) {
+                            if (resp.Estado) {
+
+                                ToastrSuccess(resp.Titulo, resp.Mensaje);
+                               // CerrarModal();
+                            } else {
+                                ToastrError("Error", resp.Mensaje);
+                            }
+                        },
+                        error: function (data) {
+                            ToastrError("Error", "Error de Red");
+                        },
+                    });
+
+        }
+
+        function EnviarCorteACepheus(idPRestamo)
+        {
+                    $.ajax({
+                            url: "@Url.Action("RealizarCorteAdministrativo", "Reportes")",
+                            type: "POST",
+                           data: { fcIdPrestamo: idPRestamo},
+                                success: function (resp) {
+                                if (resp.Estado) {
+                                    console.log(resp.Mensaje);
+                                    //ToastrSuccess(resp.Titulo, resp.Mensaje);
+
+                                } else {
+                                    ToastrError("Error", resp.Mensaje);
+                                }
+                                },
+                                error: function (data) {
+                                    ToastrError("Error", "Error de Red");
+                                },
+                    });
+
+        }
+
+
+
+    </script>
+}
+
+
+

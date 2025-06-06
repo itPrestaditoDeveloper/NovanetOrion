@@ -1,0 +1,111 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+@{
+    ViewBag.Title = "ViewEditarDatosEstadoInstalacion";
+}
+
+<!-- Modal header -->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Estado Orden de Trabajo</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="row">
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control", @id = "IDSolicitud", @disabled = "disabled" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control", @id = "Nombre", @disabled = "disabled" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="form-group">
+					@Html.LabelFor(model => model.fcDescripcion, htmlAttributes: new { @class = "control-label" })
+					<div class="input-group mar-btm">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+						</div>
+						@Html.EditorFor(model => model.fcDescripcion, new { htmlAttributes = new { @class = "form-control", @id = "fcDescripcion", @disabled = "disabled" } })
+					</div>
+					@Html.ValidationMessageFor(model => model.fcDescripcion, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					@Html.LabelFor(model => model.fiIDEstadoInstalacion, htmlAttributes: new { @class = "control-label" })
+					<div class="input-group mar-btm">
+						@Html.DropDownListFor(model => model.fiIDEstadoInstalacion, new SelectList(ViewBag.ListaEstado, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;", @id = "fiIDEstadoInstalacion" })
+					</div>
+					@Html.ValidationMessageFor(model => model.fiIDEstadoInstalacion, "", new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="col-sm-12">
+
+				<label class="form-control-plaintext font-weight-bold">Observaciones</label>
+				<textarea id="txtobservaciones" rows="3" class="form-control mascara-enteros text-left" style="text-align: right;"></textarea>
+			</div>
+		</div>
+		</div>
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="reiniciogeo" onclick="GuardarData()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+    </div>
+</div>
+
+    <script>
+        function GuardarData() {
+
+            var idsol = $('#IDSolicitud').val();
+            var idEstadoInstalacion = $('#fiIDEstadoInstalacion').val();
+            var descripcionEstado = $('#fcDescripcion').val();
+            var fiIDSolicitudInstalacion = @Model.fiIDSolicitudInstalacion;
+            var descripcionEstadoInstalacion = $('#fiIDEstadoInstalacion option:selected').text();
+		    var txtobservaciones = $('#txtobservaciones').val().trim();
+
+      
+
+            $.ajax({
+                url: "@Url.Action("ActualizarDatosInstalacionEstado")",
+                type: "POST",
+			    data: { piIDContratistaSolicitud: fiIDSolicitudInstalacion, piIDEstadoInstalacion: idEstadoInstalacion, pcObservaciones: txtobservaciones },
+                success: function (datas) {
+   
+                    CerrarModal();
+                    AlertaAjax(datas);
+
+                },
+                error: function (datae) {
+                    AlertaDinamicas(false, 'Error', 'Error al intentar actualizar estado instalación', 2);
+                }
+            });
+    }
+    </script>
+

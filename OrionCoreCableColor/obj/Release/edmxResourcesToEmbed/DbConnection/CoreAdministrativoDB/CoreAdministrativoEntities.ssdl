@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CoreAdministrativoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <Function Name="sp_Catalogo_Contable_ObtenerPorCuentaContable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pcCuentaContable" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_CatalogoCorrelativo_VerCorrelativo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pcPrefijoCorrelativo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_PartidaDiario_CrearDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaPartida" Type="date" Mode="In" />
+    <Parameter Name="piIDFila" Type="int" Mode="In" />
+    <Parameter Name="pcCuentaContable" Type="varchar" Mode="In" />
+    <Parameter Name="pcAuxiliar" Type="varchar" Mode="In" />
+    <Parameter Name="pcAuxiliarCodigo" Type="varchar" Mode="In" />
+    <Parameter Name="pnDebito" Type="decimal" Mode="In" />
+    <Parameter Name="pnCredito" Type="decimal" Mode="In" />
+    <Parameter Name="pcDebitooCredito" Type="varchar" Mode="In" />
+    <Parameter Name="pnTasadeCambio" Type="decimal" Mode="In" />
+    <Parameter Name="pcEstado" Type="varchar" Mode="In" />
+    <Parameter Name="pcTipoPartida" Type="varchar" Mode="In" />
+    <Parameter Name="pcFondo" Type="varchar" Mode="In" />
+    <Parameter Name="pcCentrodeCosto" Type="varchar" Mode="In" />
+    <Parameter Name="pcPrograma" Type="varchar" Mode="In" />
+    <Parameter Name="pcDocumento" Type="varchar" Mode="In" />
+    <Parameter Name="pcOrigen" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferencia" Type="varchar" Mode="In" />
+    <Parameter Name="pcExentoFactura" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="sp_PartidaDiario_CrearMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pdFechaPartida" Type="datetime" Mode="In" />
+    <Parameter Name="pcLote" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferencia" Type="varchar" Mode="In" />
+    <Parameter Name="pcSinopsis" Type="varchar" Mode="In" />
+    <Parameter Name="pcTipoPartida" Type="varchar" Mode="In" />
+    <Parameter Name="pcEstadoPartida" Type="varchar" Mode="In" />
+    <Parameter Name="piMoneda" Type="smallint" Mode="In" />
+    <Parameter Name="pcAutoriza" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaAutorizacion" Type="datetime" Mode="In" />
+    <Parameter Name="pcOrigen" Type="varchar" Mode="In" />
+    <Parameter Name="pnTotalPartida" Type="decimal" Mode="In" />
+    <Parameter Name="pcPartidaSeguimiento" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_PartidaDiario_ListarDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_PartidaDiario_VerDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+    <Parameter Name="piIdFila" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_PartidaDiario_VerMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="CoreAdministrativoModelStoreContainer" />
+</Schema>

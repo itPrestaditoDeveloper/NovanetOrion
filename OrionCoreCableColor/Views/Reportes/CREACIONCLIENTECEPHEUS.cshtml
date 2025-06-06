@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "ORION-API CREACION CLIENTE CEPHEUS";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>ORION-API CREACION CLIENTE CEPHEUS PENDIENTE</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaClientesPagoAtrasado">
+                <thead>
+                    <tr>
+                        <th>Solicitud</th>
+                        <th>Nombre</th>
+                        <th>Identidad</th>
+                        <th>Mensajes</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>ORION-API CREACION CLIENTE CEPHEUS PROCESADOS</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaClientesProcesados">
+                <thead>
+                    <tr>
+                        <th>Solicitud</th>
+                        <th>Nombre</th>
+                        <th>Identidad</th>
+                        <th>Mensajes</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+        var seleccionados = [];
+        $(document).ready(function () {
+
+            PagosHoyListado();
+            Procesados();
+        });
+
+        function Procesados() {
+    debugger;
+            $('#TablaClientesProcesados').DataTable({
+        autoWidth: true,
+        responsive: true,
+        destroy: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: 'Bfrtip',
+
+        ajax: {
+            url: '@Url.Action("ListarClientesApiCepheusProcesados", "Reportes")',
+            method: "Get",
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: 'fiIDSolicitud'
+            },
+            {
+                data: 'fcIdentidad'
+            },
+            {
+                data: 'fcNombre'
+            },
+            {
+                data: 'fcMensaje'
+            }
+
+        ],
+        buttons: [
+
+            //{
+            //    extend: 'pdfHtml5',
+            //    text: 'PDF',
+            //    titleAttr: 'Generate PDF',
+            //    className: 'btn-outline-danger btn-sm mr-1'
+            //},
+            {
+                extend: 'excelHtml5',
+                text: 'Excel',
+                titleAttr: 'Generate Excel',
+                className: 'btn-outline-success btn-sm mr-1',
+                exportOptions: {
+                    columns: [1, 2, 3, 4, 5, 6, 7]
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                text: 'CSV',
+                titleAttr: 'Generate CSV',
+                className: 'btn-outline-primary btn-sm mr-1'
+            },
+            {
+                extend: 'copyHtml5',
+                text: 'Copy',
+                titleAttr: 'Copy to clipboard',
+                className: 'btn-outline-primary btn-sm mr-1'
+            },
+            {
+                extend: 'print',
+                text: 'Print',
+                titleAttr: 'Print Table',
+                className: 'btn-outline-primary btn-sm'
+            }
+        ]
+    });
+}
+
+        function PagosHoyListado() {
+            debugger;
+            $('#TablaClientesPagoAtrasado').DataTable({
+                autoWidth: true,
+                responsive: true,
+                destroy: true,
+                language: {
+                    "emptyTable": "No se encontraron resultados.",
+                    //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                    "paginate": {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    "lengthMenu": " _MENU_ ",
+                    "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                    "infoEmpty": "No hay registros para mostrar.",
+                },
+                dom: 'Bfrtip',
+
+                ajax: {
+                    url: '@Url.Action("ListarClientesApiCepheus", "Reportes")',
+                    method: "Get",
+                    dataSrc: function (data) {
+                        return data;
+                    }
+                },
+                columns: [
+                    {
+                        data: 'fiIDSolicitud'
+                    },
+                    {
+                        data: 'fcIdentidad'
+                    },
+                    {
+                        data: 'fcNombre'
+                    },
+                    {
+                        data: 'fcMensaje'
+                    }
+
+                ],
+                buttons: [
+
+                    //{
+                    //    extend: 'pdfHtml5',
+                    //    text: 'PDF',
+                    //    titleAttr: 'Generate PDF',
+                    //    className: 'btn-outline-danger btn-sm mr-1'
+                    //},
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        titleAttr: 'Generate Excel',
+                        className: 'btn-outline-success btn-sm mr-1',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'CSV',
+                        titleAttr: 'Generate CSV',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copy',
+                        titleAttr: 'Copy to clipboard',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        titleAttr: 'Print Table',
+                        className: 'btn-outline-primary btn-sm'
+                    }
+                ]
+            });
+        }
+
+    </script>
+
+}

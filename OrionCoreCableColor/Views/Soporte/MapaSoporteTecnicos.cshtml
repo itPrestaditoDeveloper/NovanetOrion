@@ -1,0 +1,348 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2><i class="fal fa-map-marked-alt fa-fw"></i> Mapa de Mufas</h2>
+    </div>
+    <div class="panel-container" style="padding: 12px 15px;">
+
+        <div class="col-lg-12" style="padding-bottom:10px;">
+            <div class="form-group">
+                <div class="input-group mar-btm" style="width:100%;">
+                    <input type="text" class="form-control clsSerie1" id="coordenadas" name="coordenadas" />
+                    <div class="input-group-prepend">
+                        <button class="input-group-text btn" id="addMarker">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <select id="clientes-select" class="form-control mb-3" style="padding:10px;"></select>
+        </div>
+        <div class="col-lg-12">
+            <div id="map"></div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src='https://unpkg.com/maplibre-gl@4.1.3/dist/maplibre-gl.js'></script>
+
+    <script>
+
+        var allData = [];
+        var geojsonFeatures = [];
+        var uniqueDescriptions = new Set();
+        var colorPalette = new Set();
+        var map = null;
+        var currentPopup = null;
+    
+
+        const customStyle = {
+            "version": 8,
+            "sources": {
+                "mapbox-tiles": {
+                    "type": "raster",
+                    "tiles": [
+                        "https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic29wb3J0ZXByZXN0YWRpdG8iLCJhIjoiY2xvM2N1ZHByMWRwaDJtcDlvbXprYTBmcyJ9.Mq5jC6PF8C7JcvoQqvqy5A"
+                    ],
+                    "tileSize": 256,
+                    "maxzoom": 22
+                }
+            },
+            "layers": [
+                {
+                    "id": "mapbox-layer",
+                    "type": "raster",
+                    "source": "mapbox-tiles",
+                    "minzoom": 0,
+                    "maxzoom": 22
+                }
+            ]
+        };
+
+        $(document).ready(function () {
+            debugger;
+            var height = window.innerHeight;
+            $("#map").css("height", `${height - 300}px`);
+            Mapa();
+        });
+
+
+    function haversine(lat1, lon1, lat2, lon2) {
+        // Radio de la Tierra en kilómetros
+        var R = 6371;
+
+        // Convertir de grados a radianes
+        var rad = Math.PI / 180;
+        var dLat = (lat2 - lat1) * rad;
+        var dLon = (lon2 - lon1) * rad;
+
+        // Fórmula de Haversine
+        var a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+                Math.sin(dLon / 2) ** 2;
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Distancia
+        var distance = R * c;
+
+        return distance;
+    }
+
+    function Distancia(valor) {
+        if(valor < 1 ){
+            return (valor * 1000).toFixed(2).toLocaleString("es-HN") + ' m'
+        }
+        return valor.toFixed(2).toLocaleString("es-HN") + ' km';//  valor.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+
+    function Mapa() {
+        $.ajax({
+            url: "@Url.Action("CargarPuntosSoporte", "Soporte")",
+            type: "GET",
+            success: function (respuesta) {
+
+
+
+                var MAPTILER_KEY = 'CQjSsi4wjN5j99iwByjd';
+                map = new maplibregl.Map({
+                    style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
+                    //style: customStyle,
+                    center: [-87.9828610499999, 15.508540420591633],
+                    zoom: 11.5,
+                    container: 'map',
+                    antialias: true
+                });
+
+                map.setMaxZoom(21);
+
+                allData = respuesta;
+                for (var i in respuesta) {
+                    if (/\d/.test(respuesta[i]["fcGeolocalizacion"])) {
+                        var coordenadas = respuesta[i]["fcGeolocalizacion"].split(',').map(parseFloat);
+                        geojsonFeatures.push(newPoint(coordenadas, respuesta[i]));
+                        uniqueDescriptions.add(respuesta[i]["fcDescripcion"]);
+                        colorPalette.add(respuesta[i]["fcRGB"]);
+                    }
+                }
+
+                fillSelectWithDescriptions(uniqueDescriptions);
+
+                map.on('styleimagemissing', (e) => {
+                    const id = e.id;
+                    const prefix = 'square-rgb-';
+                    if (id.indexOf(prefix) !== 0) return;
+
+                    const rgb = id.replace(prefix, '').split(',').map(Number);
+                    const width = 64;
+                    const data = new Uint8Array(width * width * 4);
+
+                    for (let x = 0; x < width; x++) {
+                        for (let y = 0; y < width; y++) {
+                            const offset = (y * width + x) * 4;
+                            data[offset] = rgb[0];
+                            data[offset + 1] = rgb[1];
+                            data[offset + 2] = rgb[2];
+                            data[offset + 3] = 255;
+                        }
+                    }
+
+                    map.addImage(id, { width, height: width, data });
+                });
+
+                
+
+
+                map.on('load', () => {
+                    map.addSource('points', {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'FeatureCollection',
+                            'features': geojsonFeatures
+                        }
+                    });
+
+                    map.addLayer({
+                        'id': 'points',
+                        'type': 'symbol',
+                        'source': 'points',
+                        'layout': {
+                            'icon-image': ['concat', 'square-rgb-', ['get', 'color']],
+                            'icon-size': 0.2
+                        }
+                    });
+                    map.on('click', 'points', (e) => {
+
+
+                        debugger;
+                        var coordinates = e.features[0].geometry.coordinates.slice();
+                        var properties = e.features[0].properties;
+                        var coordenadas2 = properties.fcGeolocalizacion.split(',');
+                        var lat2 = parseFloat(coordenadas2[0]);
+                        var long2 = parseFloat(coordenadas2[1]);
+                        //var distancia = haversine(lat,long,lat2,long2);
+
+                        var popupContent =
+                            `<div style="max-width: 500px; border-radius: 10px; background-color: white; padding: 10px;">
+                                            <div style="display: flex;">
+                                                <div style="flex: 2; display: flex; flex-direction: column; justify-content: space-between;">
+                                                    <div>
+                                                        <h3 style="margin: 0 0 10px; font-size: 1.25rem; color: rgb(${properties.color});">${properties.fcNombreCliente}</h3>
+
+                                                        <div id="Descripcion" style=" border-radius: 5px; color: white; opacity: 0.8; text-align: center; padding: 5px 10px; background-color: rgb(${properties.color}); font-size: 1rem;">${properties.fcDescripcion ?? 'N/D'} </div>
+                                                    <button id="btn-maps-${properties.fiIDSolicitud}" value="${properties.fcGeolocalizacion}" class="btn btn-sm bg-success text-white col-12" style="margin-top: 3px; display: inline-block;"><i class="fal fa-map-marker-alt"></i> Google Maps</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>` ;
+
+
+                        new maplibregl.Popup()
+                            .setLngLat(coordinates)
+                            .setHTML(popupContent)
+                            .setMaxWidth("400px")
+
+                            .addTo(map);
+
+                        map.flyTo({
+                            center: coordinates
+                        });
+                    });
+
+                    map.on('mouseenter', 'points', () => {
+                        map.getCanvas().style.cursor = 'pointer';
+                    });
+
+                    map.on('mouseleave', 'points', () => {
+                        map.getCanvas().style.cursor = '';
+                    });
+                });
+            },
+            error: function (respuesta) {
+                console.error("Error al cargar datos:", respuesta);
+            }
+        });
+
+
+    }
+
+    function fillSelectWithDescriptions(descriptions) {
+        var select = $('#clientes-select');
+        select.empty();
+        select.append(`<option value="vertodos">Ver todos los puntos</option>`);
+
+        descriptions.forEach(function (description) {
+            select.append(`<option value="${description}">${description}</option>`);
+        });
+
+
+        console.log('Select filled with unique descriptions'); // Debug
+    }
+
+    $('#clientes-select').on('change', function () {
+        var selectedDescription = $(this).val();
+        updateMapData(selectedDescription);
+    });
+
+    function updateMapData(description) {
+        var filteredFeatures = [];
+        if (description === 'vertodos') {
+            filteredFeatures = geojsonFeatures;
+        } else {
+            for (var i in allData) {
+                if (allData[i]["fcDescripcion"] === description && /\d/.test(allData[i]["fcGeolocalizacion"])) {
+                    var coordenadas = allData[i]["fcGeolocalizacion"].split(',').map(parseFloat);
+                    filteredFeatures.push(newPoint(coordenadas, allData[i]));
+                }
+            }
+        }
+
+        map.getSource('points').setData({
+            'type': 'FeatureCollection',
+            'features': filteredFeatures
+        });
+    }
+
+    function newPoint(coordenada, cliente) {
+        var color;
+        switch (cliente.fcDescripcion) {
+            case "Pendiente": color = "255,194,65"; break;
+            case "Asignado": color = "33,150,243"; break;
+            case "Proceso": color = "136,106,181"; break;
+            case "Instalado": color = "29,201,183"; break;
+            case "Cancelado": color = "253,57,149"; break;
+            case "Validacion": color = "134,142,150"; break;
+            case "Validado soporte": color = "80,80,80"; break;
+            case "Revicion": color = "134,142,150"; break;
+            case "Finalizado": color = "29,201,183"; break;
+            case "MUFA": color = "250,166,26"; break;
+            case "Tecnico": color = "0,255,255"; break;
+            default: color = "0,0,0"; break;
+        }
+
+        return {
+            'type': 'Feature',
+            'properties': {
+                'fcNombreCliente': cliente.fcNombreCliente,
+                'fcDescripcion': cliente.fcDescripcion,
+                'color': color,
+                'fcGeolocalizacion': coordenada.join(","),
+            },
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [coordenada[1], coordenada[0]]
+            }
+        };
+    }
+
+    function IrAMaps(Localizacion) {
+        console.log(Localizacion);
+        let Latitud = Localizacion.split(',')[0];
+        let Longitud = Localizacion.split(',')[1];
+        let link = `https://www.google.com/maps?z=12&t=k&q=${Latitud},${Longitud}`;
+        window.open(link, '_blank');
+    }
+
+$(document).on('click', '[id^="btn-maps-"]', function () {
+        const geolocalizacion = $(this).attr('value');
+        IrAMaps(geolocalizacion);
+});
+
+
+        $("#addMarker").click(function () {
+            var busqueda = $("#coordenadas").val();
+
+            if (esCoordenada(busqueda)) {
+                var coords = busqueda.split(',').map(parseFloat);
+                if (coords.length === 2) {
+                    map.flyTo({
+                        center: [coords[1], coords[0]], // Reverso porque maplibre usa long, lat
+                        zoom: 15
+                    });
+
+                    if (currentPopup) currentPopup.remove(); // Elimina el popup actual si existe
+
+                    currentPopup = new maplibregl.Popup()
+                        .setLngLat([coords[1], coords[0]])
+                        .setHTML(`<strong>Coordenadas:</strong> ${coords[0]}, ${coords[1]}`)
+                        .addTo(map);
+                } else {
+                    alert("Formato de coordenadas no válido. Use el formato: lat,long");
+                }
+            } else {
+                alert("Formato de coordenadas no válido. Use el formato: lat,long");
+            }
+
+
+
+        });
+
+        function esCoordenada(query) {
+            query = query.replaceAll(' ', '');
+            var regex = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
+            return regex.test(query);
+        }
+    </script>
+
+}

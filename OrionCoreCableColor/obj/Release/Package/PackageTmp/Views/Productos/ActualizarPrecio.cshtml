@@ -1,0 +1,278 @@
+﻿@model OrionCoreCableColor.Models.Productos.CrearProductoViewModel
+@{
+    ViewBag.Title = "ActualizarPrecio";
+}
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Actualizar Precio de @Model.fcProducto</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCodigodeBarras, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-barcode fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcCodigodeBarras, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCodigodeBarras, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorProductoMN, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">L.</span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorProductoMN, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorProductoMN, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorProductoME, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorProductoME, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorProductoME, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnPorcentajeImpuesto1, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-percent fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnPorcentajeImpuesto1, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnPorcentajeImpuesto1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnPorcentajeImpuesto2, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-percent fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnPorcentajeImpuesto2, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnPorcentajeImpuesto2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorCuotaMensual, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-money-bill-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorCuotaMensual, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorCuotaMensual, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorCuotaMensual12Cliente, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-money-bill-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorCuotaMensual12Cliente, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorCuotaMensual12Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorCuotaMensual24Cliente, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-money-bill-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorCuotaMensual24Cliente, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorCuotaMensual24Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorCuotaMensual12Nuevo, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-money-bill-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorCuotaMensual12Nuevo, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorCuotaMensual12Nuevo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorCuotaMensual24Nuevo, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-money-bill-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorCuotaMensual24Nuevo, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorCuotaMensual24Nuevo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarProducto()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    var tasacambio = @ViewBag.TasaCambio;
+    $(`#fnValorProductoMN`).keyup(function () {
+        var lemp = $(this).val();
+        var tot = lemp / tasacambio
+        $(`#fnValorProductoME`).val(parseFloat(tot, 2));
+
+        //CambioValorMensual(); //de momento ira comentado esto
+    })
+
+    $(`#fnValorProductoME`).keyup(function () {
+        var lemp = $(this).val();
+        var tot = lemp * tasacambio
+        $(`#fnValorProductoMN`).val(parseFloat(tot, 2));
+        //CambioValorMensual(); //de momento ira comentado esto
+    })
+
+    function CambioValorMensual() {
+        var lemp = $(`#fnValorProductoMN`).val();
+        var tot = lemp / 12;
+        $(`#fnValorCuotaMensual`).val(parseFloat(tot, 2));
+    }
+
+    function GuardarProducto()
+    {
+        var model = @Html.Raw(Json.Encode(Model));
+        $(`#btnGuardarForm`).hide();
+
+
+        if (IsNullOrEmptyOr0($("#fcCodigodeBarras").val())) {
+            ToastrWarning("","Ingrese un codigo de barra");
+            $("#fcCodigodeBarras").focus();
+
+            return;
+        }
+
+
+
+        if (IsNullOrEmptyOr0($("#fnValorProductoMN").val()) && IsNullOrEmptyOr0($("#fnValorProductoME").val()))
+        {
+            ToastrWarning("", "Valor no puede ser 0");
+
+            $("#fnValorProductoMN").focus();
+            return;
+        }
+
+
+        var url = "@Url.Action("ActualizarelPrecio", "Productos")";
+
+
+        var form_data = new FormData();
+        form_data.append("fiIDProducto", model.fiIDProducto);
+        //form_data.append("fcCodigodeBarras", $("#fcCodigodeBarras").val());
+        //form_data.append("fcProducto", $("#fcProducto").val());
+        //form_data.append("ImgenProducto", myDropzone[0].dropzone.files[0]);
+        //form_data.append("fiIdModelo", $("#fiIdModelo").val());
+        //form_data.append("fiIdTipoProducto", $("#fiIdTipoProducto").val());
+        form_data.append("fnValorProductoMN", $("#fnValorProductoMN").val());
+        form_data.append("fnValorProductoME", $("#fnValorProductoME").val());
+        form_data.append("fnPorcentajeImpuesto1", $("#fnPorcentajeImpuesto1").val());
+        form_data.append("fnPorcentajeImpuesto1", $("#fnPorcentajeImpuesto2").val());
+        //form_data.append("fiProductoInventariable", $("#fiProductoInventariable").prop("checked") ? 1 : 0);
+        //form_data.append("fbEditar", model.fbEditar);
+        form_data.append("fnValorCuotaMensual", $("#fnValorCuotaMensual").val());
+        //form_data.append("fiProductoEnPaquete", $("#fiProductoEnPaquete").prop("checked") ? 1 : 0);
+        form_data.append("fnValorCuotaMensual12Nuevo", $("#fnValorCuotaMensual12Nuevo").val());
+        form_data.append("fnValorCuotaMensual24Nuevo", $("#fnValorCuotaMensual24Nuevo").val());
+        form_data.append("fnValorCuotaMensual12Cliente", $("#fnValorCuotaMensual12Cliente").val());
+        form_data.append("fnValorCuotaMensual24Cliente", $("#fnValorCuotaMensual24Cliente").val());
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (data) {
+                console.log(data);
+                //if (data.fiMensaje > 0) {
+                //    CerrarModal();
+                //    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                //    tablaT.ajax.reload();
+                //}
+                //else {
+                //    ToastrError("Error", data.fcMensaje);
+                //    $("#btnGuardarForm").show();
+
+                //}
+                if (data.Estado) {
+                    ToastrSuccess("Aprobada", data.Mensaje);
+                    CerrarModal();
+                    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaT.ajax.reload();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+
+
+
+            }, error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+                $("#btnGuardarForm").show();
+            }
+        });
+    }
+
+    function IsNullOrEmptyOr0(valor) {
+
+        if (typeof valor == "string") {
+            valor = valor.trim();
+        }
+
+        if (valor == "" || valor == null || valor == 0 || valor == "0") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

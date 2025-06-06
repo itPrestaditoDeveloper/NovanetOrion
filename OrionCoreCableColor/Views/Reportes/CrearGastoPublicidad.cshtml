@@ -1,0 +1,126 @@
+﻿
+@model OrionCoreCableColor.Models.Reportes.CrearGastosPublicidadViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        @if (Model.fbEditar)
+        {
+            <text>Editar Gasto de Publicidad</text>
+        }
+        else
+        {
+            <text>Crear Gasto de Publicidad</text>
+        }
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorMonto, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fnValorMonto, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorMonto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fdFechaIngreso, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    <input id="fdFechaIngreso" value="@Model.fdFechaIngreso.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                  
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fdFechaIngreso, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcComentario, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.TextAreaFor(model => model.fcComentario, new { @class = "form-control " })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcComentario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="GuardarRegistro" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+
+        $("#GuardarRegistro").click(function () {
+            if ($("#fcComentario").val().trim() === "") {
+                ToastrWarning("Advertencia", "El Comentario no puede estar vacío.");
+                return;
+            }
+
+            var model = {
+                fiIdGastosPublicidad : @Html.Raw(Json.Encode(Model.fiIdGastosPublicidad)),
+                fnValorMonto: $("#fnValorMonto").val(),
+                fcComentario: $("#fcComentario").val(),
+                fdFechaIngreso: $("#fdFechaIngreso").val(),
+                fbEditar: @Html.Raw(Json.Encode(Model.fbEditar))
+            };
+
+            var url = model.fbEditar
+                ? "@Url.Action("EditarDatosGastosPublicidad", "Reportes")"
+                : "@Url.Action("CrearDatosGastosPublicidad", "Reportes")";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: model,
+                success: function (data) {
+                    if (data.Estado) {
+                        var tablaT = $.fn.dataTable.Api("#TablaIngresoGastosPublicidad");
+                        tablaT.ajax.reload();
+                        ToastrSuccess("Operación exitosa", data.Mensaje);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Error", data.Mensaje);
+                    }
+                },
+                error: function (resp) {
+                    ToastrError("Error", resp.responseJSON?.Mensaje || "Ocurrió un error al procesar la solicitud.");
+                }
+            });
+        });
+
+
+</script>
+

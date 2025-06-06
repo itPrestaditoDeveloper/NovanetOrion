@@ -1,0 +1,224 @@
+﻿
+<style>
+    /* Important part */
+    .modal-dialog {
+        overflow-y: initial !important
+    }
+
+    .modal-body {
+        /*height: 80vh;*/
+        overflow-y: auto;
+    }
+</style>
+
+
+
+
+
+
+
+@*<div id="MyModalBig" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="bounceInDown animated">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white!important;"> <i class="fa fa-times"></i></button>
+                    <h4 class="modal-title" id="MyModalTitleBig"></h4>
+                </div>
+                <div class="modal-body" id="MyModalBodyBig">
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+<div class="modal fade" id="MyModalBig" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" id="MyModalContentBig">
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="MyModalBig2" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" style="width: 90%;">
+        <div class="modal-content" id="MyModalContentBig2">
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="MyModalBigSignalR" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" id="MyModalContentBigSignalR">
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="MyModalSm" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="MyModalContentSmall">
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@*<div id="MyModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog bounceInDown animated" id="MyModalSize">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" style="color:white!important;"> <i class="fa fa-times"></i></button>
+                    <button type="button" class="close" onclick="ExpandirModal(this)" style="margin-right:20px; color:white!important;"> <i class="fa fa-expand"></i>    </button>
+                    <h4 class="modal-title" id="MyModalTitle"></h4>
+                </div>
+                <div class="modal-body" id="MyModalBody">
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div class="modal fade" id="MyModal" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content" id="MyModalContent">
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="MyModalBig3" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content" id="MyModalContentBig3">
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="MyModalImage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-xl" role="document" id="">
+        <div class="modal-content" id="">
+            <div class="modal-body">
+                <center>
+                    <h3 id="TituloImagen">Imagen</h3>
+                    <img id="ImageBig" src="" class="img-responsive img-thumbnail" style="width:auto; height:auto;" />
+                </center>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="MyModalContrato" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog  modal-xl" role="document" id="">
+        <div class="modal-content" id="">
+            <div class="modal-body">
+                <center>
+                    <h3 id="TituloContrato">Hola</h3>
+                    <div id="divContrato">
+
+                    </div>
+                    
+                </center>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="MyModalMensaje" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content" id="MyModalContentMensaje">
+
+        </div>
+    </div>
+</div>
+
+<script>
+  
+    function ShowBigImage(boton) {
+        
+        var sourc = $(boton).attr('src');
+        $("#TituloImagen").text($(boton).attr("data-Description"));
+        $('#ImageBig').attr('src', sourc);
+        $('#MyModalImage').modal("show");
+    }
+
+    function ShowBigImageSrc(src){
+        $('#ImageBig').attr('src', src);
+        $('#MyModalImage').modal("show");
+    }
+
+    function ShowBigPdf(descripcion, carpeta) {
+        debugger;
+        $.ajax({
+            url:"@Url.Action("GetContentDocument","Base")",
+            type: "Get",
+            data: { tipo: "pdf", carpeta: carpeta, nombreArchivo: descripcion },
+            success: function (resp) {
+                $(divContrato).empty();
+                var embed = $(`<embed src="" id="DocumentoBig" type="application/pdf"  class="img-responsive img-thumbnail" style="width:100%;height:500px;" />`);
+                $("#TituloContrato").text(descripcion);
+                debugger;
+                //$(embed).attr('src', "data:application/pdf;base64," + resp);
+                $(embed).attr('src',resp);
+                $(embed).css("height", window.innerHeight - (window.innerHeight * 0.25) + "px");
+                $(divContrato).append(embed);
+                $('#MyModalContrato').modal("show");
+            }
+        });
+    }
+
+    function ShowBigPdfSrc(url)
+    {
+        debugger;
+        $(divContrato).empty();
+        var embed = $(`<embed src="${url}" id="DocumentoBig" type="application/pdf"  class="img-responsive img-thumbnail" style="width:100%;height:500px;" />`);
+        $("#TituloContrato").text("COMPROBANTE DE PAGO");
+        $(embed).css("height", window.innerHeight - (window.innerHeight * 0.25) + "px");
+        $(divContrato).append(embed);
+        $('#MyModalContrato').modal("show");
+
+    }
+    
+</script>
+
+
+
+
+
+
+<div class="modal" id="modalWaitingTime" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="">
+    <div class="modal-dialog" role="document" style="margin-top: 15%;">
+        <div class="modal-body text-center">
+            <center class="text-muted"><br /> <br /><div style="color: #a0cadb" class="la-ball-grid-pulse la-3x"> <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div><br /> <br />CARGANDO <br /><br /></center>
+            @*<center>
+                    <div style="color: #a0cadb" class="la-ball-atom la-2x">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </center>*@
+            <br />
+            @*<h5><small><b>Procesando Consulta...</b></small></h5>*@
+        </div>
+    </div>
+</div>
+
+
+

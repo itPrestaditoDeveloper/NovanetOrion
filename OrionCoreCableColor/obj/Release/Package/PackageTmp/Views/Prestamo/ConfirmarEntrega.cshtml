@@ -1,0 +1,312 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.CrearFacturacionViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        FACTURA
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card-body">
+                <div style="padding-left: 0" id="divFactura" class="test">
+
+                    <div id="divPadresPDF">
+                        <div style="" id="divPDF" class="test">
+                            <div class="col-11 col-md-11 col-lg-11 col-sm-11 bg-white" id="divContenedorFactura" style="font-size: 14px; color: #120907">
+                                <div style="width: 100%; margin: 0 auto" id="divAncho">
+                                    <!--Comienzo-->
+                                    <form id="formulario" style="margin: 0 auto; width: 95%; height: 100%; text-align:left; font-size:12px">
+                                        <br />
+                                        <div style="width:30%; float:left;">
+                                            <img src="../Content/img/logoPrestadito.png" style="width:100%;" />
+
+                                        </div>
+                                        <div style="width:60%; font-weight:bold; float:right; text-align:left; font-size:12px; margin-top:10px; margin-left:10px;">
+
+                                            <p style="margin:0;">PRESTADITO S.A. DE C.V.</p>
+                                            <p style="margin:0;">Barrio Rio de Piedras, 4 calle, 25-26 avenida, Contiguo a Club Arabe</p>
+                                            <p style="margin:0;">SAN PEDRO SULA</p>
+                                            <p style="margin:0;">Tel.(+504)2540-1050</p>
+
+                                            <p style="margin:0; margin-bottom:0; text-decoration:underline;">contabilidad@miprestadito.com</p>
+                                            <div style="width:100%; float:left;">
+                                                <div style="width:60%; float:left;">
+                                                    <p style="margin:0; margin-top:0;">Domicilio Fiscal: San Pedro Sula</p>
+                                                </div>
+                                                <div style="width:30%; float:right">
+                                                    <p style="margin:0; margin-top:0;">Factura: Contado</p>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <br />
+
+
+
+
+                                        <table style="font-weight:bold; border-collapse: separate;border-spacing: 10px 5px; width: 100%; font-size:12px">
+                                            <tbody>
+                                                <tr>
+                                                    <td>RTN. 05019016811399</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>FACTURA: #@Model.fcReferenciaDocumento</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>CAI: @Model.fcCAI</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                        <table style=" border-collapse: separate;border-spacing: 10px 5px; width: 100%; font-size:12px">
+                                            <tbody>
+
+                                                <tr>
+                                                    <td style="width:25%; font-weight:bold;">Cliente: </td>
+                                                    <td style="width:45%;"> @Model.fcNombreCliente</td>
+                                                    <td style="font-weight:bold;">Fecha: </td>
+                                                    <td>@Model.fdFechaTransaccion.ToString("dd/MM/yyyy")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:20%; font-weight:bold;">RTN: </td>
+                                                    <td style="width:50%; ">@Model.fcIdentidad</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 20%; font-weight: bold;"> Direccion: </td>
+                                                    <td style="width:50%;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 20%; font-weight: bold;"> Fecha Limite de Emisión: </td>
+                                                    <td style="width:50%;">@Model.fdFechaRangoFinalFacturacion.ToString("dd/MM/yyyy")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 20%; font-weight: bold;"> Rango de Autorización: </td>
+                                                    <td style="width:50%;">@Model.fcRangoInicialFacturacion al @Model.fcRangoFinalFacturacion</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 20%; font-weight: bold;"> No. Declaracion: @Model.fcCorrelativoDocumento</td>
+                                                    <td style="width:50%;"></td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <br />
+
+
+
+
+                                        <table id="tablaPartida" style="width: 100%; border: 0.2px solid black; font-size:12px; border-collapse: collapse; overflow: hidden;">
+                                            <thead style="border:1px solid black;">
+                                                <tr>
+                                                    <th style="padding: 4px; text-align: left; width: 10%; border: 1px solid black;">CANT.</th>
+                                                    <th style="padding: 4px; text-align: left; width: 60%; border: 1px solid black;">DESCRIPCIÓN </th>
+                                                    <th style="padding: 4px; text-align: left; width: 15%; text-align: right; border: 1px solid black;">VALOR</th>
+                                                    <th style="padding: 4px; text-align: left; width: 15%; text-align: right; border: 1px solid black;">TOTAL</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.DetalleFacturacion)
+                                                {
+                                                    <tr style="border: 1px solid black;">
+                                                        <td style="padding: 4px; border: 1px solid black; text-align:center;">@item.fnCantidad.ToString("0.##")</td>
+                                                        <td style="padding: 4px; border: 1px solid black;">@item.fcProducto</td>
+                                                        <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @item.fnValorVentaDeContado.ToString("n2")</td>
+                                                        <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @item.fnSubTotal.ToString("n2")</td>
+                                                    </tr>
+                                                }
+
+
+                                                @*<tr id="fcSubItem1" style="border: 1px solid black;display:none;">
+            <td style="padding: 4px; border: 1px solid black; text-align:center;"></td>
+            <td style="padding: 4px; border: 1px solid black;">{{fcSubItem1}}</td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+        </tr>
+        <tr id="fcSubItem2" style="border: 1px solid black;display:none;">
+            <td style="padding: 4px; border: 1px solid black; text-align:center;"></td>
+            <td style="padding: 4px; border: 1px solid black;">{{fcSubItem2}}</td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+        </tr>
+        <tr id="fcSubItem3" style="border: 1px solid black;display:none;">
+            <td style="padding: 4px; border: 1px solid black; text-align:center;"></td>
+            <td style="padding: 4px; border: 1px solid black;">{{fcSubItem3}}</td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+        </tr>
+        <tr id="fcSubItem4" style="border: 1px solid black;display:none;">
+            <td style="padding: 4px; border: 1px solid black; text-align:center;"></td>
+            <td style="padding: 4px; border: 1px solid black;">{{fcSubItem4}}</td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+            <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;"></p></td>
+        </tr>*@
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr style="border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black; "></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Sub Total</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @Model.fnSubTotal.ToString("n2")</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left;border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Descuento</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right; border: 1px solid black;">$ 0.00</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Exento</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @Model.fnImporteExento.ToString("n2")</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Exonerado</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @Model.fnImporteExonerado.ToString("n2")</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Gravado 15%</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @Model.fnImporteGravado.ToString("n2")</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black; border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">ISV 15%</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right; border: 1px solid black;">$ @Model.fnImpuestos.ToString("n2")</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black; border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">TOTAL</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px;  text-align: right; font-weight: bold; border: 1px solid black; ">$ @Model.fnTotalFactura.ToString("n2")</td>
+                                                </tr>
+                                                <tr style="border: 1px solid black; border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Tasa de Cambio</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; border: 1px solid black; "><p style="text-align: right; padding: 0; float:right; margin:0;">L. @Model.fnTasadeCambio.ToString("n4")</p></td>
+                                                </tr>
+                                                <tr style="border: 1px solid black; border: 1px solid black;">
+                                                    <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Valor en Lempiras</td>
+                                                    <td style="padding: 4px; border: 1px solid black;"></td>
+                                                    <td style="padding: 4px; text-align: right;  border: 1px solid black; ">L. @Model.fnValorLempiras.ToString("n2")</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                        <table style=" border-collapse: separate;border-spacing: 10px 5px; width: 100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align:left; font-size:10px; width:33%; font-weight:bold;">MONTO EN LETRAS: @Model.fcValorEnLetras. EXACTOS</td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <br /><br />
+
+                                        <div style="float: left; text-align: left; font-weight: bold;">
+                                            No. Orden Exenta:
+                                        </div>
+                                        <div style="float:left; width:16%; border-bottom: 1px solid;">
+                                            <br />
+                                        </div>
+                                        <div style="float: left; width: 20%; text-align: right; font-weight: bold;">
+                                            Constancia Exonerada:
+                                        </div>
+                                        <div style="float: left; width: 16%; border-bottom: 1px solid;">
+                                            <br />
+                                        </div>
+                                        <div style="float: left; width: 16%; text-align: right; font-weight: bold;">
+                                            No. Registro SAG:
+                                        </div>
+                                        <div style="float:left; width:16%; border-bottom: 1px solid;">
+                                            <br />
+                                        </div>
+
+                                        <div style="float: left; width: 100%; font-weight: bold;">
+                                            Original: Cliente
+                                        </div>
+                                        <div style="float: left; width: 100%; font-weight: bold;">
+                                            Copia: Obligado Tributario
+                                        </div>
+
+
+
+                                        <br /><br /><br /><br /><br />
+                                        <table style=" border-collapse: separate;border-spacing: 10px 5px; width:100%; font-size:12px">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="text-align:center; font-size:12px; width:30%;">
+                                                    </td>
+                                                    <td style="text-align: center; font-size: 12px; width: 40%;">
+
+                                                        <hr>
+                                                        <p style="text-align:center">Firma y Sello</p>
+                                                    </td>
+                                                    <td style="text-align: center; font-size: 12px; width: 30%;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center; font-size:10px; width:30%;">
+                                                    </td>
+                                                    <td style="text-align: center; font-size: 10px; width: 40%;">
+                                                        <p style="text-align:center; font-size:10px">LA FACTURA ES BENEFICIO DE TODOS, EXIJALA</p>
+                                                    </td>
+                                                    <td style="text-align: center; font-size: 10px; width: 30%;">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+
+                                    </form>
+                                    <!--Final-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i> Cancelar</button>
+            <button id="ContabilizarFactura" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i> Confirmar Venta</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $("#ContabilizarFactura").click(function () {
+        $.ajax({
+            url: "@Url.Action("ContabilizarFactura","Prestamo")",
+            data: { fiIDFacturacionMaestro: @Model.fiIDFacturacionMaestro },
+            method: "Get",
+            success: function (resp)
+            {
+                var tablaP = $.fn.dataTable.Api("#TablaPrincipal");
+                tablaP.ajax.reload();
+                CerrarModal();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,165 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.referenciaclienteViewModel
+<div class="col-lg-12" id="divRespuestasReferencia">
+    <h4 class="text-center subheader-title">Validación Referencia Personal</h4>
+    <div id="cardTipoAuto" class="row tipoauto">
+        <div class="p-6">
+
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <div class="row">
+                        <div class="panel-tag ">
+                            Favor responda cada pregunta
+                        </div>
+                        <div class="col-10">
+                            <label class="form-label text-muted" for="example-static-disabled"><span id="nombre1"></span>@Model.nombrecliente  @Model.fcPregunta1</label>
+                            @Html.DropDownListFor(model => model.fcRespuesta1, new SelectList(ViewBag.ListaColonias, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                            @Html.ValidationMessageFor(model => model.fcRespuesta1, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-10">
+                            <label class="form-label text-muted" for="example-static-disabled"><span id="nombre2"></span>@Model.nombrecliente  @Model.fcPregunta2</label>
+
+
+
+                            @Html.DropDownListFor(model => model.fcRespuesta2, new SelectList(ViewBag.ListaTrabajos, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                            @Html.ValidationMessageFor(model => model.fcRespuesta2, "", new { @class = "text-danger" })
+
+
+                        </div>
+                        <div class="col-10">
+                            <label class="form-label text-muted" for="example-static-disabled"><span id="nombre3"></span>@Model.nombrecliente  @Model.fcPregunta3</label>
+
+                            @Html.DropDownListFor(model => model.fcRespuesta3, new SelectList(ViewBag.ListaParentescos, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                            @Html.ValidationMessageFor(model => model.fcRespuesta3, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-10">
+                            <br />
+                            <button class="btn btn-primary  float-right ml-auto"
+                                    type="submit" id="btnenviar"
+                                    style="">
+                                Enviar Datos
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="button-row d-flex mt-4 col-12">
+        <button class="btn btn-success js-btn-prev" type="button" style="display:none"
+                id="autoanterior">
+            Regresar
+        </button>
+        <button class="btn btn-primary text-center  ml-auto p-2 js-btn-next"
+                style="display:none" type="button"
+                id="autosiguiente">
+            Aplicar
+        </button>
+    </div>
+</div>
+<script>
+    document.getElementById("btnNoestoydeacuerdo").addEventListener("click", function (event) {
+        //var data = { Titulo: "Listo!", Mensaje: "Gracias por su tiempo, puede cerrar esta página", Estado: true }
+        //AlertaAjax(data);
+        EnviarRespuestaReferencia(false);
+    })
+    //document.getElementById("btnenviar").addEventListener("click", function (event) {
+
+    //    //var data = { Titulo: "Gracias!", Mensaje: "Datos enviados", Estado: true }
+    //    //AlertaAjax(data);
+    //});
+    document.getElementById("formCliente").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (!$("#formCliente").valid()) {
+            return false;
+        }
+        EnviarRespuestaReferencia(true);
+    });
+
+    function EnviarRespuestaReferencia(AceptoSerReferencia) {
+        H5_loading.show();
+        let ModeloEnviar = {};
+        ModeloEnviar.fiIDCliente =Number( '@Model.fiIDCliente');
+        ModeloEnviar.nombrecliente = '@Model.nombrecliente';
+        ModeloEnviar.fcIDReferencia = Number('@Model.fcIDReferencia')
+        ModeloEnviar.fcRespuesta1 = AceptoSerReferencia == true ? document.getElementById("fcRespuesta1").value:"";
+        ModeloEnviar.fcRespuesta2 = AceptoSerReferencia == true ? document.getElementById("fcRespuesta2").value:"";
+        ModeloEnviar.fcRespuesta3 = AceptoSerReferencia == true ? document.getElementById("fcRespuesta3").value : "";
+         ModeloEnviar.fcPregunta1 = '@Model.fcPregunta1';
+        ModeloEnviar.fcPregunta2 = '@Model.fcPregunta2';
+        ModeloEnviar.fcPregunta3 = '@Model.fcPregunta3';
+        ModeloEnviar.fcRespuesta1Correcta = '@Model.fcRespuesta1Correcta';
+        ModeloEnviar.fcRespuesta2Correcta = '@Model.fcRespuesta2Correcta';
+        ModeloEnviar.fcRespuesta3Correcta = '@Model.fcRespuesta3Correcta';
+        ModeloEnviar.AceptoSerReferencia = AceptoSerReferencia==true?true:false;
+
+            let url = '@Url.Action("GuardarRespuestasReferencias", "DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ model: ModeloEnviar }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    document.getElementById("divRespuestasReferencia").style.display = "none";
+
+                    H5_loading.hide();
+                   /* var data = {Titulo:"Gracias",Mensaje:"Datos enviados",Estado:true}*/
+                    AlertaAjax(data);
+                    //if (!data.Estado) {
+                    //    document.getElementById("btnGuardarForm").style.display = "block";
+                    //}
+                    //AlertaCrearGoToIndex(data, "/InsuranceClaim/Index");
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    H5_loading.hide();
+                    AlertaError();
+                });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

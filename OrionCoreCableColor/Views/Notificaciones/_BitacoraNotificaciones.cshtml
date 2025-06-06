@@ -1,0 +1,45 @@
+﻿@model List<OrionCoreCableColor.Models.Notificaciones.BitacoraNotificacionesViewModel>
+
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Bitácora de Notificaciones Enviadas</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead class=" bg-primary">
+                <tr>
+                    <th>Notificación</th>
+                    <th>Nombre del Cliente</th>
+                    <th>Fecha de Envío</th>
+                    <th>Enviado por</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var notificacion in Model)
+                {
+                    <tr>
+                        <td>@notificacion.fcNotificacion</td>
+                        <td>@notificacion.fcNombre</td>
+                        <td>@notificacion.fdFechaEnvio.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@notificacion.fcNombreCorto</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--Modal footer-->
+<div class="modal-footer">
+    <div class="clearfix" style="width:100%;">
+        <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button">
+            <i class="text-lg ion-close-round"></i>
+        </button>
+    </div>
+</div>

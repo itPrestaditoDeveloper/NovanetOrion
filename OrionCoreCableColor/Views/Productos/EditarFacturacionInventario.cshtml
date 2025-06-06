@@ -1,0 +1,721 @@
+﻿@model OrionCoreCableColor.Models.Productos.CrearFacturacionInventarioViewModel
+
+<style>
+    .blink_me {
+        animation: blinker 1s linear infinite;
+    }
+
+    @@keyframes blinker {
+        50% {
+            opacity: 0.5;
+        }
+    }
+</style>
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-shopping-cart fa-fw"></i> Facturacion de Inventario</h2>
+        <div class="panel-toolbar " role="menu">
+            <a href="@Url.Action("IndexSalidaInventario")" class="btn btn-success"> Lista de Venta</a>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="panel-content">
+
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDUbicacionOrigen, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDUbicacionOrigen, new SelectList(ViewBag.ListUbicaciones, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDUbicacionOrigen, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDUbicacionDestino, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDUbicacionDestino, new SelectList(ViewBag.ListUbicaciones, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDUbicacionDestino, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcFactura, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-file-invoice fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcFactura, new { @class = "form-control", @readonly = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcFactura, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcIdentidad, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-id-card fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcIdentidad, new { @class = "form-control", @readonly = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcIdentidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcNombreCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcNombreCliente, new { @class = "form-control", @readonly = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcNombreCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcTelefonoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcTelefonoCliente, new { @class = "form-control", @readonly = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcTelefonoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCorreoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-at fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcCorreoCliente, new { @class = "form-control", @readonly = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcCorreoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <hr />
+                    <label class="control-label">Productos a entregar: </label>
+                    <ul class="mt-xs-3 list-spaced">
+                        @foreach(var item in Model.DetalleFactura)
+                        {
+                            <li>@item.fnCantidad.ToString("0.##") @(item.fnCantidad == 1 ? "Unidad" : "Unidades") de @item.fcProducto</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div id="totalesProductos" class="row" style="width:100%;">
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr />
+                </div>
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductos">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Producto</th>
+                                <th>Serie</th>
+                                <th>Mac / Serie 2</th>
+                                <th>Cantidad</th>
+                                <th>Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="clearfix" style="width:100%;">
+                    <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                    <button type="button" onclick="GuardarFacturacionInventario()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var model = @Html.Raw(Json.Encode(Model));
+        var scanner = null;
+        var listProductos = @(Html.Raw(Json.Encode(ViewBag.ListaProductos)));
+        var listProductosSinSerie = @(Html.Raw(Json.Encode(ViewBag.ProductosSinSerie)));
+        var listProductosExistenciaUbicacion = [];
+        //#fiIDUbicacion
+
+        $("#fiIDUbicacionOrigen").change(function () {
+
+            InformacionExistenciaProducto();
+        });
+
+        $("#fiIDUbicacionOrigen").select2().val(model.fiIDUbicacionOrigen).trigger("change");
+        $("#fiIDUbicacionDestino").select2().val(model.fiIDUbicacionDestino).trigger("change");
+
+
+        var buffer = "";
+        let productoEscaneado;
+
+        function NuevaLinea() {
+            return {
+                fiIDInventarioMovimientoDetalle: 0,
+                fiIDInventarioMovimientoMaestro: 0,
+                fiIDTipoMovimiento: 2,
+                fiIDMovimiento: 0,
+                fiIDUbicacionInicial: 0,
+                fiIDUbicacionDestino: 0,
+                fiIdProducto: 0,
+                fcProducto: "",
+                fcCodigoSerie1: "",
+                fcCodigoSerie2: "",
+                fnCantidad: 0,
+                fcDescripcion: "",
+                fbPorCodigo: false
+            };
+        }
+
+        $(document).keypress(function (e) {
+            if ($("#escanear")[0].classList.contains("blink_me")) {
+                if (e.target.localName == "input" || e.target.localName == "button" || e.target.localName == "select" || e.target.localName == "textarea") {
+                    buffer = "";
+                    return;
+                }
+                if (e.keyCode == 13) {
+                    if (buffer.replace(/(\r\n|\n|\r)/gm, "") != "") {
+
+
+
+                        $.ajax({
+                            url: "@Url.Action("GetInformacionInventario","Productos")",
+                            type: "Get",
+                            data: { fcCodigoSerie: buffer },
+                            success: function (resp) {
+                                if (resp.Estado) {
+                                    if (resp.listaInventarioDetalle.length >= 1) {
+
+
+
+
+                                        var tabla = $.fn.DataTable.Api("#TablaProductos");
+                                        var data = tabla.rows().data().toArray();
+                                        var repetidos = tabla.rows().data().toArray();
+                                        for (var item of resp.listaInventarioDetalle) {
+
+                                            if (item.fiIDUbicacionInicial == $("#fiIDUbicacionOrigen").val()) {
+                                                repetidos.push(item);
+                                            } else {
+                                                ToastrError("Inventario", `El producto ${item.fcProducto} con codigo ${item.fcCodigoSerie1} se encuentra en la ubicacion ${item.fcUbicacionInicial}`);
+                                            }
+
+
+                                        }
+
+                                        var uniqs = repetidos.filter(function (item, index, array) {
+                                            return array.indexOf(item) === index;
+                                        });
+
+                                        uniqs = uniqs.filter(x => !data.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+
+                                        tabla.rows.add(uniqs).draw(false);
+                                        InformacionTable();
+                                    } else {
+                                        ToastrError("Productos", "No se encontro productos con esta serie");
+                                    }
+
+
+                                } else {
+
+                                    ToastrError("Productos", "No se encontro productos con esta serie");
+                                }
+                                buffer = "";
+                            }
+                        });
+
+
+
+
+
+
+                        buffer = "";
+                    }
+                } else {
+                    buffer += e.key;
+                }
+            }
+
+        });
+
+
+
+        var tablaPrincipal = $('#TablaProductos').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            buttons: [
+                {
+                    text: `<i class="fal fa-camera"></i>`,
+                    className: 'btn btn-success',
+                    attr: { "id" : "camara" },
+                    action: function (e, dt, node, config) {
+                        VerModalScrollConObjetoDeParametro({}, "@Url.Action("CodigoInventarioPorCamara","Productos")");
+                    }
+                },
+                {
+                    text: `<i class="fal fa-scanner"></i>`,
+                    className: 'btn btn-success',
+                    attr: { "id": "escanear" },
+                    action: function (e, dt, node, config) {
+
+                        if ($("#fiIDUbicacionOrigen").val() == ("" || null ))
+                        {
+                            ToastrInfo("", "Seleccione una ubicacion");
+                            return;
+                        }
+
+                        if (node[0].classList.contains("btn-success")) {
+                            $(node).removeClass("btn-success").addClass("btn-info").addClass("blink_me");
+                            $("#fiIDUbicacionOrigen").prop("disabled", true);
+                            $("#fiIDUsuarioDestino").prop("disabled", true);
+                            $("#camara").prop("disabled", true);
+                            $("#manual").prop("disabled", true);
+                            $("#codigo").prop("disabled", true);
+                            $(node).focus();
+                        } else {
+                            $(node).removeClass("btn-info").removeClass("blink_me").addClass("btn-success");
+                            $("#fiIDUbicacionOrigen").prop("disabled", false);
+                            $("#fiIDUsuarioDestino").prop("disabled", false);
+                            $("#camara").prop("disabled", false);
+                            $("#manual").prop("disabled", false);
+                            $("#codigo").prop("disabled", false);
+                            $(node).focus();
+                        }
+                    }
+                },
+                {
+                    text: `<i class="fal fa-i-cursor"></i>`,
+                    className: 'btn btn-success',
+                    attr: { "id": "codigo" },
+                    action: function (e, dt, node, config) {
+
+                         VerModalSmConObjetoDeParametro({}, "@Url.Action("CodigoInventarioDigitado", "Productos")");
+                    }
+                },
+                {
+                    text: `<i class="fal fa-plus"></i>`,
+                    className: 'btn btn-success',
+                    attr: { "id": "manual" },
+                    action: function (e, dt, node, config) {
+                        let tabla = $.fn.dataTable.Api("#TablaProductos");
+                        //let lineas = parseInt($("#cantidadIngresar").val());
+                        tabla.row.add(NuevaLinea()).draw(false);
+
+                    }
+                }
+            ],
+            data: model.ListaInventarioDetalle,
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fcProducto
+                        } else {
+                            return `<select class="form-control clsProducto" name="fiIDProducto"></select>`;
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fcCodigoSerie1
+                        } else {
+                            return `<input type="text" class="form-control clsSerie1" name="fcCodigoSerie1" value="${data.fcCodigoSerie1}" />`;
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fcCodigoSerie2;
+                        } else {
+                            return `<input type="text" class="form-control clsSerie2" name="fcCodigoSerie2" value="${data.fcCodigoSerie2}" />`;
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fnCantidad;
+                        } else {
+                            return `<input type="number" class="form-control InputDecimal" data-class="ClaseDecimal" name="fnCantidad" type="text"  value="${data.fnCantidad}" ></input>`;
+                        }
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return `<input class="form-control" name="fcDescripcion" autocomplete="off" type="text" value="${data.fcDescripcion}" ></input>`;
+                    }
+                },
+
+            ],
+            createdRow: function (row, data, index)
+            {
+                var tabla = $.fn.dataTable.Api("#TablaProductos");
+
+                $(row).find(".clsProducto").select2({ data: listProductos, width: "100%" }).val(data.fiIdProducto).trigger('change');
+
+
+                if (!model.DetalleFactura.some(x => x.fiIDProducto == data.fiIdProducto) && data.fbPorCodigo) {
+                    ToastrError("Producto no se encuentra en los de la factura", "Producto fue elimimado");
+                    tabla.row(row).remove().draw(false);
+                    return;
+                }
+
+                if (!CantidadDeProductosPorFactura(tabla)) {
+                    return;
+                }
+
+                InformacionTable();
+
+                //$(row).find(".clsUbicacion").select2({ data: listUbicaciones, width: "100%" }).val(data.fiIDUbicacion).trigger('change');
+                //$(row).find(".clsTipoMovimiento").select2({ data: listTipoMovimiento, width: "100%" }).val(data.fiIDTipoMovimiento).trigger('change');
+            },
+            initComplete: function ()
+            {
+                InformacionTable();
+            }
+
+        });
+
+
+        function CantidadDeProductosPorFactura(tablacr)
+        {
+            var datacr = tablacr.rows().data().toArray() ?? [];
+
+            if (datacr.length > 0) {
+                var productoscr = datacr.map(x => {
+                    return {
+                        fiIdProducto: x.fiIdProducto,
+                        fcProducto: x.fcProducto,
+                        fnCantidad: x.fnCantidad
+                    };
+
+
+                });
+
+                var totalProductoscr = Object.groupBy(productoscr, ({ fiIdProducto }) => fiIdProducto);
+
+
+                for (let item in totalProductoscr) {
+
+                    var fnTotal = totalProductoscr[item].map(x => parseInt(x.fnCantidad)).reduce((a, b) => a + b);
+
+                    var dataFactura = model.DetalleFactura.find(x => x.fiIDProducto == totalProductoscr[item][0].fiIdProducto) ?? [];
+                    debugger;
+                    if (dataFactura != []) {
+                        if (fnTotal > dataFactura.fnCantidad) {
+                            ToastrWarning(`El producto ${dataFactura.fcProducto} excede la cantidad facturada`, "Advertencia");
+                            return false;
+                        }
+                    }
+
+
+
+                }
+            }
+        }
+
+        $("#TablaProductos tbody").on("click", "tr button[name=eliminar]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+
+                row = $(this).closest("tr").prev()[0];
+            }
+            tblProductos.row(row).remove().draw(false);
+            InformacionTable();
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr select[name=fiIDProducto]", function () {
+
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+
+            let data2 = tblProductos.row(row).data();
+            data2.fiIdProducto = $(this).val();
+            data2.fcProducto = $('option:selected', this).text();
+            InformacionTable();
+            CantidadDeProductosPorFactura(tblProductos);
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fcCodigoSerie1]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fcCodigoSerie1 = $(this).val();
+        });
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fcCodigoSerie2]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fcCodigoSerie2 = $(this).val();
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fnCantidad]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fnCantidad = $(this).val();
+            InformacionTable();
+            var dataProducto = listProductosExistenciaUbicacion.find(x => x.fiIDProducto == data2.fiIdProducto);
+
+            if (data2.fnCantidad > dataProducto?.fnExistencia ?? 0) {
+                ToastrWarning("", `La cantidad ${data2.fnCantidad} ingresada del producto ${dataProducto.fcProducto} con ${dataProducto.fnExistencia} unidades es mayor que lo que existe en bodega`);
+            }
+            CantidadDeProductosPorFactura(tblProductos);
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fcDescripcion]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fcDescripcion = $(this).val();
+        });
+
+
+
+        function GuardarFacturacionInventario() {
+            $("#btnGuardarForm").hide();
+            if ($("#fiIDUbicacionOrigen").val() == "" || $("#fiIDUbicacionOrigen").val() == null) {
+                ToastrError("", "Seleccione su ubicacion");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fiIDUbicacionDestino").val() == "" || $("#fiIDUbicacionDestino").val() == null) {
+                ToastrError("", "Seleccione un Destino");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            model.fiIDUbicacionOrigen = $("#fiIDUbicacionOrigen").val();
+            model.fiIDUbicacionDestino = $("#fiIDUbicacionDestino").val();
+
+
+            var tabla = $.fn.DataTable.Api("#TablaProductos");
+
+            var node = tabla.rows().nodes().toArray();
+
+            if (node.length > 0) {
+                for (var item of node) {
+                    var data = tabla.row(item).data();
+
+                    if (!listProductosSinSerie.some(x => x == data.fiIdProducto))
+                    {
+                        if (data.fiIDUbicacionInicial != $("#fiIDUbicacionOrigen").val()) {
+                            ToastrError("Error", "Existe inventario sin registrar en esta bodega");
+                            $("#btnGuardarForm").show();
+                            return;
+                        } else {
+                            $(item).css("background-color", "");
+                        }
+                    }
+
+
+                    if (!data.fbPorCodigo) {
+
+                        let dataProducto = listProductosExistenciaUbicacion.find(x => x.fiIDProducto == data.fiIdProducto);
+                        if (data.fnCantidad > (dataProducto?.fnExistencia ?? 0)) {
+                            ToastrError(`Error`, `La cantidad ${data.fnCantidad} ingresada del producto ${dataProducto.fcProducto} con ${dataProducto.fnExistencia} unidades es mayor que lo que existe en bodega`);
+                            return;
+                        }
+                    }
+                }
+            }
+            model.ListaInventarioDetalle = tabla.rows().data().toArray();
+
+           
+           
+            url = "@Url.Action("EditarFacturacionInventario", "Productos")";
+            
+
+            $.ajax({
+                url: url,
+                type: "Post",
+                data: { model: model },
+                success: function (resp) {
+                    if (resp.Estado) {
+                        ToastrSuccess("Aprobada", resp.Mensaje);
+                        location.href = "@Url.Action("IndexFacturacion","Productos")";
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                        $("#btnGuardarForm").show();
+                    }
+                }
+            });
+        }
+
+        function InformacionTable() {
+
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var data = tabla.rows().data().toArray();
+
+            var productos = data.map(x => {
+                return {
+                    fiIdProducto: x.fiIdProducto,
+                    fcProducto: x.fcProducto,
+                    fnCantidad: x.fnCantidad
+                };
+
+
+            });
+
+            var totalesProductos = Object.groupBy(productos, ({ fiIdProducto }) => fiIdProducto);
+
+            $("#totalesProductos").empty();
+            var alingText = ["text-left", "text-center", "text-right"];
+            var i = 0;
+            for (let item in totalesProductos) {
+                var fcProducto = totalesProductos[item][0].fcProducto;
+                var fnTotal = totalesProductos[item].map(x => parseInt(x.fnCantidad)).reduce((a, b) => a + b);
+
+                if (fcProducto != "") {
+                    var resultado = $(`<div class="col-lg-2"><i class="fal fa-circle text-success" style="background-color: orange; border-radius:50%;"></i> ${fcProducto}: ${fnTotal}</div>`);
+
+                    $("#totalesProductos").append(resultado);
+                }
+
+            }
+        }
+
+
+        function InformacionExistenciaProducto()
+        {
+            $.ajax({
+                url: "@Url.Action("ExistenciaProductosPorUbicacion","Productos")",
+                method: "Get",
+                data: { fiIDUbicacion: $("#fiIDUbicacionOrigen").val() },
+                success: function (resp) {
+                    listProductosExistenciaUbicacion = resp;
+
+                    var tabla = $.fn.dataTable.Api("#TablaProductos");
+                    var dataProductosSeleccionados = tabla.rows().data().toArray().filter(x => !x.fbPorCodigo);
+                    var mensaje = "";
+                    for (let item of dataProductosSeleccionados) {
+                        let dataProducto = listProductosExistenciaUbicacion.find(x => x.fiIDProducto == item.fiIdProducto);
+
+                        if (item.fnCantidad > dataProducto?.fnExistencia ?? 0) {
+                            mensaje += `La cantidad ${item.fnCantidad} ingresada del producto ${dataProducto.fcProducto} con ${dataProducto.fnExistencia} unidades es mayor que lo que existe en bodega,\n`;
+                        }
+                    }
+
+                    if (mensaje != "") {
+                        ToastrWarning("Advertencia", mensaje);
+                    }
+
+                }
+            });
+        }
+
+        $("#fiIDUbicacionOrigen").change(function () {
+
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+
+            var node = tabla.rows().nodes().toArray();
+
+            if (node.length > 0) {
+                for (var item of node)
+                {
+                    var data = tabla.row(item).data();
+
+                    if (!listProductosSinSerie.some(x => x == data.fiIdProducto)){
+                        if (data.fiIDUbicacionInicial != $("#fiIDUbicacionOrigen").val()) {
+                            $(item).css("background-color", "rgb(255 99 99 / 29%)");
+                        } else {
+                            $(item).css("background-color", "");
+                        }
+                    }
+
+                }
+
+            }
+        });
+
+
+
+       
+
+    </script>    
+}

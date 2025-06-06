@@ -1,0 +1,91 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white" id="titulo">
+        @ViewBag.fcTitulo
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        
+            <div class="col-sm-8" style="float:left;">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Paquetes enviados: </label> <label id="enviados"></label>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Paquetes recibidos: </label> <label id="recibidos"></label>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Paquetes perdidos: </label> <label id="perdidos"></label>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="col-sm-12 text-bold">
+                        <label><stong>Detalle</stong></label>
+                    </div>
+                    <div class="col-sm-12" id="paquetes">
+
+                    </div>
+
+                    <br />
+                    <br />
+
+                    <div class="col-sm-12 text-bold">
+                        <label><strong>Estadisticas de ping</strong></label>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Tiempo mínimo: </label> <label id="minimo"></label>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Tiempo máximo: </label> <label id="maximo"></label>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Tiempo medio: </label> <label id="medio"></label>
+                    </div>
+
+                </div>
+            </div>
+      
+    </div>
+</div>
+
+<script>
+    var fiIDUser = @ViewBag.fiIDUsuario;
+    var fcIP = "@ViewBag.fcIP";
+    $.ajax({
+        url: "@Url.Action("EnviarPingApi","Soporte")",
+        method: "Get",
+        data: { fcIP: fcIP, fiIDUser: fiIDUser },
+        success: function (resp) {
+
+        }
+    });
+
+
+    chat.on("recibirPing", function (model) {
+        if (model.fiIDUsuario == fiIDUser) {
+            $("#enviados").html(model.fiPacketSent);
+            $("#recibidos").html(model.fiPacketReceived);
+            $("#perdidos").html(model.fiPacketLost);
+            $("#minimo").html(model.fiMinTime + ' ms');
+            $("#maximo").html(model.fiMaxTime + ' ms');
+            $("#medio").html(model.fiMediaTime + ' ms');
+
+            var opt = "";
+            for (var item of model.Data) {
+                opt += item.fbSuccess ? `<p>Tiempo: ${item.fiTiempo} ms, TTL: ${item.fiTtl}, Bytes: ${item.fiBytes}</p>` : `<p>Tiempo de espera excedido </p>`;
+            }
+
+            $("#paquetes").html(opt);
+            
+        }
+        
+       
+        return;
+    });
+
+</script>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<OrionCoreCableColor.Models.Mantenimiento.ListPaqueteDetalleViewModel>
+
+
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="tbHistoricoProductos-@Model.FirstOrDefault().fiIdPaquete" style="width:100%;">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.fcProducto</td>
+                <td>@item.fiCantidad</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    var tablaPrincipal = $('#tbHistoricoProductos-@Model.FirstOrDefault().fiIdPaquete').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "<",
+                    next: ">",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            //dom: 'Bfrtip',
+            //order: [[1, "desc"]],
+        });
+</script>
+

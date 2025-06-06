@@ -1,0 +1,712 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+@{
+    ViewBag.Title = "BuscarCliente";
+}
+
+
+
+<div class="panel panel-primary panel-bordered">
+    <div class="panel-heading text-info">
+        <h1 class="panel-title color-white">
+                 Consultar ATC
+        </h1>
+
+    </div>
+    <div class="panel-body">
+        @Html.HiddenFor(model => model.fiIDEquifax)
+
+        <div class="panel-body">
+            <div class="col-sm-10">
+                <form id="MyFormModal">
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label" for="button-addon5">Ingresar numero de Identidad:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="9999-9999-9999" aria-label="Recipient's username" id="txtIDentidadCliente" aria-describedby="button-addon5">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary waves-effect waves-themed" type="button" id="button-addon5" onclick="ConsultarCliente()"><i class="fal fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Nombre Cliente:</label>
+                                <input type="text" id="txtNombreCliente" class="form-control" disabled="">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label text-muted">Numero Celular:</label>
+                                <input type="text" id="txtNumeroCelularCliente" class="form-control mascara-telefono" disabled="">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6" style="display:none">
+
+                            <div class="form-group" style="display:none" id="DivEstadoPrecalificadoScore">
+                                <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                                <br />
+                                <button type="button" id="btnEstadoEtiqueta" class="btn-success btn btn-sm js-btn-next">APLICA OFERTA</button>
+                                <button type="button" id="btnEstadoSol" class="btn-success btn btn-sm js-btn-next">Estado Sol</button>
+
+                                @*<button type="button" id="btnVerBuroCredito" onclick="VerBuro()" class="btn-primary btn btn-sm js-btn-next">Ver Buro</button>*@
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-sm-6" style="display:none">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Score Promedio:</label>
+                                <input type="text" id="txtScoreCliente" class="form-control" disabled="">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-2">
+
+                            @*<div class="form-group" id="DivAgregarPaquete">*@
+                            <div class="form-group" style="display:none" id="DivAgregarPaquete">
+                                <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                                <br />
+                                <button type="button" id="btnAgregarPaquete" onclick="AgregarPaquete()" class="btn-success btn btn-sm js-btn-next">Escoger Paquete</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            @*<div class="form-group" id="DivAgregarProducto">*@
+                            <div class="form-group" style="display:none" id="DivAgregarProducto">
+                                <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                                <br />
+                                <button type="button" id="btnAgregarProducto" onclick="AgregarSolicitud()" class="btn-success btn btn-sm js-btn-next">Agregar Producto</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row" id="TablaProducto" style="display:none;">
+
+                        <div id="panel-4" class="panel" style="flex: 1;">
+                            <div class="panel-hdr" style="background-color:#25476a;">
+                                <h2 style="color:white">
+                                    Tabla de Productos a Ofrecer
+                                </h2>
+                                <div class="panel-toolbar">
+                                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                </div>
+                            </div>
+                            <div class="panel-container show">
+                                <div class="panel-content" id="TablaProductoBody">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="solicitudServicio" style="display:none;">
+
+                        <div id="panel-1" class="panel" style="flex: 1;">
+                            <div class="panel-hdr" style="background-color:#25476a;">
+                                <h2 style="color:white">
+                                    Cliente con Solicitud de Servicio
+                                </h2>
+                                <div class="panel-toolbar">
+                                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                </div>
+                            </div>
+                            <div class="panel-container show">
+                                <div class="panel-content" id="SolicitudServicioBody">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="DataPrestamos" style="display:none;">
+
+                        <div id="panel-2" class="panel" style="flex: 1;">
+                            <div class="panel-hdr" style="background-color:#25476a;">
+                                <h2 style="color:white">
+                                    Detalle de Prestamos
+                                </h2>
+                                <div class="panel-toolbar">
+                                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                </div>
+                            </div>
+                            <div class="panel-container show">
+                                <div class="panel-content" id="DataPrestamosBody">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="BitacoraConsulta" style="display:none;">
+
+                        <div id="panel-3" class="panel" style="flex: 1;">
+                            <div class="panel-hdr" style="background-color:#25476a;">
+                                <h2 style="color:white">
+                                    Bitacora de Gestion
+                                </h2>
+                                <div class="panel-toolbar">
+                                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                </div>
+                            </div>
+                            <div class="panel-container show">
+                                <div class="panel-content" id="BitacoraConsultaBody">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" id="BitacoraProductosPaquete" style="display:none;">
+
+                        <div id="panel-5" class="panel" style="flex: 1;">
+                            <div class="panel-hdr" style="background-color:#25476a;">
+                                <h2 style="color:white">
+                                    Productos del paquete:
+                                </h2>
+                                <div class="panel-toolbar">
+                                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                                </div>
+                            </div>
+                            <div class="panel-container show">
+                                <div class="panel-content">
+                                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%; display:none" id="TablaPrincipal">
+                                        <thead>
+                                            <tr>
+                                                <th>numero Producto</th>
+                                                <th>Producto</th>
+                                                <th>tipo Producto</th>
+                                                <th>Valor</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br />
+
+                    
+
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="panel-footer text-right">
+        <a class="btn btn-danger" href="/dealercompany/index"><i class="text-lg ion-close-round"></i> Cancel</a>
+        <button class="btn btn-info" style="display:none" id="btnEniarCredito" onclick="EviarCridito()"><i class="text-lg ion-checkmark-round"></i> Eviar a Credito</button>
+        <button class="btn btn-success" style="display:none" id="btnGuardarForm" onclick="ProcesarSolicitud()"><i class="text-lg ion-checkmark-round"></i> Procesar</button>
+
+    </div>
+</div>
+@section Scripts{
+
+   
+    <script>
+
+		var fbCuotasAtrasadas = false;
+
+
+        var fcEstadoIndicador = "";
+        var fbClienteExiste = false;
+        var model = @Html.Raw(Json.Encode(Model));
+
+        /*ViewDataBitacoraClienteConsulta*/
+        var dataPrincipal = [];
+        $(".mascara-telefono").inputmask("9999-9999");
+        $(".mascara-identidad").inputmask("9999999999999");
+        var IDEquifax = 0;
+        var NombreCliente = "";
+        var EstadoPrecalificadoScore = "";
+        var PaqueteSeleccionado = {
+            idPaquete: 0,
+            idPlazo: 0,
+            fnValor: 0,
+            fiMeses: 0,
+            fiMesesCondicion: 0,
+            fnMontoCondicion: 0,
+            fcMesesPlazo: "",
+            fcPaquete: "",
+            fiMeses:0,
+        };
+
+
+
+        function ObtenerSolicitud(idCliente) {
+            $.ajax({
+                url: "@Url.Action("ClienteSolicitudServicio","PrecalificaCliente")",
+                method: "Get",
+                data: { IDCliente: idCliente },
+                success: function (resp) {
+					console.log(resp)
+                    $("#SolicitudServicioBody").html(resp);
+                }
+            });
+        }
+
+
+        function ObtenerDetallePrestamos(fcIdentidad) {
+            $.ajax({
+                url: "@Url.Action("ViewDataPrestamosCliente", "PrecalificaCliente")",
+                method: "Get",
+                data: { fcIdentidad: fcIdentidad },
+                success: function (resp) {
+                    $("#DataPrestamosBody").html(resp);
+                }
+            });
+        }
+
+
+         function ObtenerBitacoraGestion(fcIdentidad) {
+            $.ajax({
+                url: "@Url.Action("ViewDataBitacoraClienteConsulta", "PrecalificaCliente")",
+                method: "Get",
+                data: { fcIdentidad: fcIdentidad },
+                success: function (resp) {
+                    $("#BitacoraConsultaBody").html(resp);
+                }
+            });
+        }
+        function ObtenerPaqueteGeneral(fcIdentidad) {
+            $.ajax({
+                url: "@Url.Action("ViewDataPaqueteGeneral", "PrecalificaCliente")",
+                method: "Get",
+                data: { fcIdentidad: fcIdentidad },
+                success: function (resp) {
+                    $("#TablaProductoBody").html(resp);
+                }
+            });
+        }
+        //$("#btnEstadoEtiqueta").css('display', '');
+        //$("#DivEstadoPrecalificadoScore").css('display', '');
+
+        function ConsultarCliente() {
+            $("#txtNombreCliente").val("");
+            $("#txtScoreCliente").val("");
+           // $("#btnEstadoEtiqueta").css('display', 'none');
+           // $("#btnEstadoSol").css('display', 'none');
+
+            if ($("#txtIDentidadCliente").val() == "") {
+                AlertaErrorMensaje("Coloque la Identidad");
+                return false;
+            }
+            var formData = {
+                fcIdentidad: $("#txtIDentidadCliente").val(),
+                fcTelefonoReferencia1: $("#txtNumeroCelularCliente").val(),
+            }
+            console.log(formData);
+            document.getElementById('txtNumeroCelularCliente').disabled = false;
+           var url = "@Url.Action("ConsultarCliente", "PrecalificaCliente")";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { model: formData },
+                // enctype: "multipart/form-data",
+                success: function (data) {
+                    
+                    $("#txtNombreCliente").val(data.fcNombre);
+                    $("#txtScoreCliente").val(data.fiScorePromedio);
+                    IDEquifax = data.fiIDEquifax;
+                    NombreCliente = data.fcNombre;
+                    EstadoPrecalificadoScore = data.fcRespuestaCredito;
+                    var EstadoBoton = document.getElementById('btnEstadoEtiqueta');
+                    var EstadoBotonSol = document.getElementById('btnEstadoSol');
+                    if (EstadoPrecalificadoScore == "Aprobado") {
+                        $("#btnGuardarForm").css('display', '');
+
+                        //$("#TablaPrincipal").css('display', '');
+                        //$("#btnEstadoEtiqueta").removeClass('btn-danger').addClass('btn-success');
+                        //$("#btnEstadoSol").removeClass('btn-danger').addClass('btn-success');
+                        //$("#btnEstadoEtiqueta").css('display', '');
+                        //$("#btnEstadoSol").css('display', '');
+                        EstadoBoton.innerHTML = EstadoPrecalificadoScore;
+                        EstadoBotonSol.innerHTML = data.fcEstadoIndicador;
+                        $("#DivEstadoPrecalificadoScore").css('display', '');
+                       // $("#DivAgregarProducto").css('display', '');
+                       // $("#DivAgregarPaquete").css('display', '');
+                        MostrarProducto();
+                        EstadoPrecalificado(data.fiEstadoActualPrecalificado);
+
+                        //if (data.fcEstadoIndicador != "Cliente en Reportes con referencias sin contestar" && data.fcEstadoIndicador != "Cliente en Reportes sin contestar") {
+                        //    MostrarDirecciones();
+                        //}
+
+                        fcEstadoIndicador = data.fcEstadoIndicador;
+
+                        $("#solicitudServicio").show();
+
+
+                        ObtenerSolicitud(IDEquifax);
+
+                        $("#DataPrestamos").show();
+                        ObtenerDetallePrestamos($("#txtIDentidadCliente").val());
+
+                        $("#BitacoraConsulta").show();
+                        ObtenerBitacoraGestion($("#txtIDentidadCliente").val());
+                        $("#TablaProducto").show();
+                        ObtenerPaqueteGeneral($("#txtIDentidadCliente").val());
+
+
+                        CargarTablaPrincipal();
+                        
+
+                    } else {
+                        $("#TablaPrincipal").css('display', 'none');
+                       // $("#btnEstadoEtiqueta").css('display', '');
+                       // $("#btnEstadoSol").css('display', '');
+                       // $("#btnEstadoEtiqueta").removeClass('btn-success').addClass('btn-danger');
+                       // $("#btnEstadoSol").removeClass('btn-success').addClass('btn-danger');
+                        EstadoBoton.innerHTML = EstadoPrecalificadoScore;
+                        EstadoBotonSol.innerHTML = data.fcEstadoIndicador;
+                        $("#DivEstadoPrecalificadoScore").css('display', '');
+                        $("#btnGuardarForm").css('display', 'none');
+
+                    }
+
+                }, error: function () {
+                    AlertaError();
+                }
+            });
+        }
+
+        function MostrarDirecciones() {
+            $("#footertable").show();
+            $("#selectdirec").show();
+
+            if (fcEstadoIndicador !== "Cliente en Reportes con referencias sin contestar" && fcEstadoIndicador !== "Cliente en Reportes sin contestar") {
+                $("#selectdireccionescli").show();
+                //$("#Geo_departamento, #Geo_Municipio, #Geo_Barrio, #direccionnueva, #rowdireccionnueva").hide();
+                
+            }
+        }
+
+
+        function CargarTablaPrincipal() {
+            $("#BitacoraProductosPaquete").show();
+            var tablaPrincipal = $('#TablaPrincipal').DataTable({
+                autoWidth: true,
+                responsive: true,
+                "destroy": true,
+                language: {
+                    "emptyTable": "No se encontraron resultados.",
+                    "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                    "paginate": {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    "lengthMenu": " _MENU_ ",
+                    "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                    "infoEmpty": "No hay registros para mostrar.",
+                },
+
+                order: [[1, "desc"]],
+                data: dataPrincipal,
+                columns: [
+                    {
+
+                        data: 'fiIDProducto'
+                    },
+
+                    {
+                        data: 'fcProducto'
+                    },
+                    {
+                        data: 'fcTipoProducto'
+                    },
+
+
+                    {
+                        data: null,
+                        render: function (data) {
+
+                            return ConvertirADecimal(data.fnValorProducto) + " $";
+                        }
+                    },
+
+
+                ],
+
+
+            });
+        }
+
+        function EstadoPrecalificado(Estado)
+        {
+            var EstadoBoton = document.getElementById('btnEstadoEtiqueta');
+            //$("#btnEniarCredito").css('display', '');
+            if (Estado == 1)
+            {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con L 6,000.00";
+            }
+            if (Estado == 2) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con L 5,000.00";
+            }
+            if (Estado == 3) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con L 4,000.00";
+            }
+            if (Estado == 4) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con L 3,000.00";
+            }
+            if (Estado == 5) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con L 2,000.00";
+            }
+            if (Estado == 6) {
+                EstadoBoton.innerHTML = "Aplica Solo Servicios";
+            }
+            if (Estado == 7) {
+                //$("#btnEniarCredito").css('display', '');
+                EstadoBoton.innerHTML = "Aplica Solo Servicios o Requiere Validacion";
+            }
+
+        }
+
+        @*function ProcesarSolicitud() {
+            if ($("#txtNumeroCelularCliente").val() == "") {
+                AlertaErrorMensaje("Coloque El numero de telefono");
+                return false;
+            }
+            var telefono = $("#txtNumeroCelularCliente").val();
+
+            var DatosClientes = {
+                fcIdentidad: $("#txtIDentidadCliente").val(),
+                fcTelefonoReferencia1: telefono,
+                fcPrimerNombre: NombreCliente,
+                fiIDEquifax: IDEquifax,
+                DatosProductos: dataPrincipal,
+            }
+            var url = "@Url.Action("EnviarLinkCliente", "PrecalificaCliente")";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { model: DatosClientes },
+                success: function (data) {
+                    if (data.Estado) {
+                        AlertaAjax(data);
+                        location.reload();
+                    }
+
+
+                }, error: function () {
+                    AlertaError();
+                }
+            });
+        }*@
+
+        function ProcesarSolicitud() {
+
+			var telefono = $("#txtNumeroCelularCliente").val();
+			var selectdirec = $("#selectdireccionescli").val();
+			var solicitud = $("#selectdirec").val();
+            var fiDepartamento = $("#Geo_departamento").val();
+            var fiMunicipio = $("#Geo_Municipio").val();
+			var fiPoblado = $("#Geo_Barrio").val();
+			var detalleDireccion = $("#detalleDireccion").val();
+			var txtCorreoElectronico = $("#txtCorreoElectronico").val()
+
+            if (telefono == "") {
+                AlertaErrorMensaje("Coloque El numero de telefono");
+                return false;
+            }
+
+            if (PaqueteSeleccionado.idPaquete == 0) {
+				AlertaErrorMensaje("Seleccione un Paquete");
+				return false;
+			}
+
+            if (fbClienteExiste) {
+                if (selectdirec == null) {
+					AlertaErrorMensaje("Aún faltan llenar datos de Dirección");
+					return false;
+                }
+                else {
+					if (solicitud == null && (fiDepartamento == null || fiMunicipio == null || fiPoblado == null || detalleDireccion == "" || txtCorreoElectronico == "")) {
+						AlertaErrorMensaje("Aún faltan llenar datos de Dirección");
+						return false;
+
+					}
+				}
+            }
+
+            if (fbCuotasAtrasadas) {
+				AlertaErrorMensaje("Este Cliente tiene Cuotas en Atraso de sus Prestamos Existentes");
+				return false;
+            }
+
+            var DatosClientes = {
+                fcIdentidad: $("#txtIDentidadCliente").val(),
+                fcTelefonoReferencia1: telefono,
+                fcPrimerNombre: NombreCliente,
+                fiIDEquifax: IDEquifax,
+                DatosProductos: dataPrincipal,
+                fiDepartamento: $("#Geo_departamento").val(),
+                fiMunicipio: $("#Geo_Municipio").val(),
+                fiPoblado: $("#Geo_Barrio").val(),
+                fcDepartamento: $("#Geo_departamento option:selected").text(),
+                fcMunicipio: $("#Geo_Municipio option:selected").text(),
+                fcPoblado: $("#Geo_Barrio option:selected").text(),
+                fcDireccionDetallada: $("#detalleDireccion").val(),
+                fcCorreo: $("#txtCorreoElectronico").val()
+
+            }
+
+          
+
+           $.ajax({
+                url: "@Url.Action("ModalConfirmarDatosProcesoSolicitud", "PrecalificaCliente")",
+               type: "POST",
+               data: {
+                   model: DatosClientes,
+                   fcPlazo: PaqueteSeleccionado.fcMesesPlazo,
+                   ValorPlazo: PaqueteSeleccionado.fnValor,
+                   condicionMes: PaqueteSeleccionado.fiMesesCondicion,
+                   ValorCondicion: PaqueteSeleccionado.fnMontoCondicion,
+                   fcPaquete: PaqueteSeleccionado.fcPaquete,
+                   fiIDSolicitudDireccion: $("#selectdirec").val()
+               },
+               success: function (datas) {
+                   ShowModal(datas);
+                },
+               error: function (datae) {
+                   console.log(datae)
+                    var dataerror = { Titulo: "Error", Mensaje: `Error Al querer Mostrar los Datos ${datae}`, Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+
+        }
+        function AgregarSolicitud(){
+            VerModalScrollConObjetoDeParametro({},"@Url.Action("ViewDataProducto", "PrecalificaCliente")");
+        }
+        function AgregarPaquete(){
+
+            VerModalScrollConObjetoDeParametro({ Identidad: $("#txtIDentidadCliente").val()},"@Url.Action("ViewDataPaquete", "PrecalificaCliente")");
+        }
+
+        function VerBuro() {
+
+            var IDIDentidad = $("#txtIDentidadCliente").val();
+            $.ajax({
+                url: "@Url.Action("ViewVerBuro", "PrecalificaCliente")",
+                method: "get",
+                data: { IDIDentidad: IDIDentidad },
+                success: function (resp) {
+
+                    ShowModalBigScroll(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function MostrarProducto() {
+           @*var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaProducto", "PrecalificaCliente")',
+                method: "Get",
+                dataSrc: function (data) {
+
+                    return data;
+                }
+            },
+
+            columns: [
+
+                {
+                    data: 'fcProducto'
+                },
+                {
+                    data: 'fcPropuestaPaquete'
+                },
+                //{
+                //    visible: false,
+                //    data: null,
+                //    render: function (data) {
+
+                //        return '<div style="display:none;">' + moment(data.FechaNacimiento) + '</div>' + moment(data.FechaNacimiento).format("DD/MM/YYYY");
+                //    }
+                //},
+
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return data.fnValordeContado + " " + data.fcMoneda;
+                    }
+                },
+
+               ],
+               initComplete: function () {
+                   var tabla = $.fn.dataTable.Api('#TablaPrincipal');
+                   tabla.destroy();
+               }
+
+        });*@
+        }
+
+        function EviarCridito()
+        {
+
+            var IDIDentidad = $("#txtIDentidadCliente").val();
+            var Nombre = $("#txtNombreCliente").val();
+            VerModalConObjetoDeParametro({ IDIDentidad: IDIDentidad, nombre: Nombre }, "@Url.Action("ViewInfoPrecalificado", "PrecalificaCliente")");
+        }
+
+        function ConvertirADecimal(nStr) {
+
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+
+    </script>
+
+    }

@@ -1,0 +1,366 @@
+﻿
+@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+@{
+    ViewBag.Title = "BuscarCliente";
+}
+
+
+
+<div class="panel panel-primary panel-bordered">
+    <div class="panel-heading text-info">
+        <h1 class="panel-title color-white">
+            Consultar ATC
+        </h1>
+
+    </div>
+    <div class="panel-body">
+        @Html.HiddenFor(model => model.fiIDEquifax)
+
+        <div class="panel-body">
+            <div class="col-sm-8">
+                <form id="MyFormModal">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label" for="button-addon5">Ingresar numero de Identidad:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="9999-9999-9999" aria-label="Recipient's username" id="txtIDentidadCliente" aria-describedby="button-addon5">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary waves-effect waves-themed" type="button" id="button-addon5" onclick="ConsultarCliente()"><i class="fal fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div class="form-group" style="display:none" id="DivEstadoPrecalificadoScore">
+                                <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                                <br />
+                                <button type="button" id="btnEstadoEtiqueta" class="btn-success btn btn-sm js-btn-next">APLICA OFERTA</button>
+
+                                <button type="button" id="btnVerBuroCredito" onclick="VerBuro()" class="btn-primary btn btn-sm js-btn-next">Ver Buro</button>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Nombre Cliente:</label>
+                                <input type="text" id="txtNombreCliente" class="form-control" disabled="">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Score Promedio:</label>
+                                <input type="text" id="txtScoreCliente" class="form-control" disabled="">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label text-muted">Numero Celular:</label>
+                                <input type="text" id="txtNumeroCelularCliente" class="form-control mascara-telefono" disabled="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-2">
+
+                            @*<div class="form-group" id="DivAgregarPaquete">*@
+                            <div class="form-group" style="display:none" id="DivAgregarPaquete">
+                                <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                                <br />
+                                <button type="button" id="btnAgregarPaquete" onclick="AgregarPaquete()" class="btn-success btn btn-sm js-btn-next">Escoger Paquete</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            @*<div class="form-group" id="DivAgregarProducto">*@
+                            <div class="form-group" style="display:none" id="DivAgregarProducto">
+                                <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                                <br />
+                                <button type="button" id="btnAgregarProducto" onclick="AgregarSolicitud()" class="btn-success btn btn-sm js-btn-next">Agregar Producto</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    @*<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">*@
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%; display:none" id="TablaPrincipal">
+                        <thead>
+                            <tr>
+                                <th>numero Producto</th>
+                                <th>Producto</th>
+                                <th>tipo Producto</th>
+                                <th>Valor</th>
+                                @*<th></th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+
+
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="panel-footer text-right">
+        <a class="btn btn-danger" data-dismiss="modal"><i class="text-lg ion-close-round"></i> Cancel</a>
+
+        <button class="btn btn-success" style="display:none" id="btnGuardarForm" onclick="ProcesarSolicitud()"><i class="text-lg ion-checkmark-round"></i> Procesar</button>
+
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var model = @Html.Raw(Json.Encode(Model));
+        var dataPrincipal = [];
+        $(".mascara-telefono").inputmask("9999-9999");
+        $(".mascara-identidad").inputmask("9999999999999");
+        var IDEquifax = 0;
+        var NombreCliente = "";
+        var EstadoPrecalificadoScore = "";
+        $("#txtIDentidadCliente").val(model.fcIdentidad);
+
+
+        //$("#btnEstadoEtiqueta").css('display', '');
+        //$("#DivEstadoPrecalificadoScore").css('display', '');
+
+        function ConsultarCliente() {
+
+            $("#txtNombreCliente").val("");
+            $("#txtScoreCliente").val("");
+            $("#btnEstadoEtiqueta").css('display', 'none');
+
+            if ($("#txtIDentidadCliente").val() == "") {
+                AlertaErrorMensaje("Coloque la Identidad");
+                return false;
+            }
+            var formData = {
+                fcIdentidad: $("#txtIDentidadCliente").val(),
+                fcTelefonoReferencia1: $("#txtNumeroCelularCliente").val(),
+            }
+            console.log(formData);
+            document.getElementById('txtNumeroCelularCliente').disabled = false;
+           var url = "@Url.Action("ConsultarClientePrecalificado", "PrecalificaCliente")";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { model : formData },
+               // enctype: "multipart/form-data",
+                success: function (data) {
+
+                    $("#txtNombreCliente").val(data.fcNombre);
+                    $("#txtScoreCliente").val(data.fiScorePromedio);
+                    IDEquifax = data.fiIDEquifax;
+                    NombreCliente = data.fcNombre;
+                    EstadoPrecalificadoScore = data.fcRespuestaCredito;
+                    var EstadoBoton = document.getElementById('btnEstadoEtiqueta');
+                    if (EstadoPrecalificadoScore == "Aprobado") {
+                        $("#btnGuardarForm").css('display', '');
+
+                        $("#TablaPrincipal").css('display', '');
+                        $("#btnEstadoEtiqueta").removeClass('btn-danger').addClass('btn-success');
+                        $("#btnEstadoEtiqueta").css('display', '');
+                        EstadoBoton.innerHTML = EstadoPrecalificadoScore;
+                        $("#DivEstadoPrecalificadoScore").css('display', '');
+                        $("#DivAgregarProducto").css('display', '');
+                        $("#DivAgregarPaquete").css('display', '');
+                        MostrarProducto();
+                        EstadoPrecalificado(data.fiEstadoActualPrecalificado);
+
+
+                    } else {
+                        $("#TablaPrincipal").css('display', 'none');
+                        $("#btnEstadoEtiqueta").css('display', '');
+                        $("#btnEstadoEtiqueta").removeClass('btn-success').addClass('btn-danger');
+                        EstadoBoton.innerHTML = EstadoPrecalificadoScore;
+                        $("#DivEstadoPrecalificadoScore").css('display', '');
+                        $("#btnGuardarForm").css('display', 'none');
+
+                    }
+
+                }, error: function () {
+                    AlertaError();
+                }
+            });
+        }
+
+        function EstadoPrecalificado(Estado)
+        {
+            var EstadoBoton = document.getElementById('btnEstadoEtiqueta');
+            if (Estado == 1)
+            {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con $200";
+            }
+            if (Estado == 2) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con $150";
+            }
+            if (Estado == 3) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con $100";
+            }
+            if (Estado == 4) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con $85";
+            }
+            if (Estado == 5) {
+                EstadoBoton.innerHTML = "Aplica a Paquetes con Productos con $60";
+            }
+            if (Estado == 6) {
+                EstadoBoton.innerHTML = "Aplica Solo Servicios";
+            }
+            if (Estado == 7) {
+
+                EstadoBoton.innerHTML = "Aplica Solo Servicios o Requiere Validacion";
+            }
+
+        }
+
+        function ProcesarSolicitud() {
+            if ($("#txtNumeroCelularCliente").val() == "") {
+                AlertaErrorMensaje("Coloque El numero de telefono");
+                return false;
+            }
+            var telefono = $("#txtNumeroCelularCliente").val();
+
+            var DatosClientes = {
+                fcIdentidad: $("#txtIDentidadCliente").val(),
+                fcTelefonoReferencia1: telefono,
+                fcPrimerNombre: NombreCliente,
+                fiIDEquifax: IDEquifax,
+                DatosProductos: dataPrincipal,
+            }
+            var url = "@Url.Action("EnviarLinkCliente", "PrecalificaCliente")";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: { model: DatosClientes },
+                success: function (data) {
+                    if (data.Estado) {
+                        AlertaAjax(data);
+                        location.reload();
+                    }
+
+
+                }, error: function () {
+                    AlertaError();
+                }
+            });
+        }
+        function AgregarSolicitud(){
+            VerModalScrollConObjetoDeParametro({},"@Url.Action("ViewDataProducto", "PrecalificaCliente")");
+        }
+        function AgregarPaquete(){
+
+            VerModalScrollConObjetoDeParametro({ Identidad: $("#txtIDentidadCliente").val()},"@Url.Action("ViewDataPaquete", "PrecalificaCliente")");
+        }
+
+        function VerBuro() {
+            debugger;
+            var IDIDentidad = $("#txtIDentidadCliente").val();
+            $.ajax({
+                url: "@Url.Action("ViewVerBuro", "PrecalificaCliente")",
+                method: "get",
+                data: { IDIDentidad: IDIDentidad },
+                success: function (resp) {
+
+                    ShowModalBig2Scroll(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function MostrarProducto() {
+           @*var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaProducto", "PrecalificaCliente")',
+                method: "Get",
+                dataSrc: function (data) {
+
+                    return data;
+                }
+            },
+
+            columns: [
+
+                {
+                    data: 'fcProducto'
+                },
+                {
+                    data: 'fcPropuestaPaquete'
+                },
+                //{
+                //    visible: false,
+                //    data: null,
+                //    render: function (data) {
+
+                //        return '<div style="display:none;">' + moment(data.FechaNacimiento) + '</div>' + moment(data.FechaNacimiento).format("DD/MM/YYYY");
+                //    }
+                //},
+
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return data.fnValordeContado + " " + data.fcMoneda;
+                    }
+                },
+
+               ],
+               initComplete: function () {
+                   var tabla = $.fn.dataTable.Api('#TablaPrincipal');
+                   tabla.destroy();
+               }
+
+        });*@
+        }
+
+
+
+        function ConvertirADecimal(nStr) {
+
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+
+    </script>
+    }

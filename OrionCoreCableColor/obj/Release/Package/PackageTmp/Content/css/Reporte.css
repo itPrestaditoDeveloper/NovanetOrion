@@ -1,0 +1,50 @@
+﻿/* General settings */
+#VistaGeneral, #VistaGeneral * {
+    box-sizing: border-box;
+}
+
+/* Ensuring full width and auto height for panel content */
+.panel-content {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Ensuring full width and auto height for charts */
+#chartVenta, #chartArpu, #chartMoraCliente, #GraficaClientesActivos, #stackedColumnChart {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Styling the panel header */
+.panel-hdr h2 {
+    font-size: 1.5em;
+}
+
+/* Adjustments for screens with max width of 480px */
+@media (max-width: 480px) {
+    .panel-hdr h2 {
+        font-size: 1.2em;
+    }
+
+    .panel-tag span {
+        font-size: 1em !important;
+    }
+}
+
+/* Adjustments for screens with max width of 767px */
+@media (max-width: 767px) {
+    #btnExportarDocumento {
+        display: none;
+    }
+
+    #btnExportarDocumentoMovil {
+        display: block;
+    }
+}
+
+/* Adjustments for screens with min width of 768px */
+@media (min-width: 768px) {
+    #btnExportarDocumentoMovil {
+        display: none;
+    }
+}

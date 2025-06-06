@@ -1,0 +1,278 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+<head>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 100%;
+            border: 1px solid #ddd;
+            z-index: 1;
+        }
+
+            .dropdown-content div {
+                padding: 10px;
+                cursor: pointer;
+                border-bottom: 1px solid #ddd;
+            }
+
+           .dropdown-content div:hover {
+                    background-color: #f1f1f1;
+           }
+
+        .show {
+            display: block;
+        }
+
+
+        .dataTables_filter {
+            float: left;
+        }
+
+        .dt-buttons {
+            float: left;
+            padding-left: 5px;
+        }
+
+        .dataTables_length {
+            float: right;
+        }
+        /* Personalización del radio button */
+        .selectSolicitud {
+            display: none;
+        }
+
+            .selectSolicitud + label {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #6200EA;
+                border-radius: 50%;
+                background-color: #EDE7F6;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                box-shadow: 0 0 8px rgba(98, 0, 234, 0.4);
+            }
+
+
+            .selectSolicitud:checked + label {
+                background-color: #6200EA;
+                border: 2px solid #6200EA;
+                box-shadow: 0 0 12px rgba(98, 0, 234, 0.6);
+            }
+
+                .selectSolicitud:checked + label::before {
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    background-color: white;
+                    border-radius: 50%;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+    </style>
+
+</head>
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Adición de Producto</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form id="MyFormModal">
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group" style="width: 100%;">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.Nombre, new SelectList(ViewBag.NombreCliente, "Value", "Text"), "Seleccione un cliente", new { @class = "form-control input-lg", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <br />  <br />
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Artículos</label>
+                        <div class="input-group mar-btm">
+                            <textarea id="txtDescripcion" name="w3review" rows="4" cols="50" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Comentario</label>
+                        <div class="input-group mar-btm">
+                            <textarea id="txtComentario" name="w3review" rows="2" cols="50" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br /><br /><br />
+            <div id="tablaContainer" style="display: none;">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudes">
+                    <thead>
+                        <tr>
+                            <td> Seleccione </td>
+                            <th>#Solicitud</th>
+                            <th>#Orden Cepheus</th>
+                            <th>Nombre</th>
+                            <th>ID Equifax</th>
+                            <th>Artículos</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <div class="clearfix" style="width:100%;">
+                    <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button">
+                        <i class="text-lg ion-close-round"></i>
+                    </button>
+                    <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success">
+                        <i class="text-lg ion-checkmark-round"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+  $(document).ready(function () {
+    $("#Nombre").select2({
+        dropdownParent: $("#MyFormModal")
+    });
+      $("#tablaContainer").hide();
+
+    var tablaPrincipal = $('#BandejaSolicitudes').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            emptyTable: "No se encontraron resultados.",
+            paginate: {
+                first: "Primero",
+                previous: '<i class="fal fa-angle-left"></i>',
+                next: '<i class="fal fa-angle-right"></i>',
+                last: "Último"
+            },
+            lengthMenu: "_MENU_",
+            info: "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            infoEmpty: "No hay registros para mostrar."
+        },
+        dom: `<"row"<"col-sm-12"fBl>>rtip`,
+        ajax: {
+            url: '@Url.Action("ListaSolicitudes", "Solicitudes")',
+            method: "GET",
+            data: function (d) {
+                d.fiIDEquifax = $("#Nombre").val(); 
+            },
+            dataSrc: function (json) { 
+                return json || []; 
+            }
+        },
+        columns: [
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return `<input type="radio" id="solicitud${row.fiIDSolicitud}" name="selectSolicitud" class="selectSolicitud" value="${row.fiIDSolicitud}">
+                    <label for="solicitud${row.fiIDSolicitud}"></label>`;
+                },
+                orderable: false,
+                searchable: false
+            },
+            { data: 'fiIDSolicitud', defaultContent: '-' },
+            { data: 'fcNumeroOrdenCfeus', defaultContent: '-' },
+            { data: 'fcNombre', defaultContent: '-' },
+            { data: 'fiIDEquifax', defaultContent: '-' },
+            { data: 'Articulos', defaultContent: '-' },
+            {
+                data: null,
+                render: function (data) {
+                    return `<span class="btn-sm btn-block badge badge-${data.fcClase} text-white">${data.fcDescripcion}</span>`;
+                }
+
+            }
+        ]
+    });
+
+
+      $("#Nombre").on("change", function () {
+          var nombreSeleccionado = $(this).val();
+          if (nombreSeleccionado) {
+              $("#tablaContainer").fadeIn(); 
+              tablaPrincipal.clear().draw();
+              tablaPrincipal.ajax.reload();
+          } else {
+              $("#tablaContainer").fadeOut(); 
+          }
+      });
+
+    $('#MyFormModal').on('shown.bs.modal', function () {
+        tablaPrincipal.columns.adjust().draw();
+    });
+
+    
+
+
+      $("#btnConfirmarEnvio").on("click", function (e) {
+          e.preventDefault();
+          debugger;
+          var idCliente = $("#Nombre").val();
+          var articulos = $("#txtDescripcion").val().trim();
+          var comentario = $("#txtComentario").val().trim();
+
+          if (!idCliente) {
+              ToastrError("Error", "Seleccione un cliente.");
+              return;
+          }
+
+          if (!articulos) {
+              ToastrError("Error", "Ingrese una descripción de los artículos.");
+              return;
+          }
+          var solicitudSeleccionada = $("input[name='selectSolicitud']:checked").closest("tr").find("td").eq(1).text();
+
+          if (!solicitudSeleccionada) {
+              ToastrError("Error", "Seleccione una solicitud.");
+              return;
+          }
+          $.ajax({
+              url: '/Solicitudes/GuardarSolicitudAdicionProducto',
+              type: 'POST',
+              data: { IdSolicitud: solicitudSeleccionada, IdCliente: idCliente, Articulos: articulos, comentario: comentario },
+              success: function (response) {
+                  if (response.Estado) {
+                      ToastrSuccess(response.Titulo, response.Mensaje);
+                      $("#MyFormModal").modal("hide");
+                      location.reload();
+                  } else {
+                      ToastrError("Error", response.Mensaje);
+                  }
+              },
+              error: function () {
+                  ToastrError("Error", "Error de Red");
+              }
+          });
+      });
+  });
+</script>

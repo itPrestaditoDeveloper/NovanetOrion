@@ -1,0 +1,106 @@
+﻿@using OrionCoreCableColor.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Iniciar sesión";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>
+        Orion
+    </title>
+    <meta name="description" content="Login">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+    <!-- Call App Mode on ios devices -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- base css -->
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="~/Content/css/vendors.bundle.css">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="~/Content/css/app.bundle.css">
+    <link id="mytheme" rel="stylesheet" media="screen, print" href="#">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="~/Content/css/skins/skin-master.css">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/LogoCabeceraOrion.ico">
+    <link rel="icon" type="image/x-ico" sizes="32x32" href="~/Content/img/LogoCabeceraOrion.ico">
+    <link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="stylesheet" media="screen, print" href="~/Content/css/page-login-alt.css">
+</head>
+
+<body class="mod-bg-1 mod-nav-link desktop chrome webkit pace-done blur" data-new-gr-c-s-check-loaded="14.1145.0" data-gr-ext-installed="" style="background-size: 100%;">
+    <div class="pace  pace-inactive">
+        <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
+            <div class="pace-progress-inner"></div>
+        </div>
+        <div class="pace-activity"></div>
+    </div>
+    <!-- DOC: script to save and load page settings -->
+
+    <div class="blankpage-form-field">
+        <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
+            <div class="page-logo-link d-flex align-items-center">
+                <img src="~/Content/img/LogoCabeceraOrion.png" alt="ORION" aria-roledescription="logo" style="width:100%;height:100%;">
+                <span class="page-logo-text mr-1"></span>
+                <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
+            </div>
+        </div>
+        <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger text-center" })
+                <div class="form-group">
+                    @*<label class="form-label" for="username">Username</label>
+                        <input type="email" id="username" class="form-control" placeholder="your id or email" value="drlantern@gotbootstrap.com">
+                        <span class="help-block">
+                            Your unique username to app
+                        </span>*@
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-lg", @placeholder = "User", @autofocus = true })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @*<label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="password" value="password123">
+                        <span class="help-block">
+                            Your password
+                        </span>*@
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control input-lg", @placeholder = "Password" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+                <button class="btn btn-default float-right waves-effect waves-themed" type="submit">Iniciar Sesion</button>
+
+            }
+        </div>
+        <div class="blankpage-footer text-center">
+            <a href="/Account/ForgotPassword">
+                <span class="btn-link mar-rgt"><strong>¿Olvidaste la Contraseña?</strong></span>
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <script src="~/Content/js/vendors.bundle.js"></script>
+    <script src="~/Content/js/app.bundle.js"></script>
+
+
+
+
+</body><!-- END Body -->
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function Resultado(data) {
+
+        }
+        $(document).ready(function (data) {
+            AlertaAjax(data);
+        });
+    </script>
+}

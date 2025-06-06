@@ -1,0 +1,136 @@
+﻿
+
+@model OrionCoreCableColor.Models.Precalificado.CrearVendedorCalleViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        @if (Model.fbEditar)
+        {
+            <text>Editar Vendedor calle</text>
+        }
+        else
+        {
+            <text>Crear Vendedor Calle</text>
+        }
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcNombreVendedor, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcNombreVendedor, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcNombreVendedor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcNumeroVendedor, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcNumeroVendedor, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcNumeroVendedor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcIdentidadVendedor, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcIdentidadVendedor, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcIdentidadVendedor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCodigoVendedor, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcCodigoVendedor, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCodigoVendedor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="GuardarRegistro" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+
+        $("#GuardarRegistro").click(function () {
+            if ($("#fcNombreVendedor").val().trim() === "") {
+                ToastrWarning("Advertencia", "El nombre del vendedor no puede estar vacío.");
+                return;
+            }
+
+            var model = {
+                fiIDVendedorRepartidor: @Html.Raw(Json.Encode(Model.fiIDVendedorRepartidor)),
+                fcNombreVendedor: $("#fcNombreVendedor").val(),
+                fcNumeroVendedor: $("#fcNumeroVendedor").val(),
+                fcIdentidadVendedor: $("#fcIdentidadVendedor").val(),
+                fcCodigoVendedor: $("#fcCodigoVendedor").val(),
+                fbEditar: @Html.Raw(Json.Encode(Model.fbEditar))
+            };
+
+            var url = model.fbEditar
+                ? "@Url.Action("EditarVendedoresCalle", "PrecalificaCliente")"
+                : "@Url.Action("CrearVendedorRepartidor", "PrecalificaCliente")";
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: model,
+                success: function (data) {
+                    if (data.Estado) {
+                        var tablaT = $.fn.dataTable.Api("#TablaRepartidor");
+                        tablaT.ajax.reload();
+                        ToastrSuccess("Operación exitosa", data.Mensaje);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Error", data.Mensaje);
+                    }
+                },
+                error: function (resp) {
+                    ToastrError("Error", resp.responseJSON?.Mensaje || "Ocurrió un error al procesar la solicitud.");
+                }
+            });
+        });
+
+
+</script>
+

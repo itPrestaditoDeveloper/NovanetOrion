@@ -1,0 +1,82 @@
+﻿@{
+    ViewBag.Title = "Lista Referidos desde App Móvil";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-users fa-fw"></i>Lista Referidos desde App Móvil</h2>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+
+                        <th>Cliente Referente</th>
+                        <th>Identidad Cliente Referente</th>
+                        <th>Referido</th>
+                        <th>Número de Télefono</th>
+                        <th>Estado Instalación</th>
+                        <th>Fecha de Referencia</th>
+                        <th>Fecha Máxima de Referencia</th>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Último"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("List", "Referidos")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+            columns: [
+                { data: 'fcNombreReferente' },
+                { data: 'fcIdentidadReferente' },
+                { data: 'fcNombreReferido' },
+                { data: 'fcNumeroTelefono' },
+                {
+                    data: null,
+                    render: function (data) {
+                        let statusText = data.fcDescripcion;
+                        let statusColor = data.fcClase;
+
+                        return `
+                            <span class="d-flex align-items-center">
+                                <span class="text-white badge bg-${statusColor}" style="width: 100px; text-align: center;">
+                                    ${statusText}
+                                </span>
+                            </span>`;
+                    }
+                },
+                { data: 'fdFechaCreacion' },
+                { data: 'fdFechaVencimiento' },
+            ]
+        });
+    </script>
+}

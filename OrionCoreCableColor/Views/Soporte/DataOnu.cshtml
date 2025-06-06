@@ -1,0 +1,184 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white" id="titulo">
+        ONU @ViewBag.fcIP DEL CLIENTE @ViewBag.fcNombre
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body p-6 bg-gray-100">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button onclick="ActualizarDataOnu()" class="btn btn-success btn-sm" style="position:fixed; z-index:5; bottom: 40px; right: 22px;"><i class="fal fa-sync"></i></button>
+            <div id="estadoTrue" style="display:block;">
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">WAN Interface Status</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>Nombre:</strong> <span id="WANName"></span></p>
+                        <p class="mb-2"><strong>MAC:</strong> <span id="WANMAC"></span></p>
+                        <p class="mb-2"><strong>Modo:</strong> <span id="Mode"></span></p>
+                        <p class="mb-2"><strong>IP:</strong> <span id="IPAddress"></span></p>
+                        <p class="mb-2"><strong>Máscara de Red:</strong> <span id="Netmask"></span></p>
+                        <p class="mb-2"><strong>Gateway:</strong> <span id="Gateway"></span></p>
+                        <p class="mb-2"><strong>DNS:</strong> <span id="DNSServer"></span></p>
+                    </div>
+                </div>
+
+                <!-- WLAN 2.4G -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">WLAN 2.4G</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>Modo:</strong> <span id="Mode24G"></span></p>
+                        <p class="mb-2"><strong>Banda:</strong> <span id="Band24G"></span></p>
+                        <p class="mb-2"><strong>SSID:</strong> <span id="SSID24G"></span></p>
+                        <p class="mb-2"><strong>Canal:</strong> <span id="ChannelNumber24G"></span></p>
+                        <p class="mb-2"><strong>Encriptación:</strong> <span id="Encryption24G"></span></p>
+                        <p class="mb-2"><strong>MAC:</strong> <span id="MAC24G"></span></p>
+                        <p class="mb-2"><strong>Clientes Conectados:</strong> <span id="AssociatedClients24G"></span></p>
+                    </div>
+                </div>
+
+                <!-- WLAN 5G -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">WLAN 5G</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>Modo:</strong> <span id="Mode5G"></span></p>
+                        <p class="mb-2"><strong>Banda:</strong> <span id="Band5G"></span></p>
+                        <p class="mb-2"><strong>SSID:</strong> <span id="SSID5G"></span></p>
+                        <p class="mb-2"><strong>Canal:</strong> <span id="ChannelNumber5G"></span></p>
+                        <p class="mb-2"><strong>Encriptación:</strong> <span id="Encryption5G"></span></p>
+                        <p class="mb-2"><strong>MAC:</strong> <span id="MAC5G"></span></p>
+                        <p class="mb-2"><strong>Clientes Conectados:</strong> <span id="AssociatedClients5G"></span></p>
+                    </div>
+                </div>
+
+                <!-- Sistema -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">Sistema</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>MAC Sistema:</strong> <span id="SystemMACAddress"></span></p>
+                        <p class="mb-2"><strong>Producto CWMP:</strong> <span id="CWMPProductClass"></span></p>
+                        <p class="mb-2"><strong>Firmware:</strong> <span id="FirmwareVersion"></span></p>
+                        <p class="mb-2"><strong>Hardware:</strong> <span id="HardwareVersion"></span></p>
+                        <p class="mb-2"><strong>Uso CPU:</strong> <span id="CPUUsage"></span></p>
+                        <p class="mb-2"><strong>Uso Memoria:</strong> <span id="MemoryUsage"></span></p>
+                        <p class="mb-2"><strong>Uptime:</strong> <span id="Uptime"></span></p>
+                    </div>
+                </div>
+
+                <!-- PON -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">Estado PON</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>Temperatura:</strong> <span id="Temperature"></span></p>
+                        <p class="mb-2"><strong>Voltaje:</strong> <span id="Voltage"></span></p>
+                        <p class="mb-2"><strong>Potencia Tx:</strong> <span id="TxPower"></span></p>
+                        <p class="mb-2"><strong>Potencia Rx:</strong> <span id="RxPower"></span></p>
+                        <p class="mb-2"><strong>Corriente Bias:</strong> <span id="BiasCurrent"></span></p>
+                    </div>
+                </div>
+
+                <!-- EPON -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">Estado EPON LLID</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>Índice LLID:</strong> <span id="EPONLLIDIndex"></span></p>
+                        <p class="mb-2"><strong>Estado Registro:</strong> <span id="RegisterStatus"></span></p>
+                    </div>
+                </div>
+
+                <!-- CATV -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">Estado CATV</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>Potencia Recibida:</strong> <span id="CATVReceivePower"></span></p>
+                        <p class="mb-2"><strong>Nivel RF:</strong> <span id="CATVRFLevel"></span></p>
+                        <p class="mb-2"><strong>Control de Potencia:</strong> <span id="CATVControlPower"></span></p>
+                        <p class="mb-2"><strong>Canal del Sistema:</strong> <span id="CATVSystemChannel"></span></p>
+                        <p class="mb-2"><strong>CATV Activado:</strong> <span id="CATVEnable"></span></p>
+                    </div>
+                </div>
+
+                <!-- Configuración -->
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-header bg-gray-500 text-white p-3 font-semibold">Configuraciones</div>
+                    <div class="card-body p-4">
+                        <p class="mb-2"><strong>UPnP:</strong> <span id="UPnP"></span></p>
+                    </div>
+                </div>
+            </div>
+            <!-- WAN Interface Status -->
+            <!-- Mensaje -->
+            <div id="estadoFalse" style="display:none;">
+                <div class="card bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="card-footer bg-gray-200 p-4">
+                        @*<p class="mb-2"><strong>Estado:</strong> <span id="Estado"></span></p>*@
+                        <p class="mb-2"><strong>Mensaje:</strong> <span id="Mensaje"></span></p>
+
+                        @*<p class="mb-2"><strong>ID Usuario:</strong> <span id="fiIDUsuario"></span></p>*@
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    debugger;
+    var fiIDUser = @ViewBag.fiIDUsuario;
+    var fcIP = "@ViewBag.fcIP";
+
+    $(document).ready(function () {
+
+        $.ajax({
+            url: "@Url.Action("ConsultarDataOnu", "Soporte")",
+            method: "Get",
+            data: { fcIP: fcIP, fiIDUser: fiIDUser },
+            success: function (resp) {
+
+            }
+        });
+
+
+        chat.on("recibirDataOnu", function (model) {
+            debugger;
+            if (model.fiIDUsuario == fiIDUser) {
+
+                if (model.Estado) {
+                    $("#estadoTrue").show();
+                    $("#estadoFalse").hide();
+                    for (const key in model) {
+                        const el = document.getElementById(key);
+                        if (el) {
+                            el.textContent = model[key];
+                        }
+                    }
+                } else {
+                    $("#estadoTrue").hide();
+                    $("#estadoFalse").show();
+                    $("#Mensaje").text(model.Mensaje);
+                }
+
+
+            }
+            return;
+        });
+    });
+
+
+    function ActualizarDataOnu() {
+         $.ajax({
+            url: "@Url.Action("ConsultarDataOnu", "Soporte")",
+            method: "Get",
+            data: { fcIP: fcIP, fiIDUser: fiIDUser },
+            success: function (resp) {
+
+            }
+        });
+    }
+
+
+
+</script>

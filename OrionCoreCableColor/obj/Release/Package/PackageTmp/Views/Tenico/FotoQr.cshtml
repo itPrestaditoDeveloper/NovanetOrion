@@ -1,0 +1,215 @@
+﻿<link href="~/Content/css/formplugins/cropperjs/cropper.css" rel="stylesheet" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Escanear QR <i class="fal fa-camera"></i>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal" id="cerrarmodal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <label style="display:none;" id="escaneoProducto"></label>
+        </div>
+    </div>
+    <main>
+        <div id="reader"></div>
+        <div id="result"></div>
+    </main>
+    @*<div class="row" id="ProductoNoEncontrado">
+            <div class="col-xl-1"></div>
+            <div class="col-xl-10">
+                <div id="img-container" class="img-container" style="width:100%;">
+                    <img id="image" alt="Picture" style="width:100%;">
+                </div>
+                <button class="btn btn-danger" id="obtenerCodigoBarraQr">Finalizar</button>
+            </div>
+
+        </div>*@
+
+
+</div>
+
+<script src="~/Content/js/formplugins/cropperjs/cropper.js"></script>
+
+<script>
+    debugger;
+    const scanner = new Html5QrcodeScanner('reader', {
+        // Scanner will be initialized in DOM inside element with id of 'reader'
+        qrbox: {
+            width: 200,
+            height: 200,
+        },  // Sets dimensions of scanning box (set relative to reader element width)
+        fps: 20, // Frames per second to attempt a scan
+    });
+
+
+    scanner.render(success, error);
+    // Starts scanner
+    $("#html5-qrcode-button-camera-permission").text("Seleccione Camara");
+    $("#html5-qrcode-button-camera-permission").addClass("btn btn-primary");
+    $("#html5-qrcode-anchor-scan-type-change").text("o Adjunte imagen del QR");
+    function AbrirContrato(url) {
+        debugger;
+        window.open(url);
+        $("#cerrarmodal").click()
+       // tablaPrincipal.ajax.reload(null, false)
+        setTimeout(() => {
+            window.location.reload()
+        }, 3000);
+    }
+    function success(result) {
+
+        document.getElementById('result').innerHTML = `
+        <h5>Contrato a firmar de quien recibe articulos de instalacion:</h5>
+        <p style="font-size:13px!important"><button type="button" id="btnIrContrato" onclick="AbrirContrato('${result}')" class="btn btn-sm btn-primary"><span id="urlcontrato">${result}</span></button></p>
+        `;
+        // Prints result as a link inside result element
+
+        scanner.clear();
+        // Clears scanning instance
+
+        document.getElementById('reader').remove();
+        // Removes reader element from DOM since no longer needed
+
+
+    }
+
+
+    function error(err) {
+        //alert("aqui entro");
+        CargarBackgroundQR(Number(@ViewBag.IdInstalacion))
+       // console.error(err);
+        // Prints any errors to the console
+    }
+
+
+
+    function CargarBackgroundQR(idinstalacion) {
+        $("#reader__header_message").css("display", "none");
+        //$("#reader__scan_region").css("display","none")
+        
+
+
+    }
+    //$("#html5-qrcode-private-filescan-input").change(function () {
+    //    alert("probando")
+    //})
+
+    
+
+
+
+
+
+
+
+
+    @*$('#image').cropper("destroy");
+    const urlImagenSeleccionada = URL.createObjectURL(dato_archivo);
+
+
+    document.getElementById("image").src = urlImagenSeleccionada;
+
+
+
+            var reader = new FileReader();
+        reader.onload = function (e) {
+                debugger
+            $('#image').attr('src', e.target.result);
+
+            var $image = $('#image');
+            var $download = $('#download');
+            var $dataX = $('#dataX');
+            var $dataY = $('#dataY');
+            var $dataHeight = $('#dataHeight');
+            var $dataWidth = $('#dataWidth');
+            var $dataRotate = $('#dataRotate');
+            var $dataScaleX = $('#dataScaleX');
+            var $dataScaleY = $('#dataScaleY');
+
+            var options = {
+                //aspectRatio: 19 / 6,
+                preview: '.img-preview',
+                
+                crop: function (e) {
+                    $dataX.val(Math.round(e.detail.x));
+                    $dataY.val(Math.round(e.detail.y));
+                    $dataHeight.val(Math.round(e.detail.height));
+                    $dataWidth.val(Math.round(e.detail.width));
+                    $dataRotate.val(e.detail.rotate);
+                    $dataScaleX.val(e.detail.scaleX);
+                    $dataScaleY.val(e.detail.scaleY);
+                },
+                viewport: {
+                    width: $("#img-container").width(), // Ancho del viewport en píxeles
+                    height: $("#img-container").height(), // Altura del viewport en píxeles
+                    type: 'rectangle' // Tipo de viewport ('square' para cuadrado, 'rectangle' para rectángulo)
+                },
+                responsive: true,
+            };
+
+            $image.cropper("destroy");
+            $image.cropper(options);
+
+            }
+
+            reader.readAsDataURL(dato_archivo);
+
+
+
+   // $("#image").prop("src", );
+
+
+    $("#obtenerCodigoBarraQr").click(function () {
+        var recorte = $("#image").cropper("getCroppedCanvas", { width: 160, height: 90 });
+        let recortebase64 = recorte.toDataURL('image/png');
+        debugger;
+        var file = dataURLtoFile(recortebase64, "barCode.png");
+        var form_data = new FormData();
+        form_data.append("file", file);
+        $.ajax({
+            url: "@Url.Action("GetInformacionBarCodeQr")",
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp) {
+                if (resp.Estado) {
+                    alert(resp.producto)
+                } else {
+                    ToastrError("Error","No se puedo obtener informacion");
+                }
+
+
+
+
+
+            }, error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+                //$("#btnGuardarForm").show();
+            }
+
+        });
+    });
+
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[arr.length - 1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }*@
+
+</script>

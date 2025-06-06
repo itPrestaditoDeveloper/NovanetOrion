@@ -1,0 +1,744 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.CrearFacturacionViewModel
+
+<style>
+    .img-container {
+        width: 100%;
+        height: 350px;
+        background-image: repeating-linear-gradient(45deg,#ccc,#ccc 10px, #dbdbdb 10px, #dbdbdb 20px);
+        text-align: center;
+    }
+
+    .blink_me {
+        animation: blinker 1s linear infinite;
+    }
+
+    @@keyframes blinker {
+        50% {
+            opacity: 0.5;
+        }
+    }
+</style>
+
+
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        @if (Model.fbEditar == false)
+        {
+            <h2 class="ui-sortable-handle"> <i class="fal fa-shopping-cart fa-fw"></i> Crear Facturacion</h2>
+        }
+        else
+        {
+            <h2 class="ui-sortable-handle"> <i class="fal fa-shopping-cart fa-fw"></i> Editar Facturacion</h2>
+        }
+
+        <div class="panel-toolbar " role="menu">
+            <a href="@Url.Action("IndexFacturacion")" class="btn btn-success"> Lista de Facturacion</a>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcReferenciaDocumento, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcReferenciaDocumento, new { @class = "form-control", @disabled = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcReferenciaDocumento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcRTN, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcRTN, new { @class = "form-control", @disabled = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcRTN, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCAI, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcCAI, new { @class = "form-control", @disabled = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcCAI, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <hr />
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcIdentidad, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+
+                            @Html.TextBoxFor(model => model.fcIdentidad, new { @class = "form-control", @autocomplete = "off" })
+                            <div class="input-group-prepend">
+                                <button class="input-group-text btn" style="background-color:#ffb20e" id="btnBuscar"><i class="fal fa-search"></i></button>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcIdentidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fdFechaTransaccion, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-calendar-alt fa-fw"></i></span>
+                            </div>
+                            <input type="date" class="form-control" value="@Model.fdFechaTransaccion.ToString("yyyy-MM-dd")" id="fdFechaTransaccion" />
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fdFechaTransaccion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcNombreCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcNombreCliente, new { @class = "form-control", @readonly = true })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcNombreCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcTelefonoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcTelefonoCliente, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcTelefonoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCorreoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.TextBoxFor(model => model.fcCorreoCliente, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcCorreoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcConcepto, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.TextAreaFor(model => model.fcConcepto, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcConcepto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <hr />
+                </div>
+            </div>
+            <div id="totalesProductos" class="row" style="width:100%;">
+
+            </div>
+
+            <div class="col-lg-12">
+                <hr />
+            </div>
+            <div class="col-lg-12">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductos">
+                    <thead>
+                        <tr>
+                            <th style="width:5%;"></th>
+                            <th></th>
+                            <th style="width:14%;">Producto</th>
+                            <th style="width:14%;">Cantidad</th>
+                            <th style="width:10%;">Precio</th>
+                            <th style="width:5%;">ISV</th>
+                            <th>Sub Total</th>
+                            <th>Impuesto</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="clearfix" style="width:100%;">
+                    <div class="col-lg-4 float-right">
+                        <br />
+                        <table class="table" style="width:100%;">
+                            <tr style="border: 0 solid #000 !important">
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnSubTotal, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnSubTotal, new { @class = "form-control", @type = "text", @readonly = true })</td>
+                            </tr>
+                            <tr style="border: 0 solid #000">
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnDescuento, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnDescuento, new { @class = "form-control", @type = "text", @readonly = true })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteExento, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImporteExento, new { @class = "form-control", @type = "text", @readonly = true })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteExonerado, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImporteExonerado, new { @class = "form-control", @type = "text", @readonly = true })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteGravado, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImporteGravado, new { @class = "form-control", @type = "text", @readonly = true })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImpuestos, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImpuestos, new { @class = "form-control InputDecimal", @type = "text", @readonly = true })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnTotalFactura, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnTotalFactura, new { @class = "form-control InputDecimal", @type = "text", @readonly = true })</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="clearfix" style="width:100%;">
+                        <button onclick="javascript:window.history.back()" data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                        
+                        <button type="button" onclick="GuardarFacturacion()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="fal fa-check"></i></button>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var model = @Html.Raw(Json.Encode(Model));
+        var listProductos = @(Html.Raw(Json.Encode(ViewBag.ListaProductos)));
+        var RowSeleccionado;
+        var idSeleccionado = "";
+
+        function NuevaLinea()
+        {
+            return {
+                fiIDFacturacionDetalle: 0,
+                fiIDFacturacionMaestro: @Model.fiIDFacturacionMaestro,
+                fiIDProducto: 0,//
+                fcProducto: "",//
+                fnCantidad: 0,
+                fnValorVentaDeContado: 0,//
+                fnPorcentajeImpuesto1: 15,
+                fnPorcentajeImpuesto2: 0,
+                fnValorProductoME: 0,
+                fnSubTotal: 0,
+                fnTotal: 0,
+                fcToken: "",
+                fbAplicaImpuesto: true,
+                fnValorImpuesto: 0,
+                fbSeleccionado: true,
+                fnExistencia: 0,
+                Foto: "",
+                fiIDInventarioMovimientoMaestro: 0,
+                DetalleInventario: []
+            };
+        }
+
+
+
+        $(document).keypress(function (e) {
+            if ($("#escanear")[0].classList.contains("blink_me")) {
+                if (e.target.localName == "input" || e.target.localName == "button" || e.target.localName == "select" || e.target.localName == "textarea") {
+                    buffer = "";
+                    return;
+                }
+                if (e.keyCode == 13) {
+                    if (buffer.replace(/(\r\n|\n|\r)/gm, "") != "") {
+
+
+
+                         $.ajax({
+                            url: "@Url.Action("GetInformacionInventario","Productos")",
+                            type: "Get",
+                             data: { fcCodigoSerie: buffer },
+                            success: function (resp) {
+                                if (resp.Estado) {
+                                    if (resp.listaInventarioDetalle.length >= 1) {
+                                        var tabla = $.fn.DataTable.Api(idSeleccionado);
+                                        var data = tabla.rows().data().toArray();
+                                        var repetidos = tabla.rows().data().toArray();
+                                        for (var item of resp.listaInventarioDetalle)
+                                        {
+                                            repetidos.push(item);
+                                        }
+
+                                        var uniqs = repetidos.filter(function (item, index, array) {
+                                            return array.indexOf(item) === index;
+                                        });
+
+                                        uniqs = uniqs.filter(x => !data.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+
+                                        tabla.rows.add(uniqs).draw(false);
+                                        InformacionTable();
+                                    } else {
+                                        ToastrError("Productos", "No se encontro productos con esta serie");
+                                    }
+
+
+                                } else {
+
+                                    ToastrError("Productos", "No se encontro productos con esta serie");
+                                }
+                                buffer = "";
+                            }
+                        });
+
+                        buffer = "";
+                    }
+                } else {
+                    buffer += e.key;
+                }
+            }
+
+        });
+
+        $("#btnBuscar").click(function () {
+            debugger;
+            if ($("#fcIdentidad").val() == "") {
+                ToastrWarning("", "Ingrese una identidad");
+                return;
+            }
+            $.ajax({
+                url: "@Url.Action("BuscarClienteEquifax","Prestamo")",
+                method: "Get",
+                data: { fcIdentidad: $("#fcIdentidad").val() },
+                success: function (resp) {
+
+                    if (resp.fcNombreSAF == null) {
+                        ToastrWarning("", "Cliente no existe registrado en el sistema");
+                        $("#fcNombreCliente").prop("readonly", false);
+                        return;
+                    }
+                    $("#fcNombreCliente").prop("readonly", true);
+                    model.fiIDEquifax = resp.fiIDEquifax;
+                    $("#fcNombreCliente").val(resp.fcNombreSAF);
+                    $("#fcTelefonoCliente").val(resp.fcTelefonos);
+                    $("#fcCorreoCliente").val(resp.fcCorreo);
+                }
+            });
+        });
+
+        $("#fiIDEquifax").select2().val(model.fiIDEquifax).trigger("change");
+        var tablaPrincipal = $('#TablaProductos').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            buttons: [
+                {
+                    text: `<i class="fal fa-plus"></i>`,
+                    className: 'btn btn-success',
+                    attr: {"id" : "manual"},
+                    action: function (e, dt, node, config) {
+                        let tabla = $.fn.dataTable.Api("#TablaProductos");
+                        var data = tabla.rows().data().toArray();
+                        $.ajax({
+                            url: "@Url.Action("CatalogoDeProductos", "Prestamo")",
+                            method: "Post",
+                            data: { lista: data },
+                            success: function (resp) {
+                                $("#MyModalContentBig").html(resp);
+                                $("#MyModalBig .modal-body").css("height", '80vh');
+                                $("#MyModalBig").modal("show");
+                            }
+                        });
+                    }
+                },
+
+            ],
+            data: model.DetalleFacturacion,
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opciones = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)" ><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                            //opciones += `<button class="btn btn-sm btn-success"><i class="fal fa-camera"></i></button>`;
+                            //opciones += `<button class="btn btn-sm btn-success"><i class="fal fa-scanner"></i></button>`;
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `${data.fcProducto}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<input type="number" name="fnCantidad"  class="form-control InputDecimal" data_class="ClaseDecimal" min="0" value="${data.fnCantidad}" />`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<label name="lblPrecioVentaContado" style="float:left;">$ ${ConvertirDecimal(data.fnValorVentaDeContado)}</label><button class="btn btn-link text-warning" type="button" style="float:right;" name="editarPrecioVentaContado"><i class="fal fa-pencil"></i></button>` ;
+                    }
+                },
+                {
+                    data: null,
+                    className:"text-center",
+                    render: function (data) {
+                        return `<div class="col-lg-12 float-left">
+                                    <div class="custom-control custom-checkbox">
+                                        <input ${(data.fbAplicaImpuesto == 1 ? "checked" : "")} id="fiProductoInventariable-${data.fiIDProducto}" name="fbAplicaImpuesto" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla">
+                                        <label class="custom-control-label" for="fiProductoInventariable-${data.fiIDProducto}" style="cursor:pointer;"></label>
+                                    </div>
+                                </div>`;
+                    }
+                },
+                {
+                    className: "fnSubTotal",
+                    data: null,
+                    render: function (data) {
+                        return "$" + ConvertirDecimal(data.fnSubTotal);
+                    }
+                },
+                {
+                    className: "fnProductoImpuesto",
+                    data: null,
+                    render: function (data) {
+                        return "$ " + ConvertirDecimal(data.fnValorImpuesto);
+                    }
+                },
+                {
+                    className: "fnProductoTotal",
+                    data: null,
+                    render: function (data) {
+                        return "$ " + ConvertirDecimal(data.fnTotal);
+                    }
+                }
+            ],
+            createdRow: function (row, data, index) {
+                InformacionTable();
+            },
+            initComplete: function () {
+                var tablaProductos = $.fn.dataTable.Api("#TablaProductos");
+                var nodes = tablaProductos.rows().nodes().toArray();
+
+                for (var tr of nodes) {
+                    CalcularValores(tr);
+                }
+                InformacionTable();
+                CalcularTotales();
+            }
+        });
+
+
+        $("#TablaProductos tbody").on("click", "tr button[name=eliminar]", function () {
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var tr = $(this).closest("tr");
+
+            tabla.row(tr).remove().draw(false);
+            InformacionTable();
+            CalcularTotales();
+        });
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fnCantidad]", function () {
+            debugger;
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var tr = $(this).closest("tr");
+            var data = tabla.row(tr).data();
+            data.fnCantidad = parseFloat($(this).val());
+            InformacionTable();
+            CalcularValores(tr);
+            CalcularTotales();
+        });
+
+
+        $("#TablaProductos tbody").on("click", "tr button[name=editarPrecioVentaContado]", function () {
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var tr = $(this).closest("tr");
+            var data = tabla.row(tr).data();
+            RowSeleccionado = tr;
+            VerModalSmConObjetoDeParametro({ fiIDProducto: data.fiIDProducto }, "@Url.Action("VerEditarValorVenta", "Prestamo")");
+        });
+
+
+        $("#TablaProductos tbody").on("click", "tr input[name=fbAplicaImpuesto]", function () {
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var tr = $(this).closest("tr");
+            var data = tabla.row(tr).data();
+            data.fbAplicaImpuesto = $(this).prop("checked");
+            CalcularValores(tr);
+            CalcularTotales();
+        });
+
+        function InformacionTable() {
+
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var data = tabla.rows().data().toArray();
+
+
+            var productos = data.map(x => {
+                return {
+                    fiIdProducto: x.fiIDProducto,
+                    fcProducto: x.fcProducto,
+                    fnCantidad: x.fnCantidad
+                };
+
+
+            });
+
+            var totalesProductos = Object.groupBy(productos, ({ fiIdProducto }) => fiIdProducto);
+
+            $("#totalesProductos").empty();
+            var alingText = ["text-left", "text-center", "text-right"];
+            var i = 0;
+            for (let item in totalesProductos) {
+                var fcProducto = totalesProductos[item][0].fcProducto;
+                var fnTotal = totalesProductos[item].map(x => parseInt(x.fnCantidad)).reduce((a, b) => a + b);
+
+                if (fcProducto != "") {
+                    var resultado = $(`<div class="col-lg-2"><i class="fal fa-circle text-success" style="background-color: orange; border-radius:50%;"></i> ${fcProducto}: ${fnTotal}</div>`);
+                    $("#totalesProductos").append(resultado);
+                }
+            }
+        }
+
+        function CalcularValores(tr)
+        {
+            var table = $.fn.dataTable.Api("#TablaProductos");
+            var data = table.row(tr).data();
+
+            var lblSubTotal = $(tr).find(".fnSubTotal");
+            var fnSubTotal = (data.fnCantidad * data.fnValorVentaDeContado);
+            data.fnSubTotal = data.fnCantidad * data.fnValorVentaDeContado;
+            var lblImpuesto = $(tr).find(".fnProductoImpuesto");
+            var fnImpuesto = 0;
+            var chkImpuesto = $(tr).find("input[name=fbAplicaImpuesto]");
+            if (chkImpuesto.prop("checked")) {
+                fnImpuesto = (data.fnCantidad * data.fnValorVentaDeContado) * @ViewBag.fnValorImpuesto;
+            } else {
+                fnImpuesto = 0;
+            }
+            data.fnImpuesto = fnImpuesto;
+
+
+            var lblTotal = $(tr).find(".fnProductoTotal");
+            var fnTotal = (data.fnCantidad * data.fnValorVentaDeContado) + fnImpuesto;
+            data.fnTotal = fnTotal;
+
+            lblSubTotal.html(`$ ${ConvertirDecimal(fnSubTotal)}`);
+            lblImpuesto.html(`$ ${ConvertirDecimal(fnImpuesto)}`);
+            lblTotal.html(`$ ${ConvertirDecimal(fnTotal)}`);
+        }
+
+
+        function CalcularTotales()
+        {
+            var table = $.fn.dataTable.Api("#TablaProductos");
+            var data = table.rows().data().toArray();
+
+            var fnTSubTotal = 0;
+            var fnTDescuento = 0;
+            var fnTExento = 0;
+            var fnTExonerado = 0;
+            var fnTImporteGravado = 0;
+            var fnISV = 0;
+            var fnTTotal = 0;
+
+            if (data.length > 0) {
+                fnTSubTotal = data.filter(x => x.fbAplicaImpuesto).map(x => x.fnSubTotal).reduce((a, b) => a + b, 0);
+                model.fnSubTotal = fnTSubTotal;
+                fnTDescuento = 0;
+                model.fnDescuento = fnTDescuento;
+                fnTExento = data.filter(x => x.fbAplicaImpuesto == false).map(x => x.fnSubTotal).reduce((a, b) => a + b, 0);
+                model.fnImporteExento = fnTExento;
+                fnTExonerado = 0;
+                model.fnImporteExonerado = fnTExonerado;
+                fnTImporteGravado = fnTSubTotal + fnTExento;
+                model.fnImporteGravado = fnTImporteGravado;
+                fnISV = data.map(x => x.fnImpuesto).reduce((a, b) => a + b, 0);
+                model.fnImpuestos = fnISV;
+                fnTTotal = fnTSubTotal + fnTExento + fnISV;
+                model.fnTotalFactura = fnTTotal;
+            }
+
+            $("#fnSubTotal").val(ConvertirDecimal(fnTSubTotal));
+            $("#fnDescuento").val(ConvertirDecimal(fnTDescuento));
+            $("#fnImporteExento").val(ConvertirDecimal(fnTExento));
+            $("#fnImporteExonerado").val(ConvertirDecimal(fnTExonerado));
+            $("#fnImporteGravado").val(ConvertirDecimal(fnTImporteGravado));
+            $("#fnImpuestos").val(ConvertirDecimal(fnISV));
+            $("#fnTotalFactura").val(ConvertirDecimal(fnTTotal));
+        }
+
+
+        function GuardarFacturacion() {
+            $("#btnGuardarForm").hide();
+            var table = $.fn.dataTable.Api("#TablaProductos");
+            var nodes = table.rows().nodes().toArray();
+            var data = table.rows().data().toArray();
+
+            if ($("#fcIdentidad").val() == "") {
+                ToastrError("INGRESE UN CLIENTE", "");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fcNombreCliente").val() == "") {
+                ToastrError("REGISTRE UN NOMBRE", "");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fcTelefonoCliente").val() == "") {
+                ToastrError("REGISTRE NUMERO DE TELEFONO", "");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+
+            if (data.length == 0) {
+                ToastrError("INGRESE PRODUCTS PARA FACTURAR", "");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            for (var tr of nodes) {
+                var item = table.row(tr).data();
+                if (item.fnCantidad <= 0) {
+                    ToastrError(`LA CANTIDAD DEL PRODUCTO ${item.fcProducto.toUpperCase()} NO PUEDE SER 0`, "");
+                    $("#btnGuardarForm").show();
+                    $(tr).css("background-color", "red");
+                    return;
+                } else {
+                    $(tr).css("background-color", "");
+                }
+
+                if (item.fnValorVentaDeContado <= 0) {
+                    ToastrError(`EL PRECIO DEL PRODUCTO ${item.fcProducto.toUpperCase()} NO PUEDE SER 0, FAVOR ACTUALIZARLO`, "");
+                    $("#btnGuardarForm").show();
+                    $(tr).css("background-color", "red");
+                    return;
+                } else {
+                    $(tr).css("background-color", "");
+                }
+            }
+
+            model.fdFechaTransaccion = $("#fdFechaTransaccion").val();
+            model.fcConcepto = $("#fcConcepto").val();
+            model.fcNombreCliente = $("#fcNombreCliente").val();
+            model.fcCorreoCliente = $("#fcCorreoCliente").val();
+            model.fcTelefonoCliente = $("#fcTelefonoCliente").val();
+            model.fcIdentidad = $("#fcIdentidad").val();
+            model.DetalleFacturacion = data;
+
+            var url = "@Url.Action("CrearFacturacion","Prestamo")";
+            if (model.fbEditar) {
+                url = "@Url.Action("EditarFacturacion","Prestamo")";
+            }
+
+           
+            $.ajax({
+                url: url,
+                method: "Post",
+                data: { model: model },
+                success: function (resp) {
+                    if (resp.Estado) {
+                        ToastrSuccess("Venta", resp.Mensaje);
+                        location.href = "@Url.Action("IndexFacturacion","Prestamo")";
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                    }
+                }
+            });
+        }
+
+
+        $('#TablaProductos tbody').on('click', 'a.details-productos', function () {
+            var table = $.fn.dataTable.Api("#TablaProductos");
+            var i = $(this).find("i");
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var data = table.row(row).data();
+            if (row.child.isShown()) {
+
+                row.child('');
+                row.child.hide();
+                tr.removeClass('info');
+                $(i).removeClass("fa-minus").removeClass("text-danger").addClass("fa-plus").addClass("text-success");
+            }
+            else {
+
+                $(i).removeClass("fa-plus").removeClass("text-success").addClass("fa-minus").addClass("text-danger");
+
+                debugger;
+                $.ajax({
+                    url: '@Url.Action("ViewListaProductosPorId", "Prestamo")',
+                    data: {
+                        fiIDInventarioMovimientoMaestro: data.fiIDInventarioMovimientoMaestro,
+                        fiIDProducto: data.fiIDProducto
+                    },
+                    type: 'Get',
+                    success: function (data) {
+                        row.child(data).show();
+                        tr.addClass('info');
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        AlertaError();
+                    },
+                });
+            }
+        });
+
+    </script>
+}

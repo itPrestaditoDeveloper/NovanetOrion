@@ -1,0 +1,547 @@
+﻿
+<h2>Bandeja Comisiones</h2>
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Bandeja de mis Comisiones</h2>
+
+    </div>
+    <br />
+    <div class="panel-content">
+
+        <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item ml-2"><a class="nav-link active" data-toggle="pill" href="#nav_pills_default-1">Bandeja Comisiones <span><i class="fal fa-cogs"></i></span></a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-2">Claridad de pago <span><i class="fal fa-alarm-clock"></i></span></a></li>
+
+        </ul>
+        <div class="tab-content py-3">
+            <div class="tab-pane fade active show" id="nav_pills_default-1" role="tabpanel">
+                <div class="col-lg-12">
+                    <h5>Calculo Comisiones</h5>
+                    <div class="row" style="padding-bottom:10px;">
+                        <div class="col-lg-12 col-md-8 col-sm-12 col-12">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <label class="col-form-label">Búsqueda por Oficial</label>
+                                    <select id="ddlOficial" class="form-control form-control-sm">
+                                        <option value="">Seleccionar</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <label class="col-form-label">Búsqueda por Departamento</label>
+                                    <select id="ddlDepto" class="form-control form-control-sm">
+                                        <option value="">Seleccionar</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <label class="col-form-label">Fecha Inicio</label>
+                                    <input type="date" id="fechaInicio" class="form-control form-control-sm" />
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <label class="col-form-label">Fecha Fin</label>
+                                    <input type="date" id="fechaFin" class="form-control form-control-sm" />
+                                </div>
+                                <div class="col-lg-12 d-flex justify-content-end mt-2">
+                                    <button id="btnFiltrar" class="btn btn-primary btn-sm">Filtrar</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row" style="padding-bottom:10px;">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+
+                            <table border="1" style="border-collapse: collapse; text-align: center; width: 100%; ">
+                                <thead style="background-color: #dcdcdc;">
+                                    <tr>
+                                        <th colspan="8">Bonificación según Número de Ventas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background-color: #f0f0f0; font-weight: bold;">
+                                        <td style="padding: 8px;"># Ventas</td>
+                                        <td>0 - 10</td>
+                                        <td>11 - 12</td>
+                                        <td>13 - 14</td>
+                                        <td>15 - 16</td>
+                                        <td>17 - 18</td>
+                                        <td>19 - 20</td>
+                                        <td>21 o más</td>
+                                    </tr>
+                                    <tr style="background-color: #e6f7ff; font-weight: bold;">
+                                        <td style="padding: 8px;">Bono</td>
+                                        <td>-</td>
+                                        <td>L 3,500.00</td>
+                                        <td>L 4,500.00</td>
+                                        <td>L 5,500.00</td>
+                                        <td>L 6,000.00</td>
+                                        <td>L 6,500.00</td>
+                                        <td>L 7,000.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                        </div>
+
+
+                    </div>
+                    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+                        <div class="col-lg-12">
+                            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaComisionesVendedor">
+                                <thead>
+									<tr>
+										<th id="acciones-column">Acciones</th>
+										<th>Oficial</th>
+										<th>Depto.</th>
+										<th># Ventas</th>
+										<th>Ventas $</th>
+										<th>Ventas $ pasado a L.</th>
+										<th>Ventas L.</th>
+										<th>Suma ventas en $ y L.</th>
+										<th>Ventas lps sin IVA</th>
+										<th>%</th>
+										<th>Total Comisiones en L</th>
+										<th>Bono</th>
+										<th>Total a Pagar</th>
+
+									</tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total:</td>
+                                        <td id="TotalVentas"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td id="TotalPagar"></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<div class="tab-pane fade" id="nav_pills_default-2" role="tabpanel">
+				<div class="col-lg-12">
+					<div class="row" style="padding-bottom:10px;">
+						<div class="col-lg-3 col-md-6 col-sm-6 col-12">
+							<label class="col-form-label">Búsqueda por Oficial</label>
+							<select id="ddlOficialComision" class="form-control form-control-sm">
+								<option value="">Seleccionar</option>
+							</select>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6 col-12">
+							<label class="col-form-label">Año</label>
+							<select id="ddlAnio" class="form-control form-control-sm">
+								<option value="">Seleccionar Año</option>
+								@foreach (var anio in ViewBag.Anios)
+								{
+									<option value="@anio">@anio</option>
+								}
+							</select>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6 col-12">
+							<label class="col-form-label">Mes</label>
+							<select id="ddlMes" class="form-control form-control-sm">
+								<option value="">Seleccionar Mes</option>
+							</select>
+						</div>
+						<div class="col-lg-3 col-md-6 col-sm-6 col-12 d-flex align-items-end">
+							<button id="btnFiltrar2" class="btn-sm btn-primary">Filtrar</button>
+						</div>
+					</div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="MetasVendedor"></label>
+                                        <small class="m-0 l-h-n">Meta</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-warning-700 rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="metaArpu"></label>
+                                        <small class="m-0 l-h-n">Meta ARPU</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="ventasAcumuladasLps"></label>
+                                        <small class="m-0 l-h-n">Ventas Acumuladas en Lps</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-danger-200 rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="ventasAcumuladasDolares"></label>
+                                        <small class="m-0 l-h-n">Ventas Acumuladas en $ pasado a Lps</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="cantidadVentas"></label>
+                                        <small class="m-0 l-h-n">Número de Clientes</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-warning-700 rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="arpuAlcanzado"></label>
+                                        <small class="m-0 l-h-n">ARPU Alcanzado</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="p-3 bg-brand-gradient rounded overflow-hidden position-relative text-white mb-g">
+                                <div class="">
+                                    <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                                        <label id="cumpArpu"></label>
+                                        <small class="m-0 l-h-n">% Cumplimiento ARPU</small>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="row">
+						<div class="col-sm-6 col-xl-2">
+							<div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+								<div class="">
+									<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+										<label id="comisionAcumulada"></label>
+										<small class="m-0 l-h-n">Comisión Acumulada en Lps</small>
+									</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-xl-2">
+							<div class="p-3 bg-secondary rounded overflow-hidden position-relative text-white mb-g">
+								<div class="">
+									<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+										<label id="comisionAcumuladaLps"></label>
+										<small class="m-0 l-h-n">Comisión Acumulada en $ pasada a Lps</small>
+									</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-xl-2">
+							<div class="p-3 bg-info-700 rounded overflow-hidden position-relative text-white mb-g">
+								<div class="">
+									<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+										<label id="bonoTotal"></label>
+										<small class="m-0 l-h-n">Bono</small>
+									</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-xl-2">
+							<div class="p-3 bg-brand-gradient rounded overflow-hidden position-relative text-white mb-g">
+								<div class="">
+									<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+										<label id="comisionMasBono"></label>
+										<small class="m-0 l-h-n">Comisión + Bono</small>
+									</h3>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6 col-xl-2">
+							<div class="p-3 bg-brand-gradient rounded overflow-hidden position-relative text-white mb-g">
+								<div class="">
+									<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+										<label id="totalComisionArpu"></label>
+										<small class="m-0 l-h-n">Total Comisión</small>
+									</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Nueva tarjeta alineada a la derecha -->
+					<div class="row justify-content-end" style="display:none">
+						<div class="col-sm-6 col-xl-2">
+							<div class="p-3 bg-primary-700 rounded overflow-hidden position-relative text-white mb-g">
+								<div class="">
+									<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+										<label id="totalComisiones"></label>
+										<small class="m-0 l-h-n">Total Comisiones</small>
+									</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+
+	<script>
+
+        function EditarMetaVendedor(Nombre , IDVendedor) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, IDVendedor: IDVendedor  },"@Url.Action("ModalAgregarDatosVendedorComision", "PrecalificaCliente")");
+        }
+
+        $(document).ready(function () {
+            var showActions = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.VisualizacionAcciones));
+
+            var mesesPorAnio = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.MesesPorAnio));
+
+            $('#ddlAnio').change(function () {
+                var anioSeleccionado = $(this).val();
+                var meses = mesesPorAnio[anioSeleccionado] || [];
+                var ddlMes = $('#ddlMes');
+
+                ddlMes.empty().append('<option value="">Seleccionar Mes</option>');
+                meses.forEach(function (mes) {
+                    ddlMes.append('<option value="' + mes.Mes + '">' + mes.NombreMes + '</option>');
+                });
+            });
+
+            $('#btnFiltrar2').on('click', function () {
+        var anio = $('#ddlAnio').val();
+        var mes = $('#ddlMes').val();
+        var oficial = $('#ddlOficialComision').val();
+
+        console.log(anio);
+        console.log(mes);
+        if (anio && mes) {
+            $.ajax({
+                url: '@Url.Action("CargarDatosVendedorComisionesPorVendedor", "PrecalificaCliente")',
+                data: { anio: anio, mes: mes, nameUser: oficial },
+                type: 'GET',
+                success: function (data) {
+                    var setLabel = function (id, value) {
+                        $('#' + id).text(value !== undefined && value !== null ? value : 0);
+                    };
+
+                    if (data && data.length > 0) {
+                        var item = data[0];
+                        setLabel('MetasVendedor', item.fnMetaComision); // Asignar fnMetaComision a Meta
+                        setLabel('ventasAcumuladasLps', item.fnVentasLempiras);
+                        setLabel('ventasAcumuladasDolares', item.fnVentasDolares);
+                        setLabel('cantidadVentas', item.fiCantidadVentas);
+                        setLabel('metaArpu', item.fnMetaArpu);
+                        setLabel('arpuAlcanzado', item.fnArpuAlcanzado);
+                        setLabel('comisionAcumuladaLps', item.ComisioncumuladaDolaresPasadaL);
+                        setLabel('comisionAcumulada', item.fnComisionAcumuladaLempiras); 
+                        setLabel('bonoTotal', item.fnBono);
+                        setLabel('comisionMasBono', item.fnTotalGlobal);
+                        setLabel('cumpArpu', item.fnCumpArpu);
+                       // setLabel('totalComisionArpu', parseFloat(item.fnTotalComisionArpu).toFixed(2));
+                        setLabel('totalComisionArpu', parseFloat(item.fnTotalGlobalComision).toFixed(2));
+
+                        // Calcular Total Comisiones: fnArpuMeta + fnTotalComisionArpu - fnMetaComision
+						var totalComisiones = (parseFloat(item.fnMetaComision || 0) - parseFloat(item.fnTotalComisionArpu || 0)).toFixed(2);
+                        setLabel('totalComisiones', totalComisiones);
+                    } else {
+                        var labels = [
+                            'MetasVendedor', 'ventasAcumuladasLps', 'ventasAcumuladasDolares', 'cantidadVentas',
+                            'metaArpu', 'arpuAlcanzado', 'comisionAcumuladaLps', 'comisionAcumulada',
+                            'bonoTotal', 'comisionMasBono', 'cumpArpu', 'totalComisionArpu', 'totalComisiones'
+                        ];
+                        labels.forEach(function (id) {
+                            setLabel(id, 0);
+                        });
+                    }
+                },
+                error: function () {
+                    alert('Ocurrió un error al cargar los datos.');
+                }
+            });
+        } else {
+            alert('Por favor, selecciona un año y un mes para filtrar.');
+        }
+    });
+			if (!showActions) {
+				tablaPrincipal.column(0).visible(false);  // La columna de acciones está en el índice 0
+			}
+        });
+
+
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+        var tablaPrincipal = $('#BandejaComisionesVendedor').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            columnDefs: [
+                { targets: 12, visible: false }  // 12 es el índice de la columna 'fiIDUsuario'
+            ],
+            "ordering": false,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            pageLength: -1,
+            order: [[1, "desc"]],
+              ajax: {
+                    url: '@Url.Action("CargarDatosVendedorComisiones", "PrecalificaCliente")',
+                    method: "GET",
+                    dataSrc: function (data) {
+                        var opt = '';
+                        var optDepto = '';
+                        var oficiales = new Set();
+                        var departamentos = new Set();
+
+                        data.forEach(item => {
+                            if (item.NombreOficial) oficiales.add(item.NombreOficial);
+                            if (item.DepartamentoVenta) departamentos.add(item.DepartamentoVenta);
+                        });
+
+                        oficiales.forEach(item => opt += `<option value="${item}">${item}</option>`);
+                        departamentos.forEach(item => optDepto += `<option value="${item}">${item}</option>`);
+
+                        $('#ddlOficial').append(opt);
+                        $('#ddlOficialComision').append(opt);
+                        $('#ddlDepto').append(optDepto);
+
+                        return data;
+                    }
+                },
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += `<a onclick="EditarMetaVendedor('${data.NombreOficial}' , ${data.fiIDUsuario})" class="dropdown-item"><i class="fal fa-edit fa-fw"></i>Actualizar Datos</a>`;
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                { data: 'NombreOficial' },
+                { data: 'DepartamentoVenta' },
+                { data: 'fiCantidadVentas' },
+                { data: 'fnCantidadVentaDolares' },
+                { data: 'fnVentasDolares' },
+                { data: 'fnVentasLempiras' },
+                { data: 'fnTotalVenta' },
+                { data: 'fnTotalVentaSinISV' },
+                { data: 'Porcentaje' },
+                { data: 'fntotalComision' },
+                { data: 'fnBono' },
+                { data: 'fnTotalGlobal' },
+                { data: 'fiIDUsuario', visible: false },
+
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: { columns: ':visible' }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copiar',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Imprimir',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ],
+            initComplete: function () {
+                var tabla = $.fn.dataTable.Api('#BandejaComisionesVendedor');
+                var dataVentaTotal = tabla.rows().data().toArray().map(x => x.fiCantidadVentas);
+                var dataVentasPagarTotal = tabla.rows().data().toArray().map(x => x.fnTotalGlobal);
+                $('#TotalVentas').text(dataVentaTotal.reduce((x, y) => x + y) + " ");
+                $('#TotalPagar').text(dataVentasPagarTotal.reduce((x, y) => x + y) + " L");
+            }
+        });
+
+        function ConvertirADecimal(nStr) {
+
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        $('#ddlOficial').on('change', function () {
+            var value = $(this).val().trim();
+            tablaPrincipal.columns(1).search(value ? '^' + value + '$' : '', true, false).draw();
+        });
+
+        $('#ddlDepto').on('change', function () {
+            var value = $(this).val().trim();
+            tablaPrincipal.columns(2).search(value ? '^' + value + '$' : '', true, false).draw();
+        });
+
+        $('#btnFiltrar').on('click', function () {
+            var fechaInicio = $('#fechaInicio').val();
+            var fechaFin = $('#fechaFin').val();
+
+            // Actualiza la URL del DataTable para incluir las fechas en la llamada al servidor
+            tablaPrincipal.ajax.url('@Url.Action("CargarDatosVendedorComisiones", "PrecalificaCliente")' +
+                `?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`).load();
+        });
+
+
+
+
+	</script>
+}

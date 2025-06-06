@@ -1,0 +1,156 @@
+﻿@model int
+
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white" id="tituloBodega">v</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tblBodega">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Producto</th>
+                            <th>Serie</th>
+                            <th>Mac / Serie 2</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button class="btn btn-success waves-effect waves-themed float-right" type="button" id="btnAgregarProductoSeleccionado"><i class="fal fa-check"></i></button>
+                <button data-dismiss="modal" class="btn btn-secondary waves-effect waves-themed float-left" type="button"><i class="text-lg ion-close-round"></i></button>
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+<script>
+    $("#tituloBodega").text($("#fiIdUbicacion :selected").text());
+    var tablaProductos2 = $.fn.dataTable.Api("#TablaProductos");
+    var productosSeleccionadostablaProducto = tablaProductos2.rows().data().toArray();
+
+    $('#tblBodega').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        ajax: {
+            url: '@Url.Action("ListProductosPorUbicacion", "Productos")',
+            method: "Post",
+            data: { fiIDUbicacion: @Model, seleccionados: productosSeleccionadostablaProducto, fiIDTipoMovimiento: idTipoMovimiento  },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: null,
+                className: "text-center",
+                render: function (data) {
+                    return `<div class="col-lg-12 float-left">
+                                <div class="custom-control custom-checkbox">
+                                    <input ${(data.fbCheckeado ? "checked" : "")} id="fiProductoSeleccionable-${data.fiIDMovimiento}"  name="fbCheckeado" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla">
+                                    <label class="custom-control-label" style="cursor:pointer;" for="fiProductoSeleccionable-${data.fiIDMovimiento}"></label>
+                                </div>
+                            </div>`;
+                }
+            },
+            {
+                data: "fcProducto"
+            },
+            {
+                data: "fcCodigoSerie1"
+            },
+            {
+                data: "fcCodigoSerie2"
+            },
+            {
+                data: "fnCantidad"
+            }
+        ]
+    });
+
+
+
+    $("#tblBodega tbody").on("click", "tr input[name=fbCheckeado]", function () {
+        
+        let tblBodega = $.fn.dataTable.Api("#tblBodega");
+        let row = $(this).closest("tr");
+        let data = tblBodega.row(row).data();
+        data.fbCheckeado = $(this).prop("checked");
+    });
+
+
+
+    $("#btnAgregarProductoSeleccionado").click(function () {
+        $("#btnAgregarProductoSeleccionado").hide();
+        try {
+            let tablaProductosRows = tablaProductos2.rows().nodes().toArray();
+            let tblBodega = $.fn.dataTable.Api("#tblBodega");
+            let data = tblBodega.rows().data().toArray();
+            let seleccionados = data.filter(x => x.fbCheckeado);
+            let nuevos = seleccionados.filter(x => !productosSeleccionadostablaProducto.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+            let existentes = data.filter(x => productosSeleccionadostablaProducto.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+
+
+            if (nuevos.length > 0) {
+                tablaProductos2.rows.add(nuevos).draw(false);
+            }
+
+
+            for (let item of existentes)
+            {
+
+                if (item.fbCheckeado == false) {
+                    let rowAEliminar = tablaProductosRows.find(x => tablaProductos2.row(x).data().fiIDMovimiento == item.fiIDMovimiento);
+                    tablaProductos2.row(rowAEliminar).remove().draw(false);
+                }
+            }
+
+            CerrarModal();
+        }
+        catch (error) {
+            console.error(error);
+            $("#btnAgregarProductoSeleccionado").show();
+        }
+
+    });
+
+
+</script>

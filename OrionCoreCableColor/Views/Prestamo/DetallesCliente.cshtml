@@ -1,0 +1,447 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionClientePrincipalViewModel
+
+@{
+	ViewBag.Title = "DetallesCliente";
+}
+
+<link href="~/styles/DetallesPrestamo.css" />
+
+<style>
+	.tab-section-label {
+		font-size: 0.9rem;
+		font-weight: bold;
+		color: #555;
+		margin-bottom: 0.5rem;
+	}
+
+	.tab-content-section {
+		background-color: #f9f9f9;
+		padding: 1rem;
+		border-radius: 5px;
+	}
+
+	.breadcrumb-context {
+		font-size: 0.85rem;
+		color: #777;
+		margin-bottom: 1rem;
+	}
+
+	.custom-secondary-tabs {
+		background-color: #f1f1f1;
+	}
+
+	.tab-content-section .tab-content {
+		background-color: #fff;
+	}
+</style>
+
+<div class="container-fluid py-3">
+	<div class="d-flex justify-content-start mb-3">
+		<div class="btn-group" role="group">
+			@*<a onclick="ExportHtmlToPdf('#myContentToPrint','DetailReport')" class="btn btn-success btn-sm" title="Imprimir el reporte actual">
+				<i class="fal fa-print fa-fw"></i> Imprimir
+			</a>*@
+			<a href="/Prestamo/Bandeja_Credito" class="btn btn-primary btn-sm" title="Regresar a la lista de préstamos">
+				<i class="fal fa-arrow-left fa-fw"></i> Volver a la lista
+			</a>
+		</div>
+	</div>
+
+	<div class="panel">
+		<div class="panel-heading text-center bg-light py-3">
+			<div class="panel-control">
+				@if (ViewBag.ListadoPrestamosCliente != null && ViewBag.ListadoPrestamosCliente.Count > 0)
+				{
+					<div class="d-flex align-items-center justify-content-center flex-column flex-sm-row">
+						<i class="fal fa-user fa-2x text-primary mr-sm-2 mb-2 mb-sm-0"></i>
+						<div>
+							<h4 class="mb-0">@ViewBag.ListadoPrestamosCliente[0].fcNombreCliente</h4>
+							<p class="text-muted mb-0">
+								<i class="fal fa-id-card mr-1"></i>@ViewBag.ListadoPrestamosCliente[0].fcIdentidad |
+								<i class="fal fa-phone mr-1"></i>@ViewBag.ListadoPrestamosCliente[0].fcTelefono
+							</p>
+						</div>
+					</div>
+				}
+				else
+				{
+					<p class="text-muted mb-0">No hay datos de cliente disponibles</p>
+				}
+			</div>
+		</div>
+
+		<div class="panel-body" id="myContentToPrint">
+			<div id="ContenidoInformacion">
+				@if (ViewBag.ListadoPrestamosCliente != null && ViewBag.ListadoPrestamosCliente.Count > 0)
+				{
+					<!-- Primary Nav tabs (Loan Tabs) -->
+					<div class="tab-section-label">Seleccionar Préstamo</div>
+					<ul class="nav nav-tabs nav-justified flex-column flex-md-row border-bottom" id="loanTabs" role="tablist">
+						@foreach (var prestamo in ViewBag.ListadoPrestamosCliente)
+						{
+							<li class="nav-item">
+								<a class="nav-link @(ViewBag.ListadoPrestamosCliente.IndexOf(prestamo) == 0 ? "active" : "")"
+								   id="tab-@prestamo.fcIDPrestamo"
+								   data-toggle="tab"
+								   href="#content-@prestamo.fcIDPrestamo"
+								   role="tab"
+								   aria-controls="content-@prestamo.fcIDPrestamo"
+								   aria-selected="@(ViewBag.ListadoPrestamosCliente.IndexOf(prestamo) == 0 ? "true" : "false")"
+								   title="Ver detalles del préstamo @prestamo.fcIDPrestamo">
+									Préstamo #@prestamo.fcIDPrestamo | Solicitud @prestamo.fiIDSolicitud
+								</a>
+							</li>
+						}
+					</ul>
+
+					<!-- Primary Tab content -->
+					<div class="tab-content mt-3" id="loanTabsContent">
+						@foreach (var prestamo in ViewBag.ListadoPrestamosCliente)
+						{
+							<div class="tab-pane fade @(ViewBag.ListadoPrestamosCliente.IndexOf(prestamo) == 0 ? "show active" : "")"
+								 id="content-@prestamo.fcIDPrestamo"
+								 role="tabpanel"
+								 aria-labelledby="tab-@prestamo.fcIDPrestamo">
+								<div class="card">
+									<div class="card-body">
+										<!-- Breadcrumb for context -->
+										<div class="breadcrumb-context">
+											Préstamo #@prestamo.fcIDPrestamo
+										</div>
+
+										<!-- Secondary Nav tabs (Info Tabs for each loan) -->
+										<div class="tab-section-label">Detalles del Préstamo</div>
+										<ul class="nav nav-tabs nav-justified flex-column flex-sm-row mt-3 custom-secondary-tabs border-bottom" id="infoTabs-@prestamo.fcIDPrestamo" role="tablist">
+											<li class="nav-item">
+												<a class="nav-link active"
+												   id="credito-tab-@prestamo.fcIDPrestamo"
+												   data-toggle="tab"
+												   href="#credito-@prestamo.fcIDPrestamo"
+												   role="tab"
+												   aria-controls="credito-@prestamo.fcIDPrestamo"
+												   aria-selected="true"
+												   title="Detalles generales del crédito">
+													<i class="fal fa-info-circle mr-1"></i> Crédito
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link"
+												   id="pago-tab-@prestamo.fcIDPrestamo"
+												   data-toggle="tab"
+												   href="#pago-@prestamo.fcIDPrestamo"
+												   role="tab"
+												   aria-controls="pago-@prestamo.fcIDPrestamo"
+												   aria-selected="false"
+												   title="Historial y detalles de pagos">
+													<i class="fal fa-money-bill-wave mr-1"></i> Pagos
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link"
+												   id="bitacora-tab-@prestamo.fcIDPrestamo"
+												   data-toggle="tab"
+												   href="#bitacora-@prestamo.fcIDPrestamo"
+												   role="tab"
+												   aria-controls="bitacora-@prestamo.fcIDPrestamo"
+												   aria-selected="false"
+												   title="Registro de actividades del préstamo">
+													<i class="fal fa-history mr-1"></i> Historial
+												</a>
+											</li>
+											<li class="nav-item">
+												<a class="nav-link"
+												   id="archivos-tab-@prestamo.fcIDPrestamo"
+												   data-toggle="tab"
+												   href="#archivos-@prestamo.fcIDPrestamo"
+												   role="tab"
+												   aria-controls="archivos-@prestamo.fcIDPrestamo"
+												   aria-selected="false"
+												   title="Documentos relacionados con el préstamo">
+													<i class="fal fa-folder mr-1"></i> Archivos
+												</a>
+											</li>
+										</ul>
+
+										<!-- Enviar Correo Button -->
+										@*<div class="d-flex justify-content-end mt-3">
+											<a href="mailto:@prestamo.fcCorreo?subject=Información%20del%20Préstamo%20@prestamo.fcIDPrestamo" class="btn btn-purple btn-sm" title="Enviar detalles por correo">
+												<i class="fal fa-envelope fa-fw"></i> Enviar correo
+											</a>
+										</div>*@
+
+										<!-- Secondary Tab content -->
+										<div class="tab-content mt-3 tab-content-section" id="infoTabsContent-@prestamo.fcIDPrestamo">
+											<!-- Info. de crédito -->
+											<div class="tab-pane fade show active"
+												 id="credito-@prestamo.fcIDPrestamo"
+												 role="tabpanel"
+												 aria-labelledby="credito-tab-@prestamo.fcIDPrestamo">
+												<!-- Breadcrumb for context -->
+												<div class="breadcrumb-context">
+													Préstamo #@prestamo.fcIDPrestamo > Crédito
+												</div>
+
+
+												<!-- Tertiary Nav tabs -->
+												<div class="tab-section-label">Información Adicional</div>
+												<ul class="nav nav-tabs nav-justified flex-column flex-sm-row mt-3 custom-secondary-tabs border-bottom" id="creditoSubTabs-@prestamo.fcIDPrestamo" role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active"
+														   id="servicio-tab-@prestamo.fcIDPrestamo"
+														   data-toggle="tab"
+														   href="#servicio-@prestamo.fcIDPrestamo"
+														   role="tab"
+														   aria-controls="servicio-@prestamo.fcIDPrestamo"
+														   aria-selected="true"
+														   title="Detalles del servicio asociado">
+															<i class="fal fa-info-circle mr-1"></i> Servicio
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link"
+														   id="personal-tab-@prestamo.fcIDPrestamo"
+														   data-toggle="tab"
+														   href="#personal-@prestamo.fcIDPrestamo"
+														   role="tab"
+														   aria-controls="personal-@prestamo.fcIDPrestamo"
+														   aria-selected="false"
+														   title="Información personal del cliente">
+															<i class="fal fa-user mr-1"></i> Personal
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link"
+														   id="orden-tab-@prestamo.fcIDPrestamo"
+														   data-toggle="tab"
+														   href="#orden-@prestamo.fcIDPrestamo"
+														   role="tab"
+														   aria-controls="orden-@prestamo.fcIDPrestamo"
+														   aria-selected="false"
+														   title="Detalles de la orden de trabajo">
+															<i class="fal fa-tools mr-1"></i> Orden
+														</a>
+													</li>
+												</ul>
+
+												<!-- Tertiary Tab content -->
+												<div class="tab-content mt-3 tab-content-section" id="creditoSubTabsContent-@prestamo.fcIDPrestamo">
+													<!-- Info. del servicio -->
+													<div class="tab-pane fade show active"
+														 id="servicio-@prestamo.fcIDPrestamo"
+														 role="tabpanel"
+														 aria-labelledby="servicio-tab-@prestamo.fcIDPrestamo">
+														<div class="breadcrumb-context">
+															Préstamo #@prestamo.fcIDPrestamo > Crédito > Servicio
+														</div>
+														@{
+															Html.RenderAction("_DetalleCredito", "Prestamo", new { idCustomer = prestamo.fcIDPrestamo, idLoan = Model.fcIdentidad });
+														}
+													</div>
+
+													<!-- Info. Personal -->
+													<div class="tab-pane fade"
+														 id="personal-@prestamo.fcIDPrestamo"
+														 role="tabpanel"
+														 aria-labelledby="personal-tab-@prestamo.fcIDPrestamo">
+														<div class="breadcrumb-context">
+															Préstamo #@prestamo.fcIDPrestamo > Crédito > Personal
+														</div>
+														@{
+															Html.RenderAction("_InformacionPersonalCliente", "Prestamo", new { id = prestamo.fiIDSolicitud, idPrestamo = prestamo.fcIDPrestamo, idIDentidad = Model.fcIdentidad, fcClienteSAF = Model.fcClienteSAF });
+														}
+													</div>
+
+													<!-- Orden Trabajo -->
+													<div class="tab-pane fade"
+														 id="orden-@prestamo.fcIDPrestamo"
+														 role="tabpanel"
+														 aria-labelledby="orden-tab-@prestamo.fcIDPrestamo">
+														<div class="breadcrumb-context">
+															Préstamo #@prestamo.fcIDPrestamo > Crédito > Orden
+														</div>
+														@{
+															Html.RenderAction("_MostrarDetalleOrdenTrabajo", "Prestamo", new { IDSolicitud = prestamo.fiIDSolicitud, Identidad = Model.fcIdentidad});
+														}
+													</div>
+												</div>
+											</div>
+
+											<!-- Info. de Pago -->
+											<div class="tab-pane fade"
+												 id="pago-@prestamo.fcIDPrestamo"
+												 role="tabpanel"
+												 aria-labelledby="pago-tab-@prestamo.fcIDPrestamo">
+												<div class="breadcrumb-context">
+													Préstamo #@prestamo.fcIDPrestamo > Pagos
+												</div>
+
+												<!-- Tertiary Nav tabs -->
+												<ul class="nav nav-tabs nav-justified flex-column flex-sm-row mt-3 custom-secondary-tabs border-bottom"
+													id="pagoSubTabs-@prestamo.fcIDPrestamo"
+													role="tablist">
+													<li class="nav-item">
+														<a class="nav-link active"
+														   id="pagoServicio-tab-@prestamo.fcIDPrestamo"
+														   data-toggle="tab"
+														   href="#pagoServicio-@prestamo.fcIDPrestamo"
+														   role="tab"
+														   aria-controls="pagoServicio-@prestamo.fcIDPrestamo"
+														   aria-selected="true"
+														   title="Detalles de la información de pago, incluyendo montos y fechas">
+															<i class="fal fa-receipt mr-1"></i> Información de Pago
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link"
+														   id="pagoPersonal-tab-@prestamo.fcIDPrestamo"
+														   data-toggle="tab"
+														   href="#pagoPersonal-@prestamo.fcIDPrestamo"
+														   role="tab"
+														   aria-controls="pagoPersonal-@prestamo.fcIDPrestamo"
+														   aria-selected="false"
+														   title="Estado de cuenta con historial de pagos y saldos pendientes">
+															<i class="fal fa-file-invoice-dollar mr-1"></i> Estado de Cuenta
+														</a>
+													</li>
+													<li class="nav-item">
+														<a class="nav-link"
+														   id="pagoOrden-tab-@prestamo.fcIDPrestamo"
+														   data-toggle="tab"
+														   href="#pagoOrden-@prestamo.fcIDPrestamo"
+														   role="tab"
+														   aria-controls="pagoOrden-@prestamo.fcIDPrestamo"
+														   aria-selected="false"
+														   title="Plan de pago con cronograma y detalles de cuotas">
+															<i class="fal fa-calendar-alt mr-1"></i> Plan de Pago
+														</a>
+													</li>
+												</ul>
+
+												<!-- Tertiary Tab content -->
+												<div class="tab-content mt-3 tab-content-section"
+													 id="pagoSubTabsContent-@prestamo.fcIDPrestamo">
+													<!-- Info. del Pago -->
+													<div class="tab-pane fade show active"
+														 id="pagoServicio-@prestamo.fcIDPrestamo"
+														 role="tabpanel"
+														 aria-labelledby="pagoServicio-tab-@prestamo.fcIDPrestamo">
+														<div class="breadcrumb-context">
+															Préstamo #@prestamo.fcIDPrestamo > Pago > Información de Pago
+														</div>
+														@{
+															Html.RenderAction("_Informacionpago", "Prestamo", new { idCustomer = Model.fcIdentidad, idLoan = prestamo.fcIDPrestamo, idClienteSAF = Model.fcClienteSAF });
+														}
+													</div>
+
+													<!-- Info. Personal -->
+													<div class="tab-pane fade"
+														 id="pagoPersonal-@prestamo.fcIDPrestamo"
+														 role="tabpanel"
+														 aria-labelledby="pagoPersonal-tab-@prestamo.fcIDPrestamo">
+														<div class="breadcrumb-context">
+															Préstamo #@prestamo.fcIDPrestamo > Pago > Estado de Cuenta
+														</div>
+														@{
+															Html.RenderAction("_EstadoDeCuenta", "Prestamo", new { idCustomer = Model.fcIdentidad, idLoan = prestamo.fcIDPrestamo, idClienteSAF = Model.fcClienteSAF });
+														}
+													</div>
+
+													<!-- Orden Trabajo -->
+													<div class="tab-pane fade"
+														 id="pagoOrden-@prestamo.fcIDPrestamo"
+														 role="tabpanel"
+														 aria-labelledby="pagoOrden-tab-@prestamo.fcIDPrestamo">
+														<div class="breadcrumb-context">
+															Préstamo #@prestamo.fcIDPrestamo > Pago > Plan de Pago
+														</div>
+														@{
+															Html.RenderAction("_PlandePago", "Prestamo", new { idCustomer = Model.fcIdentidad, idLoan = prestamo.fcIDPrestamo, idClienteSAF = Model.fcClienteSAF });
+														}
+													</div>
+												</div>
+											</div>
+
+											<!-- Bitácora -->
+											<div class="tab-pane fade"
+												 id="bitacora-@prestamo.fcIDPrestamo"
+												 role="tabpanel"
+												 aria-labelledby="bitacora-tab-@prestamo.fcIDPrestamo">
+												<div class="breadcrumb-context">
+													Préstamo #@prestamo.fcIDPrestamo > Historial
+												</div>
+												@{
+													Html.RenderAction("ShowBitacoraCustomer", "Prestamo", new { idSolicitud = prestamo.fiIDSolicitud });
+												}
+
+											</div>
+
+											<!-- Archivos -->
+											<div class="tab-pane fade"
+												 id="archivos-@prestamo.fcIDPrestamo"
+												 role="tabpanel"
+												 aria-labelledby="archivos-tab-@prestamo.fcIDPrestamo">
+												<div class="breadcrumb-context">
+													Préstamo #@prestamo.fcIDPrestamo > Archivos
+												</div>
+													@{
+														Html.RenderAction("AbrirDocumentos", "Prestamo", new { idSolicitud = prestamo.fiIDSolicitud });
+													}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						}
+					</div>
+				}
+				else
+				{
+					<div class="alert alert-warning text-center" role="alert">
+						No se encontraron préstamos para este cliente.
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts {
+	<script>
+		$(document).ready(function () {
+			// Handle primary tabs (loanTabs)
+			$('#loanTabs a').on('click', function (e) {
+				e.preventDefault();
+				$(this).tab('show');
+			});
+
+			// Handle secondary tabs (infoTabs for each loan)
+			$('[id^="infoTabs-"] a').on('click', function (e) {
+				e.preventDefault();
+				$(this).tab('show');
+			});
+
+			// Handle tertiary tabs (creditoSubTabs for each loan)
+			$('[id^="creditoSubTabs-"] a').on('click', function (e) {
+				e.preventDefault();
+				$(this).tab('show');
+			});
+
+			$('#tab-OrdenTrabajo').on('shown.bs.tab', function () {
+       // Cargar el contenido de la acción 'MostrarDetalleOrdenTrabajo' al mostrar la pestaña
+       $.ajax({
+           url: "@Url.Action("MostrarDetalleOrdenTrabajo", "Prestamo")",
+           type: "GET",
+           data: { IDSolicitud: '@Model.idSolicitud', Identidad: '@Model.fcIdentidad' },
+           success: function (data) {
+               // Insertar el contenido cargado en el div correspondiente
+               $('#lft-tab-OrdenTrabajoLista').html(data);
+           },
+           error: function (error) {
+               console.log(error);
+               AlertaError();
+           }
+       });
+   });
+		});
+	</script>
+}

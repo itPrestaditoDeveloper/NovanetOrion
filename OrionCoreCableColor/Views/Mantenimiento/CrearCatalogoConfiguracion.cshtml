@@ -1,0 +1,114 @@
+﻿@model OrionCoreCableColor.Models.Mantenimiento.CrearConfiguracionViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        @if (Model.fbEditar)
+        {
+            <text>Editar Configuracion</text>
+        }
+        else
+        {
+            <text>Crear Configuracion</text>
+        }
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcNombreLlave, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcNombreLlave, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcNombreLlave, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcValorLlave, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcValorLlave, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcValorLlave, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="Guardar" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $("#Guardar").click(function () {
+
+        if ($("#fcNombreLlave").val() == "") {
+            ToastrWarning("Advertencia","El nombre de la configuracion no puede ir vacio");
+            return;
+        }
+
+        if ($("#fcValorLlave").val() == "") {
+            ToastrWarning("Advertencia", "El Valor no puede estar vacio");
+            return;
+        }
+
+        var model = @Html.Raw(Json.Encode(Model));
+
+        model.fcNombreLlave = $("#fcNombreLlave").val();
+        model.fcValorLlave = $("#fcValorLlave").val();
+        if (model.fbEditar) {
+            var url = "@Url.Action("EditarCatalogoConfiguracion", "Mantenimiento")";
+        } else {
+            var url = "@Url.Action("CrearCatalogoConfiguracion", "Mantenimiento")";
+        }
+
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { model: model },
+            success: function (data) {
+                debugger;
+                if (data.Estado) {
+                    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaT.ajax.reload();
+                    ToastrSuccess("Aprobada", data.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                }
+            },
+            error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+            }
+        });
+    });
+
+
+
+</script>

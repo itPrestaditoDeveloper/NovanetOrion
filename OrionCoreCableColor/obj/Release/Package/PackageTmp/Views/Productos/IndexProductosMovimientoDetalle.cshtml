@@ -1,0 +1,188 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-download fa-fw"></i> INVENTARIO </h2>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Producto</th>
+                        <th>Factura</th>
+                        <th>Fecha Ingreso</th>
+                        <th>Ubicacion</th>
+                        <th>Serie1</th>
+                        <th>Serie2/MAC</th>
+                        <th>Cantidad</th>
+                        <th>Referencia</th>
+                        <th>Tipo Producto</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+        var RowSeleccionado = null;
+        function EditarProductoMovimientoDetalle(fiIDMovimiento)
+        {
+            VerModalSmConObjetoDeParametro({ fiIDMovimiento: fiIDMovimiento }, "@Url.Action("EditarProductoMovimientoDetalle", "Productos")");
+        }
+
+        function EditarConsumible(fiIDProducto) {
+            VerModalConObjetoDeParametro({ fiIDProducto: fiIDProducto }, "@Url.Action("EditarConsumible", "Productos")");
+        }
+
+        function Historial(fiIDProducto, fcCodigoSerie1) {
+            VerModalConObjetoDeParametro({ fiIDProducto: fiIDProducto, fcCodigoSerie1: fcCodigoSerie1 }, "@Url.Action("HistorialProducto", "Productos")");
+        }
+
+        function HistorialConsumible(fiIDProducto) {
+            VerModalConObjetoDeParametro({ fiIDProducto: fiIDProducto }, "@Url.Action("HistorialProductoConsumible", "Productos")");
+        }
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaProductoMovimientoDetalle", "Productos")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        if (data.fbConsumible) {
+                            opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarConsumible(' + data.fiIDProducto + ')"> Editar</a>';
+                            opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="HistorialConsumible(' + data.fiIDProducto + ')">Historial</a>';
+                        } else {
+                            opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarProductoMovimientoDetalle(' + data.fiIDMovimiento + ')"> Editar</a>';
+                            opciones += `<a href="javascript:void(0)" class="dropdown-item" onclick="Historial(${data.fiIDProducto}, '${data.fcCodigoSerie1}')">Historial</a>`;
+                        }
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: "fcProducto",
+
+                },
+                {
+                    data: "fcNumeroFactura"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbFechaMovimiento) {
+                            return `<label style="display:none;">${data.fdFechaMovimiento}</label>${moment(data.fdFechaMovimiento).format("DD/MM/YYYY HH:mm:ss")}`;
+                        } else {
+                            return '';
+                        }
+
+                    }
+                },
+                {
+                    data: "fcUbicacion",
+
+                },
+                {
+                    data: "fcCodigoSerie1",
+
+                },
+                {
+                    data: "fcCodigoSerie2"
+                },
+                {
+                    data: "fnCantidad"
+                },
+
+                {
+                    data: "fcReferenciaMovimiento"
+
+                },
+                {
+                    data: "fcTipoProducto"
+                }
+
+            ]
+
+        });
+
+
+        $("#TablaPrincipal thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+        tablaPrincipal.on("responsive-resize", function () {
+            var thead = $("#TablaPrincipal thead tr").toArray();
+            var buscadores = $(thead[0]).find("th").toArray();
+
+            var titulos = $(thead[1]).find("th").toArray();
+            for (var x = 0; x < titulos.length; x++) {
+                if ($(titulos[x]).css("display") == "none") {
+
+                    $(buscadores[x]).css("display", "none");
+                } else {
+                    $(buscadores[x]).css("display", "");
+                }
+            }
+        });
+
+        chat.client.actualizarRowAjusteProducto = function (model) {
+
+            var table = $.fn.dataTable.Api("#TablaPrincipal");
+            var nodes = table.rows().nodes().toArray();
+            var node = nodes.find(x => table.row(x).data().fiIDMovimiento == model.fiIDMovimiento);
+
+            table.row(node).data(model).draw(false);
+        }
+
+
+
+    </script>
+
+}

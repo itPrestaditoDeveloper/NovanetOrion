@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CoreFinancieroModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CoreFinancieroEntities2" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_Facturacion_ConsultarFactura" ReturnType="Collection(CoreFinancieroModel.sp_Facturacion_ConsultarFactura_Result)">
+      <Parameter Name="piIDTransaccion" Mode="In" Type="Int32" />
+      <Parameter Name="pcFactura" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OperacionesBanco_CuentasdeBanco" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesBanco_CuentasdeBanco_Result)">
+      <Parameter Name="piIDSesion" Mode="In" Type="Int32" />
+      <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OperacionesCaja_AplicarAbono_NovaNet" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_AplicarAbono_NovaNet_Result)">
+      <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="pcIP" Mode="In" Type="String" />
+      <Parameter Name="pcIdentidad" Mode="In" Type="String" />
+      <Parameter Name="pnValordelAbono" Mode="In" Type="Decimal" />
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+      <Parameter Name="pcComentarioAdicional" Mode="In" Type="String" />
+      <Parameter Name="pcCuentaOrigenMonedaNacional" Mode="In" Type="String" />
+      <Parameter Name="pcReferencia" Mode="In" Type="String" />
+      <Parameter Name="piIDTransaccion" Mode="InOut" Type="Int32" />
+      <Parameter Name="pdFechadeTransaccion" Mode="In" Type="DateTime" />
+      <Parameter Name="piIDMovimientoPrimerPago" Mode="In" Type="Int32" />
+      <Parameter Name="piIDUsuarioSRC" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OperacionesCaja_UltimosMovimientos" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_UltimosMovimientos_Result)">
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OperacionesCaja_ConsultarAbono" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_ConsultarAbono_Result)">
+      <Parameter Name="piIDTransaccion" Mode="In" Type="Int32" />
+      <Parameter Name="piInformacionFactura" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Facturacion_ConsultarFactura_NovaNet" ReturnType="Collection(CoreFinancieroModel.sp_Facturacion_ConsultarFactura_NovaNet_Result)">
+      <Parameter Name="piIDTransaccion" Mode="In" Type="Int32" />
+      <Parameter Name="pcFactura" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo" ReturnType="Collection(CoreFinancieroModel.sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo_Result)">
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_SRCClientesPlandePago" ReturnType="Collection(CoreFinancieroModel.sp_SRCClientesPlandePago_Result)">
+      <Parameter Name="pcIDCLiente" Mode="In" Type="String" />
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_SRCEstadoDeCuenta">
+      <Parameter Name="pcIDCLiente" Mode="In" Type="String" />
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GeoBarrios" ReturnType="Collection(CoreFinancieroModel.sp_GeoBarrios_Result)">
+      <Parameter Name="piPais" Mode="In" Type="Int16" />
+      <Parameter Name="piDepartamento" Mode="In" Type="Int16" />
+      <Parameter Name="piMunicipio" Mode="In" Type="Int16" />
+      <Parameter Name="piPoblado" Mode="In" Type="Int16" />
+      <Parameter Name="piBarrio" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GeoDepartamento" ReturnType="Collection(CoreFinancieroModel.sp_GeoDepartamento_Result)">
+      <Parameter Name="piPais" Mode="In" Type="Int16" />
+      <Parameter Name="piDepartamento" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GeoMunicipio" ReturnType="Collection(CoreFinancieroModel.sp_GeoMunicipio_Result)">
+      <Parameter Name="piPais" Mode="In" Type="Int16" />
+      <Parameter Name="piDepartamento" Mode="In" Type="Int16" />
+      <Parameter Name="piMunicipio" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GeoPais" ReturnType="Collection(CoreFinancieroModel.sp_GeoPais_Result)">
+      <Parameter Name="piPais" Mode="In" Type="Int16" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GeoPoblado" ReturnType="Collection(CoreFinancieroModel.sp_GeoPoblado_Result)">
+      <Parameter Name="piPais" Mode="In" Type="Int32" />
+      <Parameter Name="piDepartamento" Mode="In" Type="Int32" />
+      <Parameter Name="piMunicipio" Mode="In" Type="Int32" />
+      <Parameter Name="piPoblado" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OperacionesCaja_ConsultarCliente_NovaNet" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_ConsultarCliente_NovaNet_Result)">
+      <Parameter Name="piIDSesion" Mode="In" Type="Int32" />
+      <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="pcIdentidad" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OperacionesCaja_ConsultarCliente_NovaNet_PorPrestamo">
+      <Parameter Name="piIDSesion" Mode="In" Type="Int32" />
+      <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="pcIdentidad" Mode="In" Type="String" />
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_CREDGarantias_ActualizarSerieDeProducto" ReturnType="Collection(Int32)">
+      <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
+      <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+      <Parameter Name="pcSerieProducto" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="sp_Facturacion_ConsultarFactura_Result">
+    <Property Type="String" Name="fcNombreAgencia" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcFactura" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="fcDireccionAgenca" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="fcDireccionAgencia" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="fcCAI" Nullable="false" MaxLength="50" />
+    <Property Type="DateTime" Name="fdFechaFactura" Nullable="false" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaRangoInicialFacturacion" Nullable="false" />
+    <Property Type="DateTime" Name="fdFechaRangoFinalFacturacion" Nullable="false" />
+    <Property Type="String" Name="fcRangoInicialFacturacion" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcRangoFinalFacturacion" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcNombreCliente" Nullable="false" MaxLength="60" />
+    <Property Type="String" Name="fcRTN" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="fcRenglonDetalle1" Nullable="false" MaxLength="7" />
+    <Property Type="Decimal" Name="fnRenglonValor1" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="String" Name="fcRenglonDetalle2" Nullable="false" MaxLength="17" />
+    <Property Type="Decimal" Name="fnRenglonValor2" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="String" Name="fcRenglonDetalle3" Nullable="false" MaxLength="8" />
+    <Property Type="Decimal" Name="fnRenglonValor3" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="fnSubtotal" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnImporteExento" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnImporteExonerado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnImporteGravado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnImpuestos" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcFormaPago" Nullable="false" MaxLength="1" />
+    <Property Type="Decimal" Name="fnTotal" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcProductoDescripcion" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcValorenLetras" Nullable="true" MaxLength="180" />
+    <Property Type="Decimal" Name="fnTasadeCambio" Nullable="false" Precision="13" Scale="4" />
+    <Property Type="Decimal" Name="fnValorLempiras" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcValorLempiras" Nullable="true" MaxLength="180" />
+    <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+  </ComplexType>
+  <ComplexType Name="sp_OperacionesBanco_CuentasdeBanco_Result">
+    <Property Type="String" Name="fcCuentaContable" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="fcDescripcionCuenta" Nullable="true" MaxLength="180" />
+  </ComplexType>
+  <ComplexType Name="sp_OperacionesCaja_AplicarAbono_NovaNet_Result">
+    <Property Type="String" Name="fcPrestamoSeleccionado" Nullable="true" MaxLength="20" />
+    <Property Type="Decimal" Name="fnValorentraso" Nullable="true" Precision="13" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="sp_OperacionesCaja_UltimosMovimientos_Result">
+    <Property Type="DateTime" Name="fdFechaTransaccion" Nullable="false" Precision="23" />
+    <Property Type="String" Name="fcNombreCorto" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="fcOperacion" Nullable="false" MaxLength="9" />
+    <Property Type="Decimal" Name="fnValorMovimiento" Nullable="true" Precision="28" Scale="2" />
+    <Property Type="String" Name="fcReferencia" Nullable="false" MaxLength="30" />
+  </ComplexType>
+  <ComplexType Name="sp_OperacionesCaja_ConsultarAbono_Result">
+    <Property Type="Int16" Name="fiIDEmpresadelPrestamo" Nullable="false" />
+    <Property Type="String" Name="fcNombreEmpresa" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="fiIDTransaccion" Nullable="false" />
+    <Property Type="String" Name="fcIDPrestamo" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="fcNombreAgencia" Nullable="true" MaxLength="30" />
+    <Property Type="String" Name="fcIdentidadCliente" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="fcNombreCliente" Nullable="true" MaxLength="120" />
+    <Property Type="String" Name="fcProducto" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="fdFechaVencimiento" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdUltimoAbono" Nullable="true" Precision="23" />
+    <Property Type="Decimal" Name="fnCapital" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnInteres" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnInteresMoratorio" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguros" Nullable="true" Precision="16" Scale="2" />
+    <Property Type="Decimal" Name="fnOtros" Nullable="true" Precision="21" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoActualCapital" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnTotalAbonado" Nullable="true" Precision="28" Scale="2" />
+    <Property Type="String" Name="fcUsuarioDominio" Nullable="true" MaxLength="30" />
+    <Property Type="DateTime" Name="fdFechaTransaccion" Nullable="false" Precision="23" />
+    <Property Type="String" Name="fcAvancedeCuotas" Nullable="true" MaxLength="24" />
+    <Property Type="String" Name="fcFrecuencia" Nullable="false" MaxLength="9" />
+    <Property Type="Decimal" Name="fnValorCuota" Nullable="true" Precision="20" Scale="2" />
+    <Property Type="Int32" Name="fiMostrarMensaje" Nullable="false" />
+    <Property Type="String" Name="fcMensajeAdicional" Nullable="false" MaxLength="25" />
+    <Property Type="String" Name="fcMoneda" Nullable="false" MaxLength="15" />
+    <Property Type="String" Name="fcOrigenOperacion" Nullable="false" MaxLength="5" />
+    <Property Type="Int32" Name="fiMostrarMensaje2" Nullable="false" />
+    <Property Type="String" Name="fcMensajeAdicional2" Nullable="true" MaxLength="92" />
+    <Property Type="String" Name="fcTelefonoSMS" Nullable="true" MaxLength="8000" />
+    <Property Type="Int32" Name="fiIDFormatodeRecibo" Nullable="false" />
+    <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+  </ComplexType>
+  <ComplexType Name="sp_Facturacion_ConsultarFactura_NovaNet_Result">
+    <Property Type="String" Name="fcNombreAgencia" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcFactura" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="fcDireccionAgenca" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="fcDireccionAgencia" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="fcCAI" Nullable="false" MaxLength="50" />
+    <Property Type="DateTime" Name="fdFechaFactura" Nullable="false" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaRangoInicialFacturacion" Nullable="false" />
+    <Property Type="DateTime" Name="fdFechaRangoFinalFacturacion" Nullable="false" />
+    <Property Type="String" Name="fcRangoInicialFacturacion" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcRangoFinalFacturacion" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcNombreCliente" Nullable="false" MaxLength="60" />
+    <Property Type="String" Name="fcRTN" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="fcRenglonDetalle1" Nullable="false" MaxLength="7" />
+    <Property Type="Decimal" Name="fnRenglonValor1" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="String" Name="fcRenglonDetalle2" Nullable="false" MaxLength="17" />
+    <Property Type="Decimal" Name="fnRenglonValor2" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="String" Name="fcRenglonDetalle3" Nullable="false" MaxLength="8" />
+    <Property Type="Decimal" Name="fnRenglonValor3" Nullable="true" Precision="38" Scale="2" />
+    <Property Type="Decimal" Name="fnSubtotal" Nullable="true" Precision="14" Scale="2" />
+    <Property Type="Decimal" Name="fnImporteExento" Nullable="true" Precision="14" Scale="2" />
+    <Property Type="Decimal" Name="fnImporteExonerado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnImporteGravado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnImpuestos" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcFormaPago" Nullable="false" MaxLength="1" />
+    <Property Type="Decimal" Name="fnTotal" Nullable="true" Precision="14" Scale="2" />
+    <Property Type="String" Name="fcProductoDescripcion" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="fcValorenLetras" Nullable="true" MaxLength="8000" />
+    <Property Type="Decimal" Name="fnTasadeCambio" Nullable="false" Precision="13" Scale="4" />
+    <Property Type="Decimal" Name="fnValorLempiras" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcValorLempiras" Nullable="true" MaxLength="180" />
+    <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+  </ComplexType>
+  <ComplexType Name="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo_Result">
+    <Property Type="Int16" Name="fiCuota" Nullable="false" />
+    <Property Type="DateTime" Name="fdFechadeCuota" Nullable="false" />
+    <Property Type="Decimal" Name="fnCapitalPactado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnInteresPactado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoCapital" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoInteres" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguro1" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguro2" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguro3" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguro4" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoServicio1" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoServicio2" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoServicio3" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoOtros" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguros" Nullable="true" Precision="16" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoServicios" Nullable="true" Precision="15" Scale="2" />
+    <Property Type="Decimal" Name="fnTotalCuota" Nullable="true" Precision="22" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="sp_SRCClientesPlandePago_Result">
+    <Property Type="Int16" Name="fiCuota" Nullable="false" />
+    <Property Type="Int32" Name="fiMes" Nullable="true" />
+    <Property Type="DateTime" Name="fdFechaCuota" Nullable="false" />
+    <Property Type="Decimal" Name="fnCapitalInicial" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnCapitalPactado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnInteresPactado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguro1" Nullable="true" Precision="15" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguro2" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnServicio1" Nullable="true" Precision="15" Scale="2" />
+    <Property Type="Decimal" Name="fnValorCuota" Nullable="true" Precision="22" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoCapital" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoInteres" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguro1" Nullable="true" Precision="15" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoSeguro2" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoServicio1" Nullable="true" Precision="15" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoCuota" Nullable="true" Precision="22" Scale="2" />
+  </ComplexType>
+  <ComplexType Name="sp_GeoBarrios_Result">
+    <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+    <Property Type="Int16" Name="fiCodDepartamento" Nullable="false" />
+    <Property Type="Int16" Name="fiCodMunicipio" Nullable="false" />
+    <Property Type="Int16" Name="fiCodBarrio" Nullable="true" />
+    <Property Type="Int16" Name="fiCodPoblado" Nullable="false" />
+    <Property Type="String" Name="fcBarrioColonia" Nullable="true" MaxLength="8000" />
+  </ComplexType>
+  <ComplexType Name="sp_GeoDepartamento_Result">
+    <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+    <Property Type="Int16" Name="fiCodDepartamento" Nullable="false" />
+    <Property Type="String" Name="fcDepartamento" Nullable="true" MaxLength="8000" />
+  </ComplexType>
+  <ComplexType Name="sp_GeoMunicipio_Result">
+    <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+    <Property Type="Int32" Name="fiCodDepartamento" Nullable="true" />
+    <Property Type="Int32" Name="fiCodMunicipio" Nullable="true" />
+    <Property Type="String" Name="fcMunicipio" Nullable="true" MaxLength="8000" />
+  </ComplexType>
+  <ComplexType Name="sp_GeoPais_Result">
+    <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+    <Property Type="String" Name="fcPais" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="fcNombreMoneda" Nullable="false" MaxLength="30" />
+    <Property Type="String" Name="fcAbreviacionMoneda" Nullable="false" MaxLength="3" />
+    <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+    <Property Type="String" Name="fcDominoInternet" Nullable="false" MaxLength="2" />
+  </ComplexType>
+  <ComplexType Name="sp_GeoPoblado_Result">
+    <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+    <Property Type="Int32" Name="fiCodDepartamento" Nullable="true" />
+    <Property Type="Int32" Name="fiCodMunicipio" Nullable="true" />
+    <Property Type="Int32" Name="fiCodPoblado" Nullable="true" />
+    <Property Type="String" Name="fcPoblado" Nullable="true" MaxLength="8000" />
+  </ComplexType>
+  <ComplexType Name="sp_OperacionesCaja_ConsultarCliente_NovaNet_Result">
+    <Property Type="String" Name="fcIDPrestamo" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="fcIDCliente" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="fcNombreCliente" Nullable="true" MaxLength="120" />
+    <Property Type="Int32" Name="fiDiasAtraso" Nullable="false" />
+    <Property Type="Decimal" Name="fnCapitalAtrasado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnInteresAtrasado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnInteresMoratorio" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguroAtrasado1" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguroAtrasado2" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguroAtrasado3" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSeguroAtrasado4" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnServicioAtrasado1" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnServicioAtrasado2" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnServicioAtrasado3" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnOtrosCargosAtrasado" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnRecargos" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnTotalAtrasado" Nullable="true" Precision="28" Scale="2" />
+    <Property Type="Decimal" Name="fnTotalAtrasadoMonedaNacional" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoActualCapital" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnValorCuota" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnValorCuotaMonedaNacional" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnMontoMaximoAbonoCapital" Nullable="true" Precision="14" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoParaLiquidarPrestamo" Nullable="true" Precision="29" Scale="2" />
+    <Property Type="Decimal" Name="fnSaldoParaLiquidarPrestamoSeguroMesActual" Nullable="true" Precision="29" Scale="2" />
+    <Property Type="String" Name="fcMensajeTWS" Nullable="false" MaxLength="4" />
+    <Property Type="Int16" Name="fiCuotasPagadas" Nullable="false" />
+    <Property Type="Int16" Name="fiCuotasAtrasadas" Nullable="false" />
+    <Property Type="DateTime" Name="fdFechaInicio" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaVencimiento" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdUltimoAbono" Nullable="true" Precision="23" />
+    <Property Type="Int16" Name="fiIDProducto" Nullable="false" />
+    <Property Type="String" Name="fcProducto" Nullable="false" MaxLength="100" />
+    <Property Type="Int32" Name="fiTipoPlandeAmortizacion" Nullable="false" />
+    <Property Type="String" Name="fcIDRespuestaWebService" Nullable="false" MaxLength="2" />
+    <Property Type="Int16" Name="fiIDEmpresa" Nullable="false" />
+    <Property Type="Decimal" Name="fnInteresesdelPeriodo" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="Byte" Name="fiAlertadeCliente" Nullable="false" />
+    <Property Type="String" Name="fcMensajedeAlerta" Nullable="false" MaxLength="300" />
+  </ComplexType>
+</Schema>

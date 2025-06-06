@@ -1,0 +1,194 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+
+        @if (Model.fbEditar)
+        {
+            <text>Editar datos</text>
+        }
+        else
+        {
+            <text>Agregar datos</text>
+        }
+    </h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDOLT, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDOLT, new SelectList(ViewBag.ListaOLT, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDOLT, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcMac, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcMac, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcMac, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcIP, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcIP, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcIP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcPom, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcPom, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcPom, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcNombreWifi, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcNombreWifi, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcNombreWifi, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnGuardarDatosServicioCliente" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $(".mascara-rtn").inputmask("99999999999999");
+    $("#Nombre").prop("disabled", true);
+    $("#IDSolicitud").prop("disabled", true);
+    
+
+    $('#fiIDOLT').select2({
+        dropdownParent: $("#MyModalBig")
+    });
+
+    $("#btnGuardarDatosServicioCliente").click(function () {
+        var Mac = $("#fcMac").val();
+        var IP = $("#fcIP").val(); 
+        var POM = $("#fcPom").val(); 
+        var NombreWifi = $("#fcNombreWifi").val(); 
+        var IdOLT = $("#fiIDOLT option:selected").val();
+
+
+        if (Mac == "") {
+            ToastrWarning("Campos vacios", "Debe de colocar la MAC")
+            return false;
+        }
+        if (IP == "") {
+            ToastrWarning("Campos vacios", "Debe de colocar la IP")
+            return false;
+        }
+        if (NombreWifi == "") {
+            ToastrWarning("Campos vacios", "Debe de colocar el nombre del wifi");
+            return false;
+        }
+        if ($("#fiIDOLT :selected").val() == "") {
+            ToastrWarning("Campos vacios", "Seleccione la OLT");
+            return false;
+        }
+
+        $.ajax({
+                url: "@Url.Action("GuardarDatosClienteServicioInstalacion", "PrecalificaCliente")",
+                type: "POST",
+            data: { model: model, Mac: Mac, IP: IP, POM: POM, IdOLT: IdOLT, NombreWifi: NombreWifi },
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

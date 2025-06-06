@@ -1,0 +1,550 @@
+﻿@model OrionCoreCableColor.Models.Contratista.DetalleInstalacionViewModel
+@{
+    ViewBag.Title = "ViewRevisarDetalleInstalacion";
+}
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle Instalacion</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<div class="btn-group btn-group-toggle col-lg-12 p-0 nav nav-pills" data-toggle="buttons">
+    <label class="btn nav-link cursor-pointer">
+        <input onclick="showScreen(1)" id="aprobadas" type="radio" name="DetalleInstalacion" value="1" />
+        Detalle Instalacion
+    </label>
+    <label class="btn nav-link cursor-pointer">
+        <input onclick="showScreen(2)" id="general" type="radio" name="DetalleInstalacion" value="2" />
+        Imagenes
+    </label>
+    <label class="btn nav-link cursor-pointer">
+        <input onclick="showScreen(3)" id="general" type="radio" name="DetalleInstalacion" value="2" />
+        Documentos
+    </label>
+    <label class="btn nav-link cursor-pointer">
+        <input onclick="showScreen(4)" id="general" type="radio" name="DetalleInstalacion" value="2" />
+        Bitacoras
+    </label>
+</div>
+
+<div class="modal-body" id="screen1">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group text-center">
+                                <div class="input-group mar-btm ">
+                                    <a class="btn btn-@Model.fcClase text-white col-lg-12 col-md-12">Estado Actual Instalacion: <b>@Model.fcDescripcion</b> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcNombre, htmlAttributes: new { @class = "control-label font-12" })
+                                <div class="input-group mar-btm">
+                                    @Html.EditorFor(model => model.fcNombre, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcArticulosdelContrato, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm">
+                                    @Html.EditorFor(model => model.fcArticulosdelContrato, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcNumeroVineta, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm">
+                                    @Html.EditorFor(model => model.fcNumeroVineta, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br />
+        <div class="table-responsive">
+            <table id="TablaPrincipal2" class="table m-0">
+                <thead>
+                    <tr>
+                        <th>ID Detalle</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.fjListaMateriales != null)
+                    {
+                        foreach (var item in Model.fjListaMateriales)
+                        {
+                            <tr data-idDetalle="@item.fiIDContratista_SolicitudInstalacion_Detalle">
+                                <td>@item.fiIDContratista_SolicitudInstalacion_Detalle</td>
+                                <td>
+                                    <span name="spanProducto">@item.fcProducto</span>
+                                    <input type="text" name="inputProducto" value="@item.fcProducto" style="display:none;" class="form-control" disabled />
+                                </td>
+                                <td>
+                                    <span name="spanCantidad">@item.fnCantidad</span>
+                                    <input type="number" name="inputCantidad" value="@item.fnCantidad" style="display:none;" class="form-control" />
+                                </td>
+                                @if (ViewBag.RolesContratista)
+                                {
+                                    <td class="text-center">
+                                        <button class="btn btn-warning" type="button" title="Editar" data-estado="0" name="Editar">
+                                            <i class="fal fa-edit"></i>
+                                        </button>
+
+                                        <button class="btn btn-success" type="button" title="Guardar" style="display:none;" name="GuardarCambios">
+                                            <i class="fal fa-save"></i>
+                                        </button>
+                                    </td>
+                                }
+                                else
+                                {
+
+                                }
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No hay materiales disponibles.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="modal-body" id="screen2" style="display: none">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group text-center">
+                                <h2>Fotografias Tomadas</h2>
+                                <div class="row" id="galeriaFotos">
+
+                                    @foreach (var item in Model.fjListadoFotos)
+                                    {
+                                        <img class="img-thumbnail col-lg-3 col-sm-3" src="@item.fcUrlDocumento" style="width:100%;height:300px" data-image="@item.fcUrlDocumento" data-description="@item.fcNombreFoto" onclick="ShowBigImage(this)" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        @if (ViewBag.PermisoValidarSoporte && ViewBag.fiIDEstadoInstalacion)
+                        {
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <button id="btnGuardarForm" type="button" class="col-lg-12 btn btn-primary " onclick="btnGuardarForm">Validar</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-body" id="screen3" style="display: none">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group text-center">
+                                <h2> Documentos de la instalacion</h2>
+                                <div class="row" id="ListaDocumentos">
+                                    @foreach (var item in Model.fjListadoDocumentos)
+                                    {
+                                        <a href="javascript:ShowBigPdf('@item.fcNombreArchivo','@item.fcRuta')" class="text-info"> <i class="fal fa-2x fa-file-pdf"> </i>@item.fcNombreArchivo</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal-body" id="screen4" style="display: none">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group text-center">
+                                <h2> Bitacoras </h2>
+                                <div class="row" id="ListaDocumentos">
+                                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaBitacoras">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Usuario</th>
+                                                <th>Comentario</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        @foreach (var item in Model.fjListadoBitacora)
+                                        {
+                                            <tr>
+                                                <td>@item.fdFechaCreacion.ToString("yyyy-MM-dd HH:mm") </td>
+                                                <td>@item.fcUsuarioCreacion</td>
+                                                <td>@item.fcComentario</td>
+                                            </tr>
+
+                                        }
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    var fbArticuloExtra = @ViewBag.fbArticulosExtra.ToString().ToLower();
+
+     function showScreen(screenNumber) {
+         document.getElementById('screen1').style.display = 'none';
+         document.getElementById('screen2').style.display = 'none';
+         document.getElementById('screen3').style.display = 'none';
+         document.getElementById('screen4').style.display = 'none';
+         document.getElementById('screen' + screenNumber).style.display = 'block';
+     }
+$(document).ready(function () {
+
+        $('#TablaPrincipal2 tbody').on('click', 'tr button[name=Editar]', function () {
+            var row = $(this).closest("tr");
+            var estado = $(this).data("estado");
+
+            var inputProducto = $(row).find("input[name=inputProducto]");
+            var spanProducto = $(row).find("span[name=spanProducto]");
+
+            var inputCantidad = $(row).find("input[name=inputCantidad]");
+            var spanCantidad = $(row).find("span[name=spanCantidad]");
+
+            var buttonGuardar = $(row).find("button[name=GuardarCambios]");
+            var iconoEditar = $(this).find("i");
+
+            if (estado === 0) {
+                // Modo de edición
+                inputProducto.show();
+                spanProducto.hide();
+
+                inputCantidad.show();
+                spanCantidad.hide();
+
+                $(this).removeClass("btn-warning").addClass("btn-danger");
+                iconoEditar.removeClass("fa-edit").addClass("fa-times");
+                $(this).prop("title", "Cancelar").data("estado", 1);
+
+                // Mostrar botón de guardar
+                buttonGuardar.show();
+            } else {
+                // Modo de visualización (Cancelar edición)
+                inputProducto.hide();
+                spanProducto.show();
+
+                inputCantidad.hide();
+                spanCantidad.show();
+
+                $(this).removeClass("btn-danger").addClass("btn-warning");
+                iconoEditar.removeClass("fa-times").addClass("fa-edit");
+                $(this).prop("title", "Editar").data("estado", 0);
+
+                // Ocultar botón de guardar
+                buttonGuardar.hide();
+            }
+        });
+
+
+    $('#TablaPrincipal2 tbody').on('click', 'tr button[name=GuardarCambios]', function () {
+        debugger;
+        var buttonGuardar = $(this); // Guarda referencia del botón
+        var row = buttonGuardar.closest("tr");
+
+        var idDetalle = row.attr("data-idDetalle");
+        var fcProducto = $(row).find("input[name=inputProducto]").val();
+        var fnCantidad = $(row).find("input[name=inputCantidad]").val();
+
+
+    // Datos "antes" (los valores que estaban antes de la edición)
+      var cantidadAntes = $(row).find("span[name=spanCantidad]").text().trim();
+      var productoAntes = $(row).find("span[name=spanProducto]").text().trim();
+    // Mostrar el diálogo de confirmación de bootbox
+    bootbox.confirm({
+        title: `<i class="fa fa-times-circle text-danger mr-2"></i> Escriba el Motivo de Modificación <span class='fw-500'></span>`,
+        message: `
+            <span><strong>Advertencia!:</strong> Esta acción no se puede reversar</span>
+            <div class="mt-3">
+                <input type="text" id="motivoModificacion" class="form-control" placeholder="Escriba el motivo aquí">
+            </div>
+        `,
+        centerVertical: true,
+        swapButtonOrder: true,
+        buttons: {
+            confirm: {
+                label: 'Si',
+                className: 'btn-danger shadow-0'
+            },
+            cancel: {
+                label: 'No',
+                className: 'btn-default'
+            }
+        },
+        className: "modal-alert",
+        closeButton: false,
+        callback: function (result) {
+            if (result) {
+                var Observaciones = $('#motivoModificacion').val();
+                if (!Observaciones) {
+                    bootbox.alert("Debe proporcionar un motivo para la modificación.");
+                    return false;
+                }
+
+               //actualizar materiales
+                $.ajax({
+                    url: '@Url.Action("ActualizarMaterial", "Contratista")',
+                    type: "POST",
+                    data: {
+                        idDetalle: idDetalle,
+                        fcProducto: fcProducto,
+                        fnCantidad: fnCantidad
+                    },
+                    success: function (response) {
+                        if (response.Estado) {
+                            // Actualiza los elementos de la interfaz si es exitoso
+                            $(row).find("span[name=spanProducto]").text(fcProducto);
+                            $(row).find("span[name=spanCantidad]").text(fnCantidad);
+
+                            // Alterna a modo de visualización
+                            $(row).find("input[name=inputProducto]").hide();
+                            $(row).find("span[name=spanProducto]").show();
+                            $(row).find("input[name=inputCantidad]").hide();
+                            $(row).find("span[name=spanCantidad]").show();
+
+                            // Oculta el botón de guardar
+                            buttonGuardar.hide();
+
+                            // Restaura el botón de edición
+                            var buttonEditar = $(row).find("button[name=Editar]");
+                            buttonEditar.removeClass("btn-danger").addClass("btn-warning");
+                            buttonEditar.find("i").removeClass("fa-times").addClass("fa-edit");
+                            buttonEditar.prop("title", "Editar").data("estado", 0);
+
+                            var model = {
+                                fiIDSolicitud: '@ViewBag.fiIDSolicitud',
+                                IdCliente: '@ViewBag.IdCliente',
+                                Observaciones: Observaciones,
+                                Opcion: 'Actualizar Materiales',
+                                NombreCliente: '@ViewBag.NombreCliente',
+                                fiIDDetalle: idDetalle,
+                                fcProductoAntes: productoAntes,
+                                fnCantidadAntes: cantidadAntes,
+                                fcProductoDespues: fcProducto,
+                                fnCantidadDespues: fnCantidad
+                            };
+                            // guardar en la bitácora
+                            $.ajax({
+                                url: '@Url.Action("EnviarCorreoActualizarMateriales", "Contratista")',
+                                type: "POST",
+                                data: { model:  model },
+                                success: function (datas) {
+                                    ToastrSuccess("Exito", "Registro actualizado correctamente en la bitácora");
+                                },
+                                error: function () {
+                                    var dataerror = { Titulo: "Error", Mensaje: "Error al querer guardar la bitácora", Estado: false };
+                                    AlertaAjax(dataerror);
+                                }
+                            });
+
+                            ToastrSuccess("Listo!", "Material actualizado correctamente");
+                        } else {
+                            var errorMsg = { Titulo: "Error", Mensaje: "Ocurrió un error al actualizar el material.", Estado: false };
+                            AlertaAjax(errorMsg);
+                        }
+                    },
+                    error: function () {
+                        var errorMsg = { Titulo: "Error", Mensaje: "Ocurrió un error al actualizar el material.", Estado: false };
+                        AlertaAjax(errorMsg);
+                    }
+                });
+            }
+        }
+    });
+});
+
+
+    $('#btnGuardarForm').on("click", function () {
+        debugger;
+            let fiIDSolicitudInstalacion = '@Model.fiIDContratistaSolicitud';
+            let idsolicitud = '@ViewBag.fiIDSolicitud';
+            let fnMetrosFibra = '@ViewBag.fnCantidad';
+        let idtiposolicitud = '@ViewBag.fiIDTipoSolicitud';
+
+        if (idtiposolicitud == 2) {
+            $.ajax({
+                url: "@Url.Action("ValidarOrdenTrabajo", "Tenico")",
+                type: "Post",
+                data: {
+                    fiIdSolicitudinstalacion: fiIDSolicitudInstalacion,
+                    idsolicitud: idsolicitud
+                },
+                success: function (data) {
+                    console.log(`Entro en este apartado xd`)
+                },
+                error: function (data) {
+
+                }
+            });
+        } else if (idtiposolicitud == 1) {
+
+            if (fbArticuloExtra) {
+                $.ajax({
+                    url: "@Url.Action("CrearCreditoCliente", "Tenico")",
+                    type: "POST",
+                    data: {
+                        fiIdSolicitudinstalacion: fiIDSolicitudInstalacion,
+                        idsolicitud: idsolicitud
+                    },
+                    success: function (resp) {
+                        if (resp.Estado) {
+                            ToastrSuccess(resp.Titulo, resp.Mensaje);
+                            CerrarModal();
+                            window.location = '@Url.Action("ContratistaBandeja", "Contratista")';
+                            //history.back(); //no se por que se ocupa esta funcion la verdad
+                        } else {
+                            ToastrError("Error", resp.Mensaje);
+                        }
+                    },
+                    error: function () {
+                        ToastrError("Error", "Error de Red");
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "@Url.Action("ActualizarEstadoQR", "Contratista")",
+                    type: "POST",
+                    data: {
+                        fiIDSolicitudInstalacion: fiIDSolicitudInstalacion,
+                        idSolicitud: idsolicitud,
+                        fnMetrosFibra: fnMetrosFibra
+
+                    },
+                    success: function (resp) {
+                        if (resp.Estado) {
+                            ToastrSuccess(resp.Titulo, resp.Mensaje);
+                            CerrarModal();
+                            window.location = '@Url.Action("ContratistaBandeja", "Contratista")';
+                            //history.back();
+                        } else {
+                            ToastrError("Error", resp.Mensaje);
+                        }
+                    },
+                    error: function () {
+                        ToastrError("Error", "Error de Red");
+                    }
+                });
+            }
+
+        } else {
+
+        }
+
+        if (fbArticuloExtra) {
+            if (idtiposolicitud == 1) {
+
+            }
+
+        } else {
+           if (idtiposolicitud == 1) {
+
+            }
+        }
+
+
+     //else {
+        //    error: function (data) {
+        //        ToastrError("Error", "Tipo solicitud es diferente de 1.");
+        //    }
+        //}
+    });
+
+
+});
+
+</script>
+
+
+
+
+

@@ -1,0 +1,177 @@
+﻿
+
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Generar Solicitud</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CodigoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.CodigoCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.CodigoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NumeroOrdenCepheus, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.NumeroOrdenCepheus, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.NumeroOrdenCepheus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NumeroOrdenTrabajoCepheus, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.NumeroOrdenTrabajoCepheus, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.NumeroOrdenTrabajoCepheus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.codigo, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.codigo, new SelectList(ViewBag.Actividades, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.codigo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Comentario: </label>
+                        <div class="input-group mar-btm">
+                            @Html.TextArea("Comentario", new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnCrearSolicitudTrabajoContratista" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre").prop("disabled", true);
+    $("#IDSolicitud").prop("disabled", true);
+    $("#CodigoCliente").prop("disabled", true);
+    $("#NumeroOrdenCepheus").prop("disabled", true); 
+    $("#NumeroOrdenTrabajoCepheus").prop("disabled", true); 
+
+    $("#btnCrearSolicitudTrabajoContratista").click(function () {
+        debugger;
+        if ($("#codigo :selected").val() == "") {
+            ToastrWarning("Campos vacios", "Seleccione la actividad de la solicitud");
+            return false;
+        }
+        if ($("#Comentario").val() == "") {
+            ToastrWarning("Campos vacios", "Escriba un comentario");
+            return false;
+        }
+
+        var Comentario = $("#Comentario").val();
+        var Actividad = $("#codigo :selected").val();
+        var IDSolicitud = $("#IDSolicitud").val();
+        var CodigoCliente = $("#CodigoCliente").val();
+        var NumeroOrdenCepheus = $("#NumeroOrdenCepheus").val();
+        var NumeroOrdenTrabajoCepheus = $("#NumeroOrdenTrabajoCepheus").val();
+      
+        $.ajax({
+                url: "@Url.Action("EnviarSolicitudCepheus", "PrecalificaCliente")",
+                type: "POST",
+            data: { model: model, Comentario: Comentario, Actividad: Actividad, CodigoCliente: CodigoCliente, NumeroOrdenCepheus: NumeroOrdenCepheus, NumeroOrdenTrabajoCepheus: NumeroOrdenTrabajoCepheus  },
+            success: function (resp) {
+                if (resp) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+    });
+</script>

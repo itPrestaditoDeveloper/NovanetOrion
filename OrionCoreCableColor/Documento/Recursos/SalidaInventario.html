@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <header>
+   
+  </header>
+
+  <body>
+    <div style="width: 100%; float: left">
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Se realizo la siguiente salida de inventario en la partida {txtPartida}</div>
+      </div>
+      
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Sinopsis:</div>
+        <div style="width: 100%; float: right">{txtSinopsis}</div>
+      </div>
+      <br />
+      <br />
+
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Comentario:</div>
+        <div style="width: 100%; float: right">{txtComentario}</div>
+      </div>
+
+      <br/>
+      <br/>
+    </div>
+
+    <div style="width: 100%; float: left; padding-top: 10px">
+      <table
+        bgcolor="#fff"
+        style="
+          background-color: #ffffff;
+          border-collapse: collapse;
+          border-spacing: 0;
+          margin: 0 auto;
+          padding: 0;
+          text-align: left;
+          vertical-align: top;
+          width: 100%;
+
+          background-size: 100%;
+          background-position: center;
+          width: 100%;
+          height: 100%;
+          resize: both;
+          border: #b2b2b2 1px solid;
+        "
+      >
+        <thead style="text-align: left">
+          <tr>
+            <th style="text-align: left; border: black 1px solid;">Producto</th>
+            <th style="text-align: right; border: black 1px solid;">Precio L</th>
+            <th style="text-align: right; border: black 1px solid;">Precio $</th>
+            <th style="text-align: center; border: black 1px solid;">Cantidad</th>
+            <th style="text-align: left; border: black 1px solid;">Serie1</th>
+            <th style="text-align: left; border: black 1px solid;">Serie2</th>
+            <th style="text-align: left; border: black 1px solid;">Observacion</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rowsProductos}
+        </tbody>
+      </table>
+      <br />
+      <br />
+    </div>
+    <div style="width: 100%; float: left">
+      <div style="width: 100%; float: left">
+        <div style="width: 35%; float: left">Usuario: {txtUsuario}</div>
+      </div>
+      <br />
+      <br />
+    </div>
+  </body>
+</html>

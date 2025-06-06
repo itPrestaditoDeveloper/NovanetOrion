@@ -1,0 +1,258 @@
+﻿
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Confirmar Primer Pago Por partes</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    @*<form id="MyFormModal">*@
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Identidad, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Identidad, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Identidad, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CuotaEnLempiras, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-money-bill fa-fw"></i></span>
+                        </div>
+                        @Html.TextBoxFor(model => model.CuotaEnLempiras, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CuotaEnLempiras, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcCuentaContable, htmlAttributes: new { @class = "form-label" })
+                    <div class="input-group flex-nowrap">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-city"></i></span>
+                        </div>
+                        @Html.DropDownListFor(model => model.fcCuentaContable, new SelectList(ViewBag.ListaCuentaContable, "Value", "Text"), "", new { @class = "form-control select2", @style = "width:100%;" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcCuentaContable, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label text-muted">Origen:</label>
+                        <select type="text" id="txtOrigen" class="form-control "></select>
+                    </div>
+                </div>*@
+
+            <div class="col-sm-8">
+                <div class="form-group">
+                    @*@Html.LabelFor(model => model.fcImagenProducto, htmlAttributes: new { @class = "control-label" })*@
+                    <label> Subir Comprobante de pago</label>
+
+                    <form id="Imagen-dropzone" action="@Url.Action("FormFileResponse","Base")" method="post" enctype="multipart/form-data" class="dropzone needsclick">
+                        <div class="dz-message needsclick">
+
+                            <div class="dz-icon">
+                                <i class="fal fa-cloud-upload text-muted mb-3"></i>
+                            </div>
+                            <div>
+                                <span class="dz-text">Arrastre Imagen</span>
+                                <p class="text-sm text-muted">O Click para elegirla manualmente</p>
+                            </div>
+                        </div>
+                    </form>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Comentario: </label>
+                    <div class="input-group mar-btm">
+                        @Html.TextArea("Comentario", new { @class = "form-control" })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" id="btnGuardarPago" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+    @*</form>*@
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre").prop("disabled", true);
+    $("#Identidad").prop("disabled", true);
+
+    myDropzone = $('#Imagen-dropzone').dropzone({
+
+        autoProcessQueue: true,
+        uploadMultiple: true,
+        acceptedFiles: "image/*,video/*,.pdf",
+        maxFiles: 1,
+        addRemoveLinks: true,
+        dictMaxFilesExceeded: "Maximum upload limit reached",
+        dictInvalidFileType: "upload only JPG/PNG",
+
+        init: function () {
+            debugger;
+            var myDropzone = this;
+            myDropzone.on('maxfilesexceeded', function (file) {
+                this.removeAllFiles();
+                this.addFile(file);
+            });
+        }
+    });
+
+    //$(document).ready(function () {
+    //    Listado()
+    //});
+  //  Listado()
+       function Listado()
+       {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ListadoCuentas", "Solicitudes")",
+                type: "GET",
+                data: { },
+                //data: { IdCliente: IdCliente, IDentidad: IDentidad, IdSolicitud: IdSolicitud},
+                success: function (resp) {
+                    debugger;
+                    $("#txtOrigen").select2({ data: resp, width: "100%" });
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+       }
+
+    $("#btnGuardarPago").click(function () {
+        debugger;
+        document.getElementById('btnGuardarPago').disabled = true;
+        if ($("#CuotaEnLempiras").val() == "0") {
+            ToastrWarning("Advertencia", "Ingrese valores al monto");
+            document.getElementById('btnGuardarPago').disabled = false;
+            return;
+
+        }
+        if ($("#CuotaEnLempiras").val() == "0.00") {
+            ToastrWarning("Advertencia", "Ingrese valores al monto");
+            document.getElementById('btnGuardarPago').disabled = false;
+            return;
+        }
+        if ($("#CuotaEnLempiras").val() != @Model.fnCuotaMensualMonedaNacional) {
+            ToastrWarning("Advertencia", `EL valor esta incorrecto en lempiras, el valor es:${@Model.fnCuotaMensualMonedaNacional}`);
+            document.getElementById('btnGuardarPago').disabled = false;
+            return;
+        }
+
+        if ($("#CuotaEnLempiras").val() == "") {
+            ToastrWarning("Advertencia", "Ingrese valores al monto");
+            document.getElementById('btnGuardarPago').disabled = false;
+            return;
+        }
+        if ($("#fcCuentaContable").val() == "") {
+            ToastrWarning("Advertencia", "Seleccione la cuenta Contable");
+            document.getElementById('btnGuardarPago').disabled = false;
+            return;
+        }
+
+        var form_data = new FormData();
+        form_data.append("fcComentarioPagoInicial", $("#Comentario").val());
+        form_data.append("IDSolicitud", model.IDSolicitud);
+        form_data.append("CuotaEnLempiras", $("#CuotaEnLempiras").val());
+        form_data.append("fcCuentaContable", $("#fcCuentaContable :selected").val());
+        form_data.append("DatosDocumento.ImgenProducto", myDropzone[0].dropzone.files[0]);
+
+
+        $.ajax({
+            url: "@Url.Action("RegistrarPago", "Manto")",
+            type: "POST",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    document.getElementById('btnGuardarPago').disabled = false;
+                    var Comentario =  $("#Comentario").val();
+                      $.ajax({
+                            url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                            type: "POST",
+                            data: { IdSolicitud: model.IDSolicitud, IdCliente: model.idCliente, Observaciones: Comentario , Opcion: "Subir Primer  Pago"},
+                            success: function (respuesta) {
+
+                                CerrarModal();
+                                AlertaDinamicas(true, 'Exito', 'Actualizar Datos Estado Instalacion', 1);
+
+                            },
+                            error: function (respuesta) {
+                                AlertaDinamicas(false, 'Error', 'error Actualizar Estado Instalacion', 2);
+                            }
+                        })
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

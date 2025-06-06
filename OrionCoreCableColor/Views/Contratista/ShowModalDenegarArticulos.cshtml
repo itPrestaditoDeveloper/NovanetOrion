@@ -1,0 +1,130 @@
+﻿@model OrionCoreCableColor.Models.Contratista.DetalleInstalacionViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Cancelar Artículos con #Solicitud: @Model.fiIDSolicitud</h2>
+<input type="type" name="name" value="@Model.fiIDContratistaSolicitud" style="display:none" />
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body" id="modal">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group text-center">
+                                <div class="input-group mar-btm ">
+                                    <a class="btn btn-@Model.fcClase text-white col-lg-12 col-md-12">Estado Actual Instalacion: <b>@Model.fcDescripcion</b> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcNombre, htmlAttributes: new { @class = "control-label font-12" })
+                                <div class="input-group mar-btm">
+                                    @Html.EditorFor(model => model.fcNombre, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcArticulosdelContrato, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm">
+                                    @Html.EditorFor(model => model.fcArticulosdelContrato, new { htmlAttributes = new { @class = "form-control readOnly", @readonly = "readonly" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                        <br />
+                        <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Bitacora.fcComentario, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                                    </div>
+                                    @Html.TextAreaFor(model => model.Bitacora.fcComentario, new { @class = "form-control", style = "width: 400px;", id = "fcComentario" })
+
+
+                                </div>
+                                @Html.ValidationMessageFor(model => model.Bitacora.fcComentario, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+   </div>
+
+
+<div class="modal-footer">
+    <div class="clearfix" style="width:100%;">
+        <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+        <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+    </div>
+
+</div>
+
+</form>
+</div>
+
+
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+    $("#btnConfirmarEnvio").click(function () {
+        var fcComentario = $(`#fcComentario`).val();
+        var fcNombre = $(`#fcNombre`).val();
+
+        var fcArticulosdelContrato = $(`#fcArticulosdelContrato`).val();
+        debugger;
+        $.ajax({
+                url: "@Url.Action("DenegarArticulos", "Contratista")",
+            type: "POST",
+            data: { fiIDSolicitud: @Model.fiIDSolicitud, fiIDContratistaSolicitud: @Model.fiIDContratistaSolicitud, nombreCliente: fcNombre, fcComentario: fcComentario, fcArticulosdelContrato: fcArticulosdelContrato },
+            success: function (resp) {
+                if (resp.success) {
+
+                    ToastrSuccess("", resp.message);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.message);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

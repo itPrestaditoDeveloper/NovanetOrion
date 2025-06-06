@@ -1,0 +1,513 @@
+﻿<form id="MyFormModal">
+	<div class="panel-container">
+		<div class="col-lg-12">
+			<!-- Tabla de paquetes existente -->
+			<table id="paquetesTable" class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th id="informacionCuota" colspan="3"></th>
+					</tr>
+					<tr>
+						<th>ID Paquete</th>
+						<th>Nombre Paquete</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+				<tfoot id="footertable" style="display:none">
+					<tr>
+						<td id="direccion" colspan="2">
+							<select id="selectdireccionescli" class="form-control d-none">
+							</select>
+						</td>
+						<td id="direccioncliente" colspan="4">
+							<!-- Selección de direcciones existentes -->
+							<div class="row" id="rowselectdirec" style="display: none;">
+								<div class="col-12">
+									<select id="selectdirec" style="display:none;"></select>
+								</div>
+							</div>
+
+							<!-- Campos para una nueva dirección -->
+							<div class="row mt-3" id="rowdireccionnueva" style="display: none;">
+								<div class="col-md-4">
+									<label for="Geo_departamento">Departamento:</label>
+									<select id="Geo_departamento" class="form-control"></select>
+								</div>
+								<div class="col-md-4">
+									<label for="Geo_Municipio">Municipio:</label>
+									<select id="Geo_Municipio" class="form-control"></select>
+								</div>
+								<div class="col-md-4">
+									<label for="Geo_Barrio">Barrio:</label>
+									<select id="Geo_Barrio" class="form-control"></select>
+								</div>
+							</div>
+
+							<!-- Campo de texto para dirección detallada -->
+							<div class="row mt-3" id="direccionnueva" style="display: none;">
+								<div class="col-12">
+									<label for="detalleDireccion">Dirección Detallada:</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fal fa-map-marker-alt"></i></span>
+										</div>
+										<textarea id="detalleDireccion" class="form-control" aria-label="Dirección detallada"></textarea>
+									</div>
+								</div>
+								<div class="col-12">
+									<label for="CorreoElectronico">Correo Electronico:</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text"><i class="fal fa-map-marker-alt"></i></span>
+										</div>
+										<input type="text" id="txtCorreoElectronico" class="form-control" placeholder="">
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+
+			<!-- Nueva tabla para mostrar las existencias del paquete seleccionado -->
+			<h4>Existencias del Paquete Seleccionado</h4>
+			<table id="inventarioTable" class="table table-striped table-bordered" style="display: none;">
+				<thead>
+					<tr>
+						<th>Índice</th>
+						<th>Producto</th>
+						<!-- Las columnas dinámicas (ubicaciones) se agregarán aquí -->
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Las filas se agregarán dinámicamente -->
+				</tbody>
+			</table>
+		</div>
+	</div>
+</form>
+<script>
+    var Plazo = @Html.Raw(Json.Encode(ViewBag.ListaPlazos));
+    var Valor = @Html.Raw(Json.Encode(ViewBag.valor));
+    var listadoSolicitudes = @Html.Raw(Json.Encode(ViewBag.listadoTipoSolicitudes));
+    var idSolicitudesDireccionDiferente = @Html.Raw(Json.Encode(ViewBag.idSolicitudesDireccionDiferente));
+
+    var dataEnviar = {};
+    $("#selectdireccionescli").select2({ data: listadoSolicitudes }).val(null).trigger("change");
+    $("#Geo_departamento, #Geo_Municipio, #Geo_Barrio").select2({
+        width: "100%",
+        placeholder: "Seleccione una opción",
+        allowClear: true
+    });
+
+
+
+    function actualizarTablaInventario(idPaquete) {
+    // Ocultar la tabla mientras se reconstruye
+    $("#inventarioTable").hide();
+
+    // Destruir cualquier instancia previa de DataTables
+    if ($.fn.DataTable.isDataTable('#inventarioTable')) {
+        $('#inventarioTable').DataTable().destroy();
+    }
+
+    // Limpiar completamente la tabla (encabezados y cuerpo)
+    $("#inventarioTable thead").empty();
+    $("#inventarioTable tbody").empty();
+
+    // Reconstruir los encabezados base
+    $("#inventarioTable thead").append('<tr><th>Índice</th><th>Producto</th></tr>');
+
+    // Realizar la solicitud AJAX para obtener los datos
+    $.ajax({
+        url: '@Url.Action("ObtenerInformacionExistenciasPaquete", "PrecalificaCliente")',
+        type: 'GET',
+        data: { piIDPaquete: idPaquete },
+        dataType: 'json',
+        success: function (data) {
+            if (data && data.length > 0) {
+                // Obtener las ubicaciones únicas y ordenarlas
+                var ubicaciones = [...new Set(data.map(item => item.Ubicacion))].sort();
+
+                // Agregar los encabezados dinámicos (ubicaciones) a la tabla
+                ubicaciones.forEach(function (ubicacion) {
+                    $('#inventarioTable thead tr').append('<th>' + ubicacion + '</th>');
+                });
+
+                // Agrupar los datos por producto
+                var productosAgrupados = {};
+                data.forEach(function (item) {
+                    if (!productosAgrupados[item.FcProducto]) {
+                        productosAgrupados[item.FcProducto] = {
+                            FiIndex: item.FiIndex,
+                            Cantidades: {}
+                        };
+                    }
+                    productosAgrupados[item.FcProducto].Cantidades[item.Ubicacion] = item.FnCantidad;
+                });
+
+                // Rellenar el cuerpo de la tabla con los datos
+                Object.keys(productosAgrupados).forEach(function (producto) {
+                    var item = productosAgrupados[producto];
+                    var row = '<tr>' +
+                        '<td>' + item.FiIndex + '</td>' +
+                        '<td>' + producto + '</td>';
+
+                    // Agregar las cantidades para cada ubicación
+                    ubicaciones.forEach(function (ubicacion) {
+                        var cantidad = item.Cantidades[ubicacion] || 0;
+						row += `<td style = "background-color:${cantidad <= 0 ? "#f1d4d4" : ""} ">` + ConvertirDecimal(cantidad) + '</td>';
+                    });
+
+                    row += '</tr>';
+                    $("#inventarioTable tbody").append(row);
+                });
+
+                // Mostrar la tabla después de llenarla
+                $("#inventarioTable").show();
+
+                // Inicializar DataTables con la nueva estructura
+                $('#inventarioTable').DataTable({
+                    paging: true,
+                    searching: true,
+                    ordering: true
+                });
+            } else {
+                // Si no hay datos, mostrar un mensaje
+                $("#inventarioTable tbody").append('<tr><td colspan="2">No se encontraron existencias para este paquete</td></tr>');
+                $("#inventarioTable").show();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log("Error al cargar las existencias: ", error);
+            alert("Error al cargar las existencias del paquete");
+            $("#inventarioTable").show();
+        }
+    });
+}
+
+
+    $(document).ready(function () {
+        // Realizar una solicitud AJAX para cargar los datos de los paquetes
+        $.ajax({
+            url: '@Url.Action("CargarPaqueteGeneral", "PrecalificaCliente")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data) {
+                    // Obtener el primer elemento para determinar los encabezados dinámicos
+                    var firstItem = JSON.parse(data[0]);
+                    var headers = Object.keys(firstItem);
+
+                    // Definir los encabezados que no se mostrarán como columnas dinámicas
+                    var knownHeaders = ['fiIDPaquete', 'fcPaquete', 'fbSoloServicio'];
+                    var dynamicHeaders = headers.filter(h => !knownHeaders.includes(h));
+                    $("#informacionCuota").prop("colspan", headers.length);
+
+                    // Agregar los encabezados dinámicos a la tabla (excluye knownHeaders)
+                    dynamicHeaders.forEach(function (header) {
+                        if (header != 'fbSoloServicio') {
+                            $('#paquetesTable thead tr:nth-child(2)').append('<th>' + header + '</th>');
+                        }
+                    });
+
+                    // Paso 1: Preparar la obtención de fiMesesCondicion y fnMontoCondicion para todos los paquetes y plazos
+                    var promises = [];
+                    var packageConditions = {}; // Objeto para almacenar fiMesesCondicion y fnMontoCondicion por cada paquete y plazo
+
+                    // Iterar sobre cada paquete y plazo para obtener las condiciones
+                    data.forEach(function (item, rowIndex) {
+                        var parsedItem = JSON.parse(item);
+                        dynamicHeaders.forEach(function (header) {
+                            var value = parsedItem[header] || 0;
+                            if (value > 0) { // Solo obtener datos para valores válidos
+                                var infoPlazo = Plazo.find(x => x.fcDescripcionPlazo == header);
+                                var fiMeses = infoPlazo.fiMeses;
+                                var fnMonto = value;
+                                var idPaquete = parsedItem.fiIDPaquete;
+
+                                // Crear una clave única para almacenar el resultado
+                                var key = `${idPaquete}-${header}`;
+
+                                // Realizar una solicitud AJAX para obtener fiMesesCondicion y fnMontoCondicion
+                                var promise = $.ajax({
+                                    url: "@Url.Action("ObtenerInformacionMatrizSecundaria", "PrecalificaCliente")",
+                                    type: "Get",
+                                    data: {
+                                        fcIdentidad: $("#txtIDentidadCliente").val(),
+                                        fiMeses: fiMeses,
+                                        fnMonto: fnMonto
+                                    }
+                                }).then(function (resp) {
+                                    packageConditions[key] = {
+                                        fiMesesCondicion: resp.Condicion.fiMesesCondicion,
+                                        fnMontoCondicion: resp.Condicion.fnMontoCondicion
+                                    };
+                                });
+
+                                promises.push(promise);
+                            }
+                        });
+                    });
+
+                    // Paso 2: Esperar a que todas las solicitudes AJAX se completen, luego renderizar la tabla
+                    Promise.all(promises).then(function () {
+                        var tbody = $('#paquetesTable tbody');
+                        data.forEach(function (item, rowIndex) {
+                            var parsedItem = JSON.parse(item);
+                            var fbPaqueteServicio = parsedItem["fbSoloServicio"] || false;
+                            var row = '<tr>' +
+                                '<td>' + parsedItem.fiIDPaquete + '</td>' +
+                                `<td>${parsedItem.fcPaquete} (${parsedItem.fbSoloServicio ? "Servicio" : "Con Producto"})</td>`;
+
+                            // Agregar columnas dinámicas con los valores calculados
+                            dynamicHeaders.forEach(function (header, colIndex) {
+                                var value = parsedItem[header] || 0;
+                                var infoPlazo = Plazo.find(x => x.fcDescripcionPlazo == header);
+                                var plazoSoloServicio = infoPlazo.fiTipoPlazo == 1;
+                                var key = `${parsedItem.fiIDPaquete}-${header}`;
+                                var condition = packageConditions[key] || { fiMesesCondicion: 0, fnMontoCondicion: 0 };
+
+                                var checkbox = `<input type="checkbox"
+                                                class="plazo-checkbox"
+                                                data-row="${rowIndex}"
+                                                data-col="${header}"
+                                                data-valor="${value}"
+                                                data-plazo="${infoPlazo.fiIDPlazo}"
+                                                data-id-paquete="${parsedItem.fiIDPaquete}"
+                                                data-fiMeses="${infoPlazo.fiMeses}"
+                                                data-fcpaquete="${parsedItem.fcPaquete}"
+                                                ${fbPaqueteServicio == plazoSoloServicio && value > 0 ? "" : "disabled"}
+                                                />`;
+
+                                // Mostrar el formato: L. fnValor | fiMesesCondicion Cuo = L. fnMontoCondicion
+                                var displayText = value > 0
+                                    ? `L. ${ConvertirDecimal(value)} | ${condition.fiMesesCondicion} Cuo = L. ${ConvertirDecimal(condition.fnMontoCondicion)}`
+                                    : "";
+
+                                row += `<td style="background-color:${value == 0 ? "" : Valor > value || plazoSoloServicio ? "#18a899" : "#ffb61b"}" >
+                                        <div class="row">
+                                            <div class="col-lg-12 text-center price-display">
+                                                ${displayText}
+                                            </div>
+                                            <div class="col-lg-12 text-center">
+                                                ${checkbox}
+                                            </div>
+                                        </div>
+                                    </td>`;
+                            });
+
+                            row += '</tr>';
+                            tbody.append(row);
+                        });
+
+                        // Inicializar la tabla con DataTable para paginación, búsqueda y ordenamiento
+                        $('#paquetesTable').DataTable({
+                            "paging": true,
+                            "searching": true,
+                            "ordering": true
+                        });
+
+                        // Paso 3: Manejar la selección de los checkboxes
+                        $('#paquetesTable').on('change', '.plazo-checkbox', function () {
+                            var $this = $(this);
+                            var rowIndex = $this.data('row');
+                            var colName = $this.data('col');
+                            var isChecked = $this.is(':checked');
+
+                            if (isChecked) {
+                                var table = $('#paquetesTable').DataTable();
+
+                                // Desmarcar todos los checkboxes en todas las páginas
+                                table.cells().nodes().each(function (cell) {
+                                    var $checkbox = $(cell).find('.plazo-checkbox');
+                                    if ($checkbox.length && $checkbox[0] !== $this[0]) { // Excluir el checkbox actual
+                                        $checkbox.prop('checked', false);
+                                    }
+                                });
+                            }
+
+                            // Cargar los detalles del paquete seleccionado
+                            var url = "@Url.Action("CargarDetallePaquete", "PrecalificaCliente")";
+                            if (PaqueteSeleccionado.idPaquete != $this.data('id-paquete')) {
+                                $.ajax({
+                                    url: url,
+                                    type: "Post",
+                                    data: { idPaquete: $this.data('id-paquete') },
+                                    success: function (data) {
+                                        for (var item of data) {
+                                            item.fiIDPlazo = $this.data('plazo');
+                                            item.fnValorPaquete = $this.data('valor');
+                                            item.fiMeses = $this.data('fimeses');
+                                        }
+
+                                        $("#TablaPrincipal").css('display', '');
+                                        var tablaPrincipal = $.fn.dataTable.Api('#TablaPrincipal');
+                                        tablaPrincipal.clear();
+                                        tablaPrincipal.rows.add(data).draw(false);
+                                        dataPrincipal = data;
+                                    }
+                                });
+                            } else {
+                                for (var item of dataPrincipal) {
+                                    item.fiMeses = $this.data('fimeses');
+                                    item.fiIDPlazo = $this.data('plazo');
+                                    item.fnValorPaquete = $this.data('valor');
+                                }
+                            }
+
+                            // Actualizar el objeto PaqueteSeleccionado con los datos del paquete seleccionado
+                            PaqueteSeleccionado.idPaquete = $this.data('id-paquete');
+                            PaqueteSeleccionado.idPlazo = $this.data('plazo');
+                            PaqueteSeleccionado.fnValor = $this.data('valor');
+                            PaqueteSeleccionado.fcPaquete = $this.data('fcpaquete');
+                            PaqueteSeleccionado.fcMesesPlazo = $this.data('col');
+                            PaqueteSeleccionado.fiMeses = $this.data('fimeses');
+
+                            // Obtener la información de la matriz secundaria para el paquete seleccionado
+                            $.ajax({
+                                url: "@Url.Action("ObtenerInformacionMatrizSecundaria", "PrecalificaCliente")",
+                                type: "Get",
+                                data: { fcIdentidad: $("#txtIDentidadCliente").val(), fiMeses: PaqueteSeleccionado.fiMeses, fnMonto: PaqueteSeleccionado.fnValor },
+                                success: function (resp) {
+                                    PaqueteSeleccionado.fiMesesCondicion = resp.Condicion.fiMesesCondicion;
+                                    PaqueteSeleccionado.fnMontoCondicion = resp.Condicion.fnMontoCondicion;
+
+                                    // Actualizar el encabezado con el mensaje original
+                                    $("#informacionCuota").html(`<span style="color:red;">Cliente deberá pagar ${resp.Condicion.fiMesesCondicion} Cuotas adelantadas cuyo valor total de pago inicial es de L. ${ConvertirDecimal(resp.Condicion.fnMontoCondicion)}</span>`);
+
+                                    console.log(resp);
+                                    if (resp.Direcciones.length > 0) {
+                                        MostrarDirecciones();
+                                        fbClienteExiste = true;
+                                    } else {
+                                        fbClienteExiste = false;
+                                    }
+
+                                    // Mapear las direcciones para el selector
+                                    var direcciones = resp.Direcciones.map(x => {
+                                        return {
+                                            id: x.fiIDSolicitud,
+                                            text: `Solicitud #${x.fiIDSolicitud} | ${x.fcDireccionDetallada}`
+                                        };
+                                    });
+
+                                    $("#selectdirec").select2({
+                                        data: direcciones
+                                    }).val(null).trigger("change");
+
+                                    // Nueva solicitud AJAX para obtener las existencias del paquete seleccionado
+									actualizarTablaInventario(PaqueteSeleccionado.idPaquete);
+
+                                }
+                            });
+                        });
+                    }).catch(function (error) {
+                        console.log("Error al obtener las condiciones de los paquetes: ", error);
+                        alert("Error al cargar las condiciones de los paquetes");
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error: " + error);
+                alert("Error al cargar los datos");
+            }
+        });
+
+        $("#selectdireccionescli").change(function () {
+            var idSeleccionado = $(this).val();
+			$("#selectdirec").select2().val(null).trigger("change");
+            $("#rowdireccionnueva").hide();
+            $("#direccionnueva").hide();
+
+            $("#selectdirec").hide();
+            $("#rowselectdirec").hide();
+
+            if (!idSolicitudesDireccionDiferente.some(x => x == idSeleccionado)) {
+                $("#selectdirec").show();
+                $("#rowselectdirec").show();
+                $("#Geo_departamento, #Geo_Municipio, #Geo_Barrio").val(null).trigger("change");
+                $("#detalleDireccion").val("");
+                $("#txtCorreoElectronico").val("");
+                return;
+            }
+
+            if (idSolicitudesDireccionDiferente.some(x => x == idSeleccionado)) {
+                $("#rowdireccionnueva").show();
+                $("#direccionnueva").show();
+
+                $("#Geo_departamento, #Geo_Municipio, #Geo_Barrio").empty().trigger("change");
+
+                // Llamar a la API para obtener los departamentos
+                $.ajax({
+                    url: "@Url.Action("GetDepartamentos", "PrecalificaCliente")",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        $("#Geo_departamento").append('<option value="">Seleccione un Departamento</option>');
+                        $.each(data, function (index, item) {
+                            $("#Geo_departamento").append('<option value="' + item.fiCodDepartamento + '">' + item.fcDepartamento + '</option>');
+                        });
+                        $("#Geo_departamento").trigger("change");
+                    },
+                    error: function () {
+                        alert("Error al obtener los departamentos");
+                    }
+                });
+            }
+        });
+
+        $("#Geo_departamento").change(function () {
+            var departamentoId = $(this).val();
+            $("#Geo_Municipio").empty().append('<option value="">Cargando...</option>').trigger("change");
+
+            if (departamentoId) {
+                $.ajax({
+                    url: "@Url.Action("GetMunicipios", "PrecalificaCliente")",
+                    type: "GET",
+                    data: { fiCodDepartamento: departamentoId },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#Geo_Municipio").empty().append('<option value="">Seleccione un Municipio</option>');
+                        $.each(data, function (index, item) {
+                            $("#Geo_Municipio").append('<option value="' + item.fiCodMunicipio + '">' + item.fcMunicipio + '</option>');
+                        });
+                        $("#Geo_Municipio").trigger("change");
+                    },
+                    error: function () {
+                        alert("Error al obtener los municipios");
+                    }
+                });
+            } else {
+                $("#Geo_Municipio, #Geo_Barrio").empty().trigger("change");
+            }
+        });
+
+        $("#Geo_Municipio").change(function () {
+            var departamentoId = $("#Geo_departamento").val();
+            var municipioId = $(this).val();
+            $("#Geo_Barrio").empty().append('<option value="">Cargando...</option>').trigger("change");
+
+            if (municipioId) {
+                $.ajax({
+                    url: "@Url.Action("GetBarrio", "PrecalificaCliente")",
+                    type: "GET",
+                    data: { fiCodDepartamento: departamentoId, fiCodMunicipio: municipioId },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#Geo_Barrio").empty().append('<option value="">Seleccione un Barrio</option>');
+                        $.each(data, function (index, item) {
+                            $("#Geo_Barrio").append('<option value="' + item.fiCodBarrio + '">' + item.fcBarrio + '</option>');
+                        });
+                        $("#Geo_Barrio").trigger("change");
+                    },
+                    error: function () {
+                        alert("Error al obtener los barrios");
+                    }
+                });
+            } else {
+                $("#Geo_Barrio").empty().trigger("change");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,221 @@
+﻿@model  OrionCoreCableColor.Models.Mensajeria.ListTelegramViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Enviar Mensaje por @Model.fcNombre
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label">Destinatario:</label>
+                <div class="input-group mar-btm">
+
+                    @Html.DropDownList("fiIDChatBot", new SelectList(ViewBag.ListaUsuarios, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;", @multiple = "multiple" })
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label">Mensaje:</label>
+                <div class="input-group mar-btm">
+
+                    @Html.TextArea("fcMensaje", new { @class = "form-control", @rows = "4" })
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12" style="margin-top:5px;">
+            <label class="control-label">Archivos: </label>
+        </div>
+
+        <div class="col-sm-12" style="margin-top:5px;" id="archivosSeleccionados">
+
+        </div>
+        <div class="col-sm-10" style="margin-top:5px;">
+            <div class="form-group mb-0">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile" multiple>
+                    <label class="custom-file-label" for="customFile">Archivos</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <audio style="float:right; display:none;" id="audioPlayback" controls></audio>
+                <button class="btn btn-warning" id="toggleRecording" style="float:right; margin-top:6px; margin-right:5px;"><i class="fal fa-microphone"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;height:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="EnviarMensaje" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+<script>
+    debugger;
+    var archivos = [];
+    var audioPlayback = document.getElementById('audioPlayback');
+    var mediaRecorder;
+    var audioChunks = [];
+    var isRecording = false;
+    var stream;
+    var audioBlob;
+    var audioFile = null;
+    var fotografia = null;
+    $("#fiIDChatBot").select2({ width: "100%", dropdownParent: $("#MyModal") });
+    var toggleButton = document.getElementById('toggleRecording');
+
+    $("#customFile").change(function (e) {
+
+        var files = e.target.files;
+
+        for (var item of files) {
+            if (archivos.length > 0) {
+                if (archivos.some(x => x.name == item.name)) {
+                    ToastrWarning("Advertencia", `${item.name} Documento ya fue registrado`);
+                    continue;
+                }
+            }
+            archivos.push(item);
+        }
+        $("#customFile").val("");
+
+        MostrarArchivos();
+    });
+
+
+    function MostrarArchivos() {
+        $("#archivosSeleccionados").empty();
+        var i = 0;
+
+        for (item of archivos) {
+            var $option = $(`<div class="col-sm-12 col-xl-12 inventario" id="salidaInventario_${item.fiIDInventarioMovimientoMaestro}">
+                                        <div class="p-1 bg-info-700 rounded overflow-hidden position-relative text-white mb-g">
+                                            <div class="row">
+                                                <div class="col-sm-10" style="float:right;">
+                                                    <h3 class="text-white display-1 d-block l-h-n m-0 fw-500">
+                                                        <small class="m-0 l-h-n">
+                                                                <i class="fal fal fa-file"></i> ${item.name} ${(item.size / (1024 * 1024)).toFixed(2)} MB
+                                                        </small>
+                                                    </h3>
+
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <button name="eliminarArchivo" data-index="${archivos.indexOf(item)}" class="btn btn-sm btn-link text-white"><i class="fal fa-times"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`);
+
+            $("#archivosSeleccionados").append($option);
+            i++;
+        }
+    }
+
+
+    $("#archivosSeleccionados").on("click", "button[name=eliminarArchivo]", function () {
+        var index = $(this).data("index");
+        archivos.splice(index, 1);
+        MostrarArchivos();
+    });
+
+
+    $("#EnviarMensaje").click(function () {
+        var destinatarios = $("#fiIDChatBot").val();
+        if (destinatarios.length == 0) {
+            ToastrWarning("Advertencia", "Seleccione destinatarios");
+            return;
+        }
+        var mensaje = $("#fcMensaje").val() ?? "";
+        var text = mensaje.trim();
+        if (text.length === 0) {
+            ToastrWarning("Advertencia", "Ingrese un mensaje");
+            return;
+        }
+
+        var form_data = new FormData();
+
+        form_data.append("fcCodigo", "@Model.fcCodigo");
+        for (var i = 0; i < destinatarios.length; i++) {
+            form_data.append(`fiIDDestinatarios[${i}]`, destinatarios[i]);
+        }
+
+        form_data.append("fcMensaje", $("#fcMensaje").val());
+
+        if (archivos.length > 0) {
+            for (var i = 0; i < archivos.length; i++) {
+                form_data.append(`fvArchivos[${i}]`, archivos[i]);
+            }
+        }
+
+        $.ajax({
+            url: '@Url.Action("EnviarMensajeTelegram", "Mensajeria")',
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (data) {
+                CerrarModal();
+                return data;
+
+            }, error: function () {
+                // ToastrError("Error", resp.Mensaje);
+                $("#btnGuardarForm").show();
+            }
+        });
+
+
+    });
+
+
+     toggleButton.onclick = async () => {
+        if (!isRecording) {
+            // Empezar la grabación
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+                isRecording = true;
+                toggleButton.innerHTML = "<i class='fal fa-stop'></i>";
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    var audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    var audioURL = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioURL;
+                    isRecording = false;
+                    toggleButton.innerHTML = "<i class='fal fa-microphone'></i>";
+                    audioFile = new File([audioBlob], `audio_${moment(new Date()).format("DD_MM_YYYY HH_mm")}.wav`, { type: 'audio/wav' });
+
+                    stream.getTracks().forEach(track => track.stop());
+                    archivos.push(audioFile);
+                    MostrarArchivos();
+                };
+            } catch (error) {
+                console.error("Error al acceder al micrófono: ", error);
+            }
+        } else {
+            // Detener la grabación
+            mediaRecorder.stop();
+        }
+    };
+
+
+</script>

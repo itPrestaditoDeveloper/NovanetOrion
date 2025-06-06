@@ -1,0 +1,1039 @@
+﻿@using OrionCoreCableColor.App_Helper
+<div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%; color:white;">
+    <nav id="js-primary-nav" class="primary-nav" role="navigation">
+
+        <div class="info-card justify-content-center align-items-center" style="width: 100%;">
+            <div class="page-logo-link d-flex  justify-content-center align-items-center">
+                <img style="width: 60%; height: 60%; " class="profile-image rounded-circle img-fluid" src="~/Content/img/AvatarUsuario/11.png" alt="Profile Picture">
+            </div>
+            <img src="~/Content/img/fondo_aside.jpg" class="cover img-fluid" alt="cover">
+        </div>
+        <div class="page-logo d-flex justify-content-center align-items-center">
+            <img src="~/Content/img/LogoCabeceraOrion.png" alt="ORION" aria-roledescription="logo" style="width:100%;height:auto;">
+
+        </div>
+        <ul class="nav-menu js-nav-builtr text-center">
+
+            <li class="btn-group text-center align-items-center" style="width:100%;">
+                <button class="btn btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> </button>
+                <div class="dropdown-menu">
+                    <a href="@Url.Action("LogOff","Account")" class="dropdown-item"> LogOut </a>
+                </div>
+            </li>
+        </ul>
+
+
+
+        <!--
+    TIP: The menu items are not auto translated. You must have a residing lang file associated with the menu saved inside dist/media/data with reference to each 'data-i18n' attribute.
+    -->
+        <ul id="js-nav-menu" class="nav-menu text-white">
+
+            @if (User.IsInRole("Orion_Acceso_Dashboard"))
+            {
+                <li>
+                    <a href="@Url.Action("Index","Home")" title="Application Intel" data-filter-tags="Seguridad">
+                        <i class="fal fa-home"></i>
+                        <span class="nav-link-text" data-i18n="nav.ControlUsuarios" style="color:white;">Dashboard</span>
+                    </a>
+
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="@Url.Action("Index","Home")" title="Application Intel" data-filter-tags="Seguridad">
+                        <i class="fal fa-home"></i>
+                        <span class="nav-link-text" data-i18n="nav.ControlUsuarios" style="color:white;">Inicio</span>
+                    </a>
+
+                </li>
+            }
+            @if (User.IsInRole("Orion_Acceso_Saris"))
+            {
+                <li>
+                    <a href="@Url.Action("RedireccionarSaris", "Account")" title="Application Intel" data-filter-tags="Saris">
+                        <i class="fal fa-ticket-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.ControlUsuarios" style="color:white;">Saris</span>
+                    </a>
+
+                </li>
+            }
+            @if (User.IsInRole("Orion_AccederABaseCallCenter"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Contratista">
+                        <i class="fal fa-user-cog"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Base CallCenter</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("DashboardGestiones", "BaseClientes")" data-filter-tags="blank page" class=" waves-effect waves-themed">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("BaseClienteBandeja", "BaseClientes")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Lista de Clientes</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("BandejaClientesPotenciales", "BaseClientes")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes Potenciales</span>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Orion_FiltrosGestion_BaseCallCenter"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ListaFiltroBaseClietes", "BaseClientes")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Lista de Clientes por Agentes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("FiltroAgenteBaseCallCenter", "BaseClientes")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Dashboard por Agentes</span>
+                                </a>
+                            </li>
+                        }
+
+                        <li>
+                            <a href="@Url.Action("BandejaFuenteClientesPotenciales", "BaseClientes")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mantenimiento Fuente Clientes Potenciales</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="@Url.Action("BandejaEstadoclientePotencial", "BaseClientes")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mantenimiento Estatus Clientes Potenciales</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+
+
+
+            @if (User.IsInRole("coreseguridad_AccesoSeguridadTecnicos") || User.IsInRole("coreseguridad_AccesoAlSistema"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Seguridad">
+                        <i class="fal fa-user-lock"></i>
+                        <span class="nav-link-text" data-i18n="nav.ControlUsuarios" style="color:white;">Seguridad</span>
+                    </a>
+                    <ul>
+                        @if (User.IsInRole("coreseguridad_AccesoAlSistema"))
+                        {
+                            <li>
+                                <a href="@Url.Action("index","usuario")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Registrar Usuario</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","role")" data-filter-tags="blank page">
+                                    <i class="fal fa-lock fa-fw"></i>
+                                    <span class="nav-link-text" style="color:white;"><strong>Roles</strong></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("index","permiso")" data-filter-tags="blank page">
+                                    <i class="fal fa-lock fa-fw"></i>
+                                    <span class="nav-link-text" style="color:white;"><strong>Permisos</strong></span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_AccesoSeguridadTecnicos"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexContratista","usuario")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Contratista</span>
+                                </a>
+                            </li>
+                        }
+                        
+                    </ul>
+                </li>
+            }
+
+            @if (User.IsInRole("coreseguridad_AccesoADatosCliente"))
+            {
+
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Cliente">
+                        <i class="fal fa-user-cog"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Clientes</span>
+                    </a>
+                    <ul>
+                        @if (User.IsInRole("coreseguridad_AccesoConsultarCliente"))
+                        {
+                            <li>
+                                <a href="@Url.Action("BuscarCliente", "PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Consultar Cliente</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("PrecalificadosListado", "PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes Precalificados</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_AccesoClienteSolicitudes"))
+                        {
+                            <li>
+                                <a href="@Url.Action("Solicitudes_Bandeja", "Solicitudes")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Solicitudes</span>
+                                </a>
+                            </li>
+
+                        }
+                        @if (User.IsInRole("Orion_Accesso_RenovacionSolicitud"))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Renovacion")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Solicitudes Renovacion</span>
+                                </a>
+                            </li>
+
+                        }
+                        @if (User.IsInRole("Orion_Acceso_MantoSolicitudes"))
+                        {
+
+                            <li>
+                                <a href="@Url.Action("ListaSolicitudesDeclinadas", "Solicitudes")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Solicitudes Declinadas</span>
+                                </a>
+                            </li>
+                        }
+
+
+                        @if (User.IsInRole("Orion_Acceso_SoporteCliente"))
+                        {
+                            <li>
+                                <a href="@Url.Action("Bandeja_ClienteFinales", "PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Soporte Cliente</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_Acceso_MensajeriaMasivaCliente"))
+                        {
+                            <li>
+                                <a href="@Url.Action("MensajeriaMasiva", "Base")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mensajeria Masiva</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="@Url.Action("PromosMensajeriaMasiva", "Base")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mensajeria Promociones</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="@Url.Action("Index", "Notificaciones")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Usuarios App Móvil</span>
+                                </a>
+                            </li>
+                        }
+
+
+                        @if (User.IsInRole("Orion_Acceso_SoporteCliente"))
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "ConciliacionClientes")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Conciliación Clientes</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_Clientes_Cepheus_API"))
+                        {
+                            <li>
+                                <a href="@Url.Action("CREACIONCLIENTECEPHEUS", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-file-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Consulta API</span>
+                                </a>
+                            </li>
+                        }
+
+                        
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("coreseguridad_AccesoVentas"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Cliente">
+                        <i class="fal fa-user-headset"></i>
+                        <span class="nav-link-text" data-i18n="nav.vendedores" style="color:white;">Ventas</span>
+                    </a>
+                    <ul>
+                        @if (User.IsInRole("coreseguridad_AccesoMapaCoberturas"))
+                        {
+
+                            <li>
+                                <a href="@Url.Action("MapaCobertura", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-map"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Cobertura</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_AccesoBandejasComisionesNovanet"))
+                        {
+
+                            <li>
+                                <a href="@Url.Action("VendedorExterno", "PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Bandeja Comisiones</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_AccesoComisiones"))
+                        {
+
+                            <li>
+                                <a href="@Url.Action("BandejaComisionesVendedor", "PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">mis Comisiones</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_Acceso_RegistroPago"))
+                        {
+                            <li>
+                                <a href="@Url.Action("PosteoPago","Prestamo")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Posteo Pago</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("RegistrarPago","Prestamo")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Pagos del dia</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ClientesPrimeraCuota","Prestamo")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes Primera Cuota</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ClientesPagoHoy","Prestamo")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes pagos por Fecha</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ClientesPagoPendientes","Prestamo")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes en atraso</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Bandeja_VendedoresCalleRepartidores","PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Vendedores Interno/Externo</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("ViewDistribuidores","PrecalificaCliente")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Distribuidores</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Referidos")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Referidos Por Clientes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","SolicitudesAdicion")" data-filter-tags="blank page">
+                                    <i class="fal fa-cart-plus"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Solicitudes de Adición Producto</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("AdicionDeEquipo", "Contratista")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Adición de Equipo</span>
+                                </a>
+                            </li>
+
+                            @*<li>
+                <a href="@Url.Action("Bandeja_Solicitudes_Productos", "Solicitudes")" data-filter-tags="blank page">
+                    <i class="fal fa-file-alt"></i>
+                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Bandeja de Solicitudes (Adición de Productos)</span>
+                </a>
+
+            </li>*@
+
+                        }
+                        @if (User.IsInRole("Orion_AccesoVentas_Facturacion"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexFacturacion","Prestamo")" data-filter-tags="blank page">
+                                    <i class="fal fa-shopping-cart"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Facturar</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+
+                </li>
+            }
+            @if (User.IsInRole("Orion_Acceso_Credito"))
+            {
+
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Cliente">
+                        <i class="fal fa-user-headset"></i>
+                        <span class="nav-link-text" data-i18n="nav.vendedores" style="color:white;">Creditos</span>
+                    </a>
+                    <ul>
+
+                        <li>
+                            <a href="@Url.Action("Bandeja_Credito", "Prestamo")" data-filter-tags="blank page">
+                                <i class="fal fa-user"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Prestamos</span>
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="@Url.Action("Bandeja_CreditoCancelado", "Prestamo")" data-filter-tags="blank page">
+                                <i class="fal fa-user"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Credito Cancelado</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
+            }
+
+            @if (User.IsInRole("Orion_AccesoSoporte"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Contratista">
+                        <i class="fal fa-user-shield"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Soporte</span>
+                    </a>
+                    <ul>
+                        @if (User.IsInRole("Orion_AccesoSoporte_ONUSOLT"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexEquiposCliente", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-router fa-fw"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">ONUs y OLTs</span>
+                                </a>
+                            </li>
+
+
+                        }
+
+
+                        @if (User.IsInRole("Orion_AccessoSoporte_MapaMufas"))
+                        {
+                            <li>
+                                <a href="@Url.Action("MapaCobertura", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-map"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Cobertura</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("MapaSoporteTecnicos", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-map-marked-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mufas</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccessoSoporte_Monitoreo"))
+                        {
+                            <li>
+                                <a href="@Url.Action("MapaConectividad", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-map-marked-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Monitoreo</span>
+                                </a>
+                            </li>
+                        }
+
+
+                        @if (User.IsInRole("Orion_AccessoSoporte_MapasKMZ"))
+                        {
+                            <li>
+                                <a href="@Url.Action("MapasKMZ", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-map-marked-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mapas KMZ</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccessoSoporte_RespuestaApi"))
+                        {
+                            <li>
+                                <a href="@Url.Action("BandejaRespuestaApiCpheus", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-map-marked-alt"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Servicio API</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccesoSoporte_Auditoria"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexAuditoria", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Auditoria de fibra</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoSoporte_AuditoriaInventario"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexControlInvventario", "Soporte")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Auditoria de Inventario</span>
+                                </a>
+                            </li>
+                        }
+
+
+
+
+                    </ul>
+                </li>
+            }
+
+            @if (User.IsInRole("coreseguridad_AccesoSeguridadTecnicos") || User.IsInRole("Orion_Contratista"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Contratista">
+                        <i class="fal fa-user-cog"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Contratista</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("ContratistaBandeja", "Contratista")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mis instalaciones</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("OrdendeTRabajo", "Contratista")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Orden de trabajo (SOP)</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("coreseguridad_AccesoSolicitudesTecnicos"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Contratista">
+                        <i class="fal fa-user-cog"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Tecnico</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("BandejaSolicitudesAsignadasTecnico","Tenico")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Mis instalaciones</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("BandejaOrdenesTrabajoAsignadasTecnico","Tenico")" data-filter-tags="blank page">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Ordenes de trabajo</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            }
+
+            @if (User.IsInRole("coreseguridad_AccesoReportes"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Reporte">
+                        <i class="fal fa-file-alt"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Reportes</span>
+                    </a>
+                    <ul>
+                        @if (User.IsInRole("coreseguridad_AccesoReportesClientes"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ReportesClientes", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Reporte de Clientes</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ReportesClientesFinalesInstalados", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Reporte oficiales por venta </span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="@Url.Action("ReportesSolicitudesPorAsesor", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Reporte solicitudes por asesor </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ReportesClientesFinalesInstaladosGlobalPDF", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Reporte General </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ReportesClientesMesGratis", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Cliente Mes Gratis </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ReporteClientesCortados", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes Cortados </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("ReporteClientesDescargadoAplicacion", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Iniciado Aplicacion </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_IngresoGastosPublicidad"))
+                        {
+                            <li>
+                                <a href="@Url.Action("BandejaIngresoGastoPublicidad", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Bandeja Gastos Publicidad </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("BandejaClientesConectadosPorRobchat", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes por Robchat </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("BandejaClientesPorTerminarContrato", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Clientes por Finalizar </span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("coreseguridad_ReportesGerenciales"))
+                        {
+                            <li>
+                                <a href="@Url.Action("BandejaClientesCancelados", "Reportes")" data-filter-tags="blank page">
+                                    <i class="fal fa-user"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">
+                                        Clientes Cancelados
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+
+            @if (User.IsInRole("orion_AccesoInventario"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Inventario">
+                        <i class="fal fa-router"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Inventario</span>
+                    </a>
+                    <ul>
+
+                        <li>
+                            <a href="javascript:void(0);" title="Forum" data-filter-tags="pages forum" class=" waves-effect waves-themed" aria-expanded="false">
+                                <i class="fal fa-file-alt"></i>
+                                <span class="nav-link-text" data-i18n="nav.pages_forum">Reportes</span>
+
+                            </a>
+                            <ul style="display: none;">
+                                @if (User.IsInRole("Orion_AccesoInventario_Resumen"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("IndexResumen","Productos")" data-filter-tags="blank page">
+
+                                            <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Resumen</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.IsInRole("Orion_AccesoInventario_Resumen"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("IndexCantidadProductosIngresados","Productos")" data-filter-tags="blank page">
+
+                                            <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Inventario Ingresado</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.IsInRole("Orion_AccesoInventario_InventarioPorUbicacion"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("IndexInventarioPorUbicacion","Productos")" data-filter-tags="blank page">
+
+                                            <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Inventario por Ubicacion</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0);" title="Forum" data-filter-tags="pages forum" class=" waves-effect waves-themed" aria-expanded="false">
+                                <i class="fal fa-toolbox"></i>
+                                <span class="nav-link-text" data-i18n="nav.pages_forum">Mantenimientos</span>
+
+                            </a>
+                            <ul style="display: none;">
+                                @if (User.IsInRole("Orion_AccesoInventario_Proveedores"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index","Proveedores")" data-filter-tags="blank page">
+                                            <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Proveedores</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.IsInRole("Orion_AccesoInventario_Productos"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("IndexProductoMaestro","Productos")" data-filter-tags="blank page">
+                                            <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Productos</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+
+
+
+                        @if (User.IsInRole("Orion_AccesoInventario_IngresoInventario"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexInventario","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-download"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Ingreso de Inventario</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoInventario_SalidaInventario"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexSalidaInventario","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-upload"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Salida de Bodega</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoInventario_Devolucion"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexDevolucion","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-exchange"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Devolucion de Inventario</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccesoInventario_Instalacion"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexInventarioInstalacion","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-tools"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Instalacion Cliente</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccesoInventario_VentaProducto"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexFacturacion","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-shopping-cart"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Ventas</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoInventario_VentaPrestadito"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexFacturacionPrestadito","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-sack-dollar"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Prestadito</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccessoAjusteInventario"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexProductosMovimientoDetalle","Productos")" data-filter-tags="blank page">
+                                    <i class="fal fa-screwdriver"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Traslado de inventario</span>
+                                </a>
+                            </li>
+                        }
+
+
+                    </ul>
+                </li>
+            }
+
+            @if (User.IsInRole("orion_AccesoMantenimientos"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Mantenimientos">
+                        <i class="fal fa-tools"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Mantenimientos</span>
+                    </a>
+                    <ul>
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_Marcas"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexCatalogoMarcas", "Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Marcas</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_Modelos"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexCatalogoModelos","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Modelos</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_TipoProducto"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexCatalogoTipoProducto","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Tipo Producto</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_Ubicaciones"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexCatalogoUbicaciones","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Ubicaciones</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_Ubicaciones"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexColonias","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Colonias</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_TipoMovimiento"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexCatalogoTipoMovimientos","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Movimientos</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_Paquetes"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexPaquetes","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Paquetes</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_OLT"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexListaOLT","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">OLT</span>
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_OLT"))
+                        {
+                            <li>
+                                <a href="@Url.Action("AsignarTecnicosUsuario","Contratista")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Tecnicos por Contratista</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Orion_AccesoMantenimientos_UbicacionPorUsuario"))
+                        {
+                            <li>
+                                <a href="@Url.Action("IndexUbicacionesPorUsuarios","Mantenimiento")" data-filter-tags="blank page">
+                                    <i class="fal fa-toolbox"></i>
+                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Ubicaciones por Usuario</span>
+                                </a>
+                            </li>
+                        }
+
+
+                    </ul>
+                </li>
+            }
+            @if (User.IsInRole("Orion_Acceso_MantoSolicitudes"))
+            {
+                <li>
+                    <a href="@Url.Action("Solicitudes","Manto")" data-filter-tags="blank page">
+                        <i class="fal fa-toolbox"></i>
+                        <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Manto.Solicitudes</span>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Orion_Acceso_Configuraciones"))
+            {
+                <li>
+                    <a href="@Url.Action("Cotizador","Home")" data-filter-tags="blank page">
+                        <i class="fal fa-money-bill"></i>
+                        <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Cotizador</span>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Orion_Ver_Rentabilidad"))
+            {
+
+                <li>
+                    <a href="@Url.Action("RentabilidadPaquetes","Home")" data-filter-tags="blank page">
+
+                        <i class="fal fa-analytics"></i>
+                        <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Rentabilidad</span>
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Orion_Mensajeria"))
+            {
+                <li>
+                    <a href="#" title="Application Intel" data-filter-tags="Contratista">
+                        <i class="fal fa-comment-alt-lines fa-fw"></i>
+                        <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Mensajeria</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("IndexTelgramBot","Mensajeria")" data-filter-tags="blank page">
+                                <i class="fal fa-comment-alt-lines"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Telegram</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("IndexSms","Mensajeria")" data-filter-tags="blank page">
+                                <i class="fal fa-comment-alt-lines"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Sms</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("IndexCorreo","Mensajeria")" data-filter-tags="blank page">
+                                <i class="fal fa-envelope"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Correo</span>
+                            </a>
+                        </li>
+                        @*<li>
+                            <a href="@Url.Action("IndexWhatsapp","Mensajeria")" data-filter-tags="blank page">
+                                <i class="fal fa-comment-alt-lines"></i>
+                                <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Whatsapp</span>
+                            </a>
+                        </li>*@
+                    </ul>
+                </li>
+            }
+
+
+            @if (User.IsInRole("Orion_Acceso_Configuraciones"))
+            {
+                <li>
+                    <a href="@Url.Action("IndexConfiguraciones","Mantenimiento")" data-filter-tags="blank page">
+                        <i class="fal fa-cogs"></i>
+                        <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Configuraciones</span>
+                    </a>
+                </li>
+            }
+
+
+            @*<li>
+            <a href="#" title="Application Intel" data-filter-tags="Contrato">
+                <i class="fal fa-file-contract"></i>
+                <span class="nav-link-text" data-i18n="nav.Clientes" style="color:white;">Contratos</span>
+            </a>
+            <ul>
+                <li>
+                    <a href="@Url.Action("GuardarContrato","Contrato")" data-filter-tags="blank page">
+                        <i class="fal fa-file-edit"></i>
+                        <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Editor</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>*@
+
+
+        </ul>
+
+
+    </nav>
+
+</div>

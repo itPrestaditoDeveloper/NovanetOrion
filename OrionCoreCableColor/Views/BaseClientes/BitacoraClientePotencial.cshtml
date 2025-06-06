@@ -1,0 +1,218 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Generar Bitacora al Cliente</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Comentario</label>
+                        <input id="fcomentario" class="form-control" type="text" placeholder="Escriba La Direccion" />
+                        <span class="text-danger" id="fcomentarioAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Estatus: </label>
+                        <select id="fcEstatusCliente" class="form-select form-control">
+                        </select>
+                        <span class="text-danger" id="fcEstatusAlerta"></span>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaBitacoraClientesPotenciales">
+                        <thead>
+                            <tr>
+                                <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                            </tr>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Usuario</th>
+                                <th>Comentario</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+
+
+    <div class='test col-sm-12'>
+        <br />
+        <div style='float: right;'>
+            <button type="button" id="btnGuardarCliente" class="btn btn-success">
+                Guardar Cliente
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/Content/js/loading/loading.js"></script>
+<script>
+    var fiIdClientePotencial = @ViewBag.FiIdClientePotenciales;
+    var fiidestatus = @ViewBag.fiEstatus;
+
+
+    $(document).ready(function () {
+        LlenarSelectDinamicamente()
+    });
+
+
+
+
+    $(`#btnGuardarCliente`).on(`click`, function () {
+        H5_loading.show();
+
+        //Validaciones();
+        var comentario = $(`#fcomentario`).val();
+        var estatuscliente = $(`#fcEstatusCliente`).val();
+
+        var ModeloaEnviar = {
+            fiIdClientesPotenciales: fiIdClientePotencial,
+            fcomentario: comentario,
+            fiEstatus: estatuscliente
+        }
+        console.log(ModeloaEnviar);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GuardarBitacoraClientePotencias", "BaseClientes")",
+            data: { modelo: ModeloaEnviar},
+            error: function (xhr, ajaxOptions, thrownError) {
+                H5_loading.hide();
+                var dataerror = { Titulo: "Error", Mensaje: "No se Guardo El Cliente Potencial :(", Estado: false }
+                AlertaAjax(dataerror)
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.CodeStatus == 200) {
+                    H5_loading.hide();
+                    CerrarModal();
+                    return ToastrSuccess("Exito", "Cliente Ingresado con Exito");
+                }
+            }
+        });
+    });
+
+
+
+    var tablaPrincipal = $('#BandejaBitacoraClientesPotenciales').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+              ajax: {
+                  url: '@Url.Action("ListadoBitacoraClientePotencial")',
+                  data: { idClientePotencial: fiIdClientePotencial},
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            rowCallback: function (row, data, index) {
+
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacion).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: 'fcUsuarioCreacion'
+                },
+
+                {
+                    data: 'fcComentario'
+                },
+            ]
+        });
+
+
+
+    function LlenarSelectDinamicamente() {
+        $.ajax({
+            url: "@Url.Action("ListaEstatusClientesPotenciales", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+
+                var selectEstatus = $("#fcEstatusCliente");
+
+                selectEstatus.empty();
+                selectEstatus.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione el Estado de Este Cliente '
+                }));
+                $("#fcEstatusCliente").select2({ dropdownParent: $("#MyModalBig") }).val(fiidestatus).trigger("change");
+                $.each(respuesta, function(index, item) {
+                    selectEstatus.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+
+    }
+
+
+
+    chat.on('AgregarBitacoraClientePotenciales', function (modelo) {
+        console.log(`hizo el signal r`);
+        console.log(modelo);
+
+        var tabla = $.fn.dataTable.Api(`#BandejaBitacoraClientesPotenciales`);
+        tabla.row.add(modelo).draw(false);
+    })
+
+</script>
+
+
+
+

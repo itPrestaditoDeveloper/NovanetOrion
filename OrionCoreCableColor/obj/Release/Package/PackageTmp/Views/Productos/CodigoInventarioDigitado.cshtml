@@ -1,0 +1,88 @@
+﻿<div class="modal-body">
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Digitar Codigo</label>
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-barcode fa-fw"></i></span>
+                    </div>
+                    <input id="barCodeInput" type="text" class="form-control" autocomplete="off" />
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="Buscar" type="button" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-search"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+   
+   
+   
+    
+    $("#Buscar").click(function () {
+        if ($("#barCodeInput").val().trim() == "") {
+            ToastrError("", "Digite un codigo valido");
+            return;
+        }
+        $.ajax({
+            url: "@Url.Action("GetInformacionInventario","Productos")",
+            type: "Get",
+            data: { fcCodigoSerie: $("#barCodeInput").val() },
+            success: function (resp) {
+                if (resp.Estado) {
+                    if (resp.listaInventarioDetalle.length > 0) {
+                        
+                        var tabla = $.fn.DataTable.Api("#TablaProductos");
+                        var data = tabla.rows().data().toArray();
+                        var repetidos = tabla.rows().data().toArray();
+                        for (var item of resp.listaInventarioDetalle) {
+                            repetidos.push(item);
+
+                        }
+
+                        var uniqs = repetidos.filter(function (item, index, array) {
+                            return array.indexOf(item) === index;
+                        });
+
+                        uniqs = uniqs.filter(x => !data.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+
+                        tabla.rows.add(uniqs).draw(false);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Productos", "No se encontro productos con esta serie");
+                    }
+
+
+                } else {
+
+                    ToastrError("Productos", "No se encontro productos con esta serie");
+                }
+                buffer = "";
+            }
+        });
+    });
+    $(document).on('shown.bs.modal', '#MyModalSm', function () {
+        debugger;
+        $("#barCodeInput").focus();
+    });
+    
+
+    
+</script>

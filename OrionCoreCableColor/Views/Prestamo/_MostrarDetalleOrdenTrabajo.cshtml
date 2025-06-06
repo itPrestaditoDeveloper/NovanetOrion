@@ -1,0 +1,343 @@
+﻿
+@model List<OrionCoreCableColor.Models.Prestamo.DetalleInstalacionesCliente>
+
+@{
+	ViewBag.Title = "Detalle Instalaciones Cliente";
+}
+
+<div class="container mt-4">
+	<h2 class="text-center mb-4 display-5 fw-bold text-primary">Gestión de Órdenes de Trabajo</h2>
+
+	<!-- Verificar si el modelo está vacío -->
+	@if (Model == null || !Model.Any())
+	{
+		<div class="text-center">
+			<p class="text-muted">No se encontraron órdenes de trabajo.</p>
+		</div>
+	}
+	else
+	{
+		<!-- Agrupar por fcTipoSolicitudTrabajo -->
+		var groupedItems = Model.GroupBy(item => item.fcTipoSolicitudTrabajo).OrderBy(g => g.Key);
+
+		foreach (var group in groupedItems)
+		{
+			<div class="mb-5">
+				<!-- Encabezado del grupo -->
+				<h3 class="mb-3 text-secondary border-bottom pb-2">@group.Key</h3>
+				<div class="row g-4">
+					@foreach (var item in group)
+					{
+						<div class="col-12 col-md-6 col-lg-3 pb-2">
+							<div class="card h-100 border-0 shadow-hover transition-all">
+								<div class="card-header bg-primary-gradient d-flex justify-content-between align-items-center">
+									<div>
+										<h5 class="card-title text-white mb-1">@item.fcNombre</h5>
+										<p class="text-white-50 mb-0 small">Solicitud: @item.fiIDSolicitud</p>
+										@if (!string.IsNullOrEmpty(item.fcNombre))
+										{
+											<p class="text-white-50 mb-0 small">Empresa Encargada: @item.fcNombreEmpresa</p>
+										}
+									</div>
+									<i class="fal fa-tools fa-xl text-white-50"></i>
+								</div>
+
+								<div class="card-body">
+									<div class="d-grid gap-2">
+										<!-- Sección de Creador y Técnico -->
+										<div class="mb-2">
+											<div class="d-flex align-items-center mb-1">
+												<i class="fal fa-user text-primary me-2"></i>
+												<span class="small"><strong>Creador:</strong> @(item.fcNombreCorto ?? "No especificado")</span>
+											</div>
+											<div class="d-flex align-items-center">
+												<i class="fal fa-user-cog text-success me-2"></i>
+												<span class="small"><strong>Técnico:</strong> @(item.fcNombreCorto2 ?? "No asignado")</span>
+											</div>
+										</div>
+
+										<!-- Sección de Fechas -->
+										<div class="mb-2">
+											<div class="d-flex align-items-center mb-1">
+												<i class="fal fa-calendar-alt text-primary me-2"></i>
+												<span class="small"><strong>Creación:</strong> @item.fdFechaInstalacion.ToString("dd/MM/yyyy hh:mm tt")</span>
+											</div>
+											@if (item.fdFechaInstalacionFinal > item.fdFechaInstalacion)
+											{
+												<div class="d-flex align-items-center">
+													<i class="fal fa-calendar-check text-success me-2"></i>
+													<span class="small"><strong>Finalización:</strong> @item.fdFechaInstalacionFinal.ToString("dd/MM/yyyy hh:mm tt")</span>
+												</div>
+											}
+										</div>
+
+										<!-- Estado y Tipo de Solicitud -->
+										<div class="d-flex justify-content-between align-items-center mt-2">
+											<div class="status-badge @GetStatusColor(item.fiIDEstadoInstalacion)">
+												@item.fcDescripcion
+											</div>
+											<div class="badge bg-info text-white">
+												@item.fcTipoSolicitudTrabajo
+											</div>
+										</div>
+
+										<!-- Datos Clave -->
+										<div class="mt-3">
+											<div class="d-flex justify-content-between align-items-center mb-2">
+												<div>
+													<label class="text-muted small">Código Cliente:</label>
+													<div class="badge bg-light text-dark">@item.fcCodigoCliente</div>
+												</div>
+												@*@if (item.fiNoOrden > 0)
+													{
+														<div>
+															<label class="text-muted small">Orden #:</label>
+															<div class="badge bg-secondary text-white">@item.fiNoOrden</div>
+														</div>
+													}*@
+											</div>
+
+											<div class="mb-2">
+												<label class="text-muted small">
+													@if (item.fiIDTipoSolicitud == 2)
+													{
+														<text >Número de Orden:</text>
+
+													}
+													else
+													{
+														<text >Código Cepheus:</text>
+
+													}
+
+												</label>
+												<div class="fw-bold">@(item.fcNumeroOrdenCfeus ?? "No disponible")</div>
+											</div>
+
+											<div>
+												<label class="text-muted small">Dirección Detallada:</label>
+												<div class="small text-muted" style="word-wrap: break-word;">
+													<i class="fal fa-map-marker-alt text-primary me-2"></i>
+													@(item.DireccionDetalladaCliente ?? "No especificada")
+												</div>
+											</div>
+										</div>
+
+										<!-- Comentarios Desplegables -->
+										<hr class="my-3">
+										<div class="collapse-card" aria-expanded="false">
+											<button class="collapse-trigger btn btn-link p-0 text-decoration-none"
+													onclick="toggleCollapse('comments-general-@item.fiIDContratistaSolicitud', this)"
+													aria-expanded="false"
+													aria-controls="comments-general-@item.fiIDContratistaSolicitud">
+												<i class="fal fa-comments me-2"></i>Comentarios
+												<i class="collapse-icon fal fa-chevron-down ms-2"></i>
+											</button>
+											<div class="collapse-content" id="comments-general-@item.fiIDContratistaSolicitud">
+												<div class="mt-2 small text-muted">
+													@if (!string.IsNullOrEmpty(item.ComentarioAsesor))
+													{
+														@item.ComentarioAsesor
+													}
+													else
+													{
+														<em class="text-secondary">Sin comentarios registrados</em>
+													}
+												</div>
+											</div>
+										</div>
+										@if (!string.IsNullOrEmpty(item.fcComentarioInstalacion))
+										{
+											<hr class="my-3">
+											<div class="collapse-card" aria-expanded="false">
+												<button class="collapse-trigger btn btn-link p-0 text-decoration-none"
+														onclick="toggleCollapse('comments-instalacion-@item.fiIDContratistaSolicitud', this)"
+														aria-expanded="false"
+														aria-controls="comments-instalacion-@item.fiIDContratistaSolicitud">
+													<i class="fal fa-comments me-2"></i>Comentario Instalación
+													<i class="collapse-icon fal fa-chevron-down ms-2"></i>
+												</button>
+												<div class="collapse-content" id="comments-instalacion-@item.fiIDContratistaSolicitud">
+													<div class="mt-2 small text-muted">
+														@if (!string.IsNullOrEmpty(item.fcComentarioInstalacion))
+														{
+															@item.fcComentarioInstalacion
+														}
+														else
+														{
+															<em class="text-secondary">Sin comentario registrados</em>
+														}
+													</div>
+												</div>
+											</div>
+										}
+									</div>
+								</div>
+
+								<!-- Footer con Botones -->
+								<div class="card-footer bg-transparent border-top-0 d-flex justify-content-end">
+									<div class="btn-group" role="group" aria-label="Botones de acción">
+										<button onclick="CrearBitacora('@item.fcNombre', @item.fiIDSolicitud)"
+												class="btn btn-primary btn-sm"
+												aria-label="Crear Bitacora">
+											<i class="fal fa-plus me-1"></i> Crear Bitacora
+										</button>
+
+										<button onclick="ModalVerDetalleSolicitud(@item.fiIDContratistaSolicitud)"
+												class="btn btn-primary btn-sm"
+												aria-label="Ver detalles completos">
+											<i class="fal fa-info-circle me-1"></i> Ver Detalles
+										</button>
+
+										<button onclick="ModalCrearNotas(@item.fiIDContratistaSolicitud)"
+												class="btn btn-primary btn-sm"
+												aria-label="Gestion Notas">
+											<i class="fal fa-sticky-note me-1"></i> Gestion Notas
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		}
+	}
+</div>
+
+<style>
+	.shadow-hover {
+		transition: transform 0.3s, box-shadow 0.3s;
+		box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+	}
+
+		.shadow-hover:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 1rem 2rem rgba(0,0,0,0.15);
+		}
+
+	.bg-primary-gradient {
+		background: linear-gradient(135deg, #294f75, #886ab5);
+	}
+
+	.status-badge {
+		padding: 0.35rem 0.75rem;
+		border-radius: 1rem;
+		font-size: 0.8rem;
+		color: white;
+	}
+
+	.collapse-trigger {
+		cursor: pointer;
+		color: #0d6efd;
+		transition: color 0.3s;
+	}
+
+		.collapse-trigger:hover {
+			color: #0b5ed7;
+		}
+
+	.collapse-card .collapse-icon {
+		transition: transform 0.3s;
+	}
+
+	.collapse-card[aria-expanded="true"] .collapse-icon {
+		transform: rotate(180deg);
+	}
+
+	.collapse-content {
+		max-height: 0;
+		overflow: hidden;
+		transition: max-height 0.3s ease-out;
+	}
+
+	/* Ajustes responsivos */
+	@@media (max-width: 992px) {
+		.col-lg-3 {
+			flex: 0 0 50%;
+			max-width: 50%;
+		}
+	}
+
+	@@media (max-width: 576px) {
+		.col-lg-3 {
+			flex: 0 0 100%;
+			max-width: 100%;
+		}
+	}
+</style>
+
+@functions {
+	string GetStatusColor(int estadoId)
+	{
+		switch (estadoId)
+		{
+			case 1: return "bg-warning";
+			case 2: return "bg-info";
+			case 3: return "bg-primary";
+			case 4: return "bg-success";
+			case 5: return "bg-danger";
+			case 6: return "bg-secondary";
+			case 7: return "bg-dark";
+			case 8: return "bg-secondary";
+			case 9: return "bg-success";
+			case 10: return "bg-dark";
+			case 11: return "bg-success";
+			default: return "bg-light text-dark";
+		}
+	}
+}
+
+<script>
+    function ModalCrearNotas(idsolicitudinstalacion) {
+        $.ajax({
+            url: "@Url.Action("SolicitudInstalacionNotas", "Contratista")",
+            method: "get",
+            data: { fiIDContratistaSolicitud: idsolicitudinstalacion },
+            success: function (resp) {
+                ShowModalBigScroll(resp);
+            },
+            error: function (resp) {
+                AlertaError();
+            }
+        });
+    }
+
+    function ModalVerDetalleSolicitud(idsolicitudinstalacion) {
+        $.ajax({
+            url: "@Url.Action("ModalDetalleInstalacion", "Contratista")",
+            method: "get",
+            data: { idSolicitudInstalacion: idsolicitudinstalacion },
+            success: function (resp) {
+                ShowModalBigScroll(resp);
+            },
+            error: function (resp) {
+                AlertaError();
+            }
+        });
+    }
+
+    function CrearBitacora(Nombre, IDSolicitud) {
+        console.log(Nombre);
+        console.log(IDSolicitud);
+        VerModalConObjetoDeParametro({ Nombre: Nombre, IDSolicitud: IDSolicitud }, "@Url.Action("ModalCrearBitacoras", "PrecalificaCliente")");
+    }
+
+    function toggleCollapse(targetId, trigger) {
+        const content = document.getElementById(targetId);
+        const collapseCard = trigger.closest('.collapse-card');
+        const icon = trigger.querySelector('.collapse-icon');
+        const isExpanded = collapseCard.getAttribute('aria-expanded') === 'true';
+
+        // Alternar el estado de aria-expanded
+        collapseCard.setAttribute('aria-expanded', !isExpanded);
+        trigger.setAttribute('aria-expanded', !isExpanded);
+
+        // Alternar visibilidad del contenido
+        if (isExpanded) {
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = `${content.scrollHeight}px`;
+        }
+    }
+</script>

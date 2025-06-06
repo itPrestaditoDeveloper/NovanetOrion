@@ -1,0 +1,819 @@
+﻿
+@{
+    ViewBag.Title = "Bandeja_ClienteFinales";
+}
+<style>
+
+    .animacion {
+        /*position: absolute;*/
+        animation-name: parpadeo;
+        animation-duration: 1s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        -webkit-animation-name: parpadeo;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-iteration-count: infinite;
+    }
+
+    @@-moz-keyframes parpadeo {
+        0% {
+            opacity: 1.0;
+        }
+
+        50% {
+            opacity: 0.0;
+        }
+
+        100% {
+            opacity: 1.0;
+        }
+    }
+
+    @@-webkit-keyframes parpadeo {
+        0% {
+            opacity: 1.0;
+        }
+
+        50% {
+            opacity: 0.0;
+        }
+
+        100% {
+            opacity: 1.0;
+        }
+    }
+
+    @@keyframes parpadeo {
+        0% {
+            opacity: 1.0;
+        }
+
+        50% {
+            opacity: 0.0;
+        }
+
+        100% {
+            opacity: 1.0;
+        }
+    }
+
+    .dataTables_filter {
+        float: left;
+    }
+
+    .dt-buttons {
+        float: left;
+        padding-left: 5px;
+    }
+
+    .dataTables_length {
+        float: right;
+    }
+
+    .imgCircle {
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 0px #06f611;
+        animation: glow 1.5s linear(0 0%, 0.02 15.85%) infinite alternate;
+    }
+
+    @@keyframes glow {
+        to {
+            box-shadow: 0px 0px 30px 20px #06f611;
+        }
+    }
+
+</style>
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Bandeja Clientes Servicios</h2>
+
+    </div>
+    @*<div class="table-responsive p-0 mb-1">
+            <div class="btn-group btn-group-toggle col-lg-12 p-0" data-toggle="buttons">
+                <label class="btn btn-secondary active cursor-pointer">
+                    <input id="general" type="radio" name="filtros" value="0" />
+                    General
+                </label>
+                <label class="btn btn-secondary cursor-pointer">
+                    <input id="recepcion" type="radio" name="filtros" value="5" />
+                    Enviado
+                </label>
+                <label class="btn btn-secondary cursor-pointer">
+                    <input id="analisis" type="radio" name="filtros" value="4" />
+                    Pendiente
+                </label>
+                <label class="btn btn-warning cursor-pointer">
+                    <input id="campo" type="radio" name="filtros" value="2" />
+                    Pendiente Instalacion
+                </label>
+                <label class="btn btn-success cursor-pointer">
+                    <input id="pendientes" type="radio" name="filtros" value="6" />
+
+                    Aprobado
+                </label>
+                <label class="btn btn-success cursor-pointer">
+                    <input id="aprobadas" type="radio" name="filtros" value="7" />
+                    Instalado
+                </label>
+
+            </div>
+        </div>*@
+
+
+    <div class="row mb-1  justify-content-center">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por OLT</label>
+            <select id="ddlOLT" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Mes</label>
+            <select id="ddlMesIngreso" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6" style="display: none">
+            <label class="col-form-label">Búsqueda por Fecha</label>
+            <div class="input-daterange input-group" id="date-range">
+                <input type="text" class="form-control form-control-sm" name="fecha-minima" id="fecha-minima" />
+                <input type="text" class="form-control form-control-sm" name="fecha-maxima" id="fecha-maxima" />
+            </div>
+        </div>
+        <div class=" col-lg-2 col-md-2 col-sm-6 col-6 align-self-end" style="display: none">
+            <label class="col-form-label">Búsqueda por Año</label>
+            <input id="ddlAnioIngreso" class="form-control form-control-sm" type="text" />
+        </div>
+    </div>
+
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaClientesServicios">
+                <thead>
+                    <tr>
+                        <th>Accciones</th>
+                        <th>Solicitud</th>
+                        <th>Cliente</th>
+                        <th>Telefono</th>
+                        <th>Producto</th>
+                        <th>Fecha Servicio</th>
+                        <th>OLT</th>
+                        <th>Contratista</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script src="~/Content/js/excel/xlsx.full.min.js"></script>
+    <script>
+
+        $("#ddlMesIngreso").select2();
+
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        let FiltroAnio = '';
+        let filtroMes = '';
+        $('#ddlMesIngreso').on('change', function () {
+            debugger;
+            filtroMes = this.value != '' ? this.value : '';
+            MesAnio();
+        });
+
+
+
+
+
+        function GenerarListaPartidasFiltradas() {
+            BandejaClientesServicios.ajax.reload(null, false)
+        }
+
+
+
+
+        var tablaPrincipal = $('#BandejaClientesServicios').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: `<"row"<"col-sm-12"fBl>>rtip`,
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListaPrestamo", "PrecalificaCliente")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      var opt = ''
+                      var unico = new Set();
+                      for (const item of data) {
+                          unico.add(item.fcDescripcionOLT);
+                      }
+                      for (const item of unico) {
+                          if (item == null) {
+
+                          } else {
+                              opt += `<option value="${item}">${item}</option>`
+                          }
+                      }
+                      $(`#ddlOLT`).append(opt);
+                      $("#ddlOLT").select2();
+                      return data;
+                  }
+            },
+            rowCallback: function (row, data, index) {
+                if (data.fcDescripcionOLT == "ALTERADOS") {
+                    $(row).css('background-color', "#d75b5b");
+                    $(row).addClass("animacion");
+                }
+            },
+            columns: [
+
+                {
+                data: null,
+                render: function (data) {
+
+                    var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                    opciones += '<div class="dropdown-menu">';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalVerBitacorasCliente(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item">Ver Bitacoras</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalAgregarDatosOLT(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item">Actualizar Datos ONU</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalVerDatoServicioRed(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item">Ver Datos</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalCrearBitacoras(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item">Crear Bitacora</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalGenerarOrdenTrabajo(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ',' + data.fiIDEquifax + ')" class="dropdown-item">Generar Orden Trabajo(contratista)</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalEnvioSMS(\'' + data.fcNombreCliente + '\',\'' + data.fcTelefono + '\',\'' + data.fiIDEquifax + '\')" class="dropdown-item">Enviar SMS</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalEnvioCorreo(\'' + data.fcNombreCliente + '\',\'' + data.fcCorreo + '\',\'' + data.fiIDEquifax + '\')" class="dropdown-item">Enviar Correo</a>';
+                    opciones += '<a href="javascript:void(0)" onclick="ModalGenerarSolicitudSpliter(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ',' + data.fiIDEquifax + ')" class="dropdown-item">Generar Actividad CC</a>';
+                    opciones += `<a href="javascript:void(0)" onclick="RptInventarioPorCliente(${data.fiIDEquifax}, ${data.fiIDSolicitud}, this)" class="dropdown-item"><i class="fal fa-file-excel"></i> Inventario</a>`;
+                    opciones += '</div></div>';
+                    return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<i class="fal fa-2xs fa-circle ${data.fbConectado ? "text-success imgCircle":"text-danger"}" style="background-color: ${data.fbConectado ? "#1dc9b7" : "#fd3995"}; border-radius:50%;" id="${data.fiIDSolicitud}"></i> ${data.fiIDSolicitud}`;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcIdentidad + ' | ' + data.fcNombreCliente;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcTelefono;
+                    }
+
+                },
+                {
+                    data: 'fcProducto'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacion).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: 'fcDescripcionOLT'
+                },
+                {
+                    data: 'fcNombreEmpresaContratistan'
+                },
+
+                 {
+                    data: null,
+                     render: function (data) {
+                         @*if (data.fiIDContratistaSolicitud !=0) {
+                             return `<a class="cursor-zoom-in" href="@(Url.Action("ViewRevisarDetalleInstalacion","Tenico"))?idSolicitudInstalacion=${data.fiIDContratistaSolicitud}"  ><div class="badge badge-${data.fcClase}">${data.fcDescripcion}</div></a>`;
+                         }*@
+                         return `<div class="badge badge-${data.fcClase}">${data.fcDescripcion}</div>`;
+
+                    }
+
+                }
+
+
+
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'pdfHtml5',
+                    text: 'PDF',
+                    titleAttr: 'Generate PDF',
+                    className: 'btn-outline-danger btn-sm mr-1'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Excel',
+                    titleAttr: 'Generate Excel',
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 5,6,7,8]
+                    }
+                },
+                {
+                    text: `<i class="fal fa-file-excel"></i> Inventario`,
+                    className: 'btn-outline-success btn-sm mr-1',
+                    action: function (e, dt, node, config)
+                    {
+                        $.ajax({
+                            url: "@Url.Action("GetInfoInventario","PrecalificaCliente")",
+                            method: "get",
+                            success: function (resp)
+                            {
+
+                                //console.log(resp);
+                                const workbook = XLSX.utils.book_new();
+                                const worksheetComparativo = XLSX.utils.json_to_sheet([], { skipHeader: true });
+                                worksheetComparativo['!merges'] = [];
+                                worksheetComparativo['!merges'].push({ s: { r: 0, c: 0 }, e: { r: 0, c: 3 } });
+
+
+                                worksheetComparativo['A1'] = {
+                                    v: "COMPARACION DE INVENTARIO GENERAL",
+                                    s: {
+                                        alignment: { horizontal: "center", vertical: "center" }, font: { sz: 20 } }  // Centrado horizontal y vertical
+                                };
+                                // font: { sz: 16 } // Tamaño de la fuente
+                                var row = 2;
+
+                                for (let item of resp)
+                                {
+                                    worksheetComparativo['!merges'].push({ s: { r: (row - 1), c: 0 }, e: { r: (row - 1), c: 3 } });
+                                    worksheetComparativo[`A${row}`] = {
+                                        v: `Cliente: ${item.fiIDEquifax} | ${item.fcNombre}`,
+                                        s: { alignment: { horizontal: "center", vertical: "center" }, font: { sz: 16 } }  // Centrado horizontal y vertical
+                                    };
+
+                                    row++;
+
+                                    var solicitudes = Object.groupBy(item.Productos, ({ fiIDSolicitud }) => fiIDSolicitud);
+                                    for (let itemSolicitud in solicitudes)
+                                    {
+
+
+                                        worksheetComparativo['!merges'].push({ s: { r: (row - 1), c: 0 }, e: { r: (row - 1), c: 3 } });
+                                        worksheetComparativo[`A${row}`] = {
+                                            v: `Solicitud: ${itemSolicitud}`,
+                                            s: { alignment: { horizontal: "center", vertical: "center" }, font: { sz: 20 } }
+                                        };
+
+                                        row++;
+
+                                        const headersComparativo = [["PRODUCTO", "PAQUETE", "INSTALACION", "INVENTARIO"]];
+                                        XLSX.utils.sheet_add_aoa(worksheetComparativo, headersComparativo, { origin: `A${row}` });
+                                        row++;
+                                        var productos = solicitudes[itemSolicitud].map(x => {
+                                            return {
+                                                fcProducto: x.fcProducto,
+                                                fcEnPaquete: x.fcEnPaquete,
+                                                fnCantidadInstalado: x.fnCantidadInstalado,
+                                                fnCantidadInventario: x.fnCantidadInventario
+                                            }
+                                        });
+
+
+                                        XLSX.utils.sheet_add_json(worksheetComparativo, productos, { origin: `A${row}`, skipHeader: true });
+
+
+                                        row += (productos.length + 2);
+
+
+
+
+                                    }
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+                                XLSX.utils.book_append_sheet(workbook, worksheetComparativo, "INVENTARIO");
+                                var fecha = new Date();
+                                //////////FINAL
+                                XLSX.writeFile(workbook, `Inventario general ${moment(fecha).format("DD-MM-YYYY")}.xlsx`, { compression: true });
+                            }
+                        });
+
+                    }
+                },
+            ],
+            initComplete: function () {
+                chat.on("actualizarONU", function (lista) {
+
+                    var table = $.fn.dataTable.Api('#BandejaClientesServicios');
+                    var data = table.rows().data().toArray();
+                    var nodes = nodes = table.rows().nodes().toArray();
+
+                    for (let model of lista) {
+                        let id = "#" + model.fiIDOrionSolicitud;
+                        //var icon = $(id);
+
+                        let onuSeleccionada = data.find(x => x.fiIDSolicitud == model.fiIDOrionSolicitud);
+
+                        if (onuSeleccionada == null || typeof onuSeleccionada == "undefined") {
+                            continue;
+                        }
+
+
+                        let node = nodes.find(x => table.row(x).data().fiIDSolicitud == model.fiIDOrionSolicitud);
+                        let icon = $(node).find(`td i[id=${model.fiIDOrionSolicitud}]`);
+                        if (model.fbConectado) {
+                            $(icon).removeClass("text-warning");
+                            $(icon).removeClass("text-danger");
+                            $(icon).addClass("text-success");
+                            $(icon).addClass("imgCircle");
+                            $(icon).css("background-color", "#1dc9b7");
+
+                        } else {
+                            $(icon).removeClass("text-warning");
+                            $(icon).addClass("text-danger");
+                            $(icon).removeClass("text-success");
+                            $(icon).removeClass("imgCircle");
+                            $(icon).css("background-color", "#fd3995");
+                        }
+                    }
+
+
+                });
+            }
+
+        });
+
+        function ModalAgregarDatosOLT(Nombre, IDSolicitud) {
+
+           VerModalConObjetoDeParametro({ Nombre: Nombre,  IDSolicitud: IDSolicitud, }, "@Url.Action("ModalAgregarDatosClienteDetalleInstalacion", "PrecalificaCliente")");
+
+        }
+        function ModalCrearBitacoras(Nombre, IDSolicitud) {
+
+           VerModalConObjetoDeParametro({ Nombre: Nombre,  IDSolicitud: IDSolicitud, }, "@Url.Action("ModalCrearBitacoras", "PrecalificaCliente")");
+
+       }
+
+
+        function ModalVerDatoServicioRed(Nombre, IDSolicitud) {
+
+            $.ajax({
+                url: "@Url.Action("ModalVerDatoServicioRed", "PrecalificaCliente")",
+                method: "get",
+                data: { Nombre: Nombre, IDSolicitud: IDSolicitud },
+                success: function (resp) {
+
+                    ShowModalBig(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function ModalGenerarOrdenTrabajo(Nombre, IDSolicitud, idCliente) {
+
+            $.ajax({
+                url: "@Url.Action("ModalGenerarOrdenTrabajoContratista", "PrecalificaCliente")",
+                method: "get",
+                data: { Nombre: Nombre, IDSolicitud: IDSolicitud, idCliente: idCliente },
+                success: function (resp) {
+                    if (resp && typeof resp.exito !== 'undefined') {
+                        if (!resp.exito) {
+                            AlertaMensaje(resp.mensaje);
+                            return;
+                        }
+                    }
+
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        function ModalGenerarSolicitudSpliter(Nombre, IDSolicitud, idCliente) {
+
+            $.ajax({
+                url: "@Url.Action("ModalGenerarSolicitudSpliter", "PrecalificaCliente")",
+                method: "get",
+                data: { Nombre: Nombre, IDSolicitud: IDSolicitud, idCliente: idCliente},
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function ModalVerBitacorasCliente(Nombre, IDSolicitud) {
+
+            $.ajax({
+                url: "@Url.Action("ModalVerBitacorasCliente", "PrecalificaCliente")",
+                method: "get",
+                data: { Nombre: Nombre, IDSolicitud: IDSolicitud },
+                success: function (resp) {
+
+                    ShowModalBig(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        $('#ddlOLT').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(6).search(this.value).draw();
+        });
+        function MesAnio() {
+            tablaPrincipal.columns(5).search(FiltroAnio + '/' + filtroMes + '/').draw();
+        }
+
+        function ModalEnvioSMS(Nombre, Telefono, IDCliente) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDCliente: IDCliente}, "@Url.Action("ModalEnvioSMS", "PrecalificaCliente")");
+
+        }
+
+        function ModalEnvioCorreo(Nombre, Correo, IDCliente) {
+            debugger;
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Correo: Correo, IDCliente: IDCliente }, "@Url.Action("ModalEnvioCorreo", "PrecalificaCliente")");
+        }
+
+
+        function ComparativoModel() {
+            return {
+                producto: "",
+                paquete: "",
+                instalacion: 0,
+                inventario: 0
+            };
+        }
+
+
+        function RptInventarioPorCliente(idEquifax, idSolicitud, e) {
+            $.ajax({
+                url: "@Url.Action("GetInfoInventarioCliente","PrecalificaCliente")",
+                method: "Get",
+                data: { fiIdEquifax: idEquifax, fiIdSolicitud: idSolicitud },
+                success: function (resp) {
+                    var row = $(e).closest("tr");
+                    var tabla = $.fn.dataTable.Api("#BandejaClientesServicios");
+                    var data = tabla.row(row).data();
+
+                    var paquete = resp.listPaquete.map(x => { return { fcProducto: x.fcProducto, fnCantidad: 1 }; });
+                    var instalado = resp.listInstalado.map(x => { return { fcProducto: x.fcProducto, fnCantidad: x.fnCantidad }; });
+
+                    var inventario = resp.listInventario.map(x => {
+                        return {
+                            fcProducto: x.fcProducto,
+                            fcSerie1: x.fcNumerodeSerie1,
+                            fcSerie2: x.fcNumerodeSerie2,
+                            fnCantidad: x.fnCantidad,
+                            fcSolicitud: x.fiIDSolicutd != "0" ? x.fiIDSolicitud : "SOLICITUD INDEFINIDA"
+                        };
+                    });
+
+
+                    var productos = resp.listPaquete.map(x => x.fcProducto);
+
+                    for (var item of resp.listInstalado.map(x => x.fcProducto)) {
+                        productos.push(item);
+                    }
+
+                    for (var item of resp.listInventario.map(x => x.fcProducto)) {
+                        productos.push(item);
+                    }
+
+                    productos = productos.filter((item, index) => {
+                        return productos.indexOf(item) === index;
+                    });
+
+                    console.log(productos);
+
+                    const workbook = XLSX.utils.book_new();
+                    /////////////PAQUETE
+                    const worksheet = XLSX.utils.json_to_sheet([], { skipHeader: true });
+                    const headers = [["Producto", "Cantidad" ]];
+                    XLSX.utils.sheet_add_aoa(worksheet, headers, { origin: "A5" });
+
+                    headers[0].forEach((header, index) => {
+                        const cellAddress = XLSX.utils.encode_cell({ r: 4, c: index }); // Fila 2 (A3 en Excel) y columnas sucesivas
+                        worksheet[cellAddress].s = {
+                            font: { bold: true }, // Estilo de fuente en negrita
+                            alignment: { horizontal: "center", vertical: "center" } // Centrados horizontal y vertical
+                        };
+                    });
+
+                    XLSX.utils.sheet_add_json(worksheet, paquete, { origin: "A6", skipHeader: true });
+
+                    worksheet['!merges'] = [
+                        { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }, // Combinar A1:C1
+                        { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }  // Combinar A2:C2
+                    ];
+
+                    worksheet['A1'] = {
+                        v: "Cliente: " + data.fcNombreCliente,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    worksheet['A2'] = {
+                        v: "Solicitud: " + data.fiIDSolicitud,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "PAQUETE");
+
+                    ///////////////////////INSTALADOS/////////////////////////
+                    const worksheetInstalado = XLSX.utils.json_to_sheet([], { skipHeader: true });
+                    const headersInstalado = [["Producto", "Cantidad"]];
+                    XLSX.utils.sheet_add_aoa(worksheetInstalado, headersInstalado, { origin: "A5" });
+
+
+                    headersInstalado[0].forEach((header, index) => {
+                        const cellAddress = XLSX.utils.encode_cell({ r: 4, c: index }); // Fila 2 (A3 en Excel) y columnas sucesivas
+                        worksheetInstalado[cellAddress].s = {
+                            font: { bold: true }, // Estilo de fuente en negrita
+                            alignment: { horizontal: "center", vertical: "center" } // Centrados horizontal y vertical
+                        };
+                    });
+
+
+                    XLSX.utils.sheet_add_json(worksheetInstalado, instalado, { origin: "A6", skipHeader: true });
+
+
+                    worksheetInstalado['!merges'] = [
+                        { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }, // Combinar A1:C1
+                        { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }  // Combinar A2:C2
+                    ];
+
+                    worksheetInstalado['A1'] = {
+                        v: "Cliente: " + data.fcNombreCliente,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    worksheetInstalado['A2'] = {
+                        v: "Solicitud: " + data.fiIDSolicitud,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    XLSX.utils.book_append_sheet(workbook, worksheetInstalado, "INSTALACION");
+
+
+                    //////////////////////////INVENTARIO////////////////
+
+                    const worksheetInventario = XLSX.utils.json_to_sheet([], { skipHeader: true });
+                    const headersInventario = [["Producto","Serie1", "Serie2/Mac", "Cantidad", "Solicitud"]];
+                    XLSX.utils.sheet_add_aoa(worksheetInventario, headersInventario, { origin: "A5" });
+
+
+                    headersInventario[0].forEach((header, index) => {
+                        const cellAddress = XLSX.utils.encode_cell({ r: 4, c: index }); // Fila 2 (A3 en Excel) y columnas sucesivas
+                        worksheetInventario[cellAddress].s = {
+                            font: { bold: true }, // Estilo de fuente en negrita
+                            alignment: { horizontal: "center", vertical: "center" } // Centrados horizontal y vertical
+                        };
+                    });
+
+
+                    XLSX.utils.sheet_add_json(worksheetInventario, inventario, { origin: "A6", skipHeader: true });
+
+
+                    worksheetInventario['!merges'] = [
+                        { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }, // Combinar A1:C1
+                        { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }  // Combinar A2:C2
+                    ];
+
+                    worksheetInventario['A1'] = {
+                        v: "Cliente: " + data.fcNombreCliente,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    worksheetInventario['A2'] = {
+                        v: "Solicitud: " + data.fiIDSolicitud,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    XLSX.utils.book_append_sheet(workbook, worksheetInventario, "INVENTARIO");
+
+
+                    //////--------------COMPARACION--------------///✓//
+
+                    const worksheetComparativo = XLSX.utils.json_to_sheet([], { skipHeader: true });
+                    const headersComparativo = [["Producto", "PAQUETE", "INSTALACION", "INVENTARIO"]];
+                    XLSX.utils.sheet_add_aoa(worksheetComparativo, headersComparativo, { origin: "A5" });
+
+                    var comparativo = [];
+
+                    for (var item of productos)
+                    {
+                        debugger;
+                        var model = ComparativoModel();
+                        model.producto = item;
+                        model.paquete = paquete.some(x => x.fcProducto == item) ? "✓" : "X";
+                        model.instalacion = instalado.find(x => x.fcProducto == item)?.fnCantidad ?? 0;
+                        if (inventario.filter(x => x.fcProducto == item).length == 0) {
+                            model.inventario = 0;
+                        } else {
+                            model.inventario = inventario.filter(x => x.fcProducto == item).map(x => x.fnCantidad).reduce((a, b) => a + b);
+                        }
+                        comparativo.push(model);
+                        //model.inventario = inventario.filter(x => x.fnCantidad)?.agreggate()
+                    }
+
+
+                    headersComparativo[0].forEach((header, index) => {
+                        const cellAddress = XLSX.utils.encode_cell({ r: 4, c: index }); // Fila 2 (A3 en Excel) y columnas sucesivas
+                        worksheetComparativo[cellAddress].s = {
+                            font: { bold: true }, // Estilo de fuente en negrita
+                            alignment: { horizontal: "center", vertical: "center" } // Centrados horizontal y vertical
+                        };
+                    });
+
+
+                    XLSX.utils.sheet_add_json(worksheetComparativo, comparativo, { origin: "A6", skipHeader: true });
+
+
+                    worksheetComparativo['!merges'] = [
+                        { s: { r: 0, c: 0 }, e: { r: 0, c: 2 } }, // Combinar A1:C1
+                        { s: { r: 1, c: 0 }, e: { r: 1, c: 2 } }  // Combinar A2:C2
+                    ];
+
+                    worksheetComparativo['A1'] = {
+                        v: "Cliente: " + data.fcNombreCliente,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    worksheetComparativo['A2'] = {
+                        v: "Solicitud: " + data.fiIDSolicitud,
+                        s: { alignment: { horizontal: "center", vertical: "center" } }  // Centrado horizontal y vertical
+                    };
+
+                    XLSX.utils.book_append_sheet(workbook, worksheetComparativo, "COMPARATIVO");
+
+                    ////////FINAL
+                    XLSX.writeFile(workbook, `Inventario de solicitud ${data.fiIDSolicitud} | ${data.fcNombreCliente}.xlsx`, { compression: true });
+
+
+
+
+                }
+            });
+        }
+    </script>
+}
+
+

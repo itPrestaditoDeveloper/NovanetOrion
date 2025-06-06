@@ -1,0 +1,145 @@
+﻿@model OrionCoreCableColor.Models.Usuario.CrearUsuarioViewModel
+
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Informacion Personal</h2>
+    <button type="button" class="close" data-dismiss="modal"><i class="fal fa-times-circle fa-fw fa-lg"></i></button>
+
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+        @Html.HiddenFor(model => model.fiIdUsuario)
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcPrimerNombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.fcPrimerNombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcPrimerNombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcSegundoNombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.fcSegundoNombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcSegundoNombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcPrimerApellido, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.fcPrimerApellido, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcPrimerApellido, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcSegundoApellido, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.fcSegundoApellido, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcSegundoApellido, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcTelefonoMovil, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.fcTelefonoMovil, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcTelefonoMovil, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link btn-lg waves-effect waves-themed float-left text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button class="btn btn-link btn-lg text-success waves-effect waves-themed float-right"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+
+        </div>
+
+    </form>
+</div>
+
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+    //$('#FechaNacimiento').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
+
+    //$('#date-start').bootstrapMaterialDatePicker({ weekStart: 0, time: false}).on('open', function (e, date) {
+    //    $(this).style("z-index", "10000");
+    //});
+
+
+    $("#MyFormModal").submit(function (event) {
+        event.preventDefault();
+        if (!$("#MyFormModal").valid()) {
+            return false;
+        }
+        var model = @Html.Raw(Json.Encode(Model));
+        model.fcPrimerNombre = $("#fcPrimerNombre").val();
+        model.fcSegundoNombre = $("#fcSegundoNombre").val();
+        model.fcPrimerApellido = $("#fcPrimerApellido").val();
+        model.fcSegundoApellido = $("#fcSegundoApellido").val();
+        //model.FechaNacimiento = $("#FechaNacimiento").val();
+        model.fcTelefonoMovil = $("#fcTelefonoMovil").val();
+            $.ajax({
+                url: '@Url.Action("EditarInfoUsuario","Usuario")',
+                type: 'POST',
+                data: JSON.stringify({ model: model }),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.Estado) {
+                        CerrarModal();
+                        tablaPrincipal.ajax.reload().draw(false);
+                    }
+                    AlertaAjax(data);
+                },
+                error: function (data) {
+                    AlertaError();
+                },
+            });
+
+
+    });
+</script>

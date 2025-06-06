@@ -1,0 +1,384 @@
+﻿@model OrionCoreCableColor.Models.Contabilidad.CrearDetallePartidaViewModel
+
+<div class="">
+    <div class="modal-header bg-primary-600 bg-primary-gradient">
+
+        @if (Model.EsEditar)
+        {
+            <h2 class="modal-title" style="color:white;">Editar Detalle Partida</h2>
+        }
+        else
+        {
+            <h2 class="modal-title" style="color:white;">Crear Detalle Partida</h2>
+        }
+
+    </div>
+
+
+    <div class="modal-body panel-bordered-mint">
+
+        <div id="MyFormModalDetalle" style="padding:20px; padding-top:0px;">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCuentaContable, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.DropDownListFor(model => model.fcCuentaContable, new SelectList(ViewBag.ListCuentasContables, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcCuentaContable, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-6" id="ContentDebito">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.fnDebito, htmlAttributes: new { @class = "control-label " })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.EditorFor(model => model.fnDebito, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fnDebito, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="col-md-6" id="ContentCredito">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.fnCredito, htmlAttributes: new { @class = "control-label " })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.EditorFor(model => model.fnCredito, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fnCredito, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-6" style="display:none;" id="ContentTasaCambio">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.fnTasadeCambio, htmlAttributes: new { @class = "control-label " })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.EditorFor(model => model.fnTasadeCambio, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fnTasadeCambio, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCentrodeCosto, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.DropDownListFor(model => model.fcCentrodeCosto, new SelectList(ViewBag.ListaCentroCosto, "Value", "Text"), null, new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcCentrodeCosto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcFondo, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.DropDownListFor(model => model.fcFondo, new SelectList(ViewBag.ListaFondos, "Value", "Text"), null, new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcFondo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcPrograma, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.DropDownListFor(model => model.fcPrograma, new SelectList(ViewBag.ListaPrograma, "Value", "Text"), null, new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcPrograma, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+
+                <div class="col-md-12">
+                    <div class="form-group">
+
+                        @Html.LabelFor(model => model.fcReferenciaDetalle, htmlAttributes: new { @class = "control-label " })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.EditorFor(model => model.fcReferenciaDetalle, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcReferenciaDetalle, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="checkbox pad-btm text-left">
+                            @Html.EditorFor(model => model.TieneAuxiliar)
+                            @Html.LabelFor(model => model.TieneAuxiliar)
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="display:@(Model.EsCuentaPorCobrar ? "block" : "none");">
+                    <div class="form-group">
+                        <div class="checkbox pad-btm text-left">
+                            @Html.EditorFor(model => model.Exento)
+                            @Html.LabelFor(model => model.Exento)
+
+                        </div>
+                    </div>
+                </div>
+                <div id="ContentAuxiliar" style="display:none;">
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.fcAuxiliar, htmlAttributes: new { @class = "control-label " })
+                            <div class="input-group mar-btm" style="width:100%;">
+                                @Html.DropDownListFor(model => model.fcAuxiliar, new SelectList(ViewBag.ListaTipoCuentaAuxiliar, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcAuxiliar, "", new { @class = "text-danger" })
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-9">
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.fcAuxiliarCodigo, htmlAttributes: new { @class = "control-label " })
+                            <div class="input-group mar-btm" style="width:100%;">
+                                @Html.EditorFor(model => model.fcAuxiliarCodigo, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcAuxiliarCodigo, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-link btn-lg pull-left text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" class="btn btn-link btn-lg text-success" id="btnGuardarFormDetalle" onclick="GuardarDetallePartida()"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    var modelDetallePartida = @Html.Raw(Json.Encode(Model));
+    var listadoDeCuentas = @Html.Raw(Json.Encode(ViewBag.ListCuentasContablesSelect2));
+
+
+
+
+    $("#fcAuxiliar, #fcFondo, #fcPrograma, #fiIdTipoMovimiento").select2({
+        dropdownParent: $("#MyModal")
+    });
+
+    $("#fcCentrodeCosto").select2({
+        dropdownParent: $("#MyModal"),
+        multiple : true,
+    });
+
+    $("#fcCuentaContable").select2({
+        data: listadoDeCuentas,
+        dropdownParent: $("#MyModal")
+    }).val(modelDetallePartida.fcCuentaContable).trigger("change");
+
+    //aria-disabled
+
+    //for()
+
+
+
+    $("#fnDebito").keyup(function () {
+        if ($(this).val() > 0) {
+            $("#fnCredito").prop("readonly", true);
+            $("#fnCredito").val(0);
+        }
+        else {
+            $("#fnCredito").prop("readonly", false);
+        }
+    });
+
+
+    if (parseFloat($("#fnDebito").val()) > 0) {
+        //CargarListaDebito();
+    }
+
+    if (parseFloat($("#fnCredito").val()) > 0) {
+        //CargarListaCredito();
+    }
+
+
+
+    $("#fnDebito").change(function () {
+        //CargarListaDebito();
+    });
+
+
+    $("#fnCredito").change(function () {
+        //CargarListaCredito();
+    });
+
+    $("#fnCredito").keyup(function () {
+        if ($(this).val() > 0) {
+            $("#fnDebito").prop("readonly", true);
+            $("#fnDebito").val(0);
+        }
+        else {
+            $("#fnDebito").prop("readonly", false);
+        }
+    });
+
+
+    $(document).ready(function () {
+        $("#TieneAuxiliar").prop("checked", str2bool('@Model.TieneAuxiliar')).trigger("change");
+
+        $("#fnDebito").trigger('keyup');
+        $("#fnCredito").trigger('keyup');
+
+
+        if (ConvertirStringABoolean('@Model.EsDolar')){
+            $('#ContentTasaCambio').show();
+        }
+    });
+
+
+    $('#fcCuentaContable').on('select2:select', function (e) {
+        var data = e.params.data;
+
+
+    });
+
+    $("span.select2-selection").click(function ()
+    {
+
+        $("li").click(function (e)
+        {
+            debugger;
+            var $a = $(e.target);
+            if ($a.data().data.disabled) {
+                ToastrError("Error","CUENTA CONTABLE " + $a.data().data.text + " NO PUEDE SER SELECCIONADA");
+            }
+        });
+    });
+
+
+
+
+
+    $('#TieneAuxiliar').change(function () {
+        if (this.checked) {
+            $('#ContentAuxiliar').show();
+
+        } else {
+            $('#ContentAuxiliar').hide();
+        }
+
+    });
+
+    function GuardarDetallePartida() {
+
+        var CuentaContableData = $('#fcCuentaContable').select2('data');
+
+        if (!$("#fcCuentaContable").val()) {
+            AlertaMensaje("Es requerido seleccionar una cuenta contable");
+            return;
+        }
+
+        let fnDebito = $("#fnDebito").val() * 1;
+        let fnCredito = $("#fnCredito").val() * 1;
+
+
+        if (!fnDebito && !fnCredito) {
+            AlertaMensaje("Es requerido agregar valor en Debito o Credito");
+            return;
+        }
+
+        var cuenta = $("#fcCuentaContable").val();
+
+
+        var ListafcCentrodeCosto = $("#fcCentrodeCosto").val();
+
+        ListafcCentrodeCosto.forEach(function (fcCentrodeCosto) {
+
+          var DetalleToSend = {
+              fiIDFila: '@Model.fiIDFila',
+              fcDebitooCredito: $("#fnDebito").val() > 0 ? "D" : "C",
+              fnTasadeCambio: $("#fnTasadeCambio").val(),
+              fcCuentaContable: $("#fcCuentaContable").val(),
+              DescripcionCuenta: CuentaContableData[0].text,
+
+              TieneAuxiliar: $("#TieneAuxiliar").prop("checked"),
+
+              fnDebito: $("#fnDebito").val() * 1,
+              fnCredito: $("#fnCredito").val() * 1,
+
+              fcFondo: $("#fcFondo").val(),
+              fcPrograma: $("#fcPrograma").val(),
+
+              fcCentrodeCosto: fcCentrodeCosto,
+              fcReferenciaDetalle: $("#fcReferenciaDetalle").val(),
+              Exento: $("#Exento").prop("checked"),
+              NombreCliente: "",
+              fcIDLoan: "",
+              //fcTipoMovimiento: $("#fiIdTipoMovimiento option:selected").text(),
+              //fiIdTipoMovimiento: $("#fiIdTipoMovimiento").val(),
+              SelectCuentasContables: []
+          };
+       
+          if ($("#TieneAuxiliar").prop("checked")) {
+              DetalleToSend.fcAuxiliar = $("#fcAuxiliar").val();
+              DetalleToSend.fcAuxiliarCodigo = $("#fcAuxiliarCodigo").val();
+          } else {
+              DetalleToSend.fcAuxiliar ="";
+              DetalleToSend.fcAuxiliarCodigo = "";
+          }
+
+
+          if (ActualRow == null) {
+              tablaDetallePartida.row.add(DetalleToSend).draw();
+          } else {
+              ActualRow.data(DetalleToSend).draw(false);
+            }
+
+
+            if ($("#fbTrasladoPrestadito").prop("checked")) {
+                agregarLineaTraslado();
+            }
+
+        });
+
+        
+
+        $("#MyModal").modal("hide");
+        $("#MyModalBody").empty();
+        ValidarTotalesDEBEHABER();
+    }
+
+
+
+
+
+
+</script>

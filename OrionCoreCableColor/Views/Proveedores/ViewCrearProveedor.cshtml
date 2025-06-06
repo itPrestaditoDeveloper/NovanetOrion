@@ -1,0 +1,326 @@
+﻿@model OrionCoreCableColor.Models.Proveedores.CrearProveedorViewModel
+
+@{
+    ViewBag.Title = "ViewCrearProveedor";
+}
+
+
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        @if (Model.EsEditar)
+        {
+            <text>Editar Proveedor</text>
+        }
+        else
+        {
+            <text>Crear Proveedor</text>
+        }
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+
+<!--Modal body-->
+<div class="modal-body">
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcNombre, htmlAttributes: new { @class = "control-label " })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcNombre, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcNombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class=" col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcRTN, htmlAttributes: new { @class = "control-label " })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcRTN, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcRTN, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiTipoPersona, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    @Html.DropDownListFor(model => model.fiTipoPersona, new SelectList(ViewBag.ListaTipoPersona, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fiTipoPersona, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiDiasLimiteCredito, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fiDiasLimiteCredito, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fiDiasLimiteCredito, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label></label>
+                <h5 style="text-align :center">Facturacion</h5>
+                <hr size="10" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCAI, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcCAI, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCAI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcFechaLimiteEmisionFactura, htmlAttributes: new { @class = "control-label " })
+                <div class="input-group mar-btm" style="width:100%;">
+                   
+                    <input type="date" id="fcFechaLimiteEmisionFactura" class="form-control" value="@(Convert.ToDateTime(Model.fcFechaLimiteEmisionFactura).ToString("yyyy-MM-dd"))" />
+                </div>
+                @Html.ValidationMessageFor(model => model.fcFechaLimiteEmisionFactura, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcRangoInicialFactura, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcRangoInicialFactura, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fcRangoInicialFactura, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcRangoFinalFactura, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcRangoFinalFactura, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcRangoFinalFactura, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcPrefijoFactura, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcPrefijoFactura, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcPrefijoFactura, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label></label>
+                <h5 style="text-align :center">Contactos</h5>
+                <hr size="10" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTelefono, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcTelefono, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcTelefono, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class=" col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCorreoElectronico, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcCorreoElectronico, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCorreoElectronico, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcContacto, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcContacto, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcContacto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTelefonoMovil, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcTelefonoMovil, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcTelefonoMovil, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label></label>
+                <h5 style="text-align :center">Domicilio</h5>
+                <hr size="10" />
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcDireccion1, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcDireccion1, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcDireccion1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcDIreccion2, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcDIreccion2, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcDIreccion2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal-footer">
+        <button data-dismiss="modal" class="btn btn-link btn-lg pull-left text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+        <button class="btn btn-link btn-lg text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+    </div>
+
+
+</div>
+
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+
+    $(document).ready(function () {
+
+        if (model.EsEditar == false) {
+            $("#fiCodPais").trigger("change");
+        }
+
+
+    });
+
+    $("#fiTipoPersona").select2({
+        dropdownParent: $("#MyModalBig"),
+        width: "100%"
+    }).val(model.fiTipoPersona).trigger("change");
+
+
+
+
+    
+
+    $(`#btnGuardarForm`).on("click", function () {
+        debugger;
+        $("#btnGuardarForm").hide();
+        var url = '@Url.Action("CrearProveedor", "Proveedores")'  ;
+        if (model.EsEditar) {
+            url = '@Url.Action("EditarProveedor", "Proveedores")'  ;
+        }
+
+        var ModelToSend = {
+            fiIDProveedor: '@Model.fiIDProveedor',
+           // fiCodigoProveedor: $("#fiCodigoProveedor").val(),
+            fcNombre: $("#fcNombre").val(),
+            fcRTN: $("#fcRTN").val(),
+            fcCAI: $("#fcCAI").val(),
+            fcFechaLimiteEmisionFactura: $("#fcFechaLimiteEmisionFactura").val(),
+            fcRangoInicialFactura: $("#fcRangoInicialFactura").val(),
+            fcRangoFinalFactura: $("#fcRangoFinalFactura").val(),
+            fcPrefijoFactura: $("#fcPrefijoFactura").val(),
+            fcCorreoElectronico: $("#fcCorreoElectronico").val(),
+            fcContacto: $("#fcContacto").val(),
+            fcTelefono: $("#fcTelefono").val(),
+            fcTelefonoMovil: $("#fcTelefonoMovil").val(),
+            fcDireccion1: $("#fcDireccion1").val(),
+            fcDIreccion2: $("#fcDIreccion2").val(),
+            fiTipoPersona: $("#fiTipoPersona").val(),
+            fiDiasLimiteCredito: $("#fiDiasLimiteCredito").val(),
+        }
+        console.log(ModelToSend);
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify({ model: ModelToSend }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                debugger;
+                if (!data.fiMensaje > 0) {
+                    ToastrSuccess("Error", data.fcMensaje);
+                    $("#btnGuardarForm").show();
+                } else {
+                    
+                    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaT.ajax.reload();
+                    ToastrSuccess("Aprobada", data.fcMensaje);
+                    CerrarModal();
+                }
+               
+            },
+            error: function (data) {
+                debugger;
+                console.log(data);
+                AlertaError();
+                $("#btnGuardarForm").show();
+            }
+        });
+    })
+
+
+
+
+</script>
+
+

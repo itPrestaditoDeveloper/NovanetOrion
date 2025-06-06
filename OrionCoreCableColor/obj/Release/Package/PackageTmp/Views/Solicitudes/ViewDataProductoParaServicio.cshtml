@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "ViewDataProductoParaServicio";
+}
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Productos</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+<!--Modal body-->
+
+<div class="modal-body">
+    <form id="MyFormModal">
+        <div class="panel-container">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductoServicio">
+                    <thead>
+
+                        <tr>
+                            <th style="width:50px; display:none !important">Numero Producto</th>
+                            <th style="width:100px;">Producto</th>
+                            <th style="width:100px;">tipo</th>
+                            <th style="width:100px;">Valor</th>
+                            <th style="width:100px;">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnGuardar" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+<script>
+
+    var rowSeleccionado;
+    var ProductosSeleccionados = $.fn.dataTable.Api("#TablaPaqueteServicio");
+    var seleccinados = ProductosSeleccionados.rows().data().toArray();
+    var tablaProducto = $('#TablaProductoServicio').DataTable({
+            autoWidth: true,
+             responsive: true,
+             "destroy": true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarProductoServicio", "Solicitudes")',
+                method: "Get",
+                dataSrc: function (data) {
+
+                    return data;
+                    console.log(data);
+                }
+            },
+
+             columns: [
+                 {
+                     visible: false,
+                     data: 'fiIDProducto'
+                 },
+
+                {
+                    data: 'fcProducto'
+                },
+                {
+                    data: 'fcTipoProducto'
+                },
+
+
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return ConvertirADecimal(data.fnValorProducto) + " $";
+                    }
+                 },
+                 {
+                     data: null,
+                     render: function (data) {
+                         return `<div class="custom-control custom-checkbox">
+                          <input ${data.Seleccionado ? 'checked' : ''}  id="${data.fiIDProducto}" class="custom-control-input" style="margin-left:auto; margin-right:auto;"  type="checkbox" value="" id="CheckCheckedFalla" name = "CheckCheckedFalla"  > <label></label>
+                               <label class="custom-control-label" for="${data.fiIDProducto}"></label>
+                           </div>`;
+                     }
+                 },
+               ],
+             initComplete: function () {
+                 debugger;
+                 var tabla = $.fn.dataTable.Api('#TablaPrincipalServicio');
+                 var dataTabla = tabla.rows().data().toArray();
+                 var tablaProducto = $.fn.dataTable.Api('#TablaProductoServicio');
+                 var dataTablaProducto = tablaProducto.rows().data().toArray();
+                 var nodeTablaProducto = tablaProducto.rows().nodes().toArray();
+                 debugger;
+                 for (var item of nodeTablaProducto) {
+                     var dataItem = tablaProducto.row(item._DT_RowIndex).data();
+                     if (dataTabla.some(x => x.fiIDProducto == dataItem.fiIDProducto)) {
+
+                         dataItem.Seleccionado = true;
+                         dataItem.fiIDPaquete = dataTabla.find(x => x.fiIDProducto == dataItem.fiIDProducto).fiIDPaquete;
+                         tablaProducto.row(item).data(dataItem).draw(false);
+                     }
+                 }
+             }
+
+    });
+    var tablaPrincipalServicio = $('#TablaPrincipalServicio').DataTable({
+            autoWidth: true,
+            responsive: true,
+            "destroy": true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            data : dataPrincipalServicio,
+             columns: [
+                 {
+
+                     data: 'fiIDProducto'
+                 },
+
+                {
+                    data: 'fcProducto'
+                },
+                {
+                    data: 'fcTipoProducto'
+                },
+
+
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return ConvertirADecimal(data.fnValorProducto) + " $";
+                    }
+                 },
+
+                 //{
+                 //    data: null,
+                 //    visible: false,
+                 //    render: function (data) {
+
+                 //        return `<input ${data.Seleccionado ? 'checked' : ''} class="form-check-input" style="margin-left:auto; margin-right:auto;"  type="checkbox" value="" id="CheckCheckedFalla" name = "CheckCheckedFalla"  > <label></label>`;
+                 //    }
+                 //},
+               ],
+
+
+    });
+
+
+    $("#btnGuardar").click(function () {
+
+        $("#TablaPrincipalServicio").css('display', '');
+        var table = $.fn.dataTable.Api("#TablaProductoServicio");
+        var data = table.rows().data().toArray();
+        var tableListaProducto = $.fn.dataTable.Api("#TablaPrincipalServicio");
+
+        tableListaProducto.rows().remove().draw(false);
+        var DataCliente = data.filter(x => x.Seleccionado);
+        tableListaProducto.rows.add(DataCliente).draw(false);
+        //console.log(DataCliente);
+        dataPrincipalServicio = DataCliente;
+        tablaPrincipalServicio.destroy();
+        $("#MyModalBig2").modal("hide");
+        $("#MyModalBig2").empty();
+
+        //CerrarModal();
+
+    });
+
+    $('#TablaProductoServicio tbody').on('click', 'tr input[name=CheckCheckedFalla]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaProductoServicio');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+        data.Seleccionado = $(this).prop('checked');
+
+    });
+</script>
+
+
+

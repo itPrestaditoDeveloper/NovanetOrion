@@ -1,0 +1,221 @@
+﻿@model string
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Paquetes</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+<!--Modal body-->
+
+<div class="modal-body">
+    <form id="MyFormModal">
+        <div class="panel-container">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPaquete">
+                    <thead>
+                        <tr>
+                            <th>Paquete</th>
+                            <th>Valor Mensual</th>
+                            <th>Tasa Interes Anual</th>
+                            <th>Productos</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnGuardarPaquete" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+
+
+<script>
+    var ID = "@Model";
+    console.log(ID);
+    var tablaPaquete = $('#TablaPaquete').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarPaquete", "PrecalificaCliente")',
+                data: { Identidad: ID },
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+        rowCallback: function (row, data, index) {
+            debugger;
+                if (data.fiTieneProducto == 1) { // aqui es donde se pinta las solicitudes si tienen articulos
+                    $(row).css('background-color', "#c6e8c7");
+                }
+            },
+            columns: [
+
+                {
+                    data: "fcPaquete",
+
+                },
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        return ConvertirDecimal(data.fnValorMensual);
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return ConvertirDecimal(data.fnTasadeInteresAnual)
+                    }
+
+                },
+                {
+                    data: "fcProductos"
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<div class="custom-control custom-checkbox">
+                          <input ${data.Seleccionado ? 'checked' : ''}  id="${data.fiIDPaquete}" class="custom-control-input" style="margin-left:auto; margin-right:auto;"  type="checkbox" value="" id="CheckCheckedFalla" name = "CheckCheckedFalla"  > <label></label>
+                               <label class="custom-control-label" for="${data.fiIDPaquete}"></label>
+                           </div>`;
+                    }
+                },
+
+            ]
+
+    });
+    var tablaPrincipal = $('#TablaPrincipal').DataTable({
+        autoWidth: true,
+        responsive: true,
+        "destroy": true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+
+        order: [[1, "desc"]],
+        data: dataPrincipal,
+        columns: [
+            {
+
+                data: 'fiIDProducto'
+            },
+
+            {
+                data: 'fcProducto'
+            },
+            {
+                data: 'fcTipoProducto'
+            },
+
+
+            {
+                data: null,
+                render: function (data) {
+
+                    return ConvertirADecimal(data.fnValorProducto) + " $";
+                }
+            },
+
+
+        ],
+
+
+    });
+
+    function DesabilitarCheque() {
+
+        var tabla = $.fn.dataTable.Api('#TablaPaquete');
+        var data = tabla.rows().data().toArray();
+        var node = tabla.rows().nodes().toArray();
+        for (var item of data) {
+            item.Seleccionado = false;
+
+        }
+        for (var item of node) {
+            var checked = $(item).find('input[name = CheckCheckedFalla]');
+            $(checked).prop('checked', false);
+        }
+    }
+    $('#TablaPaquete tbody').on('click', 'tr input[name=CheckCheckedFalla]', function () {
+        DesabilitarCheque();
+        var tabla = $.fn.dataTable.Api('#TablaPaquete');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+        $(this).prop('checked',true);
+        data.Seleccionado = true;
+
+    });
+
+    $("#btnGuardarPaquete").click(function ()
+    {
+        debugger;
+        var url = "@Url.Action("CargarDetallePaquete", "PrecalificaCliente")";
+        var tabla = $.fn.dataTable.Api('#TablaPaquete');
+        var data = tabla.rows().data().toArray().find(x => x.Seleccionado);
+
+
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { idPaquete: data.fiIDPaquete },
+            success: function (data) {
+                $("#TablaPrincipal").css('display', '');
+                var tablaPrincipal = $.fn.dataTable.Api('#TablaPrincipal');
+                tablaPrincipal.rows.add(data).draw(false);
+                dataPrincipal = data;
+                //tablaPrincipal.destroy();
+                CerrarModal();
+                //if (data.Estado) {
+                //   // var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                //    //tablaT.ajax.reload();
+                //    ToastrSuccess("Aprobada", data.Mensaje);
+                //    CerrarModal();
+                //} else {
+                //    ToastrError("Error", data.Mensaje);
+                //}
+            }
+        });
+    });
+</script>
+
+
+

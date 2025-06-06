@@ -1,0 +1,140 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<style>
+	/* Timeline container */
+	.timeline-section {
+		position: relative;
+		padding: 1.5rem 0;
+	}
+
+	/* Main timeline line */
+	.timeline-with-icons {
+		position: relative;
+		list-style: none;
+		padding-left: 1.5rem;
+		border-left: 2px solid #ccc; /* Solid border instead of gradient */
+	}
+
+	/* Timeline item */
+	.timeline-item {
+		position: relative;
+		margin-bottom: 1.5rem;
+		padding-left: 1.5rem;
+	}
+
+	/* Timeline icon */
+	.timeline-icon {
+		position: absolute;
+		top: 0;
+		left: -10px;
+		width: 30px;
+		height: 30px;
+		background-color: #e9f1ff;
+		color: #007bff;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	/* Timeline content */
+	.timeline-content {
+		background-color: #fff;
+		padding: 0.75rem;
+		border-radius: 4px;
+	}
+
+		.timeline-content p {
+			margin: 0;
+		}
+
+		/* Typography */
+		.timeline-content .user-name {
+			font-size: 1rem;
+			font-weight: 500;
+			color: #333;
+		}
+
+		.timeline-content .action {
+			font-style: italic;
+			color: #555;
+		}
+
+		.timeline-content .date {
+			font-size: 0.8rem;
+			color: #888;
+			margin: 0.2rem 0;
+		}
+
+		.timeline-content .description {
+			font-size: 0.85rem;
+			color: #666;
+		}
+
+	/* Links */
+	.btn-link {
+		color: #007bff;
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+		.btn-link:hover {
+			text-decoration: underline;
+			color: #0056b3;
+		}
+</style>
+
+<!-- Section: Timeline -->
+<section class="timeline-section">
+	<ul class="timeline-with-icons">
+		<!-- Combine both lists and sort by date if needed -->
+		@{
+			// Combine and sort both lists
+			var combinedBitacoras = Model.BitacorasClienteSoporte
+				.Select(b => new
+				{
+					b.fcNombreCorto,
+					b.fcGestion,
+					b.fcBitacora,
+					Date = (DateTime?)b.fdGestion,
+					DateString = b.fdGestion.ToString("dd MMM yy HH:mm"),
+					IsSoporte = true
+				})
+				.Concat(Model.BitacorasClienteMantoSolicitudes
+					.Select(b => new
+					{
+						b.fcNombreCorto,
+						b.fcGestion,
+						b.fcBitacora,
+						Date = b.fdFechaVolveraLlamar,
+						DateString = b.fdFechaVolveraLlamar.HasValue ? b.fdFechaVolveraLlamar.Value.ToString("dd MMMM yyyy hh:mm tt") : "N/A",
+						IsSoporte = false
+					}))
+				.OrderByDescending(b => b.Date);
+		}
+
+		@foreach (var item in combinedBitacoras)
+		{
+			<li class="timeline-item">
+				<span class="timeline-icon">
+					@if (item.IsSoporte)
+					{
+						<i class="fal fa-headset text-primary fa-sm fa-fw"></i>
+					}
+					else
+					{
+						<i class="fal fa-tools text-primary fa-sm fa-fw"></i>
+					}
+				</span>
+				<div class="timeline-content">
+					<p>
+						<a href="#" class="btn-link user-name">@item.fcNombreCorto</a> registró
+						<a href="#" class="action"><i>@item.fcGestion</i></a>
+					</p>
+					<p class="date">@item.DateString</p>
+					<p class="description">@item.fcBitacora</p>
+				</div>
+			</li>
+		}
+	</ul>
+</section>

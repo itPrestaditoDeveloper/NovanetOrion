@@ -1,0 +1,140 @@
+﻿
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>OLT</h2>
+        <div class="panel-toolbar " role="menu">
+            <button onclick="CrearOLT()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Registrar OLT</button>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaOLT">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>OLT</th>
+                        <th>Usuario Creacion</th>
+                        <th>Fecha Creacion</th>
+                        <th>Direccion</th>
+                        <th>Georeferencia</th>
+                        <th>Activo</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function CrearOLT()
+        {
+            VerModalConObjetoDeParametro({},"@Url.Action("CrearCatalogoOLT", "Mantenimiento")");
+        }
+
+        function EditarOLT(fiIdOLT) {
+            VerModalConObjetoDeParametro({ fiIdOLT: fiIdOLT }, "@Url.Action("EditarDatosOLT","Mantenimiento")");
+        }
+
+        function Desactivar(id) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("DeshabilitarOLT", "Mantenimiento")",
+                method: "post",
+                data: { IdOlt: id },
+                success: function (data) {
+                    if (data.Estado) {
+                        debugger;
+                        tablaPrincipal.ajax.reload().draw(false);
+                    }
+                    AlertaAjax(data);
+                },
+                Urlrror: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        var tablaPrincipal = $('#TablaOLT').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaCatalogoOLT", "Mantenimiento")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarOLT(' + data.fiIDOlt + ')"> Editar</a>';
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="Desactivar(' + data.fiIDOlt + ')"> ' + (data.fiIDEstado == 1 ? 'Deshabilitar ' : 'Habilitar ') + '</a>'
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: "fcDescripcionOLT",
+
+                },
+                {
+                    data: "USuarionCreacion",
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacion).format("DD/MM/YYYY");
+                    }
+                },
+
+                {
+                    data: 'fcDireccion'
+                },
+                {
+                    data: 'fcDireccion'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDEstado == 1) {
+                            return '<div class="badge badge-success">SI</div>';
+                        } else {
+                            return '<div class="badge badge-danger">NO</div>';
+                        }
+
+                    }
+                },
+
+            ]
+
+        });
+    </script>
+
+}

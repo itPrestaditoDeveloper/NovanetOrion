@@ -1,0 +1,246 @@
+﻿@model OrionCoreCableColor.Models.Soporte.ObservacionAuditoriaViewModel
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Observacion de la solicitud #@Model.fiIDSolicitud del cliente @Model.fcNombre
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-lg-12" style="margin-bottom:10px;">
+            <div class="form-group">
+                <label class="control-label">Georeferencia Mufa</label>
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <button class="input-group-text btn" onclick="obtenerGeolocalizacion('#fcGeoInicio')" name="btnfcGeoInicio"><i class="fal fa-map-marker-alt"></i></button>
+                    </div>
+                    <input id="fcGeoInicio" type="text" readonly class="form-control clsSerie1" name="btnfcGeoInicio" value="" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12" style="margin-bottom:10px;">
+            <div class="form-group">
+                <label class="control-label">Cantidad</label>
+                <input type="number" id="fnCantidad" class="form-control InputDecimal" data_class="ClaseDecimal" min="0" />
+            </div>
+        </div>
+
+        <div class="col-lg-12" style="margin-bottom:10px;">
+            <div class="form-group">
+                <label class="control-label">Georeferencia Final</label>
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <button class="input-group-text btn" name="btnfcGeoFinal" onclick="obtenerGeolocalizacion('#fcGeoFinal')"><i class="fal fa-map-marker-alt"></i></button>
+                    </div>
+                    <input type="text" id="fcGeoFinal" readonly class="form-control clsSerie1" name="btnfcGeoFinal" value="" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label">Observacion</label>
+                <div class="input-group mar-btm">
+                    <textarea rows="4" class="form-control" style="resize:none; margin-bottom:10px;" id="fcObservacion"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row justify-content-center">
+                <div class="col-sm-4" id="documento" style="height:300px;">
+
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-4" id="viewDocument">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group mb-0">
+                        <div class="custom-file">
+                            <input id="customFile" type="file" accept="image/*" capture>
+                            <label class="custom-file-label" for="customFile"><i class="fal fa-camera"></i></label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group">
+                <br />
+                <audio style="float:right; " id="audioPlayback" controls></audio>
+                <button class="btn btn-warning" id="toggleRecording" style="float:right; margin-top:6px; margin-right:5px;"><i class="fal fa-microphone"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarObservacion()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var toggleButton = document.getElementById('toggleRecording');
+    var audioPlayback = document.getElementById('audioPlayback');
+    var mediaRecorder;
+    var audioChunks = [];
+    var isRecording = false;
+    var stream;
+    var audioBlob;
+    var audioFile = null;
+    var fotografia = null;
+
+    // Función para alternar entre iniciar y detener la grabación
+    toggleButton.onclick = async () => {
+        if (!isRecording) {
+            // Empezar la grabación
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+                isRecording = true;
+                toggleButton.innerHTML = "<i class='fal fa-stop'></i>";
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    var audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    var audioURL = URL.createObjectURL(audioBlob);
+                    audioPlayback.src = audioURL;
+                    isRecording = false;
+                    toggleButton.innerHTML = "<i class='fal fa-microphone'></i>";
+                    audioFile = new File([audioBlob], `ObservacionSolicitud_@(Model.fiIDSolicitud)_${moment(new Date()).format("DD_MM_YYYY HH_mm")}.wav`, { type: 'audio/wav' });
+
+                    stream.getTracks().forEach(track => track.stop());
+                };
+            } catch (error) {
+                console.error("Error al acceder al micrófono: ", error);
+            }
+        } else {
+            // Detener la grabación
+            mediaRecorder.stop();
+        }
+    };
+
+
+    function GuardarObservacion()
+    {
+
+        $("#btnGuardarForm").hide();
+        if ($("#fnCantidad").val() == 0 || $("#fnCantidad").val() == '') {
+            ToastrWarning("Advertencia", "Ingrese la cantidad");
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+
+
+        var formData = new FormData();
+        formData.append('fiIDSolicitud', @Model.fiIDSolicitud);
+        formData.append('fnCantidad', $("#fnCantidad").val());
+        formData.append('fcObservacion', $("#fcObservacion").val());
+        formData.append('Documento', audioFile);
+        formData.append('Fotografia', fotografia);
+        formData.append('fcGeolocalizacionInicio', $("#fcGeoInicio").val());
+        formData.append('fcGeolocalizacionFinal', $("#fcGeoFinal").val());
+
+
+        $.ajax({
+            url: "@Url.Action("GuardarAuditoria","Soporte")",
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp) {
+                if (resp.Estado) {
+                    var tabla = $.fn.dataTable.Api("#TablaPrincipal");
+                    tabla.ajax.reload();
+                    
+                    CerrarModal();
+                    ToastrSuccess("Auditoria", resp.Mensaje);
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            }, error: function () {
+                ToastrError("Error", resp.Mensaje);
+                $("#btnGuardarForm").show();
+            }
+        });
+    }
+
+    $("#customFile").change(function (e) {
+        var file = e.target.files[0];
+        mostrarArchivo(file);
+    });
+
+    function mostrarArchivo(file) {
+        var nombre = file.name.split('.');
+        var type = file.type;
+        var blob = file.slice(0, file.size, file.type);
+        newFile = new File([blob], `Foto_${@Model.fiIDSolicitud}.${nombre[1]}`, { type: type });
+
+        fotografia = newFile;
+
+        debugger;
+        var url = window.URL.createObjectURL(newFile);
+
+
+        var embed = $(`<embed type="${file.type}"  src="${url}"  class="img-responsive img-thumbnail" style="width:100%;height:300px;overflow: hidden;"  cursor:pointer;"></embed>`);
+        $("#documento").empty().append(embed);
+
+        var view = $(`<button type="button" class="form-control btn btn-link text-center" onclick="${(file.type == "application/pdf" ? "ShowBigPdfSrc('" + url + "')" : "ShowBigImageSrc('" + url + "')")}">Visualizar Documento</button>`);
+        $("#viewDocument").empty().append(view);
+    }
+
+
+    function obtenerGeolocalizacion(idTxt) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+            $(idTxt).val(`${lat},${long}`);
+        });
+    }
+
+    function haversine(lat1, lon1, lat2, lon2)
+    {
+        // Radio de la Tierra en kilómetros
+        const R = 6371;
+
+        // Convertir de grados a radianes
+        const rad = Math.PI / 180;
+        const dLat = (lat2 - lat1) * rad;
+        const dLon = (lon2 - lon1) * rad;
+
+        // Fórmula de Haversine
+        const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+            Math.sin(dLon / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Distancia
+        const distance = R * c;
+
+        return distance;
+    }
+
+
+</script>

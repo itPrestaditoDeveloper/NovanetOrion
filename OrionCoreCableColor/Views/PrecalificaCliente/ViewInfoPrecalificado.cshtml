@@ -1,0 +1,213 @@
+﻿
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Informacion Precalificado</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Identidad, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Identidad, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Identidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Lugar Trabajo: </label>
+                        <input type="text" id="txtLugarTrabajo" class="form-control" placeholder="">
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Puesto: </label>
+                        <input type="text" id="txtPuesto" class="form-control" placeholder="">
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Rango Laboral: </label>
+                        <div class="input-group mar-btm">
+                            @Html.DropDownList("ListaLaboral", new SelectList(ViewBag.ListaLaboral, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Rango Salario: </label>
+                        <div class="input-group mar-btm">
+                            @Html.DropDownList("ListaSalario", new SelectList(ViewBag.ListaSalario, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Tipo Vivienda: </label>
+                        <div class="input-group mar-btm">
+                            @Html.DropDownList("ListaVivienda", new SelectList(ViewBag.ListaVivienda, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Direccion Trabajo: </label>
+                        <input type="text" id="txtDireccionTrabajo" class="form-control" placeholder="">
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Direccion Residencia: </label>
+                        <input type="text" id="txtDireccionResidencia" class="form-control" placeholder="">
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Paquete Interesado: </label>
+                        <div class="input-group mar-btm">
+                            @Html.DropDownList("ListaPaquetes", new SelectList(ViewBag.ListaPaquetes, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-sm-6">
+            <div class="form-group">
+                <label>Codigo Vendedor: </label>
+                <input type="text" id="txtCodigoVendedor" class="form-control" placeholder="001">
+            </div>
+        </div>*@
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Observaciones Adicionales a Credito: </label>
+                        <input type="text" id="txtAdcionalInfo" class="form-control" placeholder="">
+
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnGuardarDatosPrecalificado" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $(".mascara-rtn").inputmask("99999999999999");
+    $("#Nombre").prop("disabled", true);
+    $("#Identidad").prop("disabled", true);
+
+    $("#btnGuardarDatosPrecalificado").click(function () {
+        debugger;
+        var Identidad = $("#Identidad").val();
+        var txtLugarTrabajo = $("#txtLugarTrabajo").val();
+        var txtPuesto = $("#txtPuesto").val();
+        var ListaLaboral = $("#ListaLaboral").val();
+        var ListaSalario = $("#ListaSalario").val();
+        var ListaVivienda = $("#ListaVivienda").val();
+        var ListaPaquetes = $("#ListaPaquetes").val();
+        var txtDireccionTrabajo = $("#txtDireccionTrabajo").val();
+        var txtDireccionResidencia = $("#txtDireccionResidencia").val();
+        var txtAdcionalInfo = $("#txtAdcionalInfo").val();
+        
+        if (txtLugarTrabajo == "") {
+            ToastrWarning("Campos vacios", "Coloque un Lugar de Trabajo");
+            return false;
+        }
+
+        if (txtPuesto == "") {
+            ToastrWarning("Campos vacios", "Coloque un Puesto");
+            return false;
+        }
+        if (ListaLaboral == "") {
+            ToastrWarning("Campos vacios", "Seleccione una Rango Laboral");
+            return false;
+        }
+        if (ListaSalario == "") {
+            ToastrWarning("Campos vacios", "Seleccione una Rango Salarial");
+            return false;
+        }
+        if (ListaVivienda == "") {
+            ToastrWarning("Campos vacios", "Seleccione una Vivienda");
+            return false;
+        }
+        if (ListaPaquetes == "") {
+            ToastrWarning("Campos vacios", "Seleccione un Paquete");
+            return false;
+        }
+        if (txtDireccionTrabajo == "") {
+            ToastrWarning("Campos vacios", "Coloque una Direccion de Trabajo");
+            return false;
+        }
+        if (txtDireccionResidencia == "") {
+            ToastrWarning("Campos vacios", "Coloque una Direccion de Residencia");
+            return false;
+        }
+        if (txtAdcionalInfo == "") {
+            ToastrWarning("Campos vacios", "Coloque Informacion Adicional a Creditos");
+            return false;
+        }
+        
+        $.ajax({
+                url: "@Url.Action("GuardarDatosPrecalificado", "PrecalificaCliente")",
+                type: "POST",
+            data: { Identidad: Identidad, Trabajo: txtLugarTrabajo, Puesto: txtPuesto, RangoLaboral: ListaLaboral, RangoSalarial: ListaSalario, TipoVivienda: ListaVivienda, DireccionTrabajo: txtDireccionTrabajo, DireccionResidencia: txtDireccionResidencia, Paquete: ListaPaquetes, InfoAdicional: txtAdcionalInfo},
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

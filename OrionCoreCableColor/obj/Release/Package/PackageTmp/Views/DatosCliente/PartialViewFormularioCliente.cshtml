@@ -1,0 +1,595 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+@*<link href="~/Content/css/wizard/style.css" rel="stylesheet" />*@
+
+
+<div class="form-container">
+    <h1>Llene al siguiente Formulario</h1>
+    <div class="form-wrapper">
+        <!-- Primer Formulario -->
+        <form id="form1" class="form-content active">
+            <div class="form-group">
+                <label for="identidad">Identidad</label>
+
+                <input id="fcIdentidad" value="@Model.fcIdentidad" class="form-control" readonly="readonly" />
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcNombreCompleto, htmlAttributes: new { @class = "form-label", @for = "nombre_completo" })
+                @Html.EditorFor(model => model.fcNombreCompleto, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese su Nombre completo" } })
+                @Html.ValidationMessageFor(model => model.fcNombreCompleto, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCorreo, htmlAttributes: new { @class = "form-label", @for = "correo" })
+                @Html.EditorFor(model => model.fcCorreo, new { htmlAttributes = new { @class = "form-control", @type = "email", @placeholder = "Ingrese su correo electrónico" } })
+                @Html.ValidationMessageFor(model => model.fcCorreo, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                <input type="text" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="dd/mm/yyyy"
+                       maxlength="10" required>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTelefono, htmlAttributes: new { @class = "form-label" })
+                <input type="text" placeholder="" id="fcTelefono" data-inputmask="'mask': '999-9999'" class="form-control" maxlength="8">
+                <span class="help-block">9999999</span>
+                @Html.ValidationMessageFor(model => model.fcTelefono, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTelefonoSecundario, htmlAttributes: new { @class = "form-label" })
+                <input type="text" placeholder="" id="fcTelefonoSecundario" data-inputmask="'mask': '9999999'" class="form-control" maxlength="8">
+                <span class="help-block">9999999</span>
+                @Html.ValidationMessageFor(model => model.fcTelefonoSecundario, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcLugarTrabajo, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.fcLugarTrabajo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Escriba su Lugar de Trabajo" } })
+                @Html.ValidationMessageFor(model => model.fcLugarTrabajo, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiDepartamento, htmlAttributes: new { @class = "form-label", @for = "departamento" })
+                @Html.DropDownListFor(model => model.fiDepartamento, new SelectList(ViewBag.ListaDepartamentos, "Value", "Text"), "", new { @class = "form-control select2", @style = "width:100%;", @onchange = "ListaMunicipio()" })
+                @Html.ValidationMessageFor(model => model.fiDepartamento, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiMunicipio, htmlAttributes: new { @class = "form-label", @for = "municipio" })
+                <select id="fiMunicipio" class="form-control select2" onchange="ListaColonia()"></select>
+                
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiColonia, htmlAttributes: new { @class = "form-label", @for = "barrio_colonia" })
+                <select id="fiColonia" class="form-control select2"></select>
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcDireccionDetallada, htmlAttributes: new { @class = "form-label", @for = "direccion" })
+                @Html.EditorFor(model => model.fcDireccionDetallada, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fcDireccionDetallada, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTipoVivienda, htmlAttributes: new { @class = "form-label", @for = "tipo_vivienda" })
+                @Html.DropDownListFor(model => model.fcTipoVivienda, new SelectList(ViewBag.ListaViviendas, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.fcTipoVivienda, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiEstadoCivil, htmlAttributes: new { @class = "form-label", @for = "estado_civil" })
+                @Html.DropDownListFor(model => model.fiEstadoCivil, new SelectList(ViewBag.ListaEstadosCiviles, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.fiEstadoCivil, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fbTieneHijos, htmlAttributes: new { @class = "form-label", @for = "tiene_hijos" })
+                @Html.DropDownListFor(model => model.fbTieneHijos, new SelectList(ViewBag.ListaEstadosTieneHijos, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.fbTieneHijos, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiAntiguedadLaboral, htmlAttributes: new { @class = "form-label", @for = "antiguedad_laboral" })
+                @Html.DropDownListFor(model => model.fiAntiguedadLaboral, new SelectList(ViewBag.ListaAntiguedadLaboral, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.fiAntiguedadLaboral, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiRangoSalarial, htmlAttributes: new { @class = "form-label", @for = "rango_salarial" })
+                @Html.DropDownListFor(model => model.fiRangoSalarial, new SelectList(ViewBag.ListaRangosSalariales, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.fiRangoSalarial, "", new { @class = "text-danger" })
+            </div>
+            <button type="button" onclick="showNextForm()">Siguiente</button>
+        </form>
+        <!-- Segundo Formulario -->
+        <form id="form2" class="form-content">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcNombreReferencia1, htmlAttributes: new { @class = "form-label", @for = "nombre_referencia" })
+                @Html.EditorFor(model => model.fcNombreReferencia1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fcNombreReferencia1, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcApellidoReferencia1, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(model => model.fcApellidoReferencia1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fcApellidoReferencia1, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTelefonoReferencia1, htmlAttributes: new { @class = "form-label", @for = "telefono_referencia" })
+                @Html.EditorFor(model => model.fcTelefonoReferencia1, new { htmlAttributes = new { @class = "form-control mascara-telefono", @type = "number" } })
+                @Html.ValidationMessageFor(model => model.fcTelefonoReferencia1, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcParentescoReferencia1, htmlAttributes: new { @class = "form-label", @for = "parentesco" })
+                @Html.DropDownListFor(model => model.fcParentescoReferencia1, new SelectList(ViewBag.ListaParentesco, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(model => model.fcParentescoReferencia1, "", new { @class = "text-danger" })
+            </div>
+            @if (Model.fiTipoSolicitud == 1)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcNombreReferencia2, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(model => model.fcNombreReferencia2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fcApellidoReferencia2, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcApellidoReferencia2, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(model => model.fcApellidoReferencia2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fcApellidoReferencia2, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcTelefonoReferencia2, htmlAttributes: new { @class = "form-label" })
+                    @Html.EditorFor(model => model.fcTelefonoReferencia2, new { htmlAttributes = new { @class = "form-control mascara-telefono" } })
+                    @Html.ValidationMessageFor(model => model.fcTelefonoReferencia2, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcParentescoReferencia2, htmlAttributes: new { @class = "form-label", @for = "parentesco" })
+                    @Html.DropDownListFor(model => model.fcParentescoReferencia2, new SelectList(ViewBag.ListaParentesco, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                    @Html.ValidationMessageFor(model => model.fcParentescoReferencia2, "", new { @class = "text-danger" })
+                </div>
+            }
+            <button type="submit" id="btnEnviarForm">Enviar</button>
+            <button type="button" onclick="showPreviousForm()" class="back-button">Anterior</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    $("#fiDepartamento, #fiMunicipio, #fiPoblado, #fiColonia").select2({
+        // dropdownParent: $("#MyModalBig")
+    });
+
+    var departamento1 = 0,municipio1 = 0, poblado1 = 0, colonia1 = 0;
+
+
+    @*$(`#fiDepartamento`).on('change', function () {
+        var dep = $(`#fiDepartamento`).val();
+        
+        if (dep != 0) {
+            $.ajax({
+                url: "@Url.Action("ListaMunicipio", "LlenarCampos")",
+                type: "GET",
+                data: { iddepartamento: dep },
+                success: function (respuesta) {
+
+                    var selectmunicipio = $("#fiMunicipio");
+
+                    selectmunicipio.empty();
+                    selectmunicipio.append($('<option>', {
+                        value: 0,
+                        text: 'Seleccione Un Municipio'
+                    }));
+
+                    $.each(respuesta, function (index, item) {
+                        //console.log(item);
+                        selectmunicipio.append($('<option>', {
+                            value: item.fiCodMunicipio,
+                            text: item.fcMunicipio
+                        }));
+                    });
+
+                    //$("#fiMunicipio").select2({ dropdownParent: $("#MyModalBig") }).val(0).trigger("change");
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+            var selectcolonia = $("#fiColonia");
+
+            selectcolonia.empty();
+            selectcolonia.append($('<option>', {
+                value: 0,
+                text: 'Seleccione Una Colonia'
+            }));
+        }
+    });
+
+    $(`#fiMunicipio`).on(`change`, function () {
+        var muni = $(`#fiMunicipio`).val();
+        var dep = $(`#fiDepartamento`).val();
+        if (muni != 0 && dep != 0) {
+            $.ajax({
+                url: "@Url.Action("ListaColonia", "LlenarCampos")",
+                type: "GET",
+                data: { codDepartamento: dep, codmunicipio: muni },
+                success: function (respuesta) {
+
+                    var selectcolonia = $("#fiColonia");
+
+                    selectcolonia.empty();
+                    selectcolonia.append($('<option>', {
+                        value: 0,
+                        text: 'Seleccione Una Colonia'
+                    }));
+                    $.each(respuesta, function (index, item) {
+                        selectcolonia.append($('<option>', {
+                            value: item.fiCodBarrio,
+                            text: item.fcBarrio
+                        }));
+                    });
+                    //$("#fiColonia").select2({ dropdownParent: $("#MyModalBig") }).val(0).trigger("change");
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        } else {
+            var selectcolonia = $("#fiColonia");
+
+            selectcolonia.empty();
+            selectcolonia.append($('<option>', {
+                value: 0,
+                text: 'Seleccione Una Colonia'
+            }));
+        }
+    });*@
+
+    function ListaMunicipio() {
+
+        $('#fiMunicipio').empty();
+        municipio1 = 0
+
+
+        if(departamento1 != $("#fiDepartamento").val())
+        {
+            $('#fiPoblado').empty();
+            poblado1 = 0;
+            $('#fiColonia').empty();
+            colonia1 = 0;
+
+        }
+        if (!$('#fiDepartamento').val()) {
+            return;
+        }
+        let url = '@Url.Action("ListaMunicipiosByDepartamento", "DatosCliente")';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify( { CodDepartamento: Number(document.getElementById("fiDepartamento").value) }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en el servidor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                debugger;
+                var listParaSelect = data.map(registry => {
+                    return { id: registry.fiCodMunicipio, text: registry.fcMunicipio }
+                });
+
+                $("#fiMunicipio").select2({
+
+                    data: listParaSelect
+                });
+                if (municipio1 == 0) {
+                    $("#fiMunicipio").val(null).trigger("change");
+                    departamento1 = $("#fiDepartamento").val();
+                } else {
+                    $("#fiMunicipio").val(municipio).trigger("change");
+
+                    municipio1 = 0;
+                }
+
+                //LlenarSelect(data, "fiMunicipio");
+
+
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+
+            });
+        }
+
+    function ListaColonia() {
+
+        $('#fiColonia').empty();
+        //if (!$('#fiPoblado').val()) {
+        //       return;
+        //}
+        // poblado1 = $('#fiPoblado').val()
+        let url = '@Url.Action("ListaColoniasByPoblado", "DatosCliente")';
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify({ CodDepartamento: Number(document.getElementById("fiDepartamento").value), CodMunicipio: Number(document.getElementById("fiMunicipio").value) }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en el servidor');
+                }
+                return response.json();
+            })
+            .then(data => {
+                var listParaSelect = data.map(registry => {
+                    return { id: registry.fiCodBarrio, text: registry.fcBarrio };
+                });
+                debugger
+                $("#fiColonia").select2({
+                    //dropdownParent: $("#MyModalBig"),
+                    data: listParaSelect
+                });
+                if (colonia1 == 0) {
+                    $("#fiColonia").val(null).trigger("change");
+
+                    municipio1 = $("#fiMunicipio").val();
+                } else {
+                    $("#fiColonia").val(colonia1).trigger("change");
+                    colonia1 = 0;
+                }
+                //reiniciarSelect(Colonia)
+                //LlenarSelectColonias(data, "fiColonia");
+
+                //$("#fiColonia").val(null).trigger("change");
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+
+            });
+        }
+
+        //document.getElementById("formCliente").addEventListener("submit", function (event) {
+        document.getElementById("form2").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            //if (!$("#formCliente").valid()) {
+            //if (!$("#form2").valid()) {
+              //  return false;
+            //}
+            let idCliente;
+            H5_loading.show();
+
+            // Obtén la URL actual
+            var urlActual = window.location.href;
+
+            // Utiliza expresiones regulares para extraer el valor después de la última barra
+            var valorEnURL = urlActual.match(/\/(\d+)$/);
+
+            // Si se encuentra el valor, accede a él
+            if (valorEnURL && valorEnURL.length > 1) {
+                idCliente =Number( valorEnURL[1]);
+
+            } else {
+                idCliente = 0;
+            }
+
+            var ModeloEnviar = new FormData(); // no me gusta usar formdata pero que se le puede hacer en esta circunstancia para tener todo bien ordenado Att: Edgardo Mancia
+            //ModeloEnviar.append('')
+
+
+
+            if (($(`#fiDepartamento`).val() == 0 || $(`#fiDepartamento`).val() == "") || ($(`#fiMunicipio`).val() == 0 || $(`#fiMunicipio`).val() == "") || ($(`#fiColonia`).val() == 0 || $(`#fiColonia`).val() == "" )) {
+                H5_loading.hide();
+                return ToastrError("Advertencia!", "El Departamento o Municipio o Colonia falta por seleccionar");
+            }
+
+            debugger
+            ModeloEnviar.append(`fiIDEquifax`, idCliente);
+            ModeloEnviar.append(`fcIdentidad`, document.getElementById("fcIdentidad").value);
+            ModeloEnviar.append(`fcNombreCompleto`, document.getElementById("fcNombreCompleto").value);
+            ModeloEnviar.append(`fcCorreo`, document.getElementById("fcCorreo").value);
+            ModeloEnviar.append(`fiEstadoCivil`, document.getElementById("fiEstadoCivil").value);
+
+            var prueba = document.getElementById("fecha_nacimiento").value;
+            console.log(prueba);
+            let parts = document.getElementById("fecha_nacimiento").value.split('/');
+            let day = parseInt(parts[0], 10);
+            let month = parseInt(parts[1], 10);
+            let year = parseInt(parts[2], 10);
+
+            var nacimiento = `${month}/${day}/${year}`; ///al ejecutarlo de manera local cambiar al normal, ya si es de manera en el servidor si cambiarlo por que el formato de la fecha esta de esa manera,
+            ModeloEnviar.append(`fdFechaNacimiento`, nacimiento);
+
+            ModeloEnviar.append(`fcLugarTrabajo`, document.getElementById("fcLugarTrabajo").value);
+            ModeloEnviar.append(`fiDepartamento`, document.getElementById("fiDepartamento").value);
+            ModeloEnviar.append(`fiMunicipio`, document.getElementById("fiMunicipio").value);
+
+            ModeloEnviar.append(`fcTelefono`, document.getElementById("fcTelefono").value);
+            ModeloEnviar.append(`fcTelefonoSecundario`, document.getElementById("fcTelefonoSecundario").value);
+
+            ModeloEnviar.append(`fiColonia`, document.getElementById("fiColonia").value);
+            ModeloEnviar.append(`fcDireccionDetallada`, document.getElementById("fcDireccionDetallada").value);
+            ModeloEnviar.append(`fcTipoVivienda`, document.getElementById("fcTipoVivienda").value);
+            ModeloEnviar.append(`fbTieneHijos`, Number(document.getElementById("fbTieneHijos").value) == 2 ? false : true);
+            ModeloEnviar.append(`tieneHijosHelper`, Number(document.getElementById("fbTieneHijos").value));
+
+            ModeloEnviar.append(`fiRangoSalarial`, Number(document.getElementById("fiRangoSalarial").value));
+            ModeloEnviar.append(`fiAntiguedadLaboral`, Number(document.getElementById("fiAntiguedadLaboral").value));
+
+                //referencia 1
+            ModeloEnviar.append(`fcNombreReferencia1`, document.getElementById("fcNombreReferencia1").value);
+            ModeloEnviar.append(`fcApellidoReferencia1`, document.getElementById("fcApellidoReferencia1").value);
+            ModeloEnviar.append(`fcTelefonoReferencia1`, document.getElementById("fcTelefonoReferencia1").value);
+            ModeloEnviar.append(`fcParentescoReferencia1`, document.getElementById("fcParentescoReferencia1").value);
+
+
+
+            //ModeloEnviar.;
+            //ModeloEnviar.;
+            //ModeloEnviar.;
+            ////ModeloEnviar.fcPrimerNombre = document.getElementById("fcPrimerNombre").value;
+            //////ModeloEnviar.fcSegundoNombre = document.getElementById("fcSegundoNombre").value;
+            ////ModeloEnviar.fcSegundoNombre ="_";
+            ////ModeloEnviar.fcPrimerApellido = document.getElementById("fcPrimerApellido").value;
+            ////ModeloEnviar.fcSegundoApellido = document.getElementById("fcSegundoApellido").value;
+            //ModeloEnviar.;
+            //ModeloEnviar.diaNacimiento = document.getElementById("diaNacimiento").value;
+            //ModeloEnviar.MesNacimiento = document.getElementById("MesNacimiento").value;
+            //ModeloEnviar.AnioNacimento = document.getElementById("AnioNacimento").value;
+            //ModeloEnviar.;
+            //console.log($(`#fecha_nacimiento`).val());
+            //ModeloEnviar.;
+
+
+            debugger
+              let url = '@Url.Action("CrearDatosClienteParaSoloInternet", "DatosCliente")';
+                if (@Model.fiTipoSolicitud == 1) {
+            //referencia 2
+                    //ModeloEnviar.push{
+                    ModeloEnviar.append(`fcNombreReferencia2`, document.getElementById("fcNombreReferencia2").value);
+                    ModeloEnviar.append(`fcApellidoReferencia2`, document.getElementById("fcApellidoReferencia2").value);
+                    ModeloEnviar.append(`fcTelefonoReferencia2`, document.getElementById("fcTelefonoReferencia2").value);
+                    ModeloEnviar.append(`fcParentescoReferencia2`, document.getElementById("fcParentescoReferencia2").value);
+
+                //referencia 3
+             //ModeloEnviar.fcNombreReferencia3 = document.getElementById("fcNombreReferencia3").value;
+             //ModeloEnviar.fcApellidoReferencia3 = document.getElementById("fcApellidoReferencia3").value;
+             //ModeloEnviar.fcTelefonoReferencia3 = document.getElementById("fcTelefonoReferencia3").value;
+             //ModeloEnviar.fcParentescoReferencia3 = document.getElementById("fcParentescoReferencia3").value;
+               url = '@Url.Action("CrearDatosClienteParaPaqueteCompleto", "DatosCliente")';
+           }
+
+           /* document.getElementById("btnEnviarForm").style.display = "none";*/
+            console.log(ModeloEnviar);
+            $.ajax({
+                url: url,//'Url.Action("GuardarFotoInstalacion")',
+                type: 'POST',
+                data: ModeloEnviar,
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (data) {
+                    console.log(`Succes`);
+                    console.log(data);
+                    if (data.Estado) {
+
+                        ToastrSuccess("Listo!", "Subido correctamente");
+                        location.reload();
+                    } else {
+                        ToastrError(data.Mensaje, data.Titulo);
+
+                    }
+                    H5_loading.hide();
+                    if (data.Estado == true) {
+                        document.getElementById("btnEnviarForm").style.display = "none";
+                        AlertaAjax(data);
+                    }
+
+                }, error: function (datae) {
+                    console.log(`Error`);
+                    console.log(datae);
+                    AlertaError(datae);
+                }
+            });
+
+            //fetch(url, {
+            //    method: 'POST',
+            //    headers: {
+            //        'Content-Type': 'application/json; charset=utf-8',
+            //    },
+            //    body: JSON.stringify(),
+            //})
+            //    .then(response => {
+            //        if (!response.ok) {
+            //            throw new Error('Error en el servidor');
+            //        }
+            //        return response.json();
+            //    })
+            //    .then(data => {
+
+
+            //       /* var data = {Titulo:"Gracias",Mensaje:"Datos enviados",Estado:true}*/
+
+            //        //if (!data.Estado) {
+            //        //    document.getElementById("btnGuardarForm").style.display = "block";
+            //        //}
+            //        //AlertaCrearGoToIndex(data, "/InsuranceClaim/Index");
+            //    })
+            //    .catch(error => {
+            //        //console.error('Fetch error:', error);
+
+            //    });
+        });
+
+
+        //const LlenarSelect = ((data, idselect) => {
+        //    document.getElementById(idselect).innerHTML = "";
+        //    let selects = '<option id="codMuni0" value="0">Seleccione</option>';
+        //    data.forEach((item) => {
+        //        selects += `<option id="${item.fiCodMunicipio}" value="${item.fiCodMunicipio}">${item.fcMunicipio}</option>`;
+        //    })
+        //    document.getElementById(idselect).innerHTML += selects;
+
+
+        //    document.getElementById("fiPoblado").innerHTML = "";
+        //    document.getElementById("fiColonia").innerHTML = "";
+
+        //})
+        //const LlenarSelectPoblado = ((data, idselect) => {
+        //    document.getElementById(idselect).innerHTML = ""
+        //    let selects = '<option id="codPoblado0" value="0">Seleccione</option>';
+        //    data.forEach((item) => {
+        //        selects += `<option id="${item.fiCodPoblado}" value="${item.fiCodPoblado}">${item.fcPoblado}</option>`;
+        //    })
+
+        //    document.getElementById(idselect).innerHTML += selects;
+
+        //    document.getElementById("fiColonia").innerHTML = "";
+
+        //})
+        //const LlenarSelectColonias = ((data, idselect) => {
+        //    document.getElementById(idselect).innerHTML = ""
+        //    let selects = '<option id="codBarrio0" value="0">Seleccione</option>';
+        //    data.forEach((item) => {
+        //        selects += `<option id="${item.fiCodBarrio}" value="${item.fiCodBarrio}">${item.fcBarrio}</option>`;
+        //    })
+        //    document.getElementById(idselect).innerHTML += selects;
+
+        //})
+
+
+
+
+    // Añadir máscara de entrada para fecha de nacimiento (dd/mm/yyyy)
+    document.getElementById('fecha_nacimiento').addEventListener('input', function (e) {
+        let input = e.target.value;
+        // Remover caracteres no numéricos excepto las barras "/"
+        e.target.value = input.replace(/[^\d/]/g, '').slice(0, 10);
+        if (/^\d{2}$/.test(input)) {
+            e.target.value = input + '/';
+        } else if (/^\d{2}\/\d{2}$/.test(input)) {
+            e.target.value = input + '/';
+        } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(input)) {
+            e.target.value = input.slice(0, 10);
+        }
+
+        // Validar el día según el mes y el año
+        let parts = e.target.value.split('/');
+        let day = parseInt(parts[0], 10);
+        let month = parseInt(parts[1], 10);
+        let year = parseInt(parts[2], 10);
+
+        if (month < 1 || month > 12) {
+            e.target.setCustomValidity('El mes debe estar entre 01 y 12');
+        } else if (year > new Date().getFullYear()) {
+            e.target.setCustomValidity('El año no puede ser mayor al actual');
+        } else {
+            let daysInMonth = new Date(year, month, 0).getDate();
+            if (day < 1 || day > daysInMonth) {
+                e.target.setCustomValidity('El día ingresado no es válido para este mes y año');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        }
+    });
+</script>
+
+
+
+

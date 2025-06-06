@@ -1,0 +1,359 @@
+﻿@model OrionCoreCableColor.Models.Productos.GuardarMovimientoInventarioViewModel
+
+<style>
+    .img-container {
+        width: 100%;
+        height: 350px;
+        background-image: repeating-linear-gradient(45deg,#ccc,#ccc 10px, #dbdbdb 10px, #dbdbdb 20px);
+        text-align: center;
+    }
+</style>
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Actualizar Datos de Facturacion
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+
+
+    <div class="row">
+        <div class="col-lg-6">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDMoneda, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+
+                            @Html.DropDownListFor(model => model.fiIDMoneda, new SelectList(ViewBag.ListaMonedas, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDMoneda, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDProveedor, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.DropDownListFor(model => model.fiIDProveedor, new SelectList(ViewBag.ListaProveedores, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDProveedor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcNumeroFactura, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcNumeroFactura, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcNumeroFactura, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fdFechaFactura, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-calendar-alt fa-fw"></i></span>
+                            </div>
+                            <input type="date" class="form-control" value="@Model.fdFechaFactura.ToString("yyyy-MM-dd")" id="fdFechaFactura" />
+                            @*@Html.EditorFor(model => model.fdFechaFactura, new { htmlAttributes = new { @class = "form-control", @type = "date" } })*@
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fdFechaFactura, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcDescripcionFactura, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+
+                            @Html.TextAreaFor(model => model.fcDescripcionFactura, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcDescripcionFactura, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-12">
+                    @Html.LabelFor(model => model.fcDocumentoFactura, htmlAttributes: new { @class = "control-label" })
+                    <form id="Imagen-dropzone" action="@Url.Action("FormFileResponse","Base")" method="post" enctype="multipart/form-data" class="dropzone needsclick">
+                        <div class="dz-message needsclick">
+
+                            <div class="dz-icon">
+                                <i class="fal fa-cloud-upload text-muted mb-3"></i>
+                            </div>
+                            <div>
+                                <span class="dz-text">Arrastre Imagen</span>
+                                <p class="text-sm text-muted">O Click para elegirla manualmente</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-12" style="padding-top:10px;">
+                    <button id="ObtenerUsuario" class="btn btn-danger" style="float:right;"><i class="fal fa-camera-alt"></i> <i class="fal fa-wifi rotate-90"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <hr />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="clearfix" style="width:100%;">
+            <div class="col-lg-4 float-right">
+                <br />
+                <table class="table" style="width:100%;">
+                    <tr style="border: 0 solid #000 !important">
+                        <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteGravado, htmlAttributes: new { @class = "control-label" }):</td>
+                        <td>@Html.TextBoxFor(model => model.fnImporteGravado, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                    </tr>
+                    <tr style="border: 0 solid #000">
+                        <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteExento, htmlAttributes: new { @class = "control-label" }):</td>
+                        <td>@Html.TextBoxFor(model => model.fnImporteExento, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteExonerado, htmlAttributes: new { @class = "control-label" }):</td>
+                        <td>@Html.TextBoxFor(model => model.fnImporteExonerado, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnSaldo, htmlAttributes: new { @class = "control-label" }):</td>
+                        <td>@Html.TextBoxFor(model => model.fnSaldo, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnISV, htmlAttributes: new { @class = "control-label" }):</td>
+                        <td>@Html.TextBoxFor(model => model.fnISV, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnTotalFactura, htmlAttributes: new { @class = "control-label" }):</td>
+                        <td>@Html.TextBoxFor(model => model.fnTotalFactura, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarCambioFactura()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+
+</div>
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    var listTipoMovimiento = @(Html.Raw(Json.Encode(ViewBag.ListaTipoMovientoTable)));
+
+
+    $("#fnSaldo").prop("readonly", true);
+    $("#fnISV").prop("readonly", true);
+    $("#fnTotalFactura").prop("readonly", true);
+
+    $("#fiIDMoneda").select2({ dropdownParent: $("#MyModalBig") }).val(model.fiIDMoneda).trigger("change");
+    $("#fiIDProveedor").select2({ dropdownParent: $("#MyModalBig") }).val(model.fiIDProveedor).trigger("change");
+
+    myDropzone = $('#Imagen-dropzone').dropzone({
+        //url: '/file/post',
+        autoProcessQueue: true,
+        uploadMultiple: true,
+        acceptedFiles: "image/*,video/*",
+        maxFiles: 1,
+        addRemoveLinks: true,
+        dictMaxFilesExceeded: "Maximum upload limit reached",
+        dictInvalidFileType: "upload only JPG/PNG",
+        //resizeWidth: 500,
+        //resizeHeight: 300,
+
+        init: function () {
+            myDropzoneCapture = this;
+            var myDropzone = this;
+            myDropzone.on('maxfilesexceeded', function (file) {
+                this.removeAllFiles();
+                this.addFile(file);
+            });
+        },
+
+        removedfile: function (file) {
+
+            archivoExterno = 0;
+            var _ref = file.previewElement;
+
+            return _ref != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        }
+    });
+
+
+    $("#ObtenerUsuario").click(function () {
+        VerModalSmConObjetoDeParametro({}, "@Url.Action("ObtenerUsuariosParaFoto","Productos")");
+    });
+
+
+    $("#fnImporteGravado").keyup(function () {
+        CalcularFactura();
+
+    });
+
+
+    $("#fnImporteExento").keyup(function () {
+        CalcularFactura();
+
+    });
+
+    $("#fnImporteExonerado").keyup(function () {
+        CalcularFactura();
+    });
+
+
+    function CalcularFactura() {
+        var importeGravado = $("#fnImporteGravado").val() == "" ? 0 : parseFloat($("#fnImporteGravado").val());
+        var importeExento = $("#fnImporteExento").val() == "" ? 0 : parseFloat($("#fnImporteExento").val());
+        var exonerado = $("#fnImporteExonerado").val() == "" ? 0 : parseFloat($("#fnImporteExonerado").val());
+        if (importeGravado > 0 || importeExento > 0) {
+            $("#fnImporteExonerado").prop("readonly", true);
+            $("#fnImporteExonerado").val(0);
+            $("#fnImporteGravado").prop("readonly", false);
+            $("#fnImporteExento").prop("readonly", false);
+            $("#fnSaldo").val((importeGravado + importeExento).toFixed(2));
+            var isv = importeGravado * 0.15;
+            $("#fnISV").val(parseFloat(isv).toFixed(2));
+            $("#fnTotalFactura").val((importeGravado + importeExento + isv).toFixed(2));
+        }
+
+        if (exonerado > 0) {
+            $("#fnImporteExonerado").prop("readonly", false);
+            $("#fnImporteGravado").val(0);
+            $("#fnImporteExento").val(0);
+            $("#fnImporteGravado").prop("readonly", true);
+            $("#fnImporteExento").prop("readonly", true);
+            $("#fnSaldo").val((exonerado).toFixed(2));
+            $("#fnISV").val((0).toFixed(2));
+            $("#fnTotalFactura").val(exonerado.toFixed(2));
+        }
+
+        if (importeGravado == 0 && importeExento == 0 && exonerado == 0) {
+            $("#fnImporteExonerado").prop("readonly", false);
+            $("#fnImporteGravado").prop("readonly", false);
+            $("#fnImporteExento").prop("readonly", false);
+            $("#fnSaldo").val((0).toFixed(2));
+            $("#fnISV").val((0).toFixed(2));
+            $("#fnTotalFactura").val(0);
+        }
+
+    }
+
+    function GuardarCambioFactura() {
+            if ($("#fcNumeroFactura").val() == "")
+            {
+                ToastrError("Error", "Ingrese numero de factura");
+                return;
+            }
+
+            if ($("#fdFechaFactura").val() == "") {
+                ToastrError("Error", "Ingrese la fecha de la factura");
+                return;
+            }
+
+            if ($("#fcReferenciaFactura").val() == "") {
+                ToastrError("Error", "Ingrese referencia de la factura");
+                return;
+            }
+
+
+
+            if ($("#fnImporteGravado").val() == "" || $("#fnImporteGravado").val() == 0)
+            {
+                ToastrError("Error", "Importe no puede ser 0");
+                return;
+            }
+
+            if ($("#fnSaldo").val() == "" || $("#fnSaldo").val() == 0) {
+                ToastrError("Error", "Total sin ISV no puede ser 0");
+                return;
+            }
+
+            if ($("#fnTotalFactura").val() == "" || $("#fnTotalFactura").val() == 0) {
+                ToastrError("Error", "Total de la factura no puede ser 0");
+                return;
+            }
+
+            
+
+
+
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var dataTabla = tabla.rows().data().toArray();
+
+            var form_data = new FormData();
+            form_data.append("fiIDMovimientoMaestro", model.fiIDMovimientoMaestro);
+            form_data.append("fiIDMoneda", $("#fiIDMoneda").val());
+            form_data.append("fcNumeroFactura", $("#fcNumeroFactura").val());
+            form_data.append("fcReferenciaFactura", $("#fcReferenciaFactura").val());
+            form_data.append("fcDescripcionFactura", $("#fcDescripcionFactura").val());
+            form_data.append("fcCAI", "_");
+            form_data.append("fdFechaFactura", $("#fdFechaFactura").val())
+            form_data.append("fiIDTipoMovimiento", 1);
+            form_data.append("fnImporteGravado", $("#fnImporteGravado").val());
+            form_data.append("fnImporteExento", $("#fnImporteExento").val());
+            form_data.append("fnImporteExonerado", $("#fnImporteExonerado").val());
+            form_data.append("fnSaldo", $("#fnSaldo").val());
+            form_data.append("fnISV", $("#fnISV").val());
+            form_data.append("fnTotalFactura", $("#fnTotalFactura").val());
+       
+            form_data.append("DocumentoFactura",myDropzone[0].dropzone.files[0]);
+            form_data.append("fbEditar", model.fbEditar);
+            form_data.append("fiIDProveedor", $("#fiIDProveedor").val());
+
+
+            
+
+            $.ajax({
+                url: "@Url.Action("EditarDatosFactura","Productos")",
+                type: 'POST',
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (data) {
+
+                    if (data.Estado) {
+                        ToastrSuccess("Aprobada", data.Mensaje);
+                        var tabla = $.fn.dataTable.Api("#TablaPrincipal");
+                        tabla.ajax.reload();
+                        CerrarModal();
+                    } else {
+                        ToastrError("Error", data.Mensaje);
+                        $("#btnGuardarForm").show();
+                    }
+
+                }, error: function (resp) {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            });
+
+        }
+</script>

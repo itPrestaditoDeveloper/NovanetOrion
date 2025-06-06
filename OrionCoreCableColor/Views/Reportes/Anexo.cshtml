@@ -1,0 +1,165 @@
+﻿@model int
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Firma Orden de Trabajo</title>
+	@Styles.Render("~/styles/externalstylesheets")
+	<link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+	<link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+	<link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+	<link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+	<link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+	<link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet" />
+	<link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="~/Content/img/favicon/favicon-32x32.png">
+	<link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+	<link href="~/Content/css/wizard/style.css" rel="stylesheet" />
+	<link href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet" />
+
+	<style>
+		.drawCanvas {
+			border: 2px dashed #ced4da;
+			border-radius: 8px;
+			cursor: crosshair;
+
+		}
+
+		.card {
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			border-radius: 10px;
+		}
+	</style>
+</head>
+<body class="bg-light">
+
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="card p-4">
+					<h4 class="mb-4 text-center">Firma de Orden de Trabajo</h4>
+					<div class="mb-4">
+						@{
+							Html.RenderAction("Anexo_ComparativaInstalado", "Reportes", new { idCustomsolicituder = Model });
+						}
+					</div>
+					<form id="MyFormModal">
+						<div id="firma1" class="mb-3"></div>
+
+						<div class="text-center">
+							<a download id="btnAutorizacionProductoYServicios" class="btn btn-success">
+								<i class="fal fa-paper-plane"></i> Enviar y Finalizar
+							</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+	<script src="~/Scripts/jquery.validate.min.js"></script>
+	<script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+	<script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+	<script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+	<script src="~/Content/js/dependency/moment/moment.js"></script>
+	<script src="~/Content/js/notifications/toastr/toastr.js"></script>
+	<script src="~/Content/js/notificaciones/notificaciones.js"></script>
+	<script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+
+	<script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+	<script src="~/Content/js/wizard/function.js"></script>
+	<script src="~/Template/js/Personalized/Alertas.js"></script>
+	<script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+	<script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.bundle.js"></script>
+	<script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.js"></script>
+	<script src="~/Content/js/loading/loading.js"></script>
+	<script src="~/Template/js/Personalized/Firma.js"></script>
+	<script>
+
+		DrawCanvasFirma("#firma1", "drawCanvas", document.querySelector("#firma1").offsetWidth, 600);
+      VerificarEstado();
+    $("#btnAutorizacionProductoYServicios").click(function (e) {
+        e.preventDefault();
+        NombreArchivo = "PlantillaOrdenTrabajoFirmado";
+        var dataUrl = document.getElementById("drawCanvas").toDataURL();
+        EnviarAnexo(dataUrl);
+        //ImprimirDoc(NombreArchivo);
+    });
+      453
+      function VerificarEstado()
+      {
+          debugger;
+          $.ajax({
+          url: "@Url.Action("VerificarAnexo", "Reportes")",
+          type: "GET",
+              data: { idSolicitud: @Model},
+          success: function (resp) {
+              console.log(resp);
+              if (resp.Estado == true) {
+                  $("#btnAutorizacionProductoYServicios").css("display", "none");
+                  ToastrSuccess(resp.Titulo, resp.Mensaje);
+
+              }else {
+                  ToastrSuccess(resp.Titulo, resp.Mensaje);
+              }
+          },
+          error: function (data) {
+              ToastrError("Error", "Error de Red");
+          },
+      });
+      }
+
+      function EnviarAnexo(dataUrl)
+      {
+          $.ajax({
+          url: "@Url.Action("EnviarAnexoCliente", "Reportes")",
+          type: "POST",
+              data: { IdSolicitud: @Model, firma: dataUrl},
+          success: function (resp) {
+              console.log(resp);
+              debugger;
+              if (resp.Estado == true) {
+                  $("#btnAutorizacionProductoYServicios").css("display", "none");
+                  ToastrSuccess(resp.Titulo, resp.Mensaje);
+                  enviarConfirmaciones();
+              } else {
+                  window.location.href = resp;
+              }
+          },
+          error: function (data) {
+              ToastrError("Error", "Error de Red");
+          },
+      });
+      }
+
+      function ImprimirDoc(NombreArchivo) {
+
+      debugger;
+      $.ajax({
+          url: "@Url.Action("ImprimirDOC", "Reportes")",
+          type: "POST",
+          data: { NombreArchivo: NombreArchivo, IdSolicitud: @Model},
+          success: function (resp) {
+              console.log(resp);
+              if (resp.Estado == true) {
+                  $("#btnAutorizacionProductoYServicios").css("display", "none");
+                  ToastrSuccess(resp.Titulo, resp.Mensaje);
+
+              }else {
+                  window.location.href = resp;
+              }
+          },
+          error: function (data) {
+              ToastrError("Error", "Error de Red");
+          },
+      });
+      }
+	</script>
+
+</body>
+</html>

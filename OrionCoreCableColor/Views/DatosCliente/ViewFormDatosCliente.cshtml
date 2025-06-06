@@ -1,0 +1,200 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*@Styles.Render("~/styles/externalstylesheets")*@
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    @*<link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />*@
+    @*<link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <!-- Place favicon.ico in the root directory -->
+    @*<link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">*@
+    @*<link rel="icon" type="image/png" sizes="32x32" href="~/Content/img/favicon/favicon-32x32.png">*@
+
+    @*<link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">*@
+    @*<link href="~/Content/css/wizard/style.css" rel="stylesheet" />*@
+    <link href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet" />
+
+    <title>DatosCliente</title>
+    <link href="~/styles/FormularioClienteStilos.css" rel="stylesheet" />
+
+</head>
+<body id="contenido2">
+
+
+
+    @Scripts.Render("~/scripts/external-plugins")
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    @*<script src="~/Scripts/jquery.validate.min.js"></script>*@
+    @*<script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>*@
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    @*<script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>*@
+    @*<script src="~/Content/js/dependency/moment/moment.js"></script>*@
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    @*<script src="~/Content/js/wizard/function.js"></script>*@
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    @*<script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.bundle.js"></script>*@
+    @*<script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.js"></script>*@
+    <script src="~/Content/js/loading/loading.js"></script>
+
+    <script>
+
+
+
+        //document.getElementById("AnioNacimento").value="";
+        //$(".mascara-telefono").inputmask("9999-9999");
+
+        var urlActual = window.location.href;
+        var valorEnURL = urlActual.match(/\/(\d+)$/);
+
+        // Si se encuentra el valor, accede a él
+        if (valorEnURL && valorEnURL.length > 1) {
+            ObtenerIdentidadCliente( Number(valorEnURL[1]));
+
+        } else {
+            idCliente = 0;
+        }
+
+        function ObtenerIdentidadCliente(idEquifax) {
+            let url = '@Url.Action("ObtenerIdentidad","DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ fiIDEquifax: idEquifax }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    if (Number(data.fiEstadoForm) != 0) {
+                        FormularioLlenado();
+                        //var datos = { Estado: false, Titulo: "Atención", Mensaje: "Ya has llenado este formulario, gracias!" };
+                        //document.getElementById("contenido2").style.display = "none";
+                        //AlertaAjax(datos);
+                    }
+                    else {
+                        console.log(data)
+                        CargarPartialView(idEquifax, data.fiIDTipoSolicitud, data.fiEstadoForm, data.fcIdentidad)
+
+                        //var miInput = document.getElementById("fcIdentidad");
+                        //miInput.readOnly = true;
+                        //console.log(data)
+                        //document.getElementById("fcIdentidad").value = data.fcIdentidad;
+                    }
+
+                })
+                .catch(error => {
+                    //console.error('Fetch error:', error);
+                    //AlertaError();
+                });
+
+        }
+        function FormularioLlenado() {
+            $.ajax({
+                url: '@Url.Action("VistadeLlenadoFormulario", "DatosCliente")',
+                type: 'GET',
+                //data: ({ idEquifax: idEquifax, tipoSolicitud: tipoSolicitud, estadoForm: estadoForm, identidad: identidad }),
+                success: function (data) {
+                    //debugger
+                    $("#contenido2").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    AlertaError();
+                }
+            });
+        }
+
+        function CargarPartialView(idEquifax, tipoSolicitud, estadoForm, identidad) {
+            debugger
+            let url = '@Url.Action("PartialViewFormularioCliente", "DatosCliente")';
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: ({ idEquifax: idEquifax, tipoSolicitud: tipoSolicitud, estadoForm: estadoForm, identidad: identidad }),
+                success: function (data) {
+                    debugger
+                    $("#contenido2").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    AlertaError();
+                }
+            });
+
+
+            @*fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ idEquifax: idEquifax, tipoSolicitud: tipoSolicitud, estadoForm: estadoForm,identidad:identidad }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+                    document.getElementById("contenido2").innerHTML=data;
+
+                })
+                .catch(error => {
+                    //console.error('Fetch error:', error);
+                    //AlertaError();
+                });*@
+
+
+        }
+
+
+
+    </script>
+
+</body>
+</html>
+
+
+<script>
+    function showNextForm() {
+        document.getElementById('form1').classList.remove('active');
+        document.getElementById('form2').classList.add('active');
+    }
+
+    function showPreviousForm() {
+        document.getElementById('form2').classList.remove('active');
+        document.getElementById('form1').classList.add('active');
+    }
+
+    
+
+    // Limpiar la validación personalizada cuando se cambia el valor
+    $(`#fecha_nacimiento`).on('change', function (e) {
+        e.target.setCustomValidity('');
+    });
+</script>
+

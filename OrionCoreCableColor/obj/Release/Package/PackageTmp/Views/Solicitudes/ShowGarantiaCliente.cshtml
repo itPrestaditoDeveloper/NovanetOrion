@@ -1,0 +1,203 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Paquete del Cliente</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Identidad, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Identidad, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Identidad, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        </br>
+
+
+        <div class="form-group">
+
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPaquete">
+                <thead>
+                    <tr><th COLSPAN="5" style="text-align:center">Paquete Adquiridos:</th></tr>
+                    <tr>
+                        <th>N#</th>
+                        <th>Porducto</th>
+                        <th>Valor Moneda Extranjera</th>
+                        <th>Valor Moneda Nacional</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+                <tbody></tbody>
+                @*<tbody>
+
+            @foreach (var item in Model.ListaGarantia)
+            {
+                <tr>
+                    <td>@item.fiIDProducto</td>
+                    <td>@item.fcProducto</td>`
+                    <td>@item.fnValorProductoME</td>
+                    <td>@item.fnValorProductoMN</td>
+                </tr>
+
+            }
+
+        </tbody>*@
+            </table>
+
+        </div>
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" id="btnConfirmarProducto" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+    var model = @Html.Raw(Json.Encode(Model));
+    
+    $("#Nombre").prop("disabled", true);
+    $("#Identidad").prop("disabled", true);
+    debugger;
+    var tablaPaquete = $('#TablaPaquete').DataTable({
+
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        language:
+        {
+            "emptyTable": "No se encontraron resultados.",            
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+            buttons:
+            [
+                {
+                    text: `<i class="fal fa-plus"></i>`,
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
+
+
+                        VerModalMdConObjetoDeParametro({}, "@Url.Action("ListaProductos", "Solicitudes")");
+                    }
+                }
+            ],
+
+        data: model.ListaGarantia,
+        columns:
+            [
+
+                {
+                    data: "fiIDProducto"
+                },
+                {
+                    data: "fcProducto"
+                },
+                //{
+                //    data: null,
+                //    render: function (data) {
+                //        return `<input type="number" name="fiCantidad" class="form-control  " value=${data.fiIDProducto} />`;
+                //    }
+                //},
+                {
+                    data: "fnValorProductoME"
+                },
+                {
+                    data: "fnValorProductoMN"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                      
+                        return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                    }
+                }
+            ]
+    });
+
+    $("#TablaPaquete tbody").on("click", "button[name=eliminar]", function () {
+
+        var tabla = $.fn.dataTable.Api("#TablaPaquete");
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).remove().draw(false);
+
+    });
+
+    $("#btnConfirmarProducto").click(function ()
+    {
+        var tabla = $.fn.dataTable.Api("#TablaPaquete");
+        var productos = tabla.rows().data().toArray();       
+        model.ListaGarantia = productos;
+        var url = "@Url.Action("EditarPaquete", "Solicitudes")";
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { model: model },
+            success: function (data) {
+                if (data.Estado) {
+                    var tablaT = $.fn.dataTable.Api("#BandejaSolicitudes");
+                    tablaT.ajax.reload();
+                    ToastrSuccess("Aprobada", data.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                }
+            }
+        });
+    });
+
+
+
+
+</script>

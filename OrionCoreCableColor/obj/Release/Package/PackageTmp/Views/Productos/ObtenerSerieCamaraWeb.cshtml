@@ -1,0 +1,589 @@
+﻿<link href="~/Content/css/camaraweb.css" rel="stylesheet" />
+<link href="~/Content/css/formplugins/cropperjs/cropper.css" rel="stylesheet" />
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        <i class="fal fa-camera"></i> <span id="nombre"></span>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <label style="display:none;" id="escaneoProducto">Producto</label>
+        </div>
+    </div>
+
+    <div  id="ProductoNoEncontrado">
+        <main>
+            <div id="reader"></div>
+            <div id="result"></div>
+        </main>
+        @*<div class="col-lg-12 text-center">
+            <div class="display-cover">
+
+                <video autoplay></video>
+
+
+                <canvas class="d-none"></canvas>
+
+                <div class="video-options">
+                    <select name="" id="" class="custom-select">
+                        <option value="">Select camera</option>
+                    </select>
+                </div>
+
+                <img class="screenshot-image d-none" alt="" style="display: none;">
+
+                <div class="controls">
+                    <button class="btn btn-danger play" title="Play"><i class="fal fa-play-circle"></i></button>
+                    <button class="btn btn-info pause d-none" title="Pause"><i class="fal fa-pause"></i></button>
+                    <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><i class="fal fa-image"></i></button>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-xl-1"></div>
+        <div class="col-xl-10">
+            <div class="img-container">
+                <img id="image" alt="Picture">
+
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" data-method="move" data-option="-10" data-second-option="0" id="MoveLeft" title="Move Left">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="$().cropper(&quot;move&quot;, -10, 0)">
+                        <span class="fal fa-arrow-left"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="10" data-second-option="0" title="Move Right" id="MoveRight">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="$().cropper(&quot;move&quot;, 10, 0)">
+                        <span class="fal fa-arrow-right"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="-10" title="Move Up" id="MoveUp">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="$().cropper(&quot;move&quot;, 0, -10)">
+                        <span class="fal fa-arrow-up"></span>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-primary" data-method="move" data-option="0" data-second-option="10" title="Move Down" id="MoveDown">
+                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="$().cropper(&quot;move&quot;, 0, 10)">
+                        <span class="fal fa-arrow-down"></span>
+                    </span>
+                </button>
+            </div>
+
+            <button class="btn btn-success" id="obtenerCodigoBarraQr">Obtener Codigo</button>
+            <button class="btn btn-success" id="obtenerOCR">Obtener OCR</button>
+        </div>*@
+
+    </div>
+
+    <div class="row" id="BtnEnviar" style="padding-top: 10px;">
+        <div class="col-sm-4">
+            <select class="form-control" id="selectUsuarios">
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-success" id="enviarFormulario">Enviar</button>
+        </div>
+    </div>
+</div>
+<script src="~/Template/js/Personalized/tesseract.min.js"></script>
+<script src="~/Content/js/formplugins/cropperjs/cropper.js"></script>
+<script>
+
+    
+    var usuariosConectados = [];
+    pantallaPrincipal = 1;
+    $("#selectUsuarios").select2({ dropdownParent: $("#MyModalBig") });
+    var titulo = "";
+
+
+    $(document).on("shown.bs.modal", "#MyModalBig", function () {
+        
+        if (codigoSeleccionado == 1) {
+            titulo = "Serie 1";
+            $("#nombre").text("Serie 1");
+        }
+
+        if (codigoSeleccionado == 2) {
+            titulo = "Mac / Serie 2";
+            $("#nombre").text("Mac / Serie 2");
+        }
+
+
+        scanner = new Html5QrcodeScanner('reader', {
+            // Scanner will be initialized in DOM inside element with id of 'reader'
+            qrbox: {
+                width: $("#MyModalBig").width() / 2,
+                height: $("#MyModalBig").height() / 12,
+            },  // Sets dimensions of scanning box (set relative to reader element width)
+            fps: 20, // Frames per second to attempt a scan
+        });
+
+        scanner.render(success, error);
+
+        function success(result) {
+
+
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let data = tblProductos.row(RowSeleccionado).data();
+            let node = tblProductos.row(RowSeleccionado).node();
+
+            if (RowChild != null) {
+                node = $(RowChild);
+            }
+            if (result != "") {
+                if (codigoSeleccionado == 1) {
+                    data.fcCodigoSerie1 = result;
+                    $(node).find("input[name=fcCodigoSerie1]").val(result);
+                    Repetidos("serie1", data.fcCodigoSerie1.trim());
+                    CerrarModal();
+                }
+                if (codigoSeleccionado == 2) {
+                    data.fcCodigoSerie2 = result;
+                    $(node).find("input[name=fcCodigoSerie2]").val(result);
+                    Repetidos("serie2", data.fcCodigoSerie2.trim());
+                    CerrarModal();
+                }
+            }
+        }
+
+        function error(err) {
+            //console.error(err);
+            // Prints any errors to the console
+        }
+    });
+
+
+    
+
+    $(document).on("hidden.bs.modal", "#MyModalBig", function () {
+        pantallaPrincipal = 0;
+        
+        $(document).off("shown.bs.modal");
+        chat.off("insertarUsuarios");
+        scanner.clear();
+        $(document).empty();
+        $(document).off("hidden.bs.modal");
+        chat.off("retornarResultado")
+    });
+
+
+    chat.on('insertarUsuarios', function (resp, userPeticion) {
+        if ("@User.Identity.Name" == userPeticion) {
+            if (!usuariosConectados.some(x => x.UserName == resp.UserName)) {
+                usuariosConectados.push(resp);
+                let newOption = new Option(resp.UserName, resp.UserName, false, false);
+                $("#selectUsuarios").append(newOption).trigger("change");
+            }
+        }
+
+    });
+
+
+
+    $.ajax({
+        url: "@Url.Action("GetUsuariosConectados","Base")",
+        method: "Get",
+        success: function (resp) {
+
+            //$("#BtnEnviar").append();
+        }
+    });
+
+    $("#enviarFormulario").click(function () {
+        var usuarioSeleccionado = usuariosConectados.find(x => x.UserName == $("#selectUsuarios").val());
+        $.ajax({
+            url: "@Url.Action("EnviarModalCamaraExterna", "Productos")",
+            type: "Post",
+            data: { usuario: usuarioSeleccionado ,titulo : titulo, usuarioPeticion: "@User.Identity.Name" },
+            success: function (resp) {
+               
+            }
+        });
+
+    });
+
+    chat.on("retornarResultado", function (model) {
+        if ("@User.Identity.Name" == model.UsuarioPeticion)
+        {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let data = tblProductos.row(RowSeleccionado).data();
+            let node = tblProductos.row(RowSeleccionado).node();
+
+            if (RowChild != null) {
+                node = $(RowChild);
+            }
+            if (codigoSeleccionado == 1) {
+                data.fcCodigoSerie1 = model.Codigo;
+                $(node).find("input[name=fcCodigoSerie1]").val(model.Codigo);
+                Repetidos("serie1", data.fcCodigoSerie1.trim());
+                CerrarModal();
+            }
+            if (codigoSeleccionado == 2) {
+                data.fcCodigoSerie2 = model.Codigo;
+                $(node).find("input[name=fcCodigoSerie2]").val(model.Codigo);
+                Repetidos("serie2", data.fcCodigoSerie2.trim());
+                CerrarModal();
+            }
+        }
+    });
+
+
+    //var $image = $('#image');
+    //var $download = $('#download');
+    //var $dataX = $('#dataX');
+    //var $dataY = $('#dataY');
+    //var $dataHeight = $('#dataHeight');
+    //var $dataWidth = $('#dataWidth');
+    //var $dataRotate = $('#dataRotate');
+    //var $dataScaleX = $('#dataScaleX');
+    //var $dataScaleY = $('#dataScaleY');
+
+    //var options = {
+
+    //    preview: '.img-preview',
+    //    crop: function (e) {
+    //        $dataX.val(Math.round(e.detail.x));
+    //        $dataY.val(Math.round(e.detail.y));
+    //        $dataHeight.val(Math.round(e.detail.height));
+    //        $dataWidth.val(Math.round(e.detail.width));
+    //        $dataRotate.val(e.detail.rotate);
+    //        $dataScaleX.val(e.detail.scaleX);
+    //        $dataScaleY.val(e.detail.scaleY);
+    //    }
+    //};
+
+
+
+
+
+
+    //controls = document.querySelector('.controls');
+    //cameraOptions = document.querySelector('.video-options>select');
+    //video = document.querySelector('video');
+    //canvas = document.querySelector('canvas');
+    //screenshotImage = document.querySelector('img');
+    //buttons = $(controls).find("button").toArray(); //[...controls.querySelectorAll('button')];
+    //streamStarted = false;
+
+    //var [play, pause, screenshot] = buttons;
+
+    //letraints = {
+    //    video: {
+    //        width: {
+    //            min: 1280,
+    //            ideal: 1920,
+    //            max: 2560,
+    //        },
+    //        height: {
+    //            min: 720,
+    //            ideal: 1080,
+    //            max: 1440
+    //        },
+    //        deviceId: 0
+    //    }
+    //};
+
+    //cameraOptions.onchange = () => {
+
+    //    //let updatedletraints = {
+    //    //    ...letraints,
+    //    //    deviceId: {
+    //    //        exact: cameraOptions.value
+    //    //    }
+    //    //};
+    //    let updatedletraints = letraints;
+    //    updatedletraints.video.deviceId = cameraOptions.value;
+    //    letraints.deviceId = cameraOptions.value;
+    //    startStream(updatedletraints);
+    //};
+
+    //play.onclick = () => {
+    //    if (streamStarted) {
+    //        video.play();
+    //        play.classList.add('d-none');
+    //        pause.classList.remove('d-none');
+    //        return;
+    //    }
+    //    if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
+
+    //        //let updatedletraints = {
+    //        //    ...letraints,
+    //        //    deviceId: {
+    //        //        exact: cameraOptions.value
+    //        //    }
+    //        //};
+
+    //        let updatedletraints = letraints;
+    //        updatedletraints.video.deviceId = cameraOptions.value;
+    //        letraints.deviceId = cameraOptions.value;
+    //        startStream(updatedletraints);
+    //    }
+    //};
+
+    //var pauseStream = () => {
+    //    video.pause();
+    //    play.classList.remove('d-none');
+    //    pause.classList.add('d-none');
+    //};
+
+    //var doScreenshot = () => {
+    //    canvas.width = video.videoWidth;
+    //    canvas.height = video.videoHeight;
+    //    canvas.getContext('2d').drawImage(video, 0, 0);
+    //    //screenshotImage.src = canvas.toDataURL('image/webp');
+    //    let base64 = canvas.toDataURL('image/png');
+    //    screenshotImage.src = base64;
+    //    screenshotImage.classList.remove('d-none');
+    //    $image.cropper("destroy");
+    //    $image.prop("src", base64);
+
+    //    $image.cropper(options);
+
+
+
+    //};
+
+    //pause.onclick = pauseStream;
+    //screenshot.onclick = doScreenshot;
+
+    //var startStream = async (letraints) => {
+    //    let stream = await navigator.mediaDevices.getUserMedia(letraints);
+    //    handleStream(stream);
+    //}
+
+    //var stopStream = async () => {
+
+    //    let stream = await navigator.mediaDevices.getUserMedia(letraints);
+    //    handleStreamStop(stream);
+
+    //}
+
+
+    //var handleStream = (stream) => {
+
+    //    let video2 = $(`<video autoplay></video>`);
+    //    let objeto = $(".display-cover");
+
+    //    $(objeto).find("video").remove("video");
+    //    $(objeto).prepend(video2);
+    //    video = document.querySelector('video');
+
+    //    video.srcObject = stream;
+    //    play.classList.add('d-none');
+    //    pause.classList.remove('d-none');
+    //    screenshot.classList.remove('d-none');
+
+    //};
+
+    //var handleStreamStop = (stream) => {
+    //    let tracks = stream.getVideoTracks();
+    //    video = document.querySelector('video');
+
+    //    tracks.forEach((track) => {
+    //        track.stop();
+    //    });
+
+    //    video.srcObject.getVideoTracks().forEach(track => {
+    //        track.stop()
+    //        video.srcObject.removeTrack(track);
+    //        $("#MyModalContentBig").empty();
+    //    });
+
+    //    stream = null;
+    //    //stream.load();
+
+
+
+
+
+    //}
+
+
+    //var getCameraSelection = async () => {
+    //    let devices = await navigator.mediaDevices.enumerateDevices();
+    //    let videoDevices = devices.filter(device => device.kind === 'videoinput');
+    //    let options = videoDevices.map(videoDevice => {
+    //        return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
+    //    });
+    //    cameraOptions.innerHTML = options.join('');
+    //};
+
+    //getCameraSelection();
+
+    //$(document).on("hidden.bs.modal", "#MyModalBig", function () {
+
+
+
+    //    stopStream();
+
+    //});
+
+
+    //function dataURLtoFile(dataurl, filename) {
+    //    var arr = dataurl.split(','),
+    //        mime = arr[0].match(/:(.*?);/)[1],
+    //        bstr = atob(arr[arr.length - 1]),
+    //        n = bstr.length,
+    //        u8arr = new Uint8Array(n);
+    //    while (n--) {
+    //        u8arr[n] = bstr.charCodeAt(n);
+    //    }
+    //    return new File([u8arr], filename, { type: mime });
+    //}
+
+
+
+
+    @*$("#obtenerCodigoBarraQr").click(function () {
+        var recorte = $image.cropper("getCroppedCanvas", { maxWidth: 4096, maxHeight: 4096 });
+        let recortebase64 = recorte.toDataURL('image/png');
+        //ShowBigImageSrc(recortebase64);
+        debugger;
+        var file = dataURLtoFile(recortebase64, "barCode.png");
+        var form_data = new FormData();
+        form_data.append("file", file);
+        $.ajax({
+            url: "@Url.Action("GetInformacionBarCodeQrString", "Productos")",
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp) {
+                let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+                let data = tblProductos.row(RowSeleccionado).data();
+                let node = tblProductos.row(RowSeleccionado).node();
+
+                if (RowChild != null) {
+                    node = $(RowChild);
+                }
+
+                //data.fcCodigoSerie2 = resp.Mensaje;
+                //$(node).find("input[name=fcCodigoSerie2]").val(resp.Mensaje);
+                if (resp.Estado) {
+                    ToastrSuccess("", resp.Mensaje);
+                    try {
+                        if (codigoSeleccionado == 1) {
+                            data.fcCodigoSerie1 = resp.Mensaje;
+
+                            $(node).find("input[name=fcCodigoSerie1]").val(resp.Mensaje);
+                        }
+                        if (codigoSeleccionado == 2) {
+                            data.fcCodigoSerie2 = resp.Mensaje;
+
+                            $(node).find("input[name=fcCodigoSerie2]").val(resp.Mensaje);
+                        }
+                    } catch (error) {
+                        ///alert(JSON.stringify(error));
+                    }
+
+
+
+                    CerrarModal();
+                } else {
+                    ToastrError("", resp.Mensaje);
+
+
+                }
+
+
+
+
+
+            }, error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+                //$("#btnGuardarForm").show();
+            }
+        });
+    });*@
+
+
+
+
+    //$("#MoveLeft").click(function () {
+    //    $image.cropper("move", -10, 0);
+    //});
+
+    //$("#MoveRight").click(function () {
+    //    $image.cropper("move", 10, 0);
+    //});
+
+    //$("#MoveUp").click(function () {
+    //    $image.cropper("move", 0, -10);
+    //});
+
+
+    //$("#MoveDown").click(function () {
+    //    $image.cropper("move", 0, 10);
+    //});
+
+
+
+
+
+    //$("#obtenerOCR").click(async () =>  {
+    //    var recorte = $image.cropper("getCroppedCanvas", { maxWidth: 4096, maxHeight: 4096 });
+    //    let recortebase64 = recorte.toDataURL('image/png');
+    //    //ShowBigImageSrc(recortebase64);
+    //    debugger;
+    //    var file = dataURLtoFile(recortebase64, "barCode.png");
+    //        // (A) FETCH IMAGE
+
+
+
+    //    // (B) CREATE ENGLISH TESSERACT WORKER
+    //    const worker = await Tesseract.createWorker();
+    //    await worker.loadLanguage("eng");
+    //    await worker.initialize("eng");
+    //    const res = await worker.recognize(file);
+
+    //    let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+    //    let data = tblProductos.row(RowSeleccionado).data();
+    //    let node = tblProductos.row(RowSeleccionado).node();
+
+    //    if (RowChild != null) {
+    //        node = $(RowChild);
+    //    }
+
+
+
+
+    //    try {
+    //        if (codigoSeleccionado == 1) {
+    //            data.fcCodigoSerie1 = res.data.text;
+
+    //            $(node).find("input[name=fcCodigoSerie1]").val(res.data.text);
+    //        }
+    //        if (codigoSeleccionado == 2) {
+    //            data.fcCodigoSerie2 = res.data.text;
+
+    //            $(node).find("input[name=fcCodigoSerie2]").val(res.data.text);
+    //            CerrarModal();
+    //        }
+    //    } catch (error) {
+    //        ///alert(JSON.stringify(error));
+    //    }
+
+
+
+
+    //        ToastrSuccess("", res.data.text);
+
+
+
+
+
+    //});
+
+
+</script>

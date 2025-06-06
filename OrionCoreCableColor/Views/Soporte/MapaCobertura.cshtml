@@ -1,0 +1,213 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-map-marked-alt fa-fw"></i> Coberturas</h2>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12" style="padding-bottom:10px;">
+            <div class="form-group">
+                <div class="input-group mar-btm" style="width:100%;">
+                    <input type="text" class="form-control clsSerie1" id="coordenadas" name="coordenadas" />
+                    <div class="input-group-prepend">
+                        <button class="input-group-text btn" id="addMarker">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-12">
+
+            <div id="map"></div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+   
+    <script src="~/Content/js/mapa/leaflet.js"></script>
+    <script src="~/Content/js/mapa/togeojson.min.js"></script>
+    <script src="~/Content/js/mapa/jszip.min.js"></script>
+    <script src="~/Content/js/mapa/Control.Geocoder.js"></script>
+
+    <script>
+
+        var map = null;
+        var currentPopup = null;
+        $(document).ready(function () {
+            var height = window.innerHeight;
+            $("#map").css("height", `${height - 250}px`);
+
+            Mapa();
+
+        });
+
+
+
+        var polygonGeoJSON = {
+            "type": "FeatureCollection",
+            "features": []
+        };
+
+
+        function esCoordenada(query) {
+            query = query.replaceAll(' ', '');
+            var regex = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
+            return regex.test(query);
+        }
+
+
+        function Mapa() {
+
+            var MAPTILER_KEY = 'CQjSsi4wjN5j99iwByjd';
+
+
+            map = new maplibregl.Map({
+                style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
+                center: [-87.9828610499999, 15.508540420591633],
+                zoom: 11.5,
+                container: 'map',
+                antialias: true
+            });
+
+
+
+            map.on("load", async () => {
+                $.ajax({
+                    url: "@Url.Action("CargarCoberturas","Soporte")",
+                    method: "Get",
+                    success: function (kmlTextArray) {
+                        for (var kmlText of kmlTextArray) {
+                            var parser = new DOMParser();
+                            var kmlDoc = parser.parseFromString(kmlText, 'text/xml');
+                            var geoJsonFeatures = toGeoJSON.kml(kmlDoc).features.filter(x => x.geometry.type == "Polygon");
+                            const sourceId = `kml-source-${Math.random().toString(36).substring(2)}`;
+
+                            
+                            try {
+                                map.addSource(sourceId, {
+                                    type: 'geojson',
+                                    data: {
+                                        type: 'FeatureCollection',
+                                        features: geoJsonFeatures
+                                    }
+                                });
+
+                                map.addLayer({
+                                    id: `${sourceId}-polygons`,
+                                    type: 'fill',
+                                    source: sourceId,
+                                    filter: ['==', '$type', 'Polygon'], // Filtrar solo polígonos
+                                    paint: {
+                                        'fill-color': [
+                                            'case',
+                                            ['has', '#faa61a'],
+                                            ['get', '#faa61a'],
+                                            '#faa61a'
+                                        ],
+                                        'fill-opacity': [
+                                            'case',
+                                            ['has', 'fill-opacity'],
+                                            ['get', 'fill-opacity'],
+                                            0.6
+                                        ]
+                                    }
+                                });
+
+                                map.addLayer({
+                                    id: `${sourceId}-polygon-outlines`,
+                                    type: 'line',
+                                    source: sourceId,
+                                    filter: ['==', '$type', 'Polygon'], // Filtrar solo polígonos
+                                    paint: {
+                                        'line-color': [
+                                            'case',
+                                            ['has', '#faa61a'],
+                                            ['get', '#faa61a'],
+                                            '#faa61a'
+                                        ],
+                                        'line-width': [
+                                            'case',
+                                            ['has', 'stroke-width'],
+                                            ['get', 'stroke-width'],
+                                            2
+                                        ],
+                                        'line-opacity': [
+                                            'case',
+                                            ['has', 'stroke-opacity'],
+                                            ['get', 'stroke-opacity'],
+                                            1
+                                        ]
+                                    }
+                                });
+
+
+                                const layers = [`${sourceId}-polygons`, `${sourceId}-lines`, `${sourceId}-points`];
+                                layers.forEach(layerId => {
+                                    map.on('click', layerId, (e) => {
+                                        const feature = e.features[0];
+                                        if (feature.properties.name) {
+                                            new maplibregl.Popup()
+                                                .setLngLat(e.lngLat)
+                                                .setHTML(feature.properties.name)
+                                                .addTo(map);
+                                        }
+                                    });
+
+                                    // Cambiar cursor al pasar el ratón
+                                    map.on('mouseenter', layerId, () => {
+                                        map.getCanvas().style.cursor = 'pointer';
+                                    });
+                                    map.on('mouseleave', layerId, () => {
+                                        map.getCanvas().style.cursor = '';
+                                    });
+                                });
+
+                            } catch (e) {
+                                console.log(e);
+                            }
+
+                        }
+
+
+                    }
+                });
+            });
+
+
+        }
+
+
+        $("#addMarker").click(function () {
+            var busqueda = $("#coordenadas").val();
+
+            if (esCoordenada(busqueda)) {
+                var coords = busqueda.split(',').map(parseFloat);
+                if (coords.length === 2) {
+                    map.flyTo({
+                        center: [coords[1], coords[0]], // Reverso porque maplibre usa long, lat
+                        zoom: 15
+                    });
+
+                    if (currentPopup) currentPopup.remove(); // Elimina el popup actual si existe
+
+                    currentPopup = new maplibregl.Popup()
+                        .setLngLat([coords[1], coords[0]])
+                        .setHTML(`<strong>Coordenadas:</strong> ${coords[0]}, ${coords[1]}`)
+                        .addTo(map);
+                } else {
+                    alert("Formato de coordenadas no válido. Use el formato: lat,long");
+                }
+            } else {
+                alert("Formato de coordenadas no válido. Use el formato: lat,long");
+            }
+
+            
+
+        });
+
+    </script>
+}

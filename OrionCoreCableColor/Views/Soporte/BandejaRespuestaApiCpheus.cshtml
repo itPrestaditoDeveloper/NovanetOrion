@@ -1,0 +1,150 @@
+﻿
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Respuesta Api Chepeus</h2>
+    </div>
+
+    <div class="row mb-1 justify-content-center" style="display:none">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Fecha</label>
+            <div class="input-daterange input-group" id="date-range">
+                <input type="text" class="form-control form-control-sm" name="fecha-minima" id="fecha-minima" placeholder="Fecha inicial" />
+                <input type="text" class="form-control form-control-sm" name="fecha-maxima" id="fecha-maxima" placeholder="Fecha final" />
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-6 col-6 align-self-end">
+            <button id="btnFiltrar" class="btn btn-primary btn-sm mt-3">Filtrar</button>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table id="TablaPrincipal" class="table table-bordered table-hover table-striped w-100">
+                <thead>
+                    <tr>
+                        <th>Codigo cliente</th>
+                        <th>Nombre Cliente</th>
+                        <th>Numero Orden</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Fecha Ejecucion</th>
+                        <th>Tipo Proceso</th>
+                        <th>Estado</th>
+                        <th>Respuesta</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+        // Inicializar el datepicker con formato yyyy-mm-dd
+        $('#fecha-minima, #fecha-maxima').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'yy-mm-dd', // Formato compatible con el backend
+            showButtonPanel: true
+        });
+
+        // Configuración de DataTable con AJAX
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ totales.",
+                "infoEmpty": "No hay registros para mostrar."
+            },
+            dom: 'Bfrtip',
+            "aaSorting": [],
+            //order: [[4, "ASC"]],
+            ajax: {
+                url: '@Url.Action("CargarDatosRespuestaApi", "Soporte")',
+                method: "GET",
+                data: function (d) {
+                    // Enviar fechas al backend
+                    d.fechaMinima = $('#fecha-minima').val();
+                    d.fechaMaxima = $('#fecha-maxima').val();
+                },
+                dataSrc: function (data) {
+                    return data; // Los datos ya vienen como un array de objetos
+                },
+                error: function (xhr, error, thrown) {
+                    console.error('Error al cargar los datos:', error, thrown);
+                    alert('Error al cargar los datos. Por favor, intenta de nuevo.');
+                }
+            },
+            columns: [
+                { data: "fcCodigoCliente" },
+                { data: "fcNombre" },              
+                { data: "fcNumeroOrdenCfeus" },   
+                
+                
+                {
+                    data: "fdFechaSolicitud",
+                    render: function (d) {
+                        return d ? moment(d).format('DD/MM/YYYY') : '';
+                    }
+                },
+                {
+                    data: "fdFechaEjecucion",
+                    render: function (d) {
+                        return d ? moment(d).format('DD/MM/YYYY') : '';
+                    }
+                },
+                { data: "fcTipoProceso" },
+                { data: "fcEstado" },
+                { data: "fcRespuestaServicio" }
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    filename: 'RespuestaApi',
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    filename: 'RespuestaApi',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copy',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ]
+        });
+
+        $('#btnFiltrar').on('click', function () {
+            var fechaMinima = $('#fecha-minima').val();
+            var fechaMaxima = $('#fecha-maxima').val();
+
+            if (fechaMinima && fechaMaxima && fechaMinima > fechaMaxima) {
+                ToastrError('La fecha inicial no puede ser mayor que la fecha final.');
+                return;
+            }
+
+            tablaPrincipal.ajax.reload();
+        });
+    </script>
+}

@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "Lista de Usuarios App Móvil";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-users fa-fw"></i>Lista de Usuarios App Móvil</h2>
+        <div id="notificacionButtonContainer" style="display:none;">
+            <button id="enviarNotificacion" class="btn btn-primary mr-1" onclick="enviarNotificacion()">Enviar Notificación<i class="fal fa-paper-plane fa-fw"></i></button>
+        </div>
+        <div class="panel-toolbar " role="menu">
+            <a href="javascript:void(0)" onclick="MostrarCrear()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Nuevo Usuario</a>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="checkAll"></th>
+                        <th></th>
+                        <th>Nombre de Usuario</th>
+                        <th>Usuario</th>
+                        <th>Teléfono</th>
+                        <th>Tipo de Usuario</th>
+                        <th>Fecha Creación</th>
+                        <th>Fecha Primer Acceso</th>
+                        <th>Fecha Último Acceso</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+         
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function enviarNotificacion() {
+            var selectedUsers = [];
+
+            $('.user-checkbox:checked').each(function () {
+                selectedUsers.push($(this).data('usuario'));
+            });
+
+            if (selectedUsers.length === 0) {
+                alert("Por favor, selecciona al menos un usuario para enviar la notificación.");
+                return;
+            }
+
+            $.ajax({
+                url: "@Url.Action("EnviarNotificacion", "Notificaciones")",
+                method: "POST",
+                data: JSON.stringify({ users: selectedUsers }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    alert("Error al enviar la notificación.");
+                }
+            });
+
+        }
+
+        function BitacoraNotificaciones(fiIDEquifax) {
+           
+     
+
+            $.ajax({
+                url: "@Url.Action("BitacoraNotificaciones", "Notificaciones")",
+                method: "POST",
+                data: JSON.stringify({ fiIDEquifax: fiIDEquifax }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    alert("Error Inesperado.");
+                }
+            });
+
+        }
+
+        var selectedUsuarios = [];
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Último"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("Listar", "Notificaciones")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<input type="checkbox" class="user-checkbox" data-usuario="${data.fcUsuarioAcceso}">`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += '<a class="dropdown-item" href="javascript:void(0)" onclick="BitacoraNotificaciones(' + data.fiIDCuentaFamiliar + ')"> Bitacora de Notificaciones</a>';
+                        //opciones += '<a class="dropdown-item" href="javascript:void(0)" onclick="Desactivar(' + data.fiIDUnico + ')"> Eliminar</a>';
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                { data: 'fcNombreUsuario' },
+                { data: 'fcUsuarioAcceso' },
+                { data: 'fcTelefono' },
+                {
+                    data: null,
+                    render: function (data) {
+                        let statusText = data.fiTipodeUsuario == 1 ? 'Principal' : 'Secundario';
+                        let statusColor = data.fiTipodeUsuario == 1 ? 'primary' : 'info';
+
+                        return `
+                            <span class="d-flex align-items-center">
+                                <span class="text-white badge bg-${statusColor}" style="width: 100px; text-align: center;">
+                                    ${statusText}
+                                </span>
+                            </span>`;
+                    }
+                },
+                { data: 'fdFechaCreacion' },
+                { data: 'fdFechaPrimerAcceso' },
+                { data: 'fdFechaUltimoAcceso' },
+            ]
+        });
+
+        $('#checkAll').on('change', function () {
+            var isChecked = $(this).is(':checked');
+            $('.user-checkbox').prop('checked', isChecked).trigger('change');
+        });
+
+        $(document).on('change', '.user-checkbox', function () {
+            var usuario = $(this).data('usuario');
+
+            if ($(this).is(':checked')) {
+                if (!selectedUsuarios.includes(usuario)) {
+                    selectedUsuarios.push(usuario);
+                }
+            } else {
+                var index = selectedUsuarios.indexOf(usuario);
+                if (index > -1) {
+                    selectedUsuarios.splice(index, 1);
+                }
+            }
+
+            if (selectedUsuarios.length > 0) {
+                $('#notificacionButtonContainer').show();
+            } else {
+                $('#notificacionButtonContainer').hide();
+            }
+        });
+
+
+    </script>
+}

@@ -1,0 +1,108 @@
+﻿@model  OrionCoreCableColor.Models.Solicitudes.ModalAutorizarViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Autorizar Solicitud</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body">
+    <form id="MyFormModal">
+        <div class="panel-container">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NombreCliente, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.NombreCliente, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.NombreCliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Articulos, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Articulos, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Articulos, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ComentarioVendedor, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.ComentarioVendedor, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.ComentarioVendedor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="txtComentario">Comentario</label>
+                    <textarea id="txtComentario" name="txtMensaje" rows="4" class="form-control"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"> <i class="ion-close-round"></i> Cancelar </button>
+            <button type="button" class="btn btn-danger btnConfirmarEnvio" data-estado="2" data-dismiss="modal"><i class="ion-close-round"></i> Denegar</button>
+            <button type="button" class="btn btn-success btnConfirmarEnvio"  data-estado="1"> <i class="ion-checkmark-round"></i> Autorizar</button>
+
+        </div>
+</form>
+</div>
+
+<script>
+
+    var model = @Html.Raw(Json.Encode(Model));
+
+    $(".btnConfirmarEnvio").on("click", function (e) {
+        e.preventDefault();
+        debugger;
+        var comentario = $("#txtComentario").val().trim();
+        //if (!txtComentario) {
+        //    alert("Ingrese una descripción.");
+        //    return;
+        //}
+         var fiDEstado = $(this).data('estado');
+        // console.log(fiDEstado);
+        $.ajax({
+            url: '/Solicitudes/ActualizarSolicitudAdicionProducto',
+            type: 'POST',
+            data: { fiIDAdicionProduto: @ViewBag.fiIDAdicionProduto, fiDEstado: fiDEstado, comentario: comentario },
+            success: function (response) {
+                if (response.Estado) {
+                    ToastrSuccess(response.Titulo, response.Mensaje);
+                    $("#MyFormModal").modal("hide");
+                    location.reload();
+                } else {
+                    ToastrError("Error", response.Mensaje);
+                }
+            },
+            error: function () {
+                ToastrError("Error", "Error de Red");
+            }
+        });
+    });
+
+</script>

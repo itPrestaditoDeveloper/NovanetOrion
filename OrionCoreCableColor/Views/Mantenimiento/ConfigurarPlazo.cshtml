@@ -1,0 +1,242 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Plazos del paquete @ViewBag.fcPaquete
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPlazos">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Plazo</th>
+                    <th>Valor Plazo</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarPlazos()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardar"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var idPaquete = @ViewBag.fiIDPaquete;
+    var listPlazos = (@Html.Raw(Json.Encode(ViewBag.ListaPlazos))).map(x => {
+        return {
+            id: x.Value, text: x.Text
+        }
+
+    });
+
+
+    function createListPlazoPorPaquete()
+    {
+        return {
+            fiIDPaqueteMaestroPlazos: 0,
+            fiIDPaquete: @ViewBag.fiIDPaquete,
+            fiIDPlazo: 0,
+            fnValorPlazo: 0.0,
+            fiEstadoPlazo: 1,
+            fcToken: ""
+        };
+    }
+
+    $("#TablaPlazos").DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        buttons: [
+            {
+                text: `<i class="fal fa-plus"></i>`,
+                className: 'btn btn-success',
+                action: function (e, dt, node, config) {
+                    let tablaPlazos = $.fn.dataTable.Api("#TablaPlazos");
+
+                    tablaPlazos.row.add(createListPlazoPorPaquete()).draw(false);
+
+                }
+            }
+        ],
+        ajax: {
+            url: '@Url.Action("CargarListaPlazos", "Mantenimiento")',
+            method: "Get",
+            data: { fiIDPaquete: @ViewBag.fiIDPaquete},
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: null,
+                className: "text-center",
+                render: function (data) {
+                    return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `<select class="form-control clsPlazos" name="fiIDPlazo" style="width:50%;"></select>`;;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `<input type="number" name="fnCantidad"  class="form-control InputDecimal" data_class="ClaseDecimal" value="${data.fnValorPlazo}" />`;
+                }
+            }
+        ],
+        createdRow: function (row, data, index) {
+            $(row).find(".clsPlazos").select2({ data: listPlazos, width: "50% !important", dropdownParent: $("#MyModalBig") }).val(data.fiIDPlazo).trigger("change");
+        },
+
+    });
+
+    $("#TablaPlazos tbody").on("click", "tr button[name=eliminar]", function () {
+        let tblPlazos = $.fn.dataTable.Api("#TablaPlazos");
+        let row = $(this).closest("tr");
+        if ($(row).attr('class') == "child") {
+
+            row = $(this).closest("tr").prev()[0];
+        }
+        tblPlazos.row(row).remove().draw(false);
+    });
+
+
+    $("#TablaPlazos tbody").on("change", "tr input[name=fnCantidad]", function () {
+        let tblPlazos = $.fn.dataTable.Api("#TablaPlazos");
+        let row = $(this).closest("tr");
+        if ($(row).attr('class') == "child") {
+            row = $(this).closest("tr").prev()[0];
+        }
+        let data2 = tblPlazos.row(row).data();
+        data2.fnValorPlazo = $(this).val();
+    });
+
+
+    $("#TablaPlazos tbody").on("change", "tr select[name=fiIDPlazo]", function () {
+        let tblPlazos = $.fn.dataTable.Api("#TablaPlazos");
+        let row = $(this).closest("tr");
+        if ($(row).attr('class') == "child") {
+            row = $(this).closest("tr").prev()[0];
+        }
+        let data2 = tblPlazos.row(row).data();
+        data2.fiIDPlazo = $(this).val();
+
+    });
+
+    function GuardarPlazos() {
+        $("#btnGuardar").hide();
+
+        var tablaPlazos = $.fn.dataTable.Api("#TablaPlazos");
+        var data = tablaPlazos.rows().data().toArray();
+
+        // Validación 1: Verificar que haya al menos un plazo
+        if (data.length === 0) {
+            ToastrError("Error", "Agregue al menos un plazo");
+            $("#btnGuardar").show();
+            return;
+        }
+
+        // Validación 2 y 3: Verificar valores válidos en plazos y cantidades
+        let hasErrors = false;
+        let plazosUsados = new Set(); // Para verificar duplicados
+
+        // Recorrer cada fila para validar y actualizar cantidades
+        tablaPlazos.rows().every(function() {
+            let rowData = this.data();
+            let rowNode = this.node();
+
+            // Obtener valores actuales
+            let plazoId = rowData.fiIDPlazo; // Ya se actualiza con tu nueva función
+            let cantidad = parseFloat($(rowNode).find('input[name="fnCantidad"]').val()) || 0;
+
+            // Validar que se haya seleccionado un plazo
+            if (!plazoId || plazoId === "0" || plazoId === "") {
+                ToastrError("Error", "Seleccione un plazo válido en todas las filas");
+                hasErrors = true;
+                $(rowNode).addClass('error-row');
+                return false;
+            }
+
+            // Validar que la cantidad sea mayor a 0
+            if (cantidad <= 0) {
+                ToastrError("Error", "La cantidad debe ser mayor a 0 en todas las filas");
+                hasErrors = true;
+                $(rowNode).addClass('error-row');
+                return false;
+            }
+
+            // Validación 4: Verificar plazos duplicados
+            if (plazosUsados.has(plazoId)) {
+                ToastrError("Error", "No se permiten plazos duplicados");
+                hasErrors = true;
+                $(rowNode).addClass('error-row');
+                return false;
+            }
+            plazosUsados.add(plazoId);
+
+            // Actualizar solo la cantidad ya que el plazo ya se actualiza con tu función
+            rowData.fnValorPlazo = cantidad;
+
+            // Quitar clase de error si existía
+            $(rowNode).removeClass('error-row');
+
+            return true;
+        });
+
+        if (hasErrors) {
+            $("#btnGuardar").show();
+            return;
+        }
+
+        // Si todas las validaciones pasan, proceder con el guardado
+        $.ajax({
+            url: "@Url.Action("GuardarConfiguracionPlazo","Mantenimiento")",
+            method: "Post",
+            data: { list: data },
+            success: function (resp) {
+                if (resp.Estado) {
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    $("#btnGuardar").show();
+                    ToastrError("Error", resp.Mensaje || "Error al guardar los plazos");
+                }
+            },
+            error: function (xhr, status, error) {
+                $("#btnGuardar").show();
+                ToastrError("Error", "Ocurrió un error al guardar los plazos");
+            }
+        });
+    }
+
+
+</script>

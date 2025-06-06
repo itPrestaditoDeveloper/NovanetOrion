@@ -1,0 +1,106 @@
+﻿
+@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        <text>Enviar formulario</text>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        @if (User.IsInRole("Orion_Admin_Ventas_Distribuidor"))
+        {
+
+            <div class="col-sm-12 align-self-end">
+                <label class="col-form-label">Tipo de Envio</label>
+                <select id="ddlEnvio" class="form-control form-control-sm">
+                    <option value="3">Vendedor por distribuidor</option>
+
+                </select>
+            </div>
+
+
+        }
+        else
+        {
+            <div class="col-sm-12 align-self-end">
+                <label class="col-form-label">Tipo de Envio</label>
+                <select id="ddlEnvio" class="form-control form-control-sm">
+                    <option value="">Seleccionar</option>
+                    <option value="1">Vendedor externo</option>
+                    <option value="2">Distribuidor</option>
+                    <option value="3">Vendedor por distribuidor</option>
+
+                </select>
+            </div>
+        }
+
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTelefono, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.TextAreaFor(model => model.fcTelefono, new { @class = "form-control", style = "width:300px; height:100px;" })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcTelefono, "", new { @class = "text-danger" })
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="GuardarRegistro" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $("#ddlEnvio").select2({
+        dropdownParent: $("#MyModal"),
+      /*  multiple: true,*/
+    });
+
+        $("#GuardarRegistro").click(function () {
+            if ($("#fcTelefono").val().trim() === "") {
+                ToastrWarning("Advertencia", "El campo es requerido");
+                return;
+            }
+            var fiIDEnvioFormulario=2;
+            $.ajax({
+                url: "@Url.Action("EnviarFormularioVendedor", "PrecalificaCliente")",
+                type: "GET",
+                data: { fcTelefono: $("#fcTelefono").val(), fiIDEnvioFormulario: $("#ddlEnvio").val() }
+,
+                success: function (data) {
+                    if (data.Estado) {
+                        ToastrSuccess("Operación exitosa", data.Mensaje);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Error", data.Mensaje);
+                    }
+                },
+                error: function (resp) {
+                    ToastrError("Error", resp.responseJSON?.Mensaje || "Ocurrió un error al procesar la solicitud.");
+                }
+            });
+        });
+
+
+</script>
+

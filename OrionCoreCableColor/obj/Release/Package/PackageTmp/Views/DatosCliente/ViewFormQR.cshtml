@@ -1,0 +1,116 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewFormQR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    @Styles.Render("~/styles/externalstylesheets")
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="card" id="card">
+
+       
+        <div class="card-body">
+            <h2 style=""><span style="color:black">Nova</span><span style="color:orange">NET</span></h2>
+            <br />
+            <h6 class="card-title" id="txtTitulo">Brinde este codigo QR solamente a su tecnico</h6>
+          
+
+            <div id="divQR" class="text-center" style="width:auto; height:auto;">
+                @*<iframe id="mapa" width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src=""><a href="https://www.maps.ie/population/">Population mapping</a></iframe>*@
+            </div>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/scripts/external-plugins")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Content/js/wizard/function.js"></script>
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.js"></script>
+    <script src="~/Content/js/loading/loading.js"></script>
+    <script src="~/Content/js/qr/qrcode.js"></script>
+    <script src="~/Content/js/qr/qrcode.min.js"></script>
+
+    <script>
+        var qrcode = new QRCode(document.getElementById("divQR"), {
+            width: 300,
+            height: 300
+        });
+        Validar()
+              function Validar() {
+            var urlActual = window.location.href;
+
+            // Utiliza expresiones regulares para extraer el valor después de la última barra
+            var valorEnURL = urlActual.match(/\/(\d+)$/);
+            var idCliente
+            // Si se encuentra el valor, accede a él
+            if (valorEnURL && valorEnURL.length > 1) {
+                idCliente = Number(valorEnURL[1]);
+
+            } else {
+                idCliente = 0;
+            }
+            let url = '@Url.Action("ObtenerInfoQR", "DatosCliente")'
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ id: idCliente}),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+                    if (data.fiIDEstadoInstalacion == 7) {//estado 7 es validado por soporte tecnico
+                        qrcode.makeCode("https://orion.novanetgroup.com/Reportes/Anexo?solicitud=" + data.fiIDSolicitud);
+                    }
+                    else {
+                        document.getElementById("txtTitulo").innerHTML = "El codigo QR se mostrara cuando la instalación sea validada por soporte tecnico";
+                        if (data.fiIDEstadoInstalacion == 4) {
+                            document.getElementById("txtTitulo").textContent = "Su servicio ya fue instalado, Muchas gracias!";
+                        }
+                    }
+                })
+                .catch(error => {
+                    //console.error('Fetch error:', error);
+                    //AlertaError();
+                });
+
+        }
+
+       
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+﻿body {
+    padding-right: 0px !important
+}
+
+@media (min-width: 992px) {
+
+    .modal-lg {
+        width: 1000px;
+    }
+}
+
+
+.modal-header {
+    padding: 10px;
+    border-bottom: 1px solid #e5e5e5;
+    background: darkcyan;
+    color: white;
+    margin-top:20px;
+}
+
+.modal-header >.close {
+    color: white;
+}
+
+.modal-open {
+    overflow-y: auto;
+}
+
+.modal-title {
+    color:white;
+}
+
+/*.modal-body {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}*/
+
+
+
+
+@media (max-width: 760px) {
+
+    .modal-dialog {
+        min-height: 100vh !important;
+        margin-left:30px;
+      
+    }
+}

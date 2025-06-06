@@ -1,0 +1,168 @@
+﻿@model string
+
+
+<!--Modal body-->
+
+
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPaquete">
+    <thead>
+        <tr>
+            <th>&nbsp</th>
+            <th style="text-align: left;">No.Prestamo</th>
+            <th style="width: 150px; text-align: left;">Empresa</th>
+            <th style="width: 150px; text-align: left;">Fecha de desembolso</th>
+            <th style="width: 100px;">Saldo actual</th>
+            <th style="width: 100px;">Dias atraso</th>
+            <th style="width: 100px;">Capital</th>
+            <th style="width: 100px;">Valor Cuota</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<script>
+    var ID = "@Model";
+    var idprestamocliente = '';
+
+
+    var fcIDCliente = "";
+
+    console.log(ID);
+    var tablaPaquete = $('#TablaPaquete').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("PrestamosClientePorIdentidad", "PrecalificaCliente")',
+                data: { fcIdentidad: ID },
+                method: "Get",
+                dataSrc: function (data) {
+                    fbCuotasAtrasadas = data.some(x => x.fiCantidadCuotasEnAtraso > 1);
+                    return data;
+                }
+            },
+            rowCallback: function (row, data, index) {
+
+                if (data.fiTieneProducto == 1) { // aqui es donde se pinta las solicitudes si tienen articulos
+                    $(row).css('background-color', "#c6e8c7");
+                }
+            },
+            columns: [
+
+                {//0
+                    data: "fcIDCLiente",className: "text-center",
+                    render: function (data, type, row) {
+
+                        ididentidadcliente = row["fcIDCLiente"];
+                        return '<div class="dropdown mo-mb-2">' +
+                            '<button class="btn pt-0 pb-0 mt-0 mb-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="Opciones"><i class="fa fa-bars"></i></button >' +
+                            '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
+                            //'<button type="button" class="dropdown-item" id="btnAbrirCapturaRequerimiento" onclick="RedirigirAccion(' + "'RegistrarRequerimiento.aspx'" + ',' + "'Registrar Requerimiento'" + ')" aria-label="Detalles"><i class="far fa-file-alt"></i>Agregar Requerimiento</button>' +
+                            '<button type="button" class="dropdown-item" id="btnModuloActualizarRequerimiento" onclick="PrestamoOpciones(' + "'PlandePagos'" + ')" aria-label="Detalles"><i class="far fa-file-alt"></i>Plan de Pago</button>' +
+                            '<button type="button" class="dropdown-item" id="btnModuloActualizarRequerimiento" onclick="PrestamoOpciones(' + "'EstadodeCuenta'" + ')" aria-label="Detalles"><i class="far fa-file-alt"></i>Estado de Cuenta</button>' +
+                            '<button type="button" class="dropdown-item" id="btnModuloActualizarRequerimiento" onclick="PrestamoOpciones(' + "'InformacionAdicional'" + ')" aria-label="Detalles"><i class="far fa-file-alt"></i>Mas Informacion</button>' +
+                            //'<button type="button" class="dropdown-item" id="btnAbrirDetalles" onclick="AbrirReporte(' + row["fiIDRequerimiento"] + ')" aria-label="Detalles"><i class="far fa-file-alt"></i> Ver detalles</button>' +
+                            //(row["UsuarioPermiso"] == true ? `<button type="button" class="dropdown-item" id="btnAbrirDetalleCancelado" onclick="AbrirDetalleCancelado(${row["IdExpediente"]} , ${row["IdSolicitud"]} , '${row["NombreCliente"]}','${row["NombreOficial"]}','${row["Estado"]}', ${row["IdAbogado"]}, ${row["IDEstado"]})" aria-label="Detalles"><i class="far fa-file-alt"></i> detalles cancelados</button>` : '') +
+                            '</div>' +
+                            '</div >';
+                    }
+                },
+                {
+                    data: "fcPrestamo", className: "td-responsive",
+                    render: function (data, type, row) {
+
+                        return row["fcPrestamo"]
+                    }
+                },
+                {
+                    data: "fcEmpresaPrestamo", className: "td-responsive",
+                    render: function (data, type, row) {
+
+                        return row["fcEmpresaPrestamo"];
+                    }
+                },
+                {
+                    data: "fdFechaDesembolso", className: "td-responsive",
+                    render: function (data, type, row) {
+
+                        return moment(row["fdFechaDesembolso"]).locale('es').format('YYYY/MM/DD');
+                    }
+                },
+                {
+                    data: "fnSaldoActual", className: "text-right",
+                    render: function (data, type, row) {
+                        return row["fnSaldoActual"].toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2, minimumFractionDigits: 2 });
+
+                    }
+                },
+                {
+                    data: "fiDiasAtraso", className: "text-center",
+                    render: function (data, type, row) {
+                        return row["fiDiasAtraso"];
+
+                    }
+                },
+                {
+                    data: "fnCapital", className: "text-right",
+                    render: function (data, type, row) {
+                        return row["fnCapital"].toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2, minimumFractionDigits: 2 });
+                    }
+                },
+                {
+                    data: "fnValorCuota", className: "text-right",
+                    render: function (data, type, row) {
+                        return row["fnValorCuota"].toLocaleString('en-US', { style: 'decimal', maximumFractionDigits: 2, minimumFractionDigits: 2 });
+                    }
+                },
+
+            ]
+
+    });
+    $("#TablaPaquete tbody").on("click", "tr", function () {
+
+        let row = tablaPaquete.row(this).data();
+        debugger;
+        idprestamocliente = row.fcPrestamo;
+        fcIDCliente = row.fcIDCLiente;
+
+    });
+
+    function PrestamoOpciones(comandoprestamo) {
+
+        $.ajax({
+            url: '@Url.Action("gvDetallePrestamos_RowCommand", "PrecalificaCliente")',
+            method: "get",
+            data: { pcIdentidad: fcIDCliente, IDPrestamo: idprestamocliente},
+            error: function (xhr, ajaxOptions, thrownError) {
+                AlertaError();
+            },
+            success: function (data) {
+
+                var parametros = data;
+                //window.open('../Solicitudes/SolicitudCredito_FichaCliente.aspx?' + parametros, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=600");
+                //window.open('/Operaciones/' + comandoprestamo + '.aspx?' + parametros, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=600");
+                window.open(`http://portal.prestadito.corp/src/Gestion/${comandoprestamo}.aspx?${parametros}`, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=700,height=600");
+
+            }
+        });
+    }
+
+
+
+
+
+</script>

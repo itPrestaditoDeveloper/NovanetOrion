@@ -1,0 +1,159 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i> Ubicaciones</h2>
+        <div class="panel-toolbar " role="menu">
+            <button onclick="CrearUbicacion()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Registrar Ubicacion</button>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Ubicacion</th>
+                        <th>Descripcion</th>
+                        <th>Usuario Creacion</th>
+                        <th>Fecha Creacion</th>
+                        <th>Usuario Modificado</th>
+                        <th>Fecha Modificacion</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        function CrearUbicacion()
+        {
+            VerModalSmConObjetoDeParametro({},"@Url.Action("CrearCatalogoUbicacion","Mantenimiento")");
+        }
+
+        function EditarUbicacion(fiIdUbicacion) {
+            VerModalSmConObjetoDeParametro({ fiIdUbicacion: fiIdUbicacion},"@Url.Action("EditarCatalogoUbicacion","Mantenimiento")");
+        }
+
+        function CambiarStatus(fiIdUbicacion)
+        {
+            Swal.fire({
+                //type: "warning",
+                title: '¿Seguro que desea Deshabilitar esta ubicacion?',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                confirmButtonColor: '#d33',
+                cancelButtonText: 'No',
+                allowOutsideClick: () => !swal.isLoading()
+            }).then((result) => {
+                
+                if (result.value == true)
+                {
+                    debugger;
+                    $.ajax({
+                        url:"@Url.Action("CambiarStatusUbicacion", "Mantenimiento")",
+                        type: "Get",
+                        data: { fiIdUbicacion: fiIdUbicacion },
+                        success: function (data) {
+                            ToastrSuccess("", data.Mensaje);
+                            var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                            tablaT.ajax.reload();
+                        }
+                    });
+                }
+                
+            });
+        }
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaCatalogoUbicacion", "Mantenimiento")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += data.fiEstadoUbicacion == 1 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarUbicacion(' + data.fiIDUbicacion + ')"> Editar</a>' : '';
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="CambiarStatus(' + data.fiIDUbicacion + ')">' + (data.fiEstadoUbicacion == 1 ? "Deshabilitar" : "Habilitar") + '</a>';
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: "fcUbicacion",
+
+                },
+                {
+                    data: "fcUbicacionFisica",
+
+                },
+                
+                {
+                    data: "fcUsuarioCreacion",
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacion).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: 'fcUsuarioModificacion'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaUltimaModificacion).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoUbicacion == 1) {
+                            return '<div class="badge badge-success">Activo</div>';
+                        } else {
+                            return '<div class="badge badge-danger">Inactivo</div>';
+                        }
+                    }
+                }
+            ]
+
+        });
+    </script>
+
+}

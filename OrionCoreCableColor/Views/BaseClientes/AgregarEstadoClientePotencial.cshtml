@@ -1,0 +1,69 @@
+﻿
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Agregar Estatus Cliente Potenciales</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    @*<form >*@
+
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Nombre Estado</label>
+            <input id="txtestado" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+        </div>
+
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Descripcion Estado Clietne</label>
+            <input id="txtdescripcion" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+        </div>
+
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Color del Estatus</label>
+            <input class="form-control" id="coloestatus" type="color" name="color" value="#727cf5">
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="reiniciogeo" onclick="GuardarEstado()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+    </div>
+    @*</form>*@
+</div>
+
+<script>
+
+        function GuardarEstado() {
+        
+            var modeloEnviar = {
+                fcNombreEstatus: $(`#txtestado`).val(),
+                fcdescripcionEstatus: $(`#txtdescripcion`).val(),
+                fcHexadecimal: $(`#coloestatus`).val()
+            }
+
+            $.ajax({
+                    url: "@Url.Action("GuardarEstadoClientePotencial", "BaseClientes")",
+                    type: "POST",
+                    data: { modelo: modeloEnviar },
+                    success: function (datas) {
+                        if (datas.CodeStatus == 200) {
+                            $("#MyModal").modal("hide");
+                            return ToastrSuccess("Exito", "Estado Ingresado con Exito");
+
+                        
+                        } else {
+                            return ToastrError(`Error`,`Estado No se Pudo Ingresar por Alguna Razon`);
+                        }
+                    },
+                    error: function (datae) {
+                        var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Reiniciar Geo Referencia", Estado: false }
+                        AlertaAjax(dataerror)
+                    }
+                });
+        }
+
+
+</script>

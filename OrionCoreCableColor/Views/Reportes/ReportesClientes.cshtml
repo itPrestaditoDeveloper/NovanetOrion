@@ -1,0 +1,416 @@
+﻿
+@{
+    ViewBag.Title = "ReportesClientes";
+}
+
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Reportes de Clientes sin Contestar</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipalSinContestar">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#Equifax</th>
+                        <th>Identidad</th>
+                        <th>Nombre</th>
+                        <th>Telefono</th>
+                        <th>Asesor</th>
+                        <th>Score</th>
+                        <th>Score Promedio</th>
+                        <th>Fecha Consulta</th>
+                        <th>Estado Mensaje</th>
+                        <th>Estado Solicitud Producto</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Reportes</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#Equifax</th>
+                        <th>Identidad</th>
+                        <th>Nombre</th>
+                        <th>Telefono</th>
+                        <th>Asesor</th>
+                        <th>Score</th>
+                        <th>Score Promedio</th>
+                        <th>Fecha Consulta</th>
+                        <th>Estado Mensaje</th>
+                        <th>Estado Solicitud Producto</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+        @*function ImprimirReporteClientes(tipo) {
+            var url = "";
+            if (tipo == "excel") {
+                url = "@Url.Action("GetReporteExcel", "Base")?nombre=Reportes";
+            }
+
+            if (tipo == "pdf") {
+                url = "@Url.Action("GetReportePdf", "Base")?nombre=Reportes";
+            }
+            $.ajax({
+                url: '@Url.Action("GetRptPartidas", "DiarioContable")',
+                method: "Get",
+                data: { fechaInicial: $("#FechaInicial").val(), fechaFinal: $("#FechaFinal").val(), tipoReporte: tipo },
+                success: function (resp) {
+                    if (resp.Estado) {
+                         window.open( url, "_blank");
+                    } else {
+                        AlertaAjax(resp);
+                    }
+                    console.log(resp);
+                }
+            });*@
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("LsitaClientes", "Reportes")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+
+                {
+                data: null,
+                render: function (data) {
+
+                    var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+                    opciones += '<a href="javascript:void(0)" onclick="MostrarReferencias(' + data.fiIDEquifax + ',' + data.fiEstadoProductoServicio+')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Detalles referencias</a>';
+
+                        opciones += '</div></div>';
+                     return opciones;
+                    }
+                },
+
+                {
+                    data: 'fiIDEquifax'
+                },
+                {
+                    data: 'fcIdentidad'
+                },
+                {
+                    data: 'fcNombre'
+                },
+                {
+                    data: 'fcTelefono'
+                },
+                {
+                    data: 'fcAsesor'
+                },
+                {
+                    data: 'fiScoreActual'
+                },
+                {
+                    data: 'fiScorePromedio'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaPrimerConsulta).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoMensaje == 0) {
+
+                            return '<span class="btn-sm btn-block badge badge-secondary">Pendiente</span>';
+                        }
+                        else if (data.fiEstadoMensaje == 1)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-success">Contesto</span>`;
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoProductoServicio == 0)
+                        {
+                            return '<span class="btn-sm btn-block badge badge-secondary">Pendiente</span>';
+                        }
+                        else if (data.fiEstadoProductoServicio == 1)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-success">Aprobado</span>`;
+                        }
+                        else if (data.fiEstadoProductoServicio == 2)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-danger">Rechazado</span>`;
+                        }
+                    }
+
+                }
+
+            ]
+
+        });
+
+        var TablaPrincipalSinContestar = $('#TablaPrincipalSinContestar').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("LsitaClientes_Sincontestar", "Reportes")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+
+                {
+                data: null,
+                render: function (data) {
+
+                    var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += '<a href="javascript:void(0)" onclick="ReenviarMensajeCliente(' + data.fiIDEquifax + ',\'' + data.fcNombre + '\', \'' + data.fcTelefono+'\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Reenviar Mensaje</a>';
+                        opciones += '<a href="javascript:void(0)" onclick="EditarNumeroCliente(' + data.fiIDEquifax + ',\'' + data.fcNombre + '\', \'' + data.fcTelefono+'\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Editar Numero</a>';
+
+                        opciones += '</div></div>';
+                     return opciones;
+                    }
+                },
+
+                {
+                    data: 'fiIDEquifax'
+                },
+                {
+                    data: 'fcIdentidad'
+                },
+                {
+                    data: 'fcNombre'
+                },
+                {
+                   // visible: false,
+                    data: 'fcTelefono'
+                },
+                {
+                    
+                    data: 'fcAsesor'
+                },
+                {
+                    data: 'fiScoreActual'
+                },
+                {
+                    data: 'fiScorePromedio'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaPrimerConsulta).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoMensaje == 0) {
+                            return `<span class="btn-sm btn-block badge badge-secondary">Pendiente</span>`;
+                        }
+                        else if (data.fiEstadoMensaje == 1)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-success">Contesto</span>`;
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoProductoServicio == 0)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-secondary">Pendiente</span>`;
+                        }
+                        else if (data.fiEstadoProductoServicio == 1)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-success">Aprobado</span>`;
+                        }
+                        else if (data.fiEstadoProductoServicio == 2)
+                        {
+                            return `<span class="btn-sm btn-block badge badge-danger">Rechazado</span>`;
+                        }
+                    }
+
+                }
+
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    messageTop: "Clientes SinContestar",
+                    filename: "Clientes SinContestar",
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                        // columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    titleAttr: 'Generate CSV',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copy',
+                    titleAttr: 'Copy to clipboard',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    titleAttr: 'Print Table',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ],
+
+        });
+
+
+        @*function ImprimirPartida(id) {
+            VerModalConObjetoDeParametro({ partida: id }, '@Url.Action("ViewImprimirPartidaContable", "DiarioContable")');
+        }*@
+        function MostrarReferencias(ID, Estatus) {
+            if (Estatus == 0) {
+                fbEstadoAprobado = "block";
+                fbEstadoDenegado = "block";
+            }
+            else
+            {
+                fbEstadoAprobado = "none";
+                fbEstadoDenegado = "none";
+            }
+
+
+            $.ajax({
+                url: "@Url.Action("DetallesReferencias","Reportes")",
+                method: "get",
+                data: {id:ID},
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        function EditarNumeroCliente(IDEquifax, Nombre, Telefono)
+        {
+            VerModalSmConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDEquifax: IDEquifax }, "@Url.Action("EditarNumeroCliente", "Reportes")");
+        }
+
+        function ReenviarMensajeCliente(IDEquifax, Nombre,Telefono) {
+
+
+            $.ajax({
+                url: "@Url.Action("ReenviarMensaje_Principal", "Reportes")",
+                method: "Post",
+                data: { IDEquifax: IDEquifax, Nombre: Nombre, Telefono: Telefono},
+                success: function (resp) {
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                },
+                error: function (resp) {
+                    ToastrError("Error", "Error de Red");
+                }
+            });
+        }
+
+        chat.client.eliminarrow = function (idequifax) {
+            var tabla = $.fn.dataTable.Api("#TablaPrincipalSinContestar");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIDEquifax == idequifax);
+
+            tabla.row(node).remove().draw(false);
+        }
+
+        chat.client.agregarrow = function (modelo) {
+            var tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.row.add(modelo).draw(false);
+        }
+
+    </script>
+}
+

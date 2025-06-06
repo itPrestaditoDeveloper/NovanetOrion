@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "DashboardGestiones";
+}
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+
+            <div class="col-xl-6" style="display:block">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Grafica <span class="fw-300"><i>De las Gestiones</i></span>
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="panel-tag">
+                                Grafica para saber la de Cada Gestion
+                            </div>
+                            <div id="chartAvanceGlobal" style="width: 100%; height: 1px;">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Content/js/statistics/ApexchartEchoaMano.js"></script>
+
+
+@section Scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            datos()
+        });
+
+        function datos()
+        {
+            $.ajax({
+                url: "@Url.Action("GraficaGlobal", "BaseClientes")",
+                method: "get",
+                 success: function (resp) {
+                     debugger;
+                     console.log(resp);
+                     grafica(resp);
+                },
+                error: function (resp) {
+
+                }
+            });
+        }
+
+
+        function grafica(datos) {
+            debugger;
+            //Grafica para Incidentes por area Conteo
+            var labels = [];
+            for (var i = 0; i < datos.length; i++) {
+                labels.push(datos[i].fcGestion)
+            }
+
+            var valores = [];
+            for (var i = 0; i < datos.length; i++) {
+                valores.push(datos[i].fiCantidadGestiones)
+            }
+
+            debugger;
+            var optionsTicketArea = {
+                labels: labels,
+                series: valores,
+                chart: {
+                    type: 'pie',
+                },
+                stroke: {
+                    colors: ['#fff']
+                },
+                fill: {
+                    opacity: 0.8
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chartTicketArea = new ApexCharts(document.querySelector("#chartAvanceGlobal"), optionsTicketArea);
+            chartTicketArea.render();
+            //fin
+        }
+
+    </script>
+
+}

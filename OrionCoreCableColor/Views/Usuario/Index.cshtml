@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = "Usuarios";
+}
+
+<style>
+    .imgCircle {
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 0px #06f611;
+        animation: glow 1.5s linear(0 0%, 0.02 15.85%) infinite alternate;
+    }
+
+    @@keyframes glow {
+        to {
+            box-shadow: 0px 0px 30px 20px #06f611;
+        }
+    }
+</style>
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Lista de Usuarios</h2>
+        <div class="panel-toolbar " role="menu">
+            @if (User.IsInRole("coreseguridad_AccesoAlSistema"))
+            {
+                <a href="@Url.Action("CrearUsuario")" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Nuevo Usuario</a>
+            }
+
+        </div>
+    </div>
+
+    <div class="panel-container">
+        <div class="col-lg-12" style="padding-top:12px; padding-bottom:15px;">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Usuario</th>
+                        <th>Nombre Completo</th>
+                        <th>Activo</th>
+                        <th>Rol Usuario</th>
+                        <th>Correo Electronico</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Telefono</th>
+
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        var usuariosConectados = [];
+
+        function MostrarEditarInfo(id) {
+            $.ajax({
+                url: "@Url.Action("EditarInfoUsuario", "Usuario")",
+                method: "get",
+                data: { id: id },
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+        function MostrarEditarCuenta(id) {
+            $.ajax({
+                url: "@Url.Action("EditarCuentaUsuario","Usuario")",
+                method: "get",
+                data: { id: id },
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+        function MostrarCambiarContrasena(id) {
+            $.ajax({
+                url: "@Url.Action("CambiarContrasenaUsuario","Usuario")",
+                method: "get",
+                data: { id: id },
+                success: function (resp) {
+                    ShowModal(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+        function Desactivar(id) {
+            $.ajax({
+                url: "@Url.Action("DeshabilitarUsuario","Usuario")",
+                method: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data.Estado) {
+                        tablaPrincipal.ajax.reload().draw(false);
+                    }
+                    AlertaAjax(data);
+                },
+                Urlrror: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+
+        function ObtenerUbicacion(fiIDUsuario) {
+            $.ajax({
+                url: "@Url.Action("GetGeolocalizacionUsuario", "Usuario")",
+                method: "get",
+                data: { fiIDUsuario: fiIDUsuario },
+                success: function (resp) {
+
+                }
+            });
+        }
+
+        function EnviarMensaje(fiIDUsuario) {
+            VerModalMensajeDirectoConObjetoDeParametro({ fcUsuarioMensajero: Usuario.UserName, fiIDUsuarioReceptor: fiIDUsuario }, "@Url.Action("MensajeDirecto", "Usuario")");
+        }
+
+
+        chat.client.mostrarGeolocalizacion = function (resp) {
+            if (Usuario.UserName == resp.usuarioPeticion) {
+                let Latitud = resp.latitud;
+                let Longitud = resp.longitud;
+                let link = `https://www.google.com/maps?z=12&t=k&q=${Latitud},${Longitud}`;
+                window.open(link, '_blank');
+            }
+
+        }
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaUsuarios", "Usuario")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="MostrarEditarInfo(' + data.fiIdUsuario + ')"> Editar Informacion Personal</a>';
+                    @if (User.IsInRole("coreseguridad_AccesoAlSistema"))
+                    {
+                        <text>opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="MostrarEditarCuenta(' + data.fiIdUsuario + ')"> Editar Cuenta de Usuario</a>';</text>
+                    }
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="MostrarCambiarContrasena(' + data.fiIdUsuario + ')"> Cambiar Contraseña</a>';
+                    @if (User.IsInRole("coreseguridad_AccesoAlSistema"))
+                    {
+                        <text>opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="Desactivar(' + data.fiIdUsuario + ')"> ' + (data.fiEstado == 1 ? 'Deshabilitar Usuario' : 'Habilitar Usuario') + '</a>';</text>
+                    }
+
+                    @if (User.IsInRole("coreseguridad_AccessoUbicacionUsuarios"))
+                    {
+                        <text>opciones += `<a href="javascript:void(0)" class="dropdown-item" onclick="ObtenerUbicacion(${data.fiIdUsuario})">Obtener Ubicacion</a>`;</text>
+                    }
+                    @if (User.IsInRole("coreseguridad_AccessoEnviarMensaje")) {
+                        <text>opciones += `<a href="javascript:void(0)" class="dropdown-item" onclick="EnviarMensaje(${data.fiIdUsuario})">Enviar Mensaje</a>`; </text>
+                    }
+                    @if (User.IsInRole("coreseguridad_AccessoEnviarMensaje")) {
+                        <text>opciones += `<a href="javascript:void(0)" class="dropdown-item" onclick="iniciarLlamada('${data.UserName}')">Llamar</a>`; </text>
+                    }
+
+                        opciones += data.NombreRol == "Orion_Contratista" ? `<a href="@Url.Action("AgregarUsuarioTecnico", "Usuario")/${data.fiIdUsuario}" class="dropdown-item"> Agregar Tecnicos </a>` : "";
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    className: 'statusUserName text-center',
+                    data: null,
+                    render: function (data) {
+                        if (data.UserName == Usuario.UserName) {
+                            return `<i class="fal fa-2xs fa-circle text-success imgCircle" style="background-color: #1dc9b7; border-radius:50%;"></i> <label style="display:none;">Activo</label>`;
+                        }
+                        return `<i class="fal fa-2xs fa-circle text-danger" style="background-color: #fd3995; border-radius:50%;"></i> <label style="display:none;">Inactivo</label>`;
+                    }
+                },
+                {
+
+                    data: 'UserName'
+                },
+                {
+
+                    data: null,
+                    render: function (data) {
+
+                        return  data.fcPrimerNombre + " " + data.fcSegundoNombre + " " + data.fcPrimerApellido + " " + data.fcSegundoApellido;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstado) {
+                            return '<div class="badge badge-success">SI</div>';
+                        } else {
+                            return '<div class="badge badge-danger">NO</div>';
+                        }
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return `<span class="badge badge-info">${data.NombreRol}</span>`;
+
+
+                    }
+                },
+
+                {
+                    data: 'fcBuzondeCorreo'
+                },
+                {
+                    visible: false,
+                    data: null,
+                    render: function (data) {
+
+                        return '<div style="display:none;">' + moment(data.FechaNacimiento) + '</div>' + moment(data.FechaNacimiento).format("DD/MM/YYYY");
+                    }
+                },
+
+                {
+                    data: 'fcTelefonoMovil'
+                },
+
+
+
+
+
+            ],
+            initComplete: function () {
+                debugger;
+                sleepES5(5000);
+                $.ajax({
+                    url: "@Url.Action("GetUsuariosConectados","Base")",
+                    method: "Get",
+                    success: function (resp) {
+
+                    }
+                });
+            }
+
+        });
+
+        var sleepES5 = function (ms) {
+            var esperarHasta = new Date().getTime() + ms;
+            while (new Date().getTime() < esperarHasta) continue;
+        };
+
+        chat.on('insertarUsuarios', function (resp, userPeticion)
+        {
+
+            if (!usuariosConectados.some(x => x.UserName == resp.UserName))
+            {
+                usuariosConectados.push(resp);
+                var conectado = `<i class="fal fa-2xs fa-circle text-success imgCircle" style="background-color: #1dc9b7; border-radius:50%;"></i> `;
+                var tabla = $.fn.dataTable.Api("#TablaPrincipal");
+
+                var nodes = tabla.rows().nodes().toArray();
+                var tr = nodes.find(x => tabla.row(x).data().UserName == resp.UserName);
+                var data = tabla.row(tr).data();
+                var td = $(tr).find(".statusUserName");
+                $(td).html(conectado + `<label style="display:none;">Activo</label>`);
+            }
+
+
+        });
+
+
+
+    </script>
+}

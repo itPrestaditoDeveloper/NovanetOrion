@@ -1,0 +1,258 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        .file-upload-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 200px;
+            border: 2px dashed #c3c3c3;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .file-upload-wrapper:hover {
+                border-color: #007bff;
+                background-color: #e9ecef;
+            }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-box {
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .file-upload-icon {
+            margin-bottom: 10px;
+        }
+
+        .file-upload-message {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        #removeFileBtn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<div class="card">
+
+    <div id="errorMessage" class="alert alert-danger" role="alert" style="display:none;"></div>
+    <div class="card-header">
+        <h2>Cargar archivo de conciliación de clientes</h2>
+    </div>
+    <div class="card-body">
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="file-upload-wrapper">
+                    <input type="file" class="file-input" id="billingFile" name="billingFile" accept=".xlsx, .xls" onchange="handleFileChange(event)" />
+                    <div class="file-upload-box">
+                        <div class="file-upload-icon">
+                            <i class="fa fa-cloud-upload" style="font-size: 36px;"></i>
+                        </div>
+                        <p class="file-upload-message">ARRASTRE IMAGEN <br /> O Click para elegirla manualmente</p>
+                        <span id="fileNameDisplay" style="display: none; font-weight: bold;"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <button type="button" class="btn btn-primary" onclick="submitForm()">Comparar</button>
+                <button type="button" class="btn btn-danger" id="removeFileBtn" style="display:none;" onclick="removeFile()">Remover Archivo</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<br />
+
+<!-- Resultados -->
+<div id="resultados"></div>
+
+@section Scripts {
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+
+       function submitForm() {
+            var formData = new FormData($('#uploadForm')[0]);
+            $.ajax({
+                url: '@Url.Action("UploadBillingFile", "ConciliacionClientes")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        displayResults(response.coincidentes, response.noCoincidentes);
+                        $('#errorMessage').hide();
+                    } else {
+                        $('#errorMessage').html(response.message).show();
+                        hideErrorMessageAfterDelay();
+                    }
+                },
+                error: function (error) {
+                    $('#errorMessage').html("Error al procesar el archivo.").show();
+                    hideErrorMessageAfterDelay();
+                }
+            });
+        }
+
+        function hideErrorMessageAfterDelay() {
+            setTimeout(function () {
+                $('#errorMessage').fadeOut('slow');
+            }, 5000);
+        }
+
+
+        function displayResults(coincidentes, noCoincidentes) {
+            var coincidentesHtml = `
+                <div class='card'>
+                    <div class='card-header'>
+                        <h2>Clientes Coincidentes</h2>
+                    </div>
+                    <div class='card-body'>
+                        <div class='table-responsive'>
+                            <table class='table table-bordered table-hover table-striped w-100' id='TablaCoincidentes'>
+                                <thead>
+                                    <tr>
+                                        <th>Código Cliente</th>
+                                         <th>Orden Cepheus</th>
+                                        <th>Nombre</th>
+                                        <th>Servicio</th>
+                                        <th>Mes Creado</th>
+                                        <th>Ciudad</th>
+                                        <th>Monto Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+            coincidentes.forEach(function (cliente) {
+                coincidentesHtml += `<tr>
+                                        <td>${cliente.CodigoCliente}</td>
+                                        <td>${cliente.NumeroOrdenCepheus}</td>
+                                        <td>${cliente.Nombre}</td>
+                                        <td>${cliente.Servicio}</td>
+                                        <td>${cliente.MesCreado}</td>
+                                        <td>${cliente.Ciudad}</td>
+                                        <td>${cliente.MontoTotal}</td>
+                                    </tr>`;
+            });
+
+            coincidentesHtml += `</tbody></table></div></div></div>`;
+            var noCoincidentesHtml = `
+                <div class='card'>
+                    <div class='card-header'>
+                        <h2>Clientes No Coincidentes</h2>
+                    </div>
+                    <div class='card-body'>
+                        <div class='table-responsive'>
+                            <table class='table table-bordered table-hover table-striped w-100' id='TablaNoCoincidentes'>
+                                <thead>
+                                    <tr>
+                                        <th>Código Cliente</th>
+                                        <th>Orden Cepheus</th>
+                                        <th>Nombre</th>
+                                        <th>Servicio</th>
+                                        <th>Mes Creado</th>
+                                        <th>Ciudad</th>
+                                        <th>Monto Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+            noCoincidentes.forEach(function (cliente) {
+                noCoincidentesHtml += `<tr>
+                                        <td>${cliente.CodigoCliente}</td>
+                                        <td>${cliente.NumeroOrdenCepheus}</td>
+                                        <td>${cliente.Nombre}</td>
+                                        <td>${cliente.Servicio}</td>
+                                        <td>${cliente.MesCreado}</td>
+                                        <td>${cliente.Ciudad}</td>
+                                        <td>${cliente.MontoTotal}</td>
+                                    </tr>`;
+            });
+            noCoincidentesHtml += `</tbody></table></div></div></div>`;
+
+            $("#resultados").html(noCoincidentesHtml + coincidentesHtml);
+
+            $('#TablaCoincidentes, #TablaNoCoincidentes').DataTable({
+                autoWidth: true,
+                responsive: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<span>EXCEL</span>',
+                        className: 'btn btn-outline-success btn-sm mr-1 waves-effect waves-themed'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<span>CSV</span>',
+                        className: 'btn btn-outline-danger btn-sm mr-1 waves-effect waves-themed'
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: '<span>Copy</span>',
+                        className: 'btn btn-outline-primary btn-sm mr-1 waves-effect waves-themed'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<span>Print</span>',
+                        className: 'btn btn-outline-warning btn-sm mr-1 waves-effect waves-themed'
+                    }
+                ],
+                language: {
+                    "emptyTable": "No se encontraron resultados.",
+                    "paginate": {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    "lengthMenu": " _MENU_ ",
+                    "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                    "infoEmpty": "No hay registros para mostrar."
+                }
+            });
+        }
+
+        function handleFileChange(event) {
+            var fileInput = event.target;
+            var file = fileInput.files[0];
+
+            if (file) {
+                document.getElementById('fileNameDisplay').innerText = file.name;
+                document.getElementById('fileNameDisplay').style.display = 'block';
+                document.getElementById('removeFileBtn').style.display = 'block';
+            }
+        }
+
+
+        function removeFile() {
+            var fileInput = document.getElementById('billingFile');
+            fileInput.value = ""; 
+            document.getElementById('fileNameDisplay').style.display = 'none';
+            document.getElementById('removeFileBtn').style.display = 'none';
+            $('#resultados').html(''); 
+        }
+    </script>
+}

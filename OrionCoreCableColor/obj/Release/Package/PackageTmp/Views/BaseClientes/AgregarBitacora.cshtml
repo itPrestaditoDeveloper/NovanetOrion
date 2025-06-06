@@ -1,0 +1,113 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+
+        <text>Agregar Bitacora</text>
+
+    </h2>
+
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Comentario</label>
+                        <input id="txtcomentario" class="form-control" type="text" placeholder="Definicion del titulo" />
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Gestion</label>
+                        <select id="selectgestion" class="form-select form-control">
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class='test col-sm-12'>
+        <br />
+        <div style='float: right;'>
+            <button type="button" id="btnGuardarBitacora" class="btn btn-success">
+                Guardar Bitacora
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    select();
+    var cliente = @ViewBag.idcliente;
+    var telefonocontacto = @ViewBag.telefonocontacto;
+
+    function select() {
+            $.ajax({
+                url: "@Url.Action("SelectGestion", "BaseClientes")",
+                type: "GET",
+                success: function (respuesta) {
+
+                    var selectgestion = $("#selectgestion");
+
+                    selectgestion.empty();
+                    selectgestion.append($('<option>', {
+                        value: 0,
+                        text: 'Defina un Tipo de Gestion'
+                    }));
+                    $("#selectgestion").select2({ dropdownParent: $("#MyModal") }).val(null).trigger("change");
+                    $.each(respuesta, function (index, item) {
+                        console.log(item);
+                        selectgestion.append($('<option>', {
+                            value: item.Value,
+                            text: item.Text
+                        }));
+                    });
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+
+    }
+
+
+    $("#btnGuardarBitacora").click(function (e) {
+
+        var comentario = $(`#txtcomentario`).val();
+        var gestion = $(`#selectgestion`).val();
+
+        if (gestion == 0 || gestion == null || gestion == "") {
+            ToastrWarning("Advertencia", "Elija una Gestion")
+            return 0;
+        } else {
+            $.ajax({
+                url: "@Url.Action("GuardarBitacora", "BaseClientes")",
+                data: { idcliente: cliente, comentariogestion: comentario, idgestion: gestion, telefono: telefonocontacto},
+                type: "GET",
+                success: function (respuesta) {
+
+                    window.location.reload();
+                },
+                error: function (respuesta) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Guardar Bitacora", Estado: false }
+                    AlertaAjax(dataerror)
+                    console.log(respuesta);
+                }
+            });
+        }
+
+    });
+
+
+</script>

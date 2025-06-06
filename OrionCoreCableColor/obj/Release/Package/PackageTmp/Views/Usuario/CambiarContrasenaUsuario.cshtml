@@ -1,0 +1,88 @@
+﻿@model OrionCoreCableColor.Models.Usuario.CambiarContraseñaUsuarioViewModel
+<!--Modal header-->
+<div class="modal-header">
+    <h4 class="modal-title">Cambiar Contraseña : @User.Identity.Name</h4>
+    <div class="panel-toolbar " role="menu">
+        <button type="button" class="close" data-dismiss="modal"><i class="fal fa-times-circle fa-fw fa-lg"></i></button>
+    </div>
+        
+
+    </div>
+
+    <!--Modal body-->
+    <div class="modal-body">
+        <form id="MyFormModal">
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NewPassword, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment-dots"></i></span>
+                            </div>
+
+                            @Html.EditorFor(model => model.NewPassword, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.NewPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-comment-dots"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <div class="clearfix" style="width:100%;">
+                    <button data-dismiss="modal" class="btn btn-link btn-lg waves-effect waves-themed float-leftt text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                    <button class="btn btn-link btn-lg text-success waves-effect waves-themed float-right"><i class="text-lg ion-checkmark-round"></i></button>
+                </div>
+                    
+            </div>
+</form>
+    </div>
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+    $("#MyFormModal").submit(function (event) {
+        event.preventDefault();
+        if (!$("#MyFormModal").valid()) { return false;  }
+        var model = @Html.Raw(Json.Encode(Model));
+        model.NewPassword = $("#NewPassword").val();
+        model.ConfirmPassword = $("#ConfirmPassword").val();
+
+        $.ajax({
+            url: '@Url.Action("CambiarContrasenaUsuario","Usuario")',
+            type: 'POST',
+            data: JSON.stringify({ model: model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.Estado) {
+                    CerrarModal();
+                }
+                AlertaAjax(data);
+            },
+            error: function (data) {
+                AlertaError();
+            },
+        });
+
+
+    });
+    </script>
+

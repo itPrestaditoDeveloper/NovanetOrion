@@ -1,0 +1,187 @@
+﻿
+@model OrionCoreCableColor.Models.Precalificado.ListDistribuidorViewModel
+@using OrionCoreCableColor.App_Helper
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle del Distribuidor con #identidad-@Model.fcIdentidadRepresentante</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NombreRepresentante, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.NombreRepresentante, new { htmlAttributes = new { @class = "form-control" }, @disabled = "disabled" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.NombreRepresentante, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcIdentidadRepresentante, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-calendar fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcIdentidadRepresentante, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcIdentidadRepresentante, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcTelefonoMovil, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-mail-bulk fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcTelefonoMovil, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcTelefonoMovil, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCorreoElectronico, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-mail-bulk fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcCorreoElectronico, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcCorreoElectronico, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcNombreComercial, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcNombreComercial, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcNombreComercial, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcRTN, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-mail-bulk fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcRTN, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcRTN, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcTelefono, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-mail-bulk fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcTelefono, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcTelefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+             
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcDireccion, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                                </div>
+                                @Html.TextAreaFor(model => model.fcDireccion, new { @class = "form-control", style = "width:500px; height:100px;" })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcDireccion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+               
+
+            </div>
+                
+                <br />
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>Documentos</h4>
+                    </div>
+                    @foreach (var item in Model.DatosDocumentoListado)
+                    {
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <div class="input-group mar-btm">
+                                    @if (item.fcTipoDocumento == "pdf")
+                                    {
+
+                                        <a href="javascript:ShowBigPdf('@item.fcNombreArchivo','@item.fcRuta')" class="text-info"> <i class="fal fa-2x fa-file-pdf"> </i> @item.fcComentario</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0)" data-Description="@item.fcComentario" class="text-info" onclick="ShowBigImage(this)" src="@(MemoryLoadManager.Helper)?type=img&carpeta=@(item.fcRuta)&documento=@(item.fcNombreArchivo)"> <i class="fal fa-2x fa-file-image"> </i>  @item.fcComentario</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $("#NombreRepresentante,#fcIdentidadRepresentante,#fcTelefonoMovil,#fcCorreoElectronico,#fcRTN,#fcDireccion,#fcNombreComercial,#fcTelefono").prop("disabled", true);
+</script>

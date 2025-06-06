@@ -1,0 +1,1910 @@
+﻿<style>
+
+    .imgCircle {
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 0px #06f611;
+        animation: glow 1.5s linear(0 0%, 0.02 15.85%) infinite alternate;
+    }
+
+    @@keyframes glow {
+        to {
+            box-shadow: 0px 0px 30px 20px #06f611;
+        }
+    }
+
+    .conexiones-panel {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .conexiones-content {
+        height: 100%;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .slimScrollDiv {
+        height: calc(100vh - 300px);
+        overflow-y: auto;
+    }
+
+    .nav-menu2 {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .nav-menu2 li {
+            position: relative;
+        }
+
+            .nav-menu2 li a {
+                display: block;
+                padding: 8px 12px;
+                color: #000;
+                text-decoration: none;
+                background: #f8f9fa;
+                border-bottom: 1px solid #ddd;
+                cursor: pointer;
+            }
+
+                .nav-menu2 li a:hover {
+                    background: #e9ecef;
+                }
+
+
+
+        .nav-menu2 ul.show {
+            display: block;
+        }
+
+        .nav-menu2 ul li a {
+            padding: 6px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+            .nav-menu2 ul li a:hover {
+                background: #f1f3f5;
+            }
+
+        .nav-menu2 ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: none;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+    .submenu-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .toggle-icon {
+        margin-left: 10px; /* Espacio entre el texto y el ícono */
+    }
+
+    #zoom-info {
+        position: absolute;
+        top: 0px; /* Coloca el elemento en la parte inferior */
+        left: 10px; /* Alinea a la izquierda (puedes cambiar a 'right' o 'center') */
+        background: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        z-index: 1; /* Asegura que esté sobre el mapa */
+        font-weight: bold;
+    }
+</style>
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2><i class="fal fa-map-marked-alt fa-fw"></i> Mapa de Conectividad</h2>
+    </div>
+    <div class="panel-container" style="padding: 12px 15px;">
+        <div class="row">
+            <div class="col-lg-3">
+                Buscar:
+                <div class="input-group" id="search-container">
+                    <input type="text" class="form-control" placeholder="Buscar..." id="search-input" aria-label="Buscar ubicación Lat,Long..." aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" id="search-button" type="button">Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4">
+                Conexion:
+                <select id="clientes-select" class="form-control mb-3" multiple="multiple" style="padding:10px;"></select>
+            </div>
+            <div class="col-lg-3" style="padding-bottom:10px;">
+                OLT:
+                <select id="clientes-olt" class="form-control mb-3" style="padding:10px;"></select>
+            </div>
+            <div class="col-lg-2" style="padding-bottom:10px;">
+                PON:
+                <select id="clientes-pon" class="form-control mb-3" style="padding:10px;"></select>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-lg-3" id="conexiones">
+                <div class="conexiones-panel">
+                    <div class="conexiones-content text-center">
+                        <div class="d-flex justify-content-center">
+                            <ul class="nav nav-pills" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#OLT">OLT <span><i class="fal fa-router"></i></span></a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#Clientes">Clientes <span><i class="fal fa-user"></i></span></a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#Colonias">Colonias <span><i class="fal fa-map"></i></span></a></li>
+                            </ul>
+                        </div>
+                        <div class="conexiones-content text-left slimScrollDiv2" id="conexiones-panel">
+                            <div class="tab-content py-3" style="color:black;">
+                                <div class="tab-pane fade active show" id="OLT" role="tabpanel">
+                                    <div class="col-lg-12" style="padding:0;">
+                                        <ul id="lista-olt" class="nav-menu2"></ul>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="Clientes" role="tabpanel">
+                                    <div class="col-lg-12" style="padding:0;">
+                                        <ul id="lista-clientes" class="nav-menu2"></ul>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="Colonias" role="tabpanel">
+                                    <div class="col-lg-12" style="padding:0;">
+                                        <ul id="lista-colonias" class="nav-menu2"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="map-container">
+                    <div id="map" style="height: 500px;"></div>
+                    <div id="zoom-info">0</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+    <script src='https://unpkg.com/maplibre-gl@4.1.3/dist/maplibre-gl.js'></script>
+    <script src="~/Content/js/mapa/leaflet.js"></script>
+    <script src="~/Content/js/mapa/togeojson.min.js"></script>
+    <script src="~/Content/js/mapa/jszip.min.js"></script>
+    <script src="~/Content/js/mapa/Control.Geocoder.js"></script>
+    <script src="~/Scripts/signalRCore/signalr.js"></script>
+    <script>
+
+        var lat = 15.508540420591633, lng = -87.9828610499999;
+
+        var modeloClientes;
+        var modeloColonias;
+        var modeloOLT;
+        var CConline = null;
+        var CCoffline = null;
+        var actualizacion = new Date();
+        var zoom;
+        var cantidades = {
+            on: 0,
+            off: 0,
+            cortados: 0
+        };
+
+
+        var apitec = new signalR.HubConnectionBuilder()
+            .withUrl("https://apitec.novanetgroup.com/notificaciones", {
+                transport: signalR.HttpTransportType.LongPolling
+            })
+            .withAutomaticReconnect()
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        apitec.start()
+        .then(() => console.log("Conectado a SignalR"))
+        .catch(err => console.error("Error al conectar:", err));
+
+        function ActualizarInfoTop() {
+            document.getElementById('zoom-info').innerHTML = `Zoom: ${zoom} | ${lat},${lng} | actualizado: ${moment(actualizacion).format("DD/MM/YYYY HH:mm")} | ON: <span style="color:#1dc9b7;">${cantidades.on}</span>, OFF: <span style="color:#fd3995;">${cantidades.off}</span>, Cortados: <span style="color:rgb(101,5,0);">${cantidades.cortados}</span>`;
+        }
+
+
+
+        const customStyle = {
+            "version": 8,
+            "sources": {
+                "mapbox-tiles": {
+                    "type": "raster",
+                    "tiles": [
+                        "https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic29wb3J0ZXByZXN0YWRpdG8iLCJhIjoiY2xvM2N1ZHByMWRwaDJtcDlvbXprYTBmcyJ9.Mq5jC6PF8C7JcvoQqvqy5A"
+                    ],
+                    "tileSize": 256,
+                    "maxzoom": 22
+                }
+            },
+            "layers": [
+                {
+                    "id": "mapbox-layer",
+                    "type": "raster",
+                    "source": "mapbox-tiles",
+                    "minzoom": 0,
+                    "maxzoom": 22
+                }
+            ]
+        };
+
+        $(document).ready(function () {
+            Mapa();
+            $("#map").css("height", `${height - 250}px`);
+            $("#conexiones-panel").css("height", `${height - 300}px`);
+
+            $('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+                const target = $(e.target).attr("href");
+                switch (target) {
+                    case '#OLT':
+                        generarListaOLT(modeloOLT);
+                        break;
+                    case '#Clientes':
+                        generarListaClientes(modeloClientes);
+                        break;
+                    case '#Colonias':
+                        generarListaColonias(modeloColonias);
+                        break;
+                }
+            });
+        });
+
+        $("#clientes-select").select2({
+            placeholder: "Selecciona conexiones...",
+            allowClear: true, // Permite limpiar las selecciones
+            width: "100%" // Ajusta el ancho al 100% del contenedor
+        });
+        $("#clientes-pon").select2();
+        $("#clientes-olt").select2();
+
+
+        var idUsuario = @ViewBag.idUsuario;
+        var allData = [];
+
+
+        var polygonGeoJSON = {
+            "type": "FeatureCollection",
+            "features": []
+        };
+
+        var geojsonFeatures = [];
+        var uniqueDescriptions = new Set();
+        var uniqueOLT = new Set();
+        var uniquePons = new Map();
+        var colorPalette = new Set();
+        var map = null;
+        var height = window.innerHeight;
+        var allDataPON = [];
+
+
+
+
+        function esCoordenada(query) {
+            var regex = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
+            return regex.test(query);
+        }
+
+
+
+
+        function haversine(lat1, lon1, lat2, lon2) {
+            // Radio de la Tierra en kilómetros
+            var R = 6371;
+
+            // Convertir de grados a radianes
+            var rad = Math.PI / 180;
+            var dLat = (lat2 - lat1) * rad;
+            var dLon = (lon2 - lon1) * rad;
+
+            // Fórmula de Haversine
+            var a = Math.sin(dLat / 2) ** 2 +
+                    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+                    Math.sin(dLon / 2) ** 2;
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            // Distancia
+            var distance = R * c;
+
+            return distance;
+        }
+
+        function Distancia(valor) {
+            if(valor < 1 ){
+                return (valor * 1000).toFixed(2).toLocaleString("es-HN") + ' m'
+            }
+            return valor.toFixed(2).toLocaleString("es-HN") + ' km';//  valor.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+
+        function Mapa() {
+            $.ajax({
+                url: "@Url.Action("CargarPuntosConectividad", "Soporte")",
+                type: "GET",
+                success: function (respuesta) {
+
+                    for (var i in respuesta) {
+                        if (/\d/.test(respuesta[i]["fcGeolocalizacion"])) {
+                            var coordenadas = respuesta[i]["fcGeolocalizacion"].split(',').map(parseFloat);
+                            var feature = newPoint(coordenadas, respuesta[i]);
+                            geojsonFeatures.push(feature);
+                            uniqueDescriptions.add(respuesta[i]["fcDescripcion"]);
+                            colorPalette.add(respuesta[i]["fcRGB"]);
+                            if (feature.properties.markerType === 'icono') {
+                                //console.log('Icono feature created:', feature);
+                            }
+                        }
+                    }
+
+                    procesarDatos(respuesta);
+
+                    var MAPTILER_KEY = 'CQjSsi4wjN5j99iwByjd';
+                    map = new maplibregl.Map({
+                        style: `https://api.maptiler.com/maps/streets/style.json?key=${MAPTILER_KEY}`,
+                        //style: customStyle,
+                        center: [-87.9828610499999, 15.508540420591633],
+                        zoom: 11.5,
+                        container: 'map',
+                        antialias: true
+                    });
+
+                    allData = respuesta;
+
+
+                    map.addControl(new maplibregl.FullscreenControl(), 'top-right');
+                    //map.setMaxZoom(21);
+
+
+
+                    /*console.log('GeoJSON Features creados:', geojsonFeatures);
+                    console.log('Cantidad de features:', geojsonFeatures.length);
+                    console.log('Features con markerType "icono":', geojsonFeatures.filter(f => f.properties.markerType === 'icono'));
+                    console.log('Features con markerType "cuadrado":', geojsonFeatures.filter(f => f.properties.markerType === 'cuadrado'));*/
+
+                    fillSelectWithDescriptions(uniqueDescriptions);
+                    fillOLT(uniqueOLT);
+
+
+                    map.on('styleimagemissing', (e) => {
+                        const id = e.id;
+                        const prefix = 'square-rgb-';
+                        if (id.indexOf(prefix) !== 0) return;
+
+                        const rgb = id.replace(prefix, '').split(',').map(Number);
+                        const width = 64;
+                        const data = new Uint8Array(width * width * 4);
+
+                        for (let x = 0; x < width; x++) {
+                            for (let y = 0; y < width; y++) {
+                                const offset = (y * width + x) * 4;
+                                data[offset] = rgb[0];
+                                data[offset + 1] = rgb[1];
+                                data[offset + 2] = rgb[2];
+                                data[offset + 3] = 255;
+                            }
+                        }
+
+                        map.addImage(id, { width, height: width, data });
+                    });
+
+
+                    map.on('zoom', () => {
+                        zoom = map.getZoom().toFixed(2);
+                        ActualizarInfoTop();
+                    });
+
+                    map.on('mousemove', (e) => {
+                        zoom = map.getZoom().toFixed(2);
+                        lng = e.lngLat.lng.toFixed(8); // Redondear a 4 decimales
+                        lat = e.lngLat.lat.toFixed(8);
+                        ActualizarInfoTop();
+                    });
+
+                    map.on('contextmenu', (e) => {
+
+                        navigator.clipboard.writeText(`${lat},${lng}`).then(() => {
+                            ToastrSuccess("", `Coordenadas [${lat},${lng}] copiadas`);
+                        })
+                            .catch(err => {
+                                console.error('Error al copiar: ', err);
+                            });
+                    });
+
+
+
+                    map.on('load', async () => {
+
+                        CargarCobertura();
+                        //CargarLineas();
+                        zoom = map.getZoom().toFixed(2);
+                        ActualizarInfoTop();
+
+                        CConline = await map.loadImage('../Content/img/CConline.png');
+                        map.addImage('CConline', CConline.data);
+
+                        CCoffline = await map.loadImage('../Content/img/CCoffline.png');
+                        map.addImage('CCoffline', CCoffline.data);
+                        //  <img src="~/Content/img/cancelado.png" />
+                        //map.loadImage('../Content/img/CConline.png', (error, image) => {
+                        //    debugger;
+                        //    if (error) {
+                        //        console.error('Error loading CConline image:', error);
+                        //        return;
+                        //    }
+                        //    map.addImage('CConline', image);
+                        //    console.log('CConline image loaded');
+                        //});
+
+                        //map.loadImage('../Content/img/CCoffline.png', (error, image) => {
+                        //    if (error) {
+                        //        console.error('Error loading CCoffline image:', error);
+                        //        return;
+                        //    }
+                        //    map.addImage('CCoffline', image);
+                        //    console.log('CCoffline image loaded');
+                        //});
+
+                        map.addSource('points', {
+                            'type': 'geojson',
+                            'data': {
+                                'type': 'FeatureCollection',
+                                'features': geojsonFeatures
+                            },
+                            //cluster: true,
+                            //clusterMaxZoom: 21,
+                            //clusterRadius: 5
+                        });
+
+                        map.addLayer({
+                            'id': 'points',
+                            'type': 'symbol',
+                            'source': 'points',
+                            'layout': {
+                                'icon-image': [
+                                    'case',
+                                    ['==', ['get', 'markerType'], 'cuadrado'],
+                                    ['concat', 'square-rgb-', ['get', 'color']],
+                                    ['coalesce', ['get', 'icon'], 'CConline'] // Fallback a CConline si icon es null
+                                ],
+
+                                'icon-size': [
+                                    'case',
+                                    ['==', ['get', 'markerType'], 'cuadrado'], 0.2, 0.05],
+                                'icon-allow-overlap': false,
+                                'icon-anchor': 'center',
+
+                            }
+                        });
+
+                        
+
+                        //PoligonoColonia();
+
+                        map.on('click', 'points', (e) => {
+
+
+
+                            var coordinates = e.features[0].geometry.coordinates.slice();
+                            var properties = e.features[0].properties;
+                            var coordenadas2 = properties.fcGeolocalizacion.split(',');
+                            var lat2 = parseFloat(coordenadas2[0]);
+                            var long2 = parseFloat(coordenadas2[1]);
+                            //var distancia = haversine(lat,long,lat2,long2);
+
+                            var popupContent =
+                                `<div style="max-width: 500px; border-radius: 10px; background-color: white; padding: 10px;">
+                                                <div style="display: flex;">
+                                                    <div style="flex: 2; display: flex; flex-direction: column; justify-content: space-between;">
+                                                        <div>
+                                                            <h4 style="margin: 0 0 10px; font-size: 1.25rem; color: rgb(${properties.color});">${properties.fcNombreCliente}</h4>
+                                                            <div id="Descripcion" style=" border-radius: 5px; color: white; opacity: 0.8; text-align: center; padding: 5px 10px; background-color: rgb(${properties.color}); font-size: 1rem;">${properties.fcDescripcion ?? 'N/D'}</div>
+                                                            ${ properties.fcDescripcion == "Sin Servicio" && properties.fcStatusPing != '' ? '<div id="DescripcionPing" style="border-radius: 5px; color: white; opacity: 0.8; text-align: center; padding: 5px 10px; background-color:rgb(' + properties.color + '); font-size: 1rem; margin-top: 3px;">Error: ' + properties.fcStatusPing + '</div>' : '' }
+                                                            <button title="Google maps" id="btn-maps-${properties.fiIDSolicitud}" value="${properties.fcGeolocalizacion}" class="btn btn-sm bg-success text-white col-sm-3" style="margin-top: 3px; display: inline-block; float:left;"><i class="fal fa-map-marker-alt"></i></button>
+                                                            <button title="Ping" onclick="ping('${properties.fcIpOnu}', '${properties.fcNombreCliente}', 'ONU')" class="btn btn-sm bg-danger text-white col-sm-3" style="margin-top: 3px; display: inline-block; float:left;"><i class="fal fa-waveform"></i></button>
+                                                            <button title="Detalle" onclick="ModalDetalleCliente('${properties.fcNombreCliente}','${properties?.fcTelefono ?? 'N/D'}',${properties.fiIDSolicitud})" class="btn btn-sm bg-primary text-white col-sm-3" style="margin-top: 3px; display: inline-block;float:left;"><i class="fal fa-user"></i></button>
+                                                            <button title="Historial" onclick="ModalHistorialCliente('${properties.fiIDSolicitud}','${properties.fcIpOnu}','${properties.fcNombreCliente}')" class="btn btn-sm bg-info text-white col-sm-3" style="margin-top: 3px; display: inline-block;float:left;"><i class="fal fa-history"></i></button>
+                                                        </div>
+                                                        <div style="font-size: 0.875rem; line-height: 1.5;">
+                                                            <p style="margin: 5px 0 0;"><strong>ID Solicitud:</strong> ${properties.fiIDSolicitud ?? 'N/D'}</p>
+                                                            <p style="margin: 5px 0 0;"><strong>Codigo Cepheus:</strong> ${properties.fcCodigoCepheus ?? 'N/D'}</p>
+                                                            <p style="margin: 5px 0 0;"><strong>Teléfono:</strong> <a href="https://wa.me/504${properties?.fcTelefono ?? 'N/D'}" target="_blank">${properties?.fcTelefono ?? 'N/D'}</a></p>
+                                                            <p style="margin: 5px 0 0;"><strong>OLT:</strong> ${properties.fcDescripcionOLT ?? 'N/D'}</p>
+                                                            <p style="margin: 5px 0 0;"><strong>PON:</strong> ${properties.fcPomOnu ?? 'N/D'}</p>
+                                                            <p style="margin: 5px 0 0;"><strong>ONU:</strong> ${properties.fcIpOnu ?? 'N/D'} <button title="onu" class="btn btn-xs btn-info" onclick="DataONU('${properties.fcIpOnu}')"><i class="fal fa-router"></i></button></p>
+                                                            <p style="margin: 5px 0 0;"><strong>Direccion:</strong> ${properties.fcDepartamento}, ${properties.fcMunicipio ?? 'N/D'}</p>
+                                                            <p style="margin: 5px 0 0;"><strong>Colonia:</strong> ${properties.fcBarrio ?? 'N/D'}</p>
+                                                            ${properties.fiDiasAtraso == 0 ? "" : '<p style="margin: 5px 0 0;"><strong>Dias de atraso: </strong>' + properties.fiDiasAtraso.toString() + '</p >' }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+
+
+
+
+                            new maplibregl.Popup()
+                                .setLngLat(coordinates)
+                                .setHTML(popupContent)
+                                .setMaxWidth("400px")
+
+                                .addTo(map);
+
+                            map.flyTo({
+                                center: coordinates
+                            });
+                        });
+
+                        map.on('mouseenter', 'points', () => {
+                            map.getCanvas().style.cursor = 'pointer';
+                        });
+
+                        map.on('mouseleave', 'points', () => {
+                            map.getCanvas().style.cursor = '';
+                        });
+
+
+                        chat.on("ActualizarOLT", function (model) {
+                            var circuloOlt = $(`#circulo-olt-${model.fiIDOLT}`);
+                            var dataOLT = modeloOLT.find(x => x.fiIDOLT == model.fiIDOLT);
+
+
+                            if (model.fbConectado) {
+                                $(circuloOlt).removeClass("text-danger").addClass("text-success");
+                                $(circuloOlt).css("background-color", "#1dc9b7"); // Verde para conectado
+                                $(circuloOlt).addClass("imgCircle");
+                            } else {
+                                $(circuloOlt).removeClass("imgCircle");
+                                $(circuloOlt).removeClass("text-success").addClass("text-danger");
+                                $(circuloOlt).css("background-color", "#fd3995"); // Rosa para desconectado
+
+                            }
+
+                        });
+
+                        apitec.on("ActualizarOLT",function(model){
+                            console.log(model);
+                            var circuloOlt = $(`#circulo-olt-${model.fiIDOLT}`);
+                            var dataOLT = modeloOLT.find(x => x.fiIDOLT == model.fiIDOLT);
+
+
+                            if (model.fbConectado) {
+                                $(circuloOlt).removeClass("text-danger").addClass("text-success");
+                                $(circuloOlt).css("background-color", "#1dc9b7"); // Verde para conectado
+                                $(circuloOlt).addClass("imgCircle");
+                            } else {
+                                $(circuloOlt).removeClass("imgCircle");
+                                $(circuloOlt).removeClass("text-success").addClass("text-danger");
+                                $(circuloOlt).css("background-color", "#fd3995"); // Rosa para desconectado
+
+                            }
+                        });
+
+                        chat.on("actualizarONU", function (list) {
+                            actualizacion = new Date();
+                            document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | ${lat},${lng} | actualizado: ${moment(actualizacion).format("DD/MM/YYYY HH:mm")}`;
+                            //var puntosCC = geojsonFeatures.filter(feature => feature.properties.fcEmpresa == "CABLE_COLOR");
+                            //for (var item of puntosCC) {
+                            //    item.fbConectado = true;
+                            //    item.properties.fcDescripcion = "Conectado";
+                            //    item.properties.color = "29,201,183";
+                            //    item.properties.icon = 'CConline'
+                            //}
+
+                            for (var model of list)
+                            {
+                                if (model.fbConectado == false) {
+                                    
+                                    continue;
+                                }
+                                var puntoActualizar = geojsonFeatures.find(feature => feature.properties.fiIDSolicitud == model.fiIDOrionSolicitud);
+
+                                if (typeof puntoActualizar === "undefined") continue;
+
+                                var conectado = model.fbConectado ? "Conectado" : puntoActualizar.properties.fiDiasAtraso == 0 ? "Sin Servicio" : "Desconectado";
+                                var colorNuevo = model.fbConectado ? "29,201,183" : puntoActualizar.properties.fiDiasAtraso == 0 ? "253,57,149" : "101,5,0";
+
+                                if (puntoActualizar) {
+                                    if (puntoActualizar.properties.fcDescripcion === conectado && puntoActualizar.properties.color === colorNuevo) {
+                                        continue;
+                                    }
+
+                                    // Actualizar geojsonFeatures
+                                    puntoActualizar.properties.fcDescripcion = conectado;
+                                    puntoActualizar.properties.color = colorNuevo;
+
+
+                                    if (puntoActualizar.properties.markerType == "icono") {
+                                        puntoActualizar.properties.icon = model.fbConectado ? 'CConline' : 'CCoffline';
+                                    }
+
+                                    // También actualizar allData para mantener la coherencia
+                                    var index = allData.findIndex(item => item.fiIDSolicitud == model.fiIDOrionSolicitud);
+                                    if (index !== -1) {
+                                        allData[index].fcDescripcion = conectado;
+                                        allData[index].fcRGB = colorNuevo;
+                                    }
+
+                                    // Refrescar el mapa con los nuevos datos
+                                    var source = map.getSource('points');
+                                    if (source) {
+                                        source.setData({
+                                            'type': 'FeatureCollection',
+                                            'features': geojsonFeatures
+                                        });
+
+                                        updateMapData($('#clientes-select').val(), $('#clientes-pon').val(), $("#clientes-olt").val());
+                                    }
+                                }
+
+                                actualizarListaOLT(model);
+                                actualizarListaColonias(model);
+                                actualizarListaClientes(model);
+                            }
+                            CalcConexiones();
+                        });
+
+                        apitec.on("ActualizarONU",function(model){
+                            actualizacion = new Date();
+                            
+                            var puntoActualizar = geojsonFeatures.find(feature => feature.properties.fiIDSolicitud == model.fiIDOrionSolicitud);
+
+                                if (typeof puntoActualizar === "undefined") return;
+
+                                var conectado = model.fbConectado ? "Conectado" : puntoActualizar.properties.fiDiasAtraso == 0 ? "Sin Servicio" : "Desconectado";
+                                var colorNuevo = model.fbConectado ? "29,201,183" : puntoActualizar.properties.fiDiasAtraso == 0 ? "253,57,149" : "101,5,0";
+
+                                if (puntoActualizar) {
+                                    if (puntoActualizar.properties.fcDescripcion === conectado && puntoActualizar.properties.color === colorNuevo) {
+                                        return;
+                                    }
+
+                                    // Actualizar geojsonFeatures
+                                    puntoActualizar.properties.fcDescripcion = conectado;
+                                    puntoActualizar.properties.color = colorNuevo;
+                                    puntoActualizar.properties.fcStatusPing = model.fcStatusPing;
+
+                                    if (puntoActualizar.properties.markerType == "icono") {
+                                        puntoActualizar.properties.icon = model.fbConectado ? 'CConline' : 'CCoffline';
+                                    }
+
+                                    // También actualizar allData para mantener la coherencia
+                                    var index = allData.findIndex(item => item.fiIDSolicitud == model.fiIDOrionSolicitud);
+                                    if (index !== -1) {
+                                        allData[index].fcDescripcion = conectado;
+                                        allData[index].fcRGB = colorNuevo;
+                                    }
+
+                                    // Refrescar el mapa con los nuevos datos
+                                    var source = map.getSource('points');
+                                    if (source) {
+                                        source.setData({
+                                            'type': 'FeatureCollection',
+                                            'features': geojsonFeatures
+                                        });
+
+                                        updateMapData($('#clientes-select').val(), $('#clientes-pon').val(), $("#clientes-olt").val());
+                                    }
+                                }
+
+                                actualizarListaOLT(model);
+                                actualizarListaColonias(model);
+                                actualizarListaClientes(model);
+                                CalcConexiones();
+                        });
+
+                        chat.on("ubicarClienteMapa", function (model) {
+
+                            if (model.fiIDUsuario == idUsuario) {
+                                var puntoAUbicar = geojsonFeatures.find(feature => feature.properties.fiIDSolicitud == model.fiIDSolicitud);
+                                if (puntoAUbicar) {
+                                    var coords = puntoAUbicar.properties.fcGeolocalizacion.split(',').map(parseFloat);
+                                    if (esCoordenada(coords)) {
+                                        if (coords.length === 2) {
+
+
+                                            map.flyTo({
+                                                center: [coords[1], coords[0]], // Reverso porque maplibre usa long, lat
+                                                zoom: 25
+                                            });
+
+                                            map.once('moveend', function () {
+                                                console.log("El mapa ha terminado de moverse.");
+
+                                                // Mostrar el popup después del vuelo
+                                                map.fire('click', { lngLat: { lng: coords[1], lat: coords[0] } });
+                                            });
+
+
+                                        } else {
+                                            alert("Formato de coordenadas no válido. Use el formato: lat,long");
+                                        }
+                                    } else {
+                                        alert("Formato de coordenadas no válido. Use el formato: lat,long");
+                                    }
+
+                                }
+
+
+
+                            }
+
+
+
+
+                        });
+
+                        document.getElementById('search-button').addEventListener('click', function () {
+
+
+                            var query = document.getElementById('search-input').value.trim();
+
+                            if (esCoordenada(query)) {
+                                buscarPorCoordenada(query); // Buscar por coordenadas
+                            } else {
+                                filtrarListaActiva(query); // Filtrar la lista activa
+                            }
+
+                        });
+
+                        var currentPopup = null; // Variable para almacenar el popup actual
+
+
+
+                        function buscarPorCoordenada(query) {
+                            var coords = query.split(',').map(parseFloat);
+                            if (coords.length === 2) {
+                                map.flyTo({
+                                    center: [coords[1], coords[0]], // Reverso porque maplibre usa long, lat
+                                    zoom: 15
+                                });
+
+                                if (currentPopup) currentPopup.remove(); // Elimina el popup actual si existe
+
+                                currentPopup = new maplibregl.Popup()
+                                    .setLngLat([coords[1], coords[0]])
+                                    .setHTML(`<strong>Coordenadas:</strong> ${coords[0]}, ${coords[1]}`)
+                                    .addTo(map);
+                            } else {
+                                alert("Formato de coordenadas no válido. Use el formato: lat,long");
+                            }
+                        }
+
+
+                        modeloClientes = generarModeloClientes(allData);
+                        modeloColonias = generarModeloColonias(allData);
+                        modeloOLT = generarModeloOLT(allData);
+
+
+                        generarListaOLT(modeloOLT);
+                        generarListaColonias(modeloColonias);
+                        CalcConexiones();
+
+
+                    });
+                },
+                error: function (respuesta) {
+                    console.error("Error al cargar datos:", respuesta);
+                }
+            });
+        }
+
+        function fillSelectWithDescriptions(descriptions) {
+            var select = $('#clientes-select');
+            select.empty();
+
+            descriptions.forEach(function (description) {
+                select.append(`<option value="${description}" selected>${description}</option>`);
+            });
+            select.trigger('change'); // Notifica a Select2 que las opciones han cambiado
+        }
+
+        function fillOLT(descriptions) {
+            var select = $('#clientes-olt');
+            select.empty().append(`<option value="vertodos">Ver todas las OLT</option>`);
+
+            // Convertimos a array, ordenamos alfabéticamente y agregamos al select
+            Array.from(descriptions)
+                .sort((a, b) => a.localeCompare(b, "es", { numeric: true }))
+                .forEach(function (description) {
+                    select.append(`<option value="${description}">${description}</option>`);
+                });
+
+            // Evento para actualizar las PON cuando se cambia la OLT
+            select.on('change', function () {
+                var selectedOLT = $(this).val();
+                fillPons(selectedOLT);
+            });
+
+            // Llenar PON con todas las opciones inicialmente
+            fillPons("vertodos");
+        }
+
+        function fillPons(selectedOLT) {
+            var select = $('#clientes-pon');
+            select.empty().append(`<option value="vertodos">Ver todas las PON</option>`);
+
+            let ponsOrdenadas = new Set(); // Usamos Set para evitar duplicados
+
+            if (selectedOLT === "vertodos") {
+                //uniquePons.forEach((pons) => {
+                //    pons.forEach(pon => {
+                //        let ponLimpia = extraerPon(pon);
+                //        ponsOrdenadas.add(ponLimpia);
+                //    });
+                //});
+            } else if (uniquePons.has(selectedOLT)) {
+                uniquePons.get(selectedOLT).forEach(pon => {
+                    let ponLimpia = extraerPon(pon);
+                    ponsOrdenadas.add(ponLimpia);
+                });
+            }
+
+            // Convertimos a array, ordenamos y agregamos las opciones
+            Array.from(ponsOrdenadas)
+                .sort((a, b) => a.localeCompare(b, "es", { numeric: true }))
+                .forEach(pon => {
+                    select.append(`<option value="${pon}">${pon}</option>`);
+                });
+        }
+
+        function extraerPon(ponString) {
+            return ponString.split(':')[0];
+            //var match = ponString.match(/\((.*?)\)\s(?:EPON\s)?ONU\s*(\d+\/\d+)/);
+            //return match ? match[2] : ponString;
+        }
+
+        function limpiarPonTexto(ponString) {
+            var match = ponString.match(/\((.*?)\)\s(?:EPON\s)?ONU\s*(\d+\/\d+)/);
+            return match ? `(${match[1]}) EPON ONU${match[2]}` : ponString;
+        }
+
+        $('#clientes-select, #clientes-olt, #clientes-pon').on('change', function () {
+            var selectedDescriptions = $('#clientes-select').val(); // Esto ahora es un array
+            var selectedOLT = $("#clientes-olt").val();
+            var selectedPonValue = $('#clientes-pon').val();
+            updateMapData(selectedDescriptions, selectedPonValue, selectedOLT);
+        });
+
+        function extraerOLT(texto) {
+            var match = texto.match(/\((.*?)\)/); // Busca el contenido dentro de los paréntesis
+            return match ? match[1] : ''; // Devuelve la OLT o cadena vacía si no la encuentra
+        }
+
+        function updateMapData(descriptions, pon, olt) {
+            if (!map || !map.getSource('points')) {
+                console.error("El mapa o la fuente 'points' no están disponibles aún.");
+                return;
+            }
+
+            var filteredFeatures = geojsonFeatures.filter(feature => {
+                var selectedDescriptions = Array.isArray(descriptions) ? descriptions : [descriptions];
+                var matchDescription = selectedDescriptions.length === 0 || selectedDescriptions.includes(feature.properties.fcDescripcion);
+                var matchOLT = (olt === 'vertodos' || feature.properties.fcDescripcionOLT === olt);
+                if (olt === 'vertodos') {
+                    pon = 'vertodos';
+                }
+                var matchPon = (pon === 'vertodos' || feature.properties.fcPomOnu.includes(pon));
+                return matchDescription && matchPon && matchOLT;
+            });
+
+            map.getSource('points').setData({
+                'type': 'FeatureCollection',
+                'features': filteredFeatures
+            });
+        }
+
+
+        function procesarDatos(respuesta) {
+            uniqueOLT.clear();
+            uniquePons.clear();
+
+            respuesta.forEach(item => {
+                if (item.fcDescripcionOLT && item.fcPomOnu) {
+                    uniqueOLT.add(item.fcDescripcionOLT);
+
+                    if (!uniquePons.has(item.fcDescripcionOLT)) {
+                        uniquePons.set(item.fcDescripcionOLT, new Set());
+                    }
+
+                    uniquePons.get(item.fcDescripcionOLT).add(item.fcPomOnu);
+                }
+            });
+
+            fillOLT(uniqueOLT);
+        }
+
+
+
+        function newPoint(coordenada, cliente) {
+            var markerType, icon, color;
+
+
+            if (cliente.fcEmpresa == 'CABLE_COLOR') {
+
+                markerType = "icono";
+                switch (cliente.fcDescripcion) {
+                    case "Conectado": icon = "CConline"; color = "29,201,183"; break;
+                    case "Sin Servicio": icon = "CCoffline"; color = "253,57,149"; break;
+                }
+
+            } else {
+                markerType = "cuadrado";
+                icon = null; // No se usará para cuadrados
+                switch (cliente.fcDescripcion) {
+                    case "Pendiente": color = "255,194,65"; break;
+                    case "Conectado": color = "29,201,183"; break;
+                    case "Sin Servicio": color = "253,57,149"; break;
+                    case "Desconectado": color = "101,5,0"; break;
+                    default: color = "0,0,0"; break;
+                }
+            }
+
+
+
+            return {
+                'type': 'Feature',
+                'properties': {
+                    'fcNombreCliente': cliente.fcNombreCliente,
+                    'fcDescripcion': cliente.fcDescripcion,
+                    'markerType': markerType, // Nuevo: cuadrado o icono
+                    'icon': icon, // Nuevo: nombre del icono (null para cuadrados)
+
+                    'color': color,
+                    'fcGeolocalizacion': coordenada.join(","),
+                    'fiIDSolicitud': cliente.fiIDSolicitud,
+                    'fcDescripcionOLT': cliente.fcDescripcionOLT,
+                    'fcIPOlt': cliente.fcIPOlt,
+                    'fcIpOnu': cliente.fcIpOnu,
+                    'fcPomOnu': cliente.fcPomOnu,
+                    'fcTelefono': cliente.fcTelefono,
+                    'fiCodDepartamento': cliente.fiCodDepartamento ?? 0,
+                    'fcDepartamento': cliente.fcDepartamento,
+                    'fiCodMunicipio': cliente.fiCodMunicipio ?? 0,
+                    'fcMunicipio': cliente.fcMunicipio,
+                    'fiCodColonia': cliente.fiCodColonia ?? 0,
+                    'fcBarrio': cliente.fcBarrio,
+                    'fbEstadoServicio': cliente.fbEstadoServicio,
+                    'fnCapitalAtrasado': cliente.fnCapitalAtrasado,
+                    'fiDiasAtraso': cliente.fiDiasAtraso,
+                    'fcCodigoCepheus': cliente.fcCodigoCepheus,
+                    'fcEmpresa': cliente.fcEmpresa,
+                    'fcStatusPing': cliente.fcEstadoPing
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [coordenada[1], coordenada[0]]
+                }
+            };
+        }
+
+
+        function PoligonoColonia() {
+            // Agrupar primero por Departamento
+            var departamentos = Object.groupBy(allData, ({ fiCodDepartamento }) => fiCodDepartamento);
+
+            for (let departamentoId in departamentos) {
+                if (departamentoId !== "0") {
+                    var municipios = Object.groupBy(departamentos[departamentoId], ({ fiCodMunicipio }) => fiCodMunicipio);
+
+                    for (let municipioId in municipios) {
+                        if (municipioId !== "0") {
+                            var colonias = Object.groupBy(municipios[municipioId], ({ fiCodColonia }) => fiCodColonia);
+
+                            for (let coloniaId in colonias) {
+                                if (coloniaId !== "0") {
+                                    var clientes = colonias[coloniaId];
+
+                                    // Filtrar clientes con coordenadas válidas (evita 0,0)
+                                    var coordenadas = clientes
+                                        .map(cliente => cliente.fcGeolocalizacion.split(',').map(parseFloat))
+                                        .filter(coords => coords.length === 2 && coords[0] !== 0 && coords[1] !== 0) // Validar que no sean (0,0)
+                                        .map(coords => [coords[1], coords[0]]); // Convertir a [longitud, latitud]
+
+                                    // Verificar si hay suficientes puntos para formar un polígono
+                                    if (coordenadas.length > 2) {
+                                        // Cerrar el polígono solo si el primer punto es válido
+                                        if (coordenadas[0][0] !== 0 && coordenadas[0][1] !== 0) {
+                                            coordenadas.push(coordenadas[0]);
+                                        }
+
+                                        // Generar color dinámico para cada colonia
+                                        var colorColonia = `hsl(${(coloniaId * 50) % 360}, 90%, 70%)`;
+
+                                        polygonGeoJSON.features.push({
+                                            "type": "Feature",
+                                            "properties": {
+                                                "color": colorColonia,
+                                                "nombreDepartamento": clientes[0].fcDepartamento,
+                                                "nombreMunicipio": clientes[0].fcMunicipio,
+                                                "nombreColonia": clientes[0].fcBarrio
+                                            },
+                                            "geometry": {
+                                                "type": "Polygon",
+                                                "coordinates": [coordenadas]
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Agregar o actualizar la fuente de datos en el mapa
+            if (map.getSource('polygon-source')) {
+                map.getSource('polygon-source').setData(polygonGeoJSON);
+            } else {
+                map.addSource('polygon-source', {
+                    "type": "geojson",
+                    "data": polygonGeoJSON
+                });
+
+                map.addLayer({
+                    "id": "polygon-layer",
+                    "type": "fill",
+                    "source": "polygon-source",
+                    "layout": {},
+                    "paint": {
+                        "fill-color": ["get", "color"],
+                        "fill-opacity": 0.3
+                    }
+                });
+
+                map.addLayer({
+                    "id": "polygon-outline",
+                    "type": "line",
+                    "source": "polygon-source",
+                    "layout": {},
+                    "paint": {
+                        "line-color": "#000000",
+                        "line-width": 1
+                    }
+                });
+
+
+                map.on('click', 'polygon-layer', function (e) {
+                    var properties = e.features[0].properties;
+                    var coordinates = e.lngLat;
+
+                    var popupContent = `
+                <div>
+                    <h4 style="margin: 0;">${properties.nombreColonia}</h4>
+                    <p><strong>Municipio:</strong> ${properties.nombreMunicipio}</p>
+                    <p><strong>Departamento:</strong> ${properties.nombreDepartamento}</p>
+                    <p><strong>Colonia:</strong> ${properties.nombreColonia}</p>
+                </div>
+            `;
+
+                    new maplibregl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML(popupContent)
+                        .addTo(map);
+                });
+            }
+        }
+
+
+        function IrAMaps(Localizacion) {
+            console.log(Localizacion);
+            let Latitud = Localizacion.split(',')[0];
+            let Longitud = Localizacion.split(',')[1];
+            let link = `https://www.google.com/maps?z=12&t=k&q=${Latitud},${Longitud}`;
+            window.open(link, '_blank');
+        }
+
+        $(document).on('click', '[id^="btn-maps-"]', function () {
+            const geolocalizacion = $(this).attr('value');
+            IrAMaps(geolocalizacion);
+        });
+
+
+
+        /*------------------------------------*/
+
+
+        ////////////////COLONIAS////////////////////
+        function generarModeloColonias(datos) {
+            const coloniasMap = new Map();
+
+            datos.forEach(dato => {
+                const esConectado = dato.fcDescripcion === "Conectado";
+                const esCortado = dato.fbEstadoServicio;
+
+                // Crear Colonia si no existe
+                if (!coloniasMap.has(dato.fiCodColonia)) {
+                    coloniasMap.set(dato.fiCodColonia, {
+                        fiIDColonia: dato.fiCodColonia,
+                        fcColonia: `${dato.fcDepartamento}<br/>- ${dato.fcMunicipio}<br/>- ${dato.fcBarrio}`,
+                        fnCantidadConectados: 0,
+                        fnCantidadDesconectados: 0,
+                        Clientes: []
+                    });
+                }
+
+                const colonia = coloniasMap.get(dato.fiCodColonia);
+
+                // Crear Cliente si no existe
+                let clienteEnColonia = colonia.Clientes.find(c => c.fcNombreCliente === dato.fcNombreCliente);
+                if (!clienteEnColonia) {
+                    clienteEnColonia = {
+                        fiIDCliente: dato.fiIDSolicitud,
+                        fcNombreCliente: dato.fcNombreCliente,
+                        fnCantidadConectados: 0,
+                        fnCantidadDesconectados: 0,
+                        Solicitudes: []
+                    };
+                    colonia.Clientes.push(clienteEnColonia);
+                }
+
+                // Agregar solicitud al cliente
+                const solicitud = {
+                    fiIDSolicitud: dato.fiIDSolicitud,
+                    fbConectado: esConectado, // Usamos esto, pero podrías usar otro campo si prefieres
+                    fiCortado: esCortado,
+                    fcGeolocalizacion: dato.fcGeolocalizacion,
+                    fcIP: dato.fcIpOnu
+                };
+                clienteEnColonia.Solicitudes.push(solicitud);
+
+                // Calcular conectados y desconectados del cliente basados en solicitudes
+                clienteEnColonia.fnCantidadConectados = clienteEnColonia.Solicitudes.filter(s => s.fbConectado).length;
+                clienteEnColonia.fnCantidadDesconectados = clienteEnColonia.Solicitudes.filter(s => !s.fbConectado).length;
+
+                // Actualizar conteos de la Colonia sumando los de sus clientes
+                colonia.fnCantidadConectados = colonia.Clientes.reduce((sum, cliente) => sum + cliente.fnCantidadConectados, 0);
+                colonia.fnCantidadDesconectados = colonia.Clientes.reduce((sum, cliente) => sum + cliente.fnCantidadDesconectados, 0);
+            });
+
+            var listaModeloColonias = Array.from(coloniasMap.values());
+            return [...listaModeloColonias].sort((a, b) => a.fcColonia.localeCompare(b.fcColonia, 'es', { sensitivity: 'base' }));
+        }
+
+        function generarListaColonias(modelo) {
+            const $lista = $('#lista-colonias');
+            $lista.empty();
+            modelo.forEach(colonia => {
+                const conectados = colonia.fnCantidadConectados;
+                const desconectados = colonia.fnCantidadDesconectados;
+
+                let menuCliente = "";
+                colonia.Clientes.forEach(cliente => {
+                    let menuSolicitud = "";
+                    cliente.Solicitudes.forEach(solid => {
+                        menuSolicitud += `
+                    <li>
+                        <a href="#">
+                            <i class="fal fa-2xs fa-circle ${solid.fbConectado ? "text-success imgCircle" : "text-danger"} text-right" style="background-color: ${solid.fbConectado ? "#1dc9b7" : "#fd3995"}; border-radius:50%;" id="circulo-colonia-solicitud-${solid.fiIDSolicitud}"></i>
+                            <strong style="color:black;" class="text-left">Solicitud: ${solid.fiIDSolicitud}</strong>
+                            <i class="btn btn-xs btn-primary fal fa-map-marker-alt" onclick="ubicarSolicitud('${solid.fcGeolocalizacion}')"></i>
+                            <i class="btn btn-xs btn-primary fal fa-waveform" title="ping" onclick="ping('${solid.fcIP}','${cliente.fcNombreCliente}','ONU')"></i>
+                        </a>
+                    </li>`;
+                    });
+                    menuCliente += `
+                <li>
+                    <a href="#" class="submenu-toggle"><strong style="color:black;" class="text-left">${cliente.fcNombreCliente}</strong> (<span id="colonia-cliente-conectado-${cliente.fiIDCliente}" class="text-success">${cliente.fnCantidadConectados}</span> | <span id="colonia-cliente-desconectados-${cliente.fiIDCliente}" class="text-danger">${cliente.fnCantidadDesconectados}</span>) <i class="fal fa-chevron-right toggle-icon"></i></a>
+                    <ul>${menuSolicitud}</ul>
+                </li>`;
+                });
+
+                const item = `
+            <li class="colonia-menu" data-fiidcolonia="${colonia.fiIDColonia}">
+                <a href="#" class="submenu-toggle" style="font-size:12px;"><strong style="color:black;" class="text-left">${colonia.fcColonia}</strong> (<span id="colonia-conectado-${colonia.fiIDColonia}" class="text-success">${conectados}</span> | <span id="colonia-desconectados-${colonia.fiIDColonia}" class="text-danger">${desconectados}</span>) <i class="fal fa-chevron-right toggle-icon"></i></a>
+                <ul>${menuCliente}</ul>
+            </li>`;
+                $lista.append(item);
+            });
+
+            $lista.off('click', '.submenu-toggle').on('click', '.submenu-toggle', function (e) {
+                e.preventDefault();
+                const $submenu = $(this).next('ul');
+                const $icon = $(this).find('.toggle-icon');
+                $submenu.toggleClass('show');
+
+                if ($submenu.hasClass('show')) {
+                    $icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                } else {
+                    $icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                }
+            });
+        }
+
+        function actualizarListaColonias(modelo)
+        {
+            var $liColonia = $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).closest(".colonia-menu");
+            var idColonia = $liColonia.data("fiidcolonia");
+
+            var colonia = modeloColonias.find(x => x.fiIDColonia == idColonia);
+            if (!colonia) return;
+
+            var cliente = colonia.Clientes.find(x => x.fcNombreCliente == modelo.fcNombre);
+            if (!cliente) return; // Si no se encuentra el cliente, salir
+
+            var solicitud = cliente.Solicitudes.find(x => x.fiIDSolicitud == modelo.fiIDOrionSolicitud);
+            if (!solicitud) return; // Si no se encuentra la solicitud, salir
+
+            solicitud.fbConectado = modelo.fbConectado;
+
+            if (modelo.fbConectado) {
+                $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).removeClass("text-danger").addClass("text-success");
+                $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).css("background-color", "#1dc9b7"); // Verde para conectado.
+                $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).addClass("imgCircle");
+            } else {
+                $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).removeClass("text-success").addClass("text-danger");
+                $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).css("background-color", "#fd3995"); // Rosa para desconectado
+                $(`#circulo-colonia-solicitud-${modelo.fiIDOrionSolicitud}`).removeClass("imgCircle");
+            }
+
+            cliente.fnCantidadConectados = cliente.Solicitudes.filter(s => s.fbConectado).length;
+            cliente.fnCantidadDesconectados = cliente.Solicitudes.filter(s => !s.fbConectado).length;
+
+            $(`#colonia-cliente-conectado${cliente.fiIDCliente}`).text(cliente.fnCantidadConectados);
+            $(`#colonia-cliente-desconectados-${cliente.fiIDCliente}`).text(cliente.fnCantidadDesconectados);
+
+
+            colonia.fnCantidadConectados = colonia.Clientes.reduce((sum, p) => sum + p.fnCantidadConectados, 0);
+            colonia.fnCantidadDesconectados = colonia.Clientes.reduce((sum, p) => sum + p.fnCantidadDesconectados, 0);
+
+            $(`#colonia-conectado-${colonia.fiIDColonia}`).text(colonia.fnCantidadConectados);
+            $(`#colonia-desconectados-${colonia.fiIDColonia}`).text(colonia.fnCantidadDesconectados);
+        }
+
+
+        //////////////////FIN COLONIA//////////
+
+
+        ///////////////CLIENTE///////////////////////
+
+        function generarModeloClientes(datos) {
+
+            const clientesMap = new Map();
+
+            datos.forEach(dato => {
+                const esConectado = dato.fcDescripcion === "Conectado";
+                const esCortado = dato.fbEstadoServicio;
+
+                if (!clientesMap.has(dato.fcNombreCliente)) {
+                    clientesMap.set(dato.fcNombreCliente, {
+                        fiIDCliente: dato.fiIDSolicitud, // Usamos fiIDSolicitud como ID por ahora
+                        fcNombreCliente: dato.fcNombreCliente,
+                        fnCantidadConectados: 0,
+                        fnCantidadDesconectados: 0,
+                        Solicitudes: []
+                    });
+                }
+
+                const cliente = clientesMap.get(dato.fcNombreCliente);
+
+                cliente.Solicitudes.push({
+                    fiIDSolicitud: dato.fiIDSolicitud,
+                    fbConectado: esConectado,
+                    fiCortado: esCortado,
+                    fcGeolocalizacion: dato.fcGeolocalizacion,
+                    fcIP: dato.fcIpOnu
+                });
+
+
+                cliente.fnCantidadConectados = cliente.Solicitudes.filter(s => s.fbConectado).length;
+                cliente.fnCantidadDesconectados = cliente.Solicitudes.filter(s => !s.fbConectado).length;
+
+
+            });
+
+            var listaModeloClientes = Array.from(clientesMap.values());
+            return [...listaModeloClientes].sort((a, b) => a.fcNombreCliente.localeCompare(b.fcNombreCliente, 'es', { sensitivity: 'base' }));
+        }
+
+
+        function generarListaClientes(modelo) {
+            const $lista = $('#lista-clientes');
+            $lista.empty();
+            modelo.forEach(cliente => {
+                let menuSolicitud = "";
+                cliente.Solicitudes.forEach(solid => {
+                    menuSolicitud += `
+                <li>
+                    <a href="#">
+                        <i class="fal fa-2xs fa-circle ${solid.fbConectado ? "text-success imgCircle" : "text-danger"} text-right" style="background-color: ${solid.fbConectado ? "#1dc9b7" : "#fd3995"}; border-radius:50%;" id="circulo-cliente-solicitud-${solid.fiIDSolicitud}"></i>
+                        <strong style="color:black;" class="text-left">Solicitud: ${solid.fiIDSolicitud}</strong>
+                        <i class="btn btn-xs btn-primary fal fa-map-marker-alt" onclick="ubicarSolicitud('${solid.fcGeolocalizacion}')"></i>
+                        <i class="btn btn-xs btn-primary fal fa-waveform" title="ping" onclick="ping('${solid.fcIP}','${cliente.fcNombreCliente}','ONU')"></i>
+                    </a>
+                </li>`;
+                });
+                const item = `
+            <li class="cliente-menu" data-fiidcliente="${cliente.fiIDCliente}">
+                <a href="#" class="submenu-toggle" style="font-size:12px;"><strong style="color:black;" class="text-left">${cliente.fcNombreCliente}</strong> (<span id="cliente-conectado-${cliente.fiIDCliente}" class="text-success">${cliente.fnCantidadConectados}</span> | <span id="cliente-desconectados-${cliente.fiIDCliente}" class="text-danger">${cliente.fnCantidadDesconectados}</span>) <i class="fal fa-chevron-right toggle-icon"></i></a>
+                <ul>${menuSolicitud}</ul>
+            </li>`;
+                $lista.append(item);
+            });
+
+            $lista.off('click', '.submenu-toggle').on('click', '.submenu-toggle', function (e) {
+                e.preventDefault();
+                const $submenu = $(this).next('ul');
+                const $icon = $(this).find('.toggle-icon');
+                $submenu.toggleClass('show');
+
+                if ($submenu.hasClass('show')) {
+                    $icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                } else {
+                    $icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                }
+            });
+        }
+
+
+
+        function actualizarListaClientes(modelo) {
+            var $liCliente = $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).closest(".cliente-menu");
+            var idCliente = $liCliente.data("fiidcliente");
+
+
+            var cliente = modeloClientes.find(x => x.fiIDCliente == idCliente);
+            if (!cliente) return; // Si no se encuentra el cliente, salir
+
+            var solicitud = cliente.Solicitudes.find(x => x.fiIDSolicitud == modelo.fiIDOrionSolicitud);
+            if (!solicitud) return; // Si no se encuentra la solicitud, salir
+
+            solicitud.fbConectado = modelo.fbConectado;
+
+            if (modelo.fbConectado) {
+                $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).removeClass("text-danger").addClass("text-success");
+                $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).css("background-color", "#1dc9b7"); // Verde para conectado.
+                $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).addClass("imgCircle");
+            } else {
+                $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).removeClass("text-success").addClass("text-danger");
+                $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).css("background-color", "#fd3995"); // Rosa para desconectado
+                $(`#circulo-cliente-solicitud-${modelo.fiIDOrionSolicitud}`).removeClass("imgCircle");
+            }
+
+            cliente.fnCantidadConectados = cliente.Solicitudes.filter(s => s.fbConectado).length;
+            cliente.fnCantidadDesconectados = cliente.Solicitudes.filter(s => !s.fbConectado).length;
+
+
+
+            $(`#cliente-conectado-${cliente.fiIDColonia}`).text(cliente.fnCantidadConectados);
+            $(`#cliete-desconectados-${cliente.fiIDColonia}`).text(cliente.fnCantidadDesconectados);
+        }
+
+
+        ///////////FIN CLIENTE///////////////////////
+
+        //////////////////////OLT////////////
+        function generarModeloOLT(datos) {
+            const oltMap = new Map();
+
+            datos.forEach(dato => {
+                const esConectado = dato.fcDescripcion === "Conectado"; // Esto podría no ser necesario si solo usamos fbConectado
+                const esCortado = dato.fbEstadoServicio;
+
+                // Crear OLT si no existe
+                if (!oltMap.has(dato.fcDescripcionOLT)) {
+                    oltMap.set(dato.fcDescripcionOLT, {
+                        fiIDOLT: dato.fiIDOLT || dato.fcDescripcionOLT, // Usa fiIDOLT si existe, sino fcDescripcionOLT
+                        fcOLT: dato.fcDescripcionOLT,
+                        fcIP: dato.fcIPOlt,
+                        fbConectado: dato.fbOLTConectado || true, // Asumimos conectado por defecto si no hay fbOLTConectado
+                        fnCantidadConectados: 0,
+                        fnCantidadDesconectados: 0,
+                        Pons: []
+                    });
+                }
+
+                const olt = oltMap.get(dato.fcDescripcionOLT);
+
+                // Crear PON si no existe
+                let pon = olt.Pons.find(p => p.fcPon === dato.fcPomOnu);
+                if (!pon) {
+                    pon = {
+                        fcPon: dato.fcPomOnu,
+                        fnCantidadConectados: 0,
+                        fnCantidadDesconectados: 0,
+                        Clientes: []
+                    };
+                    olt.Pons.push(pon);
+                }
+
+                // Crear Cliente si no existe
+                let clienteEnPon = pon.Clientes.find(c => c.fcNombreCliente === dato.fcNombreCliente);
+                if (!clienteEnPon) {
+                    clienteEnPon = {
+                        fiIDCliente: dato.fiIDSolicitud,
+                        fcNombreCliente: dato.fcNombreCliente,
+                        fnCantidadConectados: 0,
+                        fnCantidadDesconectados: 0,
+                        Solicitudes: []
+                    };
+                    pon.Clientes.push(clienteEnPon);
+                }
+
+                // Agregar solicitud al cliente
+
+                const solicitud = {
+                    fiIDSolicitud: dato.fiIDSolicitud,
+                    fbConectado: esConectado, // Usamos esto, pero podrías usar otro campo si prefieres
+                    fiCortado: esCortado,
+                    fcGeolocalizacion: dato.fcGeolocalizacion,
+                    fcIP: dato.fcIpOnu
+                };
+                clienteEnPon.Solicitudes.push(solicitud);
+
+                // Calcular conectados y desconectados del cliente basados en solicitudes
+                clienteEnPon.fnCantidadConectados = clienteEnPon.Solicitudes.filter(s => s.fbConectado).length;
+                clienteEnPon.fnCantidadDesconectados = clienteEnPon.Solicitudes.filter(s => !s.fbConectado).length;
+
+                // Actualizar conteos del PON sumando los de sus clientes
+                pon.fnCantidadConectados = pon.Clientes.reduce((sum, cliente) => sum + cliente.fnCantidadConectados, 0);
+                pon.fnCantidadDesconectados = pon.Clientes.reduce((sum, cliente) => sum + cliente.fnCantidadDesconectados, 0);
+
+                // Actualizar conteos del OLT sumando los de sus PONs
+                olt.fnCantidadConectados = olt.Pons.reduce((sum, pon) => sum + pon.fnCantidadConectados, 0);
+                olt.fnCantidadDesconectados = olt.Pons.reduce((sum, pon) => sum + pon.fnCantidadDesconectados, 0);
+            });
+
+            return Array.from(oltMap.values());
+
+            var listaModeloOLT = Array.from(oltMap.values());
+            return [...listaModeloOLT].sort((a, b) => a.fcOLT.localeCompare(b.fcOLT, 'es', { sensitivity: 'base' }));
+        }
+
+
+        function generarListaOLT(modelo) {
+            const $lista = $('#lista-olt');
+            $lista.empty();
+            modelo.forEach(olt => {
+                const conectados = olt.fnCantidadConectados;
+                const desconectados = olt.fnCantidadDesconectados;
+
+                let menuPon = "";
+                olt.Pons.forEach(pon => {
+                    let menuCliente = "";
+                    pon.Clientes.forEach(cliente => {
+                        let menuSolicitud = "";
+                        cliente.Solicitudes.forEach(solid => {
+                            menuSolicitud += `
+                        <li>
+                            <a href="#">
+                                <i class="fal fa-2xs fa-circle ${solid.fbConectado ? "text-success imgCircle" : "text-danger"} text-right" style="background-color: ${solid.fbConectado ? "#1dc9b7" : "#fd3995"}; border-radius:50%;" id="circulo-olt-solicitud-${solid.fiIDSolicitud}"></i>
+                                <strong style="color:black;" class="text-left">Solicitud: ${solid.fiIDSolicitud}</strong>
+                                <i class="btn btn-xs btn-primary fal fa-map-marker-alt" onclick="ubicarSolicitud('${solid.fcGeolocalizacion}')"></i>
+                                <i class="btn btn-xs btn-primary fal fa-waveform" title="ping" onclick="ping('${solid.fcIP}','${cliente.fcNombreCliente}','ONU')"></i></a>
+                            </a>
+                        </li>`;
+                        });
+                        menuCliente += `
+                    <li>
+                        <a href="#" class="submenu-toggle"><strong style="color:black;" class="text-left">${cliente.fcNombreCliente}</strong> (<span id="cliente-conectado-${cliente.fiIDCliente}" class="text-success">${cliente.fnCantidadConectados}</span> | <span id="cliente-desconectados-${cliente.fiIDCliente}" class="text-danger">${cliente.fnCantidadDesconectados}</span>) <i class="fal fa-chevron-right toggle-icon"></i></a>
+                        <ul>${menuSolicitud}</ul>
+                    </li>`;
+                    });
+                    menuPon += `
+                <li>
+                    <a href="#" class="submenu-toggle"><strong style="color:black;" class="text-left">${pon.fcPon}</strong> (<span id="pon-${olt.fiIDOLT}-conectado-${pon.fcPon.replaceAll(' ', '-').replaceAll('/', '-').replaceAll('#', '-')}" class="text-success">${pon.fnCantidadConectados}</span> | <span id="pon-${olt.fiIDOLT}-desconectados-${pon.fcPon.replaceAll(' ', '-').replaceAll('/', '-').replaceAll('#', '-')}" class="text-danger">${pon.fnCantidadDesconectados}</span>) <i class="fal fa-chevron-right toggle-icon"></i></a>
+                    <ul>${menuCliente}</ul>
+                </li>`;
+                });
+
+                const item = `
+            <li class="olt-menu" data-fiidolt="${olt.fiIDOLT}">
+                <a href="#" class="submenu-toggle" style="font-size:12px;">
+                    <i class="fal fa-2xs fa-circle ${olt.fbConectado ? "text-success imgCircle" : "text-danger"} text-right" style="background-color: ${olt.fbConectado ? "#1dc9b7" : "#fd3995"}; border-radius:50%;" id="circulo-olt-${olt.fiIDOLT}"></i>
+                    <strong style="color:black;" class="text-left">${olt.fcOLT}</strong>
+                    (<span id="olt-conectado-${olt.fiIDOLT}" class="text-success">${conectados}</span> | <span id="olt-desconectados-${olt.fiIDOLT}" class="text-danger">${desconectados}</span>)
+                    <i class="btn btn-xs btn-primary fal fa-waveform" title="ping" onclick="ping('${olt.fcIP}','${olt.fcOLT}','OLT')"></i>
+                    <i class="fal fa-chevron-right toggle-icon"></i></a>
+                </a>
+                <ul>${menuPon}</ul>
+            </li>`;
+                $lista.append(item);
+            });
+
+            // Evento para alternar submenús y actualizar ícono
+            $lista.off('click', '.submenu-toggle').on('click', '.submenu-toggle', function (e) {
+                e.preventDefault();
+                const $submenu = $(this).next('ul');
+                const $icon = $(this).find('.toggle-icon');
+                $submenu.toggleClass('show');
+
+                // Cambiar ícono según estado
+                if ($submenu.hasClass('show')) {
+                    $icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                } else {
+                    $icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                }
+            });
+        }
+
+        function actualizarListaOLT(modelo)
+        {
+            // Identificar la solicitud en el DOM
+            var id = `#circulo-olt-solicitud-${modelo.fiIDOrionSolicitud}`;
+            var $liOlt = $(id).closest(".olt-menu");
+            var idOLT = $liOlt.data("fiidolt");
+
+            // Encontrar y actualizar la solicitud en el modelo
+            var olt = modeloOLT.find(x => x.fiIDOLT == idOLT);
+            if (!olt) return; // Si no se encuentra el OLT, salir
+
+            var pon = olt.Pons.find(x => x.fcPon == modelo.fcPon);
+            if (!pon) return; // Si no se encuentra el PON, salir
+
+            var cliente = pon.Clientes.find(x => x.fcNombreCliente == modelo.fcNombre);
+            if (!cliente) return; // Si no se encuentra el cliente, salir
+
+            var solicitud = cliente.Solicitudes.find(x => x.fiIDSolicitud == modelo.fiIDOrionSolicitud);
+            if (!solicitud) return; // Si no se encuentra la solicitud, salir
+
+            // Actualizar el estado fbConectado
+            solicitud.fbConectado = modelo.fbConectado;
+
+            // Actualizar el círculo en la interfaz
+            if (modelo.fbConectado) {
+                $(id).removeClass("text-danger").addClass("text-success");
+                $(id).css("background-color", "#1dc9b7"); // Verde para conectado.
+                $(id).addClass("imgCircle");
+            } else {
+                $(id).removeClass("text-success").addClass("text-danger");
+                $(id).css("background-color", "#fd3995"); // Rosa para desconectado
+                $(id).removeClass("imgCircle");
+            }
+
+            // Recalcular conteos desde Cliente hacia arriba
+            // 1. Cliente
+            cliente.fnCantidadConectados = cliente.Solicitudes.filter(s => s.fbConectado).length;
+            cliente.fnCantidadDesconectados = cliente.Solicitudes.filter(s => !s.fbConectado).length;
+
+            // Actualizar UI del cliente
+            $(`#cliente-conectado-${cliente.fiIDCliente}`).text(cliente.fnCantidadConectados);
+            $(`#cliente-desconectados-${cliente.fiIDCliente}`).text(cliente.fnCantidadDesconectados);
+
+            // 2. PON
+            pon.fnCantidadConectados = pon.Clientes.reduce((sum, c) => sum + c.fnCantidadConectados, 0);
+            pon.fnCantidadDesconectados = pon.Clientes.reduce((sum, c) => sum + c.fnCantidadDesconectados, 0);
+
+            // Actualizar UI del PON
+            $(`#pon-${idOLT}-conectado-${pon.fcPon.replaceAll(' ', '-').replaceAll('/', '-').replaceAll('#','-')}`).text(pon.fnCantidadConectados);
+            $(`#pon-${idOLT}-desconectados-${pon.fcPon.replaceAll(' ', '-').replaceAll('/', '-').replaceAll('#', '-')}`).text(pon.fnCantidadDesconectados);
+
+            // 3. OLT
+            olt.fnCantidadConectados = olt.Pons.reduce((sum, p) => sum + p.fnCantidadConectados, 0);
+            olt.fnCantidadDesconectados = olt.Pons.reduce((sum, p) => sum + p.fnCantidadDesconectados, 0);
+
+            // Actualizar UI del OLT
+            $(`#olt-conectado-${olt.fiIDOLT}`).text(olt.fnCantidadConectados);
+            $(`#olt-desconectados-${olt.fiIDOLT}`).text(olt.fnCantidadDesconectados);
+        }
+        ////////////////////////////FIN OLT///////////
+
+
+        function filtrarListaActiva(query) {
+            const activeTab = $('.tab-pane.active.show').attr('id');
+            let $lista;
+
+            switch (activeTab) {
+                case 'OLT':
+                    $lista = $('#lista-olt');
+                    break;
+                case 'Clientes':
+                    $lista = $('#lista-clientes');
+                    break;
+                case 'Colonias':
+                    $lista = $('#lista-colonias');
+                    break;
+                default:
+                    return;
+            }
+
+            if (query === "") {
+                $lista.find('li').show();
+            } else {
+                const searchText = query.toLowerCase();
+                $lista.find('li').each(function () {
+                    const $item = $(this);
+                    const text = $item.text().toLowerCase();
+                    if (text.includes(searchText)) {
+                        $item.show();
+                    } else {
+                        $item.hide();
+                    }
+                });
+            }
+        }
+
+
+        function ubicarSolicitud(fcGeolocalizacion) {
+            var coords = fcGeolocalizacion.split(',').map(parseFloat);
+            if (esCoordenada(coords)) {
+                if (coords.length === 2) {
+
+
+                    map.flyTo({
+                        center: [coords[1], coords[0]], // Reverso porque maplibre usa long, lat
+                        zoom: 25
+                    });
+
+                    map.once('moveend', function () {
+                        console.log("El mapa ha terminado de moverse.");
+
+                        // Mostrar el popup después del vuelo
+                        map.fire('click', { lngLat: { lng: coords[1], lat: coords[0] } });
+                    });
+
+
+                } else {
+                    alert("Formato de coordenadas no válido. Use el formato: lat,long");
+                }
+            } else {
+                alert("Formato de coordenadas no válido. Use el formato: lat,long");
+            }
+        }
+
+
+        function ping(fcIP, fcNombre, fcDispositivo)
+        {
+            var ip = cleanAndValidateIp(fcIP);
+            if (ip != null)
+            {
+                VerModalConObjetoDeParametro({ fcIP: ip, fcNombre: fcNombre, fcDispositivo: fcDispositivo }, "@Url.Action("DoPing","Soporte")");
+            }
+        }
+
+        function cleanAndValidateIp(ipAddress) {
+            const cleaned = ipAddress.trim().replace(/[^0-9.]/g, '');
+            const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            return ipRegex.test(cleaned) ? cleaned : null;
+        }
+
+        function ModalDetalleCliente(Nombre, Telefono, IDSolicitud) {
+
+            $.ajax({
+                url: "/Solicitudes/ModalDetalleCliente",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud },
+                success: function (resp) {
+
+                    ShowModalBigScroll(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        function ModalHistorialCliente(fiIDSolicitud, fcIPOnu, fcNombreCliente) {
+            VerModalConObjetoDeParametro({ fcTipoDispositivo: "ONU", propiedadUnica: "fiIDOrionSolicitud", valor: fiIDSolicitud, titulo: `Historial de onu ${fcIPOnu} del cliente ${fcNombreCliente}` }, "/Soporte/ViewHistorialConeccionONU");
+        }
+
+
+        function CalcConexiones()
+        {
+            var conectados = geojsonFeatures.filter(x => x.properties.fcDescripcion == "Conectado");
+            var desconectados = geojsonFeatures.filter(x => x.properties.fcDescripcion == "Sin Servicio");
+            var cortados = geojsonFeatures.filter(x => x.properties.fcDescripcion == "Desconectado");
+
+            cantidades.on = conectados.length;
+            cantidades.off = desconectados.length;
+            cantidades.cortados = cortados.length;
+
+            ActualizarInfoTop();
+        }
+
+        function DataONU(fcIP) {
+            var ip = cleanAndValidateIp(fcIP);
+            if (ip != null) {
+                VerModalConObjetoDeParametro({ fcIP: ip }, "@Url.Action("DataOnu", "Soporte")");
+            }
+        }
+
+
+        function CargarCobertura()
+        {
+            $.ajax({
+                url: "@Url.Action("CargarCoberturas","Soporte")",
+                method: "Get",
+                success: function (kmlTextArray) {
+                    for (var kmlText of kmlTextArray) {
+                        var parser = new DOMParser();
+                        var kmlDoc = parser.parseFromString(kmlText, 'text/xml');
+                        var geoJsonFeatures = toGeoJSON.kml(kmlDoc).features.filter(x => x.geometry.type == "Polygon");
+                        const sourceId = `kml-source-${Math.random().toString(36).substring(2)}`;
+
+
+                        try {
+                            map.addSource(sourceId, {
+                                type: 'geojson',
+                                data: {
+                                    type: 'FeatureCollection',
+                                    features: geoJsonFeatures
+                                }
+                            });
+
+                            map.addLayer({
+                                id: `${sourceId}-polygons`,
+                                type: 'fill',
+                                source: sourceId,
+                                filter: ['==', '$type', 'Polygon'], // Filtrar solo polígonos
+                                paint: {
+                                    'fill-color': [
+                                        'case',
+                                        ['has', '#faa61a'],
+                                        ['get', '#faa61a'],
+                                        '#faa61a'
+                                    ],
+                                    'fill-opacity': 0.1
+                                        //[
+                                    //    'case',
+                                    //    ['has', 'fill-opacity'],
+                                    //    ['get', 'fill-opacity'],
+                                    //    0.3
+                                    //]
+                                }
+                            });
+
+                            map.addLayer({
+                                id: `${sourceId}-polygon-outlines`,
+                                type: 'line',
+                                source: sourceId,
+                                filter: ['==', '$type', 'Polygon'], // Filtrar solo polígonos
+                                paint: {
+                                    'line-color': [
+                                        'case',
+                                        ['has', '#faa61a'],
+                                        ['get', '#faa61a'],
+                                        '#faa61a'
+                                    ],
+                                    'line-width': [
+                                        'case',
+                                        ['has', 'stroke-width'],
+                                        ['get', 'stroke-width'],
+                                        2
+                                    ],
+                                    'line-opacity': [
+                                        'case',
+                                        ['has', 'stroke-opacity'],
+                                        ['get', 'stroke-opacity'],
+                                        1
+                                    ]
+                                }
+                            });
+
+
+                            const layers = [`${sourceId}-polygons`, `${sourceId}-lines`, `${sourceId}-points`];
+                            layers.forEach(layerId => {
+                                //map.on('click', layerId, (e) => {
+                                //    const feature = e.features[0];
+                                //    if (feature.properties.name) {
+                                //        new maplibregl.Popup()
+                                //            .setLngLat(e.lngLat)
+                                //            .setHTML(feature.properties.name)
+                                //            .addTo(map);
+                                //    }
+                                //});
+
+                                // Cambiar cursor al pasar el ratón
+                                map.on('mouseenter', layerId, () => {
+                                    map.getCanvas().style.cursor = 'pointer';
+                                });
+                                map.on('mouseleave', layerId, () => {
+                                    map.getCanvas().style.cursor = '';
+                                });
+                            });
+
+                        } catch (e) {
+                            console.log(e);
+                        }
+
+                    }
+                }
+            });
+        }
+
+        function CargarLineas()
+        {
+            $.ajax({
+                url: "@Url.Action("CargarMufasKMZ", "Soporte")",
+                method: "Get",
+                success: function (kmlTextArray) {
+                    for (var kmlText of kmlTextArray) {
+                        var parser = new DOMParser();
+                        var kmlDoc = parser.parseFromString(kmlText, 'text/xml');
+                        var geoJsonFeatures = toGeoJSON.kml(kmlDoc).features.filter(x => x.geometry.type == "LineString");
+                        const sourceId = `kml-source-${Math.random().toString(36).substring(2)}`;
+
+
+                        try {
+                            map.addSource(sourceId, {
+                                type: 'geojson',
+                                data: {
+                                    type: 'FeatureCollection',
+                                    features: geoJsonFeatures
+                                }
+                            });
+
+                            map.addLayer({
+                                id: `${sourceId}-lines`,
+                                type: 'line',
+                                source: sourceId,
+                                filter: ['==', '$type', 'LineString'], // Filtrar solo líneas
+                                paint: {
+                                    'line-color': [
+                                        'case',
+                                        ['has', 'stroke'],
+                                        ['get', 'stroke'],
+                                        '#000000'
+                                    ],
+                                    'line-width': [
+                                        'case',
+                                        ['has', 'stroke-width'],
+                                        ['get', 'stroke-width'],
+                                        2
+                                    ],
+                                    'line-opacity': [
+                                        'case',
+                                        ['has', 'stroke-opacity'],
+                                        ['get', 'stroke-opacity'],
+                                        1
+                                    ]
+                                }
+                            });
+
+
+                            const layers = [`${sourceId}-lines`];
+                            layers.forEach(layerId => {
+
+                                map.on('click', layerId, (e) => {
+                                    const feature = e.features[0];
+                                    if (feature.properties.name) {
+                                        new maplibregl.Popup()
+                                            .setLngLat(e.lngLat)
+                                            .setHTML(feature.properties.name)
+                                            .addTo(map);
+                                    }
+                                });
+
+
+                                map.on('mouseenter', layerId, () => {
+                                    map.getCanvas().style.cursor = 'pointer';
+                                });
+                                map.on('mouseleave', layerId, () => {
+                                    map.getCanvas().style.cursor = '';
+                                });
+                            });
+
+                        } catch (e) {
+                            console.log(e);
+                        }
+
+                    }
+                }
+            });
+        }
+        /*------------------------------------*/
+
+    </script>
+
+}

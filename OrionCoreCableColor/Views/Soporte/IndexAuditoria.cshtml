@@ -1,0 +1,304 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Auditoria</h2>
+
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <ul class="nav nav-pills" role="tablist">
+            <li class="nav-item ml-2"><a class="nav-link active" data-toggle="pill" href="#nav_pills_default-1">Pendientes</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-2">Auditados</a></li>
+        </ul>
+
+        <div class="tab-content py-3">
+            <div class="tab-pane fade active show" id="nav_pills_default-1" role="tabpanel">
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Solicitud</th>
+                                <th>Cliente</th>
+                                <th>Colonia</th>
+                                <th>Direccion</th>
+                                <th>Empresa / Tecnico</th>
+                                <th>METROS DE FIBRA</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav_pills_default-2" role="tabpanel">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaAuditados">
+                    <thead>
+                        <tr>
+                            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Solicitud</th>
+                            <th>Cliente</th>
+                            <th>Colonia</th>
+                            <th>Direccion</th>
+                            <th>Empresa / Tecnico</th>
+                            <th>METROS</th>
+                            <th>METROS AUDITADOS</th>
+                            <th>Diferencia</th>
+                            <th>Observacion</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+
+
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            pageLength: -1,
+            dom: 'Bfrtip',
+            order: [[4, "asc"]],
+            rowGroup: {
+                dataSrc: "fcBarrio", // Indica que la primera columna será la que agrupará las filas
+            },
+            ajax: {
+                url: '@Url.Action("CargarListaClientesAuditoria", "Soporte")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button name="agregarComentario" class="btn btn-success"><i class="fal fa-comment-alt-lines"></i></button>`;
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-center",
+                    visible: false,
+                    render: function (data) {
+                        var opt = "";
+                        opt = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)" ><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                        return opt;
+                    }
+                },
+                {
+                    data: "fiIDSolicitud",
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `${data.fcNombre} <a href="tel:${data.fcTelefono}">${data.fcTelefono}</a>`;
+                    }
+                },
+                {
+                    data: null,
+                    visible: false,
+                    render: function (data) {
+                        return `${data.fcDepartamento} - ${data.fcMunicipio} - ${data.fcBarrio}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<a href=${data.fcGeolocalizacion} target="_blank">${data.fcDireccionDetallada}</a>`;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        return `${data.fcNombreEmpresa} - ${data.fcNombreTecnico}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return ConvertirDecimal(data.fnCantidadFibra);
+                    }
+                }
+            ]
+
+        });
+
+
+        $("#TablaPrincipal thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+        $("#TablaPrincipal tbody").on("click", "tr button[name=agregarComentario]", function () {
+            var tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            var tr = $(this).closest("tr");
+            var data = tabla.row(tr).data();
+            VerModalConObjetoDeParametro({ fiIDSolicitud: data.fiIDSolicitud, fcNombre: data.fcNombre }, "@Url.Action("ViewAgregarObservacion","Soporte")");
+        });
+
+
+        tablaPrincipal.on("responsive-resize", function () {
+            var thead = $("#TablaPrincipal thead tr").toArray();
+            var buscadores = $(thead[0]).find("th").toArray();
+
+            var titulos = $(thead[1]).find("th").toArray();
+            for (var x = 0; x < titulos.length; x++) {
+                if ($(titulos[x]).css("display") == "none") {
+
+                    $(buscadores[x]).css("display", "none");
+                } else {
+                    $(buscadores[x]).css("display", "");
+                }
+            }
+        });
+
+
+
+
+        /////////CLIENTES AUDITADOS
+
+
+        var tablaPrincipal = $('#TablaAuditados').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            pageLength: -1,
+            dom: 'Bfrtip',
+            order: [[4, "asc"]],
+            rowGroup: {
+                dataSrc: "fcBarrio", // Indica que la primera columna será la que agrupará las filas
+            },
+            ajax: {
+                url: '@Url.Action("CargarListaClientesAuditados", "Soporte")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: "fiIDSolicitud",
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `${data.fcNombre} <a href="tel:${data.fcTelefono}">${data.fcTelefono}</a>`;
+                    }
+                },
+                {
+                    data: null,
+                    visible: false,
+                    render: function (data) {
+                        return `${data.fcDepartamento} - ${data.fcMunicipio} - ${data.fcBarrio}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<a href=${data.fcGeolocalizacion} target="_blank">${data.fcDireccionDetallada}</a>`;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        return `${data.fcNombreEmpresa} - ${data.fcNombreTecnico}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return ConvertirDecimal(data.fnCantidadFibraInstalacion);
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return ConvertirDecimal(data.fnCantidadFibraAuditoria);
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return ConvertirDecimal(data.fnDiferenciaDeFibra);
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcObservacion;
+                    }
+                }
+            ]
+
+        });
+
+
+        $("#TablaAuditados thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaAuditados");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+    </script>
+}

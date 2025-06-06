@@ -1,0 +1,111 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.ListFacturacionDetalleViewModel
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductos-@Model.fiIDInventarioMovimientoMaestro-@Model.fiIDProducto">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Producto</th>
+            <th>Serie</th>
+            <th>Mac / Serie 2</th>
+            <th>Cantidad</th>
+            <th>Descripcion</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+<script>
+    var tablaPrincipal = $('#TablaProductos-@Model.fiIDInventarioMovimientoMaestro-@Model.fiIDProducto').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            data: model.ListaInventarioDetalle,
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fcProducto
+                        } else {
+                            return `<select class="form-control clsProducto" name="fiIDProducto"></select>`;
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fcCodigoSerie1
+                        } else {
+                            return `<input type="text" class="form-control clsSerie1" name="fcCodigoSerie1" value="${data.fcCodigoSerie1}" />`;
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fcCodigoSerie2;
+                        } else {
+                            return `<input type="text" class="form-control clsSerie2" name="fcCodigoSerie2" value="${data.fcCodigoSerie2}" />`;
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbPorCodigo) {
+                            return data.fnCantidad;
+                        } else {
+                            return `<input type="number" class="form-control InputDecimal" data-class="ClaseDecimal" name="fnCantidad" type="text"  value="${data.fnCantidad}" ></input>`;
+                        }
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return `<input class="form-control" name="fcDescripcion" autocomplete="off" type="text" value="${data.fcDescripcion}" ></input>`;
+                    }
+                },
+
+            ],
+            createdRow: function (row, data, index)
+            {
+                $(row).find(".clsProducto").select2({ data: listProductos, width: "100%" }).val(data.fiIdProducto).trigger('change');
+                
+                //$(row).find(".clsUbicacion").select2({ data: listUbicaciones, width: "100%" }).val(data.fiIDUbicacion).trigger('change');
+                //$(row).find(".clsTipoMovimiento").select2({ data: listTipoMovimiento, width: "100%" }).val(data.fiIDTipoMovimiento).trigger('change');
+            },
+            initComplete: function ()
+            {
+                
+            }
+
+        });
+</script>

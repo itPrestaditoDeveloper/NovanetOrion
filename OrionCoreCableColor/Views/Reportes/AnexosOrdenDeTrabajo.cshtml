@@ -1,0 +1,203 @@
+﻿@model int
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/styles/externalstylesheets")
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/img/favicon/favicon-32x32.png">
+
+    <link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link href="~/Content/css/wizard/style.css" rel="stylesheet" />
+    <link href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet" />
+    <style>
+
+        .panel-container {
+            background-color: #f9f9f9; /* Fondo claro para diferenciar la sección */
+            border: 1px solid #ddd; /* Borde sutil */
+            border-radius: 8px; /* Bordes redondeados */
+            padding: 20px; /* Espaciado interno */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        }
+
+        .drawCanvas {
+            border: 2px dotted #007bff; /* Cambiar color para mayor contraste */
+            border-radius: 5px;
+            cursor: crosshair;
+            background-color: #fff; /* Fondo blanco para la firma */
+        }
+
+        .btn-actions {
+            display: flex;
+            justify-content: space-between; /* Espaciado entre los botones */
+            margin-top: 10px;
+        }
+
+        #btnAutorizacionProductoYServicios {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="modal-body">
+        <form id="MyFormModal">
+            <div class="panel-container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="text-primary">Firma Orden de Trabajo</h4>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <!-- Canvas de firma -->
+                        <div id="firma1" style="text-align: center;">
+                            <canvas id="drawCanvas" class="drawCanvas" width="700" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row btn-actions">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-warning btn-sm w-100" onclick="clearCanvas()">Borrar</button>
+                    </div>
+                    <div class="col-6">
+                        <button id="btnAutorizacionProductoYServicios" class="btn btn-success btn-lg">
+                            Enviar y Finalizar
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Content/js/wizard/function.js"></script>
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.js"></script>
+    <script src="~/Content/js/loading/loading.js"></script>
+    <script src="~/Template/js/Personalized/Firma.js"></script>
+    <script>
+
+
+        function clearCanvas() {
+            const canvas = document.getElementById("drawCanvas");
+            const ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpia todo el área
+        }
+
+        document.getElementById("firma1").innerHTML = "";
+        DrawCanvasFirma("#firma1", "drawCanvas");
+        document.getElementById("draw-clearBtn-drawCanvas").style.display = "none";
+
+        VerificarEstado();
+        $("#btnAutorizacionProductoYServicios").click(function (e) {
+            e.preventDefault();
+            NombreArchivo = "PlantillaOrdenTrabajoIncidente";
+            var dataUrl = document.getElementById("drawCanvas").toDataURL();
+            EnviarAnexo(dataUrl);
+            //ImprimirDoc(NombreArchivo);
+        });
+        
+        function VerificarEstado()
+        {
+            debugger;
+            $.ajax({
+            url: "@Url.Action("VerificarAnexoOrdenTrabajo", "Reportes")",
+            type: "GET",
+                data: { idSolicitudContratista: @Model},
+            success: function (resp) {
+                console.log(resp);
+                if (resp.Estado == true) {
+                    $("#btnAutorizacionProductoYServicios").css("display", "none");
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+
+                }else {
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+        }
+
+        function EnviarAnexo(dataUrl)
+        {
+            $.ajax({
+                url: "@Url.Action("EnviarAnexoOrdenTrabajoAlCliente", "Reportes")",
+                type: "POST",
+                    data: { IdSolicitudContratista: @Model, firma: dataUrl},
+                success: function (resp) {
+                    console.log(resp);
+                    debugger;
+                    if (resp.Estado == true) {
+                        $("#btnAutorizacionProductoYServicios").css("display", "none");
+                        ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    } else {
+                        window.location.href = resp;
+                    }
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+
+        }
+
+        function ImprimirDoc(NombreArchivo) {
+
+        debugger;
+        $.ajax({
+            url: "@Url.Action("ImprimirDOC", "Reportes")",
+            type: "POST",
+            data: { NombreArchivo: NombreArchivo, IdSolicitud: @Model},
+            success: function (resp) {
+                console.log(resp);
+                if (resp.Estado == true) {
+                    $("#btnAutorizacionProductoYServicios").css("display", "none");
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+
+                }else {
+                    window.location.href = resp;
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+        }
+    </script>
+
+
+</body>
+</html>

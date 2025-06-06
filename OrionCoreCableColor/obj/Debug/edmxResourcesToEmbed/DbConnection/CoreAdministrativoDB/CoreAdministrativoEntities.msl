@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CoreAdministrativoModelStoreContainer" CdmEntityContainer="CoreAdministrativoEntities">
+    <FunctionImportMapping FunctionImportName="sp_PartidaDiario_CrearDetalle" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_CrearDetalle" />
+    <FunctionImportMapping FunctionImportName="sp_PartidaDiario_CrearMaestro" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_CrearMaestro" />
+    <FunctionImportMapping FunctionImportName="sp_Catalogo_Contable_ObtenerPorCuentaContable" FunctionName="CoreAdministrativoModel.Store.sp_Catalogo_Contable_ObtenerPorCuentaContable">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Catalogo_Contable_ObtenerPorCuentaContable_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+          <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_PartidaDiario_ListarDetalle" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_ListarDetalle">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_PartidaDiario_ListarDetalle_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+          <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+          <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+          <ScalarProperty Name="fcAuxiliar" ColumnName="fcAuxiliar" />
+          <ScalarProperty Name="fcAuxiliarCodigo" ColumnName="fcAuxiliarCodigo" />
+          <ScalarProperty Name="fnDebito" ColumnName="fnDebito" />
+          <ScalarProperty Name="fnCredito" ColumnName="fnCredito" />
+          <ScalarProperty Name="fcDebitooCredito" ColumnName="fcDebitooCredito" />
+          <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+          <ScalarProperty Name="fcEstado" ColumnName="fcEstado" />
+          <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+          <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+          <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+          <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+          <ScalarProperty Name="fcDocumento" ColumnName="fcDocumento" />
+          <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+          <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+          <ScalarProperty Name="fdFechaCreacionPartida" ColumnName="fdFechaCreacionPartida" />
+          <ScalarProperty Name="fcCuenta" ColumnName="fcCuenta" />
+          <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+          <ScalarProperty Name="fiPresu_VistoBueno" ColumnName="fiPresu_VistoBueno" />
+          <ScalarProperty Name="fiConvertida" ColumnName="fiConvertida" />
+          <ScalarProperty Name="fiIDFila" ColumnName="fiIDFila" />
+          <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+          <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+          <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fcAutoGUID" ColumnName="fcAutoGUID" />
+          <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+          <ScalarProperty Name="fcSAFMigradoPor" ColumnName="fcSAFMigradoPor" />
+          <ScalarProperty Name="fcSAFOperador" ColumnName="fcSAFOperador" />
+          <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+          <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+          <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+          <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+          <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+          <ScalarProperty Name="fbExentoFactura" ColumnName="fbExentoFactura" />
+          <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_PartidaDiario_VerDetalle" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_VerDetalle">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_PartidaDiario_VerDetalle_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+          <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+          <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+          <ScalarProperty Name="fcAuxiliar" ColumnName="fcAuxiliar" />
+          <ScalarProperty Name="fcAuxiliarCodigo" ColumnName="fcAuxiliarCodigo" />
+          <ScalarProperty Name="fnDebito" ColumnName="fnDebito" />
+          <ScalarProperty Name="fnCredito" ColumnName="fnCredito" />
+          <ScalarProperty Name="fcDebitooCredito" ColumnName="fcDebitooCredito" />
+          <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+          <ScalarProperty Name="fcEstado" ColumnName="fcEstado" />
+          <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+          <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+          <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+          <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+          <ScalarProperty Name="fcDocumento" ColumnName="fcDocumento" />
+          <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+          <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+          <ScalarProperty Name="fdFechaCreacionPartida" ColumnName="fdFechaCreacionPartida" />
+          <ScalarProperty Name="fcCuenta" ColumnName="fcCuenta" />
+          <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+          <ScalarProperty Name="fiPresu_VistoBueno" ColumnName="fiPresu_VistoBueno" />
+          <ScalarProperty Name="fiConvertida" ColumnName="fiConvertida" />
+          <ScalarProperty Name="fiIDFila" ColumnName="fiIDFila" />
+          <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+          <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+          <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fcAutoGUID" ColumnName="fcAutoGUID" />
+          <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+          <ScalarProperty Name="fcSAFMigradoPor" ColumnName="fcSAFMigradoPor" />
+          <ScalarProperty Name="fcSAFOperador" ColumnName="fcSAFOperador" />
+          <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+          <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+          <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+          <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+          <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+          <ScalarProperty Name="fbExentoFactura" ColumnName="fbExentoFactura" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_PartidaDiario_VerMaestro" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_VerMaestro">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_PartidaDiario_VerMaestro_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+          <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+          <ScalarProperty Name="fcLote" ColumnName="fcLote" />
+          <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+          <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+          <ScalarProperty Name="fcEstadoPartida" ColumnName="fcEstadoPartida" />
+          <ScalarProperty Name="fiMoneda" ColumnName="fiMoneda" />
+          <ScalarProperty Name="fcAutoriza" ColumnName="fcAutoriza" />
+          <ScalarProperty Name="fdFechaAutorizacion" ColumnName="fdFechaAutorizacion" />
+          <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+          <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+          <ScalarProperty Name="fcPartidaOrigen" ColumnName="fcPartidaOrigen" />
+          <ScalarProperty Name="fdFechaOrigen" ColumnName="fdFechaOrigen" />
+          <ScalarProperty Name="fcCreador" ColumnName="fcCreador" />
+          <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+          <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+          <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+          <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+          <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fcSinopsis" ColumnName="fcSinopsis" />
+          <ScalarProperty Name="fcAutGuid" ColumnName="fcAutGuid" />
+          <ScalarProperty Name="fcUsuarioMigrador" ColumnName="fcUsuarioMigrador" />
+          <ScalarProperty Name="fnValorPartida" ColumnName="fnValorPartida" />
+          <ScalarProperty Name="fiIDUsuarioCreador" ColumnName="fiIDUsuarioCreador" />
+          <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+          <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+          <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+          <ScalarProperty Name="fcPartidaSeguimiento" ColumnName="fcPartidaSeguimiento" />
+          <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_CatalogoCorrelativo_VerCorrelativo" FunctionName="CoreAdministrativoModel.Store.sp_CatalogoCorrelativo_VerCorrelativo">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_CatalogoCorrelativo_VerCorrelativo_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcCorrelativo" ColumnName="fcCorrelativo" />
+          <ScalarProperty Name="fcDescripcionCorrelativo" ColumnName="fcDescripcionCorrelativo" />
+          <ScalarProperty Name="fiNumeroConsecutivo" ColumnName="fiNumeroConsecutivo" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Catalogo_TipoPartida_Listar" FunctionName="CoreAdministrativoModel.Store.sp_Catalogo_TipoPartida_Listar">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Catalogo_TipoPartida_Listar_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+          <ScalarProperty Name="fcDescripcionTipoOperacion" ColumnName="fcDescripcionTipoOperacion" />
+          <ScalarProperty Name="fiNumeroCorrelativo" ColumnName="fiNumeroCorrelativo" />
+          <ScalarProperty Name="fiModificable" ColumnName="fiModificable" />
+          <ScalarProperty Name="fcTipoDocumento" ColumnName="fcTipoDocumento" />
+          <ScalarProperty Name="fcModulo" ColumnName="fcModulo" />
+          <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+          <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_CuentasContables_Prestamo_Seguros" FunctionName="CoreAdministrativoModel.Store.sp_CuentasContables_Prestamo_Seguros">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_CuentasContables_Prestamo_Seguros_Result">
+          <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+          <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+          <ScalarProperty Name="fcAceptaPosteo" ColumnName="fcAceptaPosteo" />
+          <ScalarProperty Name="fcCuentaBloqueada" ColumnName="fcCuentaBloqueada" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_CuentasContables_Listar" FunctionName="CoreAdministrativoModel.Store.sp_CuentasContables_Listar" />
+    <FunctionImportMapping FunctionImportName="sp_CentroCosto_Listar" FunctionName="CoreAdministrativoModel.Store.sp_CentroCosto_Listar">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_CentroCosto_Listar_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+          <ScalarProperty Name="fcDescripcionAgencia" ColumnName="fcDescripcionAgencia" />
+          <ScalarProperty Name="fcNivel" ColumnName="fcNivel" />
+          <ScalarProperty Name="fcPrefijoAgencia" ColumnName="fcPrefijoAgencia" />
+          <ScalarProperty Name="fcRegion" ColumnName="fcRegion" />
+          <ScalarProperty Name="fcDireccionAgencia" ColumnName="fcDireccionAgencia" />
+          <ScalarProperty Name="fcSectorAgencia" ColumnName="fcSectorAgencia" />
+          <ScalarProperty Name="fiEsAgenciaCorporativo" ColumnName="fiEsAgenciaCorporativo" />
+          <ScalarProperty Name="fiIDCiudad" ColumnName="fiIDCiudad" />
+          <ScalarProperty Name="fcUsuarioGerente" ColumnName="fcUsuarioGerente" />
+          <ScalarProperty Name="NombreGerence" ColumnName="NombreGerence" />
+          <ScalarProperty Name="fcRegistroSucursal" ColumnName="fcRegistroSucursal" />
+          <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+          <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+          <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fcInstiutoCBNS" ColumnName="fcInstiutoCBNS" />
+          <ScalarProperty Name="fcCreadoPor" ColumnName="fcCreadoPor" />
+          <ScalarProperty Name="fcTelefonoAgencia" ColumnName="fcTelefonoAgencia" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Fondos_Listar" FunctionName="CoreAdministrativoModel.Store.sp_Fondos_Listar">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Fondos_Listar_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+          <ScalarProperty Name="fcDescripcionFondo" ColumnName="fcDescripcionFondo" />
+          <ScalarProperty Name="fcPrefijoFondo" ColumnName="fcPrefijoFondo" />
+          <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+          <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fnMontodelFondo" ColumnName="fnMontodelFondo" />
+          <ScalarProperty Name="fiFondeador" ColumnName="fiFondeador" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_Programas_Listar" FunctionName="CoreAdministrativoModel.Store.sp_Programas_Listar">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Programas_Listar_Result">
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+          <ScalarProperty Name="fcDescripcionPrograma" ColumnName="fcDescripcionPrograma" />
+          <ScalarProperty Name="fcPrefijoPrograma" ColumnName="fcPrefijoPrograma" />
+          <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+          <ScalarProperty Name="fdCreacion" ColumnName="fdCreacion" />
+          <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_ObtenerTasaDeCambioMoneda" FunctionName="CoreAdministrativoModel.Store.sp_ObtenerTasaDeCambioMoneda">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_ObtenerTasaDeCambioMoneda_Result">
+          <ScalarProperty Name="fiAno" ColumnName="fiAno" />
+          <ScalarProperty Name="fiMes" ColumnName="fiMes" />
+          <ScalarProperty Name="fiCodPaisOrigen" ColumnName="fiCodPaisOrigen" />
+          <ScalarProperty Name="fiCodPaisDestino" ColumnName="fiCodPaisDestino" />
+          <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="Diario_Detalle">
+      <EntityTypeMapping TypeName="CoreAdministrativoModel.Diario_Detalle">
+        <MappingFragment StoreEntitySet="Diario_Detalle">
+          <ScalarProperty Name="fbExentoFactura" ColumnName="fbExentoFactura" />
+          <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+          <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+          <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+          <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+          <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+          <ScalarProperty Name="fcSAFOperador" ColumnName="fcSAFOperador" />
+          <ScalarProperty Name="fcSAFMigradoPor" ColumnName="fcSAFMigradoPor" />
+          <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+          <ScalarProperty Name="fcAutoGUID" ColumnName="fcAutoGUID" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+          <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+          <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+          <ScalarProperty Name="fiIDFila" ColumnName="fiIDFila" />
+          <ScalarProperty Name="fiConvertida" ColumnName="fiConvertida" />
+          <ScalarProperty Name="fiPresu_VistoBueno" ColumnName="fiPresu_VistoBueno" />
+          <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+          <ScalarProperty Name="fcCuenta" ColumnName="fcCuenta" />
+          <ScalarProperty Name="fdFechaCreacionPartida" ColumnName="fdFechaCreacionPartida" />
+          <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+          <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+          <ScalarProperty Name="fcDocumento" ColumnName="fcDocumento" />
+          <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+          <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+          <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+          <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+          <ScalarProperty Name="fcEstado" ColumnName="fcEstado" />
+          <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+          <ScalarProperty Name="fcDebitooCredito" ColumnName="fcDebitooCredito" />
+          <ScalarProperty Name="fnCredito" ColumnName="fnCredito" />
+          <ScalarProperty Name="fnDebito" ColumnName="fnDebito" />
+          <ScalarProperty Name="fcAuxiliarCodigo" ColumnName="fcAuxiliarCodigo" />
+          <ScalarProperty Name="fcAuxiliar" ColumnName="fcAuxiliar" />
+          <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+          <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+          <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Diario_Maestro">
+      <EntityTypeMapping TypeName="CoreAdministrativoModel.Diario_Maestro">
+        <MappingFragment StoreEntitySet="Diario_Maestro">
+          <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+          <ScalarProperty Name="fcPartidaSeguimiento" ColumnName="fcPartidaSeguimiento" />
+          <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+          <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+          <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+          <ScalarProperty Name="fiIDUsuarioCreador" ColumnName="fiIDUsuarioCreador" />
+          <ScalarProperty Name="fnValorPartida" ColumnName="fnValorPartida" />
+          <ScalarProperty Name="fcUsuarioMigrador" ColumnName="fcUsuarioMigrador" />
+          <ScalarProperty Name="fcAutGuid" ColumnName="fcAutGuid" />
+          <ScalarProperty Name="fcSinopsis" ColumnName="fcSinopsis" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+          <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+          <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+          <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+          <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+          <ScalarProperty Name="fcCreador" ColumnName="fcCreador" />
+          <ScalarProperty Name="fdFechaOrigen" ColumnName="fdFechaOrigen" />
+          <ScalarProperty Name="fcPartidaOrigen" ColumnName="fcPartidaOrigen" />
+          <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+          <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+          <ScalarProperty Name="fdFechaAutorizacion" ColumnName="fdFechaAutorizacion" />
+          <ScalarProperty Name="fcAutoriza" ColumnName="fcAutoriza" />
+          <ScalarProperty Name="fiMoneda" ColumnName="fiMoneda" />
+          <ScalarProperty Name="fcEstadoPartida" ColumnName="fcEstadoPartida" />
+          <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+          <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+          <ScalarProperty Name="fcLote" ColumnName="fcLote" />
+          <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+          <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Catalogo_Contable">
+      <EntityTypeMapping TypeName="CoreAdministrativoModel.Catalogo_Contable">
+        <MappingFragment StoreEntitySet="Catalogo_Contable">
+          <ScalarProperty Name="fiIDCatalogoCuentaContable" ColumnName="fiIDCatalogoCuentaContable" />
+          <ScalarProperty Name="fiIDUsuarioCreador" ColumnName="fiIDUsuarioCreador" />
+          <ScalarProperty Name="fiEsEncaje" ColumnName="fiEsEncaje" />
+          <ScalarProperty Name="fcCompaniaEspejo" ColumnName="fcCompaniaEspejo" />
+          <ScalarProperty Name="fcCuentaEspejo" ColumnName="fcCuentaEspejo" />
+          <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+          <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+          <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+          <ScalarProperty Name="fdFechaCreado" ColumnName="fdFechaCreado" />
+          <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+          <ScalarProperty Name="fcCuentaBloqueada" ColumnName="fcCuentaBloqueada" />
+          <ScalarProperty Name="fiNumeroLimite" ColumnName="fiNumeroLimite" />
+          <ScalarProperty Name="fiNumero" ColumnName="fiNumero" />
+          <ScalarProperty Name="fiMoneda" ColumnName="fiMoneda" />
+          <ScalarProperty Name="fcMonedaEquivalenter" ColumnName="fcMonedaEquivalenter" />
+          <ScalarProperty Name="fiLiquida" ColumnName="fiLiquida" />
+          <ScalarProperty Name="fiReferencia" ColumnName="fiReferencia" />
+          <ScalarProperty Name="fiDolar" ColumnName="fiDolar" />
+          <ScalarProperty Name="fiCuentaCredito" ColumnName="fiCuentaCredito" />
+          <ScalarProperty Name="fiCuentaDebito" ColumnName="fiCuentaDebito" />
+          <ScalarProperty Name="fcModuloAuxiliar" ColumnName="fcModuloAuxiliar" />
+          <ScalarProperty Name="fiTieneAuxiliar" ColumnName="fiTieneAuxiliar" />
+          <ScalarProperty Name="fcCuentaPresupuestoC" ColumnName="fcCuentaPresupuestoC" />
+          <ScalarProperty Name="fcCuentaPresupuestoD" ColumnName="fcCuentaPresupuestoD" />
+          <ScalarProperty Name="fcCuentaPresupuestoP" ColumnName="fcCuentaPresupuestoP" />
+          <ScalarProperty Name="fcCuentaVieja" ColumnName="fcCuentaVieja" />
+          <ScalarProperty Name="fcCuentaContablePadre" ColumnName="fcCuentaContablePadre" />
+          <ScalarProperty Name="fcTipo" ColumnName="fcTipo" />
+          <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+          <ScalarProperty Name="fcAceptaPosteo" ColumnName="fcAceptaPosteo" />
+          <ScalarProperty Name="fiBalanza" ColumnName="fiBalanza" />
+          <ScalarProperty Name="fcNivelC" ColumnName="fcNivelC" />
+          <ScalarProperty Name="fiRubro" ColumnName="fiRubro" />
+          <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Control_MesContable">
+      <EntityTypeMapping TypeName="CoreAdministrativoModel.Control_MesContable">
+        <MappingFragment StoreEntitySet="Control_MesContable">
+          <ScalarProperty Name="fbActivo" ColumnName="fbActivo" />
+          <ScalarProperty Name="fcUsuarioModificador" ColumnName="fcUsuarioModificador" />
+          <ScalarProperty Name="fcUsuarioCreador" ColumnName="fcUsuarioCreador" />
+          <ScalarProperty Name="fdFechaModificacion" ColumnName="fdFechaModificacion" />
+          <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+          <ScalarProperty Name="fcComentario" ColumnName="fcComentario" />
+          <ScalarProperty Name="fbMesCerrado" ColumnName="fbMesCerrado" />
+          <ScalarProperty Name="fiMes" ColumnName="fiMes" />
+          <ScalarProperty Name="fiAnio" ColumnName="fiAnio" />
+          <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+          <ScalarProperty Name="fiIDControlMesContable" ColumnName="fiIDControlMesContable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_CorePartidas_Nuevo" FunctionName="CoreAdministrativoModel.Store.sp_CorePartidas_Nuevo" />
+    <FunctionImportMapping FunctionImportName="sp_PartidaDiario_ConvertirdeDolaresaLempiras" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_ConvertirdeDolaresaLempiras" />
+  </EntityContainerMapping>
+</Mapping>

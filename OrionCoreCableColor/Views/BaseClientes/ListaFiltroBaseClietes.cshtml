@@ -1,0 +1,206 @@
+﻿@model OrionCoreCableColor.Models.BaseCallCenter.AgentesCallcenterViewModel
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Clientes pagos por Fecha</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-sm-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiIDUsuario, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+
+                    @Html.DropDownListFor(model => model.fiIDUsuario, new SelectList(ViewBag.Agentes, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fiIDUsuario, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaClientesPagoHoy">
+                <thead>
+                    <tr>
+                        <th>Acciones</th>
+                        <th>Identidad</th>
+                        <th>Nombre Cliente</th>
+                        <th>Ciudad</th>
+                        <th>Telefono Contacto</th>
+                        <th>Telefono Adicionales</th>
+                        <th>Ultima Gestion</th>
+                        <th>Comentario</th>
+                        <th>Gestion</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+    <script>
+
+
+        $('#fiIDUsuario').change(function () {
+            debugger;
+
+            var data = $(this).val();
+
+
+            FiltroAgente(data);
+
+        });
+
+        function FiltroAgente(IDAgente)
+        {
+            debugger;
+            $('#TablaClientesPagoHoy').DataTable({
+                autoWidth: true,
+                responsive: true,
+                destroy: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+                dom: 'Bfrtip',
+            order: [[6, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListaBaseClientePorAgente", "BaseClientes")',
+                  method: "Get",
+                  data: { IDUsuario: IDAgente },
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+                columns: [
+
+                    {
+                        data: null,
+                        render: function (data) {
+
+                            var opciones = `<div class='dropdown d-inline-block dropleft'>
+                                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>\n\t\t\t\t\t\t\t\t<i class=\"fal fa-ellipsis-v\"></i>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t
+                                    <div class='dropdown-menu'>`
+
+                            //opciones += `<a onclick="agregarBitacora(${data.fiIDCliente},'${data.fcTelefonoContacto}','${data.fcTelefonosAdicionales}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Agregar Bitacora</a>`;
+                            opciones += `<a onclick="VerDetalleCliente(${data.fiIDCliente})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Detalle Cliente</a>`;
+
+                            opciones += '</div></div>';
+                            return opciones;
+                        }
+                    },
+
+                    {
+                        data: "fcIdentidad",
+                    },
+                    {
+                        data: "fcNombreCliente",
+
+                    },
+                    {
+                        data: 'fcCiudad'
+                    },
+                    {
+                        data: "fcTelefonoContacto",
+
+                    },
+                    {
+                        data: "fcTelefonosAdicionales",
+
+                    },
+                    {
+                        data: null,
+                        render: function (data) {
+                            var opt = "";
+                            if (data.fdFechaUltimaGestion == null || data.fdFechaUltimaGestion == "") {
+
+                            } else {
+                                opt = moment(data.fdFechaUltimaGestion).locale('es').format('YYYY/MM/DD hh:mm a');
+                            }
+                            return opt;
+                        }
+
+                    },
+                    {
+                        data: "fcComentarioGestion",
+
+                    },
+                    {
+                        data: null,
+                        render: function (data) {
+
+                            return data.fcGestion;
+                        }
+                    },
+                ],
+                buttons: [
+
+                    //{
+                    //    extend: 'pdfHtml5',
+                    //    text: 'PDF',
+                    //    titleAttr: 'Generate PDF',
+                    //    className: 'btn-outline-danger btn-sm mr-1'
+                    //},
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        titleAttr: 'Generate Excel',
+                        className: 'btn-outline-success btn-sm mr-1',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8,9]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'CSV',
+                        titleAttr: 'Generate CSV',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copy',
+                        titleAttr: 'Copy to clipboard',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        titleAttr: 'Print Table',
+                        className: 'btn-outline-primary btn-sm'
+                    }
+                ]
+
+            });
+        }
+
+        function VerDetalleCliente(idcliente) {
+            $.ajax({
+                url: "@Url.Action("DetalleCliente", "BaseClientes")",
+                data: { ID: idcliente},
+                type: "GET",
+                success: function (respuesta) {
+                    ShowModalBig(respuesta)
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+
+
+    </script>
+
+}

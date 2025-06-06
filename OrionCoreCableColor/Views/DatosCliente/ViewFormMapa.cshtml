@@ -1,0 +1,208 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/styles/externalstylesheets")
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+
+    <style>
+        .nav-tabs li a {
+            color: #337ab7;
+        }
+
+        #mapid {
+            height: 400px;
+            width: 100%;
+        }
+
+        .dataTables_filter {
+            float: left !important;
+        }
+
+        .RowForSelection {
+            cursor: pointer;
+        }
+    </style>
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/img/favicon/favicon-32x32.png">
+
+    <link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link href="~/Content/css/wizard/style.css" rel="stylesheet" />
+    <link href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet" />
+
+    <link href="~/Content/js/leaflet/leaflet.css" rel="stylesheet" />
+    <title>ViewFormMapa</title>
+</head>
+<body>
+    <div class="card" id="card">
+        <div class="card-body">
+            <h6 class="card-title">Mi Ubicacion Actual</h6>
+            <div class="panel-tag">
+                
+            </div>
+            <p></p>
+            <div style="width: 100%">
+                @*<iframe id="mapa" width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src=""><a href="https://www.maps.ie/population/">Population mapping</a></iframe>*@
+                <div id="mapid"></div>
+                <br />
+                <button class="btn btn-success" type="button" id="btnEnviar">Enviar Ubicación</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/scripts/external-plugins")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Content/js/wizard/function.js"></script>
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.js"></script>
+    <script src="~/Content/js/loading/loading.js"></script>
+
+    <script src="~/Content/js/leaflet/leaflet.js"></script>
+    <script>
+        Validar()
+          function Validar() {
+            var urlActual = window.location.href;
+
+            // Utiliza expresiones regulares para extraer el valor después de la última barra
+            var valorEnURL = urlActual.match(/\/(\d+)$/);
+            var idCliente
+            // Si se encuentra el valor, accede a él
+            if (valorEnURL && valorEnURL.length > 1) {
+                idCliente = Number(valorEnURL[1]);
+
+            } else {
+                idCliente = 0;
+            }
+            let url = '@Url.Action("ObtenerUbicacion","DatosCliente")'
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ fiIDEquifax: idCliente}),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+
+                    if (data != "0") {
+                        var data = { Titulo: "Atencion", Mensaje:"Ya has enviado tu ubicacion, gracias!",Estado: false}
+                        AlertaAjax(data)
+                        document.getElementById("card").style.display = "none";
+                    }
+
+                })
+                .catch(error => {
+                    //console.error('Fetch error:', error);
+                    //AlertaError();
+                });
+
+        }
+        debugger
+        let lat
+        let long
+
+
+        navigator.geolocation.getCurrentPosition((position) => {
+            lat = position.coords.latitude;
+            long = position.coords.longitude;
+
+            var mymap = L.map('mapid').setView([lat, long], 15);
+            var marker;
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic29wb3J0ZXByZXN0YWRpdG8iLCJhIjoiY2xvM2N1ZHByMWRwaDJtcDlvbXprYTBmcyJ9.Mq5jC6PF8C7JcvoQqvqy5A', {
+                maxZoom: 18,
+                //attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/"></a> contributors, ' +
+                //    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                //    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1
+            }).addTo(mymap);
+
+            marker = L.marker([lat, long]).addTo(mymap)
+                .bindPopup("Mi ubicación")
+                .openPopup();
+        });
+
+        document.getElementById("btnEnviar").addEventListener("click", function () {
+            debugger;
+            GuardarUbicacion(lat,long)
+        })
+
+        function GuardarUbicacion(latitud, longitud) {
+            var urlActual = window.location.href;
+
+            // Utiliza expresiones regulares para extraer el valor después de la última barra
+            var valorEnURL = urlActual.match(/\/(\d+)$/);
+            var idCliente
+            // Si se encuentra el valor, accede a él
+            if (valorEnURL && valorEnURL.length > 1) {
+                idCliente = Number(valorEnURL[1]);
+
+            } else {
+                idCliente = 0;
+            }
+            let url = '@Url.Action("guardarUbicacion","DatosCliente")'
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ idEquifax: idCliente, latitud: latitud,longitud:longitud }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+
+                    AlertaAjax(data)
+
+                })
+                .catch(error => {
+                    //console.error('Fetch error:', error);
+                    //AlertaError();
+                });
+
+        }
+
+
+    </script>
+</body>
+</html>

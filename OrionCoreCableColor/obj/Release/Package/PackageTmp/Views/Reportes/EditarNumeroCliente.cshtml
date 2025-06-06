@@ -1,0 +1,137 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Numero Cliente</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre").prop("disabled", true);
+    //$("#Telefono").prop("disabled", true);
+    function generarRandom(num) {
+        const characters = "0123456789";
+        const charactersLength = characters.length;
+        let result = "";
+        for (let i = 0; i < num; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+
+        return result;
+    }
+
+    $("#btnConfirmarEnvio").click(function () {
+        model.Telefono = $("#Telefono").val();
+        $.ajax({
+                url: "@Url.Action("EditarNumero", "Reportes")",
+                type: "Get",
+            data: { Telefono: model.Telefono, IDEquifax: model.IdCliente },
+                success: function (resp) {
+                    if (resp.Estado) {
+
+                        ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                    }
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            })
+    })
+
+    function Editar(ID, Estatus) {
+        $("#Telefono")
+
+        }
+
+    //function dataURLtoFile(dataurl, filename) {
+    //    var arr = dataurl.split(','),
+    //        mime = arr[0].match(/:(.*?);/)[1],
+    //        bstr = atob(arr[arr.length - 1]),
+    //        n = bstr.length,
+    //        u8arr = new Uint8Array(n);
+    //    while (n--) {
+    //        u8arr[n] = bstr.charCodeAt(n);
+    //    }
+    //    return new File([u8arr], filename, { type: mime });
+    //}
+
+    @*$("#btnConfirmarEnvio").click(function () {
+        debugger;
+        model.Telefono =
+
+        $.ajax({
+                url: "@Url.Action("MensajeToken", "Solicitudes")",
+                type: "POST",
+            data: { model: model},
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });*@
+</script>

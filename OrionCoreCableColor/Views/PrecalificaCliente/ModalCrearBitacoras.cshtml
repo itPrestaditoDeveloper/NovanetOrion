@@ -1,0 +1,146 @@
+﻿
+
+
+
+
+
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Agregar Bitacoras</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDGestionAnterior, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDGestionAnterior, new SelectList(ViewBag.ListadoGestion, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDGestionAnterior, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDGestion, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDGestion, new SelectList(ViewBag.ListadoGestion, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDGestion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Observaciones: </label>
+                        <div class="input-group mar-btm">
+                            @Html.TextArea("ObservacionesBitacoras", new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnGuardarBitacoras" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $(".mascara-rtn").inputmask("99999999999999");
+    $("#Nombre").prop("disabled", true);
+    $("#IDSolicitud").prop("disabled", true); 
+    $("#fiIDGestionAnterior").prop("disabled", true); 
+
+
+    $("#btnGuardarBitacoras").click(function () {
+
+        var ObservacionesBitacoras = $("#ObservacionesBitacoras").val();
+        var IdGestion = $("#fiIDGestion option:selected").val();
+
+
+        if ($("#fiIDGestion :selected").val() == "") {
+            ToastrWarning("Campos vacios", "Seleccione la Gestion del cliente");
+            return false;
+        }
+        if ($("#ObservacionesBitacoras").val() == "") {
+            ToastrWarning("Campos vacios", "Debe de colocar el link de pago")
+            return false;
+        }
+        $.ajax({
+                url: "@Url.Action("GuardarBitacoras", "PrecalificaCliente")",
+                type: "POST",
+            data: { model: model, IdGestion: IdGestion, ObservacionesBitacoras: ObservacionesBitacoras },
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

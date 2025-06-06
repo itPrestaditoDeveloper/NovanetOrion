@@ -1,0 +1,726 @@
+﻿<style>
+    .imgCircle {
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 0px #06f611;
+        animation: glow 1.5s linear(0 0%, 0.02 15.85%) infinite alternate;
+    }
+
+    @@keyframes glow {
+        to {
+            box-shadow: 0px 0px 30px 20px #06f611;
+        }
+    }
+
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .dt-buttons {
+        float: left;
+    }
+
+    #TablaPrincipal_filter > label {
+        float: right;
+    }
+</style>
+
+
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-router fa-fw"></i>OLTs y ONUs</h2>
+
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+
+
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="input-group mar-btm" style="width:100%;">
+
+                            <input type="text" id="buscadorOLTs" class="form-control clsSerie1" value="">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fal fa-search"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12">
+            <div class="row" id="olts" style="height: 400px; overflow-y: scroll;"></div>
+        </div>
+
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th>OLT</th>
+                        <th></th>
+                        <th>ONU</th>
+                        <th>IP</th>
+                        <th>Solicitud</th>
+                        <th>Cepheus</th>
+                        <th>Cliente</th>
+                        <th>Pon</th>
+                        <th>Telefono</th>
+                        <th>Wifi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-12" style="margin-bottom:10px;">
+            <div class="form-group">
+                <label class="control-label">Log</label>
+                <div class="input-group mar-btm">
+                    <textarea rows="6" class="form-control" style="resize:none;" id="fcLog" disabled></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+        var modelOriginal = [];
+        var modelAdaptado = [];
+        var Historial = null;
+
+        var OLTs = new Set();
+        var paginacionOLT = [];
+
+
+        function NuevaLinea() {
+            return {
+                fiIDOLT: 0,
+                fcIPOLT: "",
+                fcNombreOLT: "",
+                fbOLTConectado: null,
+                idHtmlOLT:"",
+
+                fiIDONU: 0,
+                fiIDOrionSolicitud: 0,
+                fiIDEquifax: 0,
+                fcNombreCliente: "",
+                fcMacONU: "",
+                fcIPONU: "",
+                fcNombreWifi: "",
+                fbONUConectado: null,
+                fbPrimerCarga: true,
+                fcGeolocalizacion: "",
+                fcTelefono: "",
+                fcPom: "",
+                fcCodigoCepheus: "",
+                fcEmpresa: "",
+                listAuditoria:[]
+            };
+        }
+
+        function Auditoria(id)
+        {
+            return {
+                id: id,
+                conectado: "",
+                desconectado: "",
+                tiempo: "",
+                estado: null
+            };
+        }
+
+
+        function CargarInicial()
+        {
+            $.ajax({
+                url: "@Url.Action("CargarListaOltOnus", "Soporte")",
+                method: "Get",
+                success: function (data) {
+                    modelOriginal = data;
+                    var respuesta = OltOnus(data);
+                    modelAdaptado = respuesta;
+                    generarOLTs();
+                    //return respuesta;
+                }
+            });
+        }
+
+
+        function ActualizarConeccion(onu, estado)
+        {
+            var item = onu.listAuditoria.reduce((max, obj) => (obj.id > max.id ? obj : max), onu.listAuditoria[0]);
+            if (item.conectado == "") {
+                item.conectado = new Date();
+                item.estado = true;
+            } else {
+                item.desconectado = new Date();
+                let diferenciaMs = item.desconectado - item.conectado;
+                let segundosTotales = Math.floor(diferenciaMs / 1000);
+                let horas = Math.floor(segundosTotales / 3600);
+                let minutos = Math.floor((segundosTotales % 3600) / 60);
+                let segundos = segundosTotales % 60;
+                item.tiempo = `${horas} horas, ${minutos} minutos, ${segundos} segundos`;
+
+
+                var nuevaAuditoria = Auditoria(item.id + 1);
+                nuevaAuditoria.estado = estado;
+                nuevaAuditoria.conectado = item.desconectado;
+                onu.listAuditoria.push(nuevaAuditoria);
+            }
+
+        }
+
+
+
+
+
+
+        function OltOnus(data)
+        {
+            var lista = [];
+            for (let olt of data)
+            {
+                for (let onu of olt.ListInfoONU)
+                {
+                    let obj = NuevaLinea();
+                    obj.fiIDOLT = olt.fiIDOLT;
+                    obj.fcIPOLT = olt.fcIP.trim();
+                    obj.fcNombreOLT = olt.fcNombre;
+                    obj.fiIDONU = onu.fiIDONU;
+                    obj.fiIDOrionSolicitud = onu.fiIDOrionSolicitud;
+                    obj.fiIDEquifax = onu.fiIDEquifax;
+                    obj.fcNombreCliente = onu.fcNombre;
+                    obj.fcMacONU = onu.fcMac;
+                    obj.fcIPONU = onu.fcIP.trim();
+                    obj.fcNombreWifi = onu.fcNombreWifi;
+                    obj.idHtmlOLT = olt.fcIP.trim().replace(/\./g, "-");
+                    obj.fcGeolocalizacion = onu.fcGeolocalizacion;
+                    obj.fcTelefono = onu.fcTelefono;
+                    obj.fbONUConectado = onu.fbEstado;
+                    obj.fcPon = onu.fcPon;
+                    obj.fcCodigoCepheus = onu.fcCodigoCepheus;
+                    obj.fcEmpresa = onu.fcEmpresa;
+                    //obj.listAuditoria.push(new Auditoria(1));
+                    //ActualizarConeccion(obj, true);
+                    lista.push(obj);
+                }
+                OLTs.add(olt.fcNombre);
+
+            }
+
+            paginacionOLT = [...OLTs].sort();
+
+            return lista;
+        }
+
+
+        function generarOLTs()
+        {
+
+            for (var olt of paginacionOLT) {
+                var item = modelOriginal.find(x => x.fcNombre == olt);
+                var data = modelAdaptado.filter(x => x.fiIDOLT == item.fiIDOLT);
+                var conexiones = ContarConecciones(data);
+                var $option = $(`<div class="col-sm-4 col-xl-4 olt" id="olt_${item.fiIDOLT}" data-filter-tags="${item.fcNombre} IP(${item.fcIP.trim()}">
+                                        <div class="p-1  rounded overflow-hidden position-relative text-white mb-g">
+                                            <div class="">
+                                                <h3 class="display-1 d-block l-h-n m-0 fw-500">
+                                                    <small class="m-0 l-h-n">
+                                                        <a style="text-decoration: underline;" class="text-info"  href="javascript:CargarONUS(${item.fiIDOLT});">
+                                                            <i id="conect_2_${item.fiIDOLT}" class="fal fa-2xs ${item.fbEstado ? 'text-success imgCircle' : 'text-danger'} fa-circle " style="background-color: ${item.fbEstado ? '#1dc9b7' : '#fd3995'}; border-radius:50%;"></i> ${item.fcNombre} IP(${item.fcIP.trim()}) [ <span id="olt_${item.fiIDOLT}_conectados" style="color: green; font-weight:bolder;">${conexiones.online}</span> | <span id="olt_${item.fiIDOLT}_desconectados" style="color: red; font-weight:bolder;">${conexiones.offline}</span> ]
+                                                        </a>
+                                                    </small>
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>`);
+
+                $("#olts").append($option);
+            }
+
+        }
+
+
+        function ContarConecciones(data)
+        {
+            var cantidad = {
+                online: 0,
+                offline: 0
+            };
+            for (var item of data) {
+                if (item.fbONUConectado) {
+                    cantidad.online++;
+                } else {
+                    cantidad.offline++;
+                }
+            }
+            return cantidad;
+        }
+
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+            CargarInicial();
+        });
+
+
+
+        function CargarONUS(fiIDOlt)
+        {
+            var tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            var data = modelAdaptado.filter(x => x.fiIDOLT == fiIDOlt);
+            tabla.rows().remove().draw(false);
+            tabla.rows.add(data).draw(false);
+        }
+
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            pageLength: -1,
+            //dom: '<"top"fB<"estadoFiltroContainer">>rt<"bottom"lp><"clear">',
+            dom: `<"row" <"#estadoFiltroContainer.col-sm-4"><"col-sm-4 left"B><"col-sm-4"f>>rtip`,
+            rowGroup: {
+                dataSrc: "fcNombreOLT", // Indica que la primera columna será la que agrupará las filas
+                startRender: function (rows, group, data) {
+
+                    var OLT = rows.data()[0];
+                    var ipOLT = OLT.fcIPOLT;
+                    var idOLT = OLT.idHtmlOLT;
+                    var idOLTOrion = OLT.fiIDOLT;
+                    //var conectado = modelOriginal.find(x => x.fcIP.trim() == OLT.fcIPOLT).fbConectado
+                    var conectado = modelOriginal.find(x => x.fcIP.trim() == OLT.fcIPOLT).fbEstado;
+
+                    // Agrega el icono y el texto del grupo
+                    //return `<i class="fal fa-2xs fa-circle text-danger" style="background-color: #fd3995; border-radius:50%;"></i> ${group} (${ipOLT})`;
+                    return $('<tr/>', {
+                        id: idOLT.trim(),
+                        html: conectado == null ? `<td colspan="9"><i id="conect" class="fal fa-2xs fa-circle text-warning" style="background-color: #ffc241; border-radius:50%;"></i> ${group} (${ipOLT.trim()}) <button title="historial" onclick="HistorialOLT(${idOLTOrion},'${group} ${ipOLT.trim()}')" class="btn btn-xs btn-link text-info"><i class="fal fa-history"></i></button> <button title="ping" name="ping" class="btn btn-xs btn-link text-info" onclick="ping('${ipOLT.trim()}','${group}','OLT')"><i class="fal fa-waveform"></i></button></td>`
+                            : conectado == false ? `<td colspan="9"><i id="conect" class="fal fa-2xs fa-circle text-danger" style="background-color: #fd3995; border-radius:50%;"></i> ${group} (${ipOLT.trim()}) <button title="historial" onclick="HistorialOLT(${idOLTOrion},'${group} ${ipOLT.trim()}')" class="btn btn-xs btn-link text-info"><i class="fal fa-history"></i></button> <button title="ping" name="ping" class="btn btn-xs btn-link text-info" onclick="ping('${ipOLT.trim()}','${group}','OLT')"><i class="fal fa-waveform"></i></button></td>`
+                                : `<td colspan="9"><i id="conect" class="fal fa-2xs fa-circle text-success imgCircle" style="background-color: #1dc9b7; border-radius:50%;"></i> ${group} (${ipOLT.trim()}) <button title="historial" onclick="HistorialOLT(${idOLTOrion},'${group} ${ipOLT.trim()}')" class="btn btn-xs btn-link text-info"><i class="fal fa-history"></i></button> <button title="ping" name="ping" class="btn btn-xs btn-link text-info" onclick="ping('${ipOLT.trim()}','${group}','OLT')"><i class="fal fa-waveform"></i></button></td>`
+                    });
+                }
+            },
+            order: [[0, "asc"]],
+            columnDefs: [{
+                targets: "_all",
+                sortable: false
+            }],
+            columns: [
+                {
+                    data: null,
+                    visible: false,
+
+                    render: function (data) {
+                        return `<i class="fal fa-2xs fa-circle text-warning" style="background-color: #ffc241; border-radius:50%;"></i> ${data.fcNombreOLT} (${data.fcIPOLT})`;
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        return data.fbONUConectado == null ? `<i class="fal fa-2xs fa-circle text-warning" style="background-color: #ffc241; border-radius:50%;" id="${data.fiIDOrionSolicitud}"></i>`
+                            : data.fbONUConectado == false ? `<i class="fal fa-2xs fa-circle text-danger" style="background-color: #fd3995; border-radius:50%;" id="${data.fiIDOrionSolicitud}"></i>`
+                                : `<i class="fal fa-2xs fa-circle text-success imgCircle" style="background-color: #1dc9b7; border-radius:50%;" id="${data.fiIDOrionSolicitud}"></i>` ;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `${data.fcMacONU} <button title="historial" name="historial" style="float:right;" class="btn btn-xs btn-link text-info"><i class="fal fa-history"></i></button>`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<div class="row">
+                                    <div class="col-sm-8">${data.fcIPONU} </div> 
+                                    <div class="col-sm-2"><button title="onu" style="float:right;" class="btn btn-xs btn-link text-info" onclick="DataONU('${data.fcIPONU}')"><i class="fal fa-router"></i></button></div> 
+                                    <div class="col-sm-2"><button title="ping" name="ping" style="float:right;" class="btn btn-xs btn-link text-info" onclick="ping('${data.fcIPONU}','${data.fcNombreCliente}','ONU')"><i class="fal fa-waveform"></i></button></div>
+                                </div>`;
+                    }
+                },
+                {
+                    data: "fiIDOrionSolicitud",
+                },
+                {
+                    data: "fcCodigoCepheus"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreCliente + ' ' + (data.fcGeolocalizacion == "" ? '' : `<a href="${data.fcGeolocalizacion}" target="_blank" class="btn btn-info btn-xs" style="float:right;"><i class="fal fa-map-marker-alt"></i></a>`);
+                    }
+                },
+                {
+                    data: "fcPon"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<a href="https://wa.me/504${data.fcTelefono}" target="_blank">${data.fcTelefono}</a>`;
+                    }
+                },
+                {
+                    data: "fcNombreWifi"
+                }
+            ],
+            rowCallback: function (row, data, index) {
+                if (data.fcEmpresa == "CABLE_COLOR") { // aqui es donde se pinta las solicitudes si tienen articulos
+                    $(row).css('background-color', "#cc8bff");
+                }
+            },
+            initComplete: function ()
+            {
+
+                var select = $('<select id="estadoFiltro" class="form-select">' +
+                    '<option value="">Todos</option>' +
+                    '<option value="verde">Conectado (Verde)</option>' +
+                    '<option value="rojo">Desconectado (Rojo)</option>' +
+                    '<option value="amarillo">En espera (Amarillo)</option>' +
+                    '</select>');
+
+                select.appendTo('#estadoFiltroContainer');
+
+                select.select2();
+
+                $('#estadoFiltro').on('change', function () {
+                    var estadoSeleccionado = $(this).val();
+                    $('#TablaPrincipal').DataTable().draw();
+                });
+
+
+
+                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                    var estadoSeleccionado = $('#estadoFiltro').val();
+                    var iconColor = $(settings.aoData[dataIndex].anCells[1]).find('i').css('background-color');
+
+                    if (estadoSeleccionado === 'verde' && iconColor === 'rgb(29, 201, 183)') {
+                        return true;  // Verde (Conectado)
+                    } else if (estadoSeleccionado === 'rojo' && iconColor === 'rgb(253, 57, 149)') {
+                        return true;  // Rojo (Desconectado)
+                    } else if (estadoSeleccionado === 'amarillo' && iconColor === 'rgb(255, 194, 65)') {
+                        return true;  // Amarillo (En espera)
+                    } else if (estadoSeleccionado === '') {
+                        return true;  // Mostrar todos
+                    }
+                    return false;
+                });
+
+                chat.on("actualizarOLT", function (model) {
+                    //modelAdaptado
+                    var id = "#" + model.fcIP;
+                    var icon = $(id).find("#conect");
+                    //modelOriginal.find(x => x.fcIP.trim().replace(/\./g, "-") == model.fcIP).fbConectado = model.fbConectado;
+
+                    if (typeof modelOriginal.find(x => x.fcIP.trim().replace(/\./g, "-") == model.fcIP) == "undefined") {
+                        return;
+                    }
+
+                    var oltOriginal = modelOriginal.find(x => x.fcIP.trim().replace(/\./g, "-") == model.fcIP);
+
+                    if (model.fbConectado != oltOriginal.fbEstado)
+                    {
+                        if (model.fbConectado) {
+                            var mensaje = `LA OLT ${model.fcNombre} ESTA CONECTADO`;
+                            ToastrSuccess("", mensaje);
+                            EscribirLog(mensaje);
+                        } else {
+                            var mensaje = `LA OLT ${model.fcNombre} ESTA DESCONECTADO`;
+                            ToastrError("", mensaje);
+                            EscribirLog(mensaje);
+                        }
+                    }
+
+                    oltOriginal.fbEstado = model.fbConectado;
+
+                    var iconLista = `#conect_2_${model.fiIDOLT}`;
+
+                    if (model.fbConectado) {
+                        //<i class="fal fa-2xs fa-circle text-success imgCircle" style="background-color: #1dc9b7; border-radius:50%;"></i> verde
+                        $(icon).removeClass("text-warning");
+                        $(icon).removeClass("text-danger");
+                        $(icon).addClass("text-success");
+                        $(icon).addClass("imgCircle");
+                        $(icon).css("background-color", "#1dc9b7");
+
+                        $(iconLista).removeClass("text-warning");
+                        $(iconLista).removeClass("text-danger");
+                        $(iconLista).addClass("text-success");
+                        $(iconLista).addClass("imgCircle");
+                        $(iconLista).css("background-color", "#1dc9b7");
+
+                    } else {
+                        $(icon).removeClass("text-warning");
+                        $(icon).addClass("text-danger");
+                        $(icon).removeClass("text-success");
+                        $(icon).removeClass("imgCircle");
+                        $(icon).css("background-color", "#fd3995");
+
+                        $(iconLista).removeClass("text-warning");
+                        $(iconLista).addClass("text-danger");
+                        $(iconLista).removeClass("text-success");
+                        $(iconLista).removeClass("imgCircle");
+                        $(iconLista).css("background-color", "#fd3995");
+                    }
+
+
+
+                });
+
+
+
+
+                chat.on("actualizarONU", function (list) {
+
+                    var table = $.fn.dataTable.Api('#TablaPrincipal');
+                    var data = table.rows().data().toArray();
+                    var rows = table.rows().nodes().toArray();
+
+                    for (let model of list) {
+                        let id = "#" + model.fiIDOrionSolicitud;
+                        let icon = $(id);
+
+                        //var tr = null;
+
+                        /////////ACTUALIZAR modelAdaptado////
+
+
+                        let itemModelAdaptado = modelAdaptado.find(x => x.fiIDOrionSolicitud == model.fiIDOrionSolicitud);
+
+                        if (itemModelAdaptado == null || typeof itemModelAdaptado == "undefined") {
+                            continue;
+                        }
+
+
+                        if (itemModelAdaptado.fbONUConectado != model.fbConectado) {
+                            infoOLT = modelAdaptado.filter(x => x.fiIDOLT == itemModelAdaptado.fiIDOLT);
+                            if (model.fbConectado) {
+                                let mensaje = `LA ONU DEL CLIENTE ${model.fcNombre.toUpperCase()} CON IP ${model.fcIP} EN LA OLT ${infoOLT[0].fcNombreOLT} ESTA CONECTADO`;
+                                ToastrSuccess("", mensaje);
+                                EscribirLog(mensaje);
+                            } else {
+                                let mensaje = `LA ONU DEL CLIENTE ${model.fcNombre.toUpperCase()} CON IP ${model.fcIP} EN LA OLT ${infoOLT[0].fcNombreOLT} ESTA DESCONECTADO`;
+                                ToastrError("", mensaje);
+                                EscribirLog(mensaje);
+                            }
+
+
+                            itemModelAdaptado.fbONUConectado = model.fbConectado;
+
+
+                            let conexiones = ContarConecciones(infoOLT);
+
+                            $(`#olt_${infoOLT[0].fiIDOLT}_conectados`).text(conexiones.online);
+                            $(`#olt_${infoOLT[0].fiIDOLT}_desconectados`).text(conexiones.offline);
+                        }
+
+
+
+                        /////////*******PARA DATATABLE**********///////////////////
+
+
+                        let onuSeleccionada = data.find(x => x.fiIDOrionSolicitud == model.fiIDOrionSolicitud);
+
+                        if (onuSeleccionada == null || typeof onuSeleccionada == "undefined") {
+                            continue;
+                        }
+
+                        //tr = rows.find(a => table.row(a).data().fiIDOrionSolicitud == model.fiIDOrionSolicitud);
+
+                        if (model.fbConectado) {
+                            //<i class="fal fa-2xs fa-circle text-success imgCircle" style="background-color: #1dc9b7; border-radius:50%;"></i> verde
+                            //<i class="fal fa-2xs fa-circle text-danger" style="background-color: #fd3995; border-radius:50%;" id="${data.fiIDOrionSolicitud}"></i> rojo
+                            $(icon).removeClass("text-warning");
+                            $(icon).removeClass("text-danger");
+                            $(icon).addClass("text-success");
+                            $(icon).addClass("imgCircle");
+                            $(icon).css("background-color", "#1dc9b7");
+
+                        } else {
+                            $(icon).removeClass("text-warning");
+                            $(icon).addClass("text-danger");
+                            $(icon).removeClass("text-success");
+                            $(icon).removeClass("imgCircle");
+                            $(icon).css("background-color", "#fd3995");
+                        }
+                    }
+
+
+
+                    /*******MENSAJES*******/
+
+                    //if (onuSeleccionada.fbONUConectado == null) {
+                    //    onuSeleccionada.fbONUConectado = model.fbConectado;
+                    //    if (model.fbConectado == false) {
+                    //        //ActualizarConeccion(onuSeleccionada, model.fbConectado);
+                    //    }
+
+                    //} else {
+                    //    if (model.fbConectado != onuSeleccionada.fbONUConectado) {
+                    //        onuSeleccionada.fbONUConectado = model.fbConectado;
+                    //        if (model.fbConectado) {
+                    //            var mensaje = `LA ONU DEL CLIENTE ${model.fcNombre.toUpperCase()} CON IP ${model.fcIP} EN LA OLT ${onuSeleccionada.fcNombreOLT} ESTA CONECTADO`;
+                    //            ToastrSuccess("", mensaje);
+                    //            EscribirLog(mensaje);
+                    //        } else {
+                    //            var mensaje = `LA ONU DEL CLIENTE ${model.fcNombre.toUpperCase()} CON IP ${model.fcIP} EN LA OLT ${onuSeleccionada.fcNombreOLT} ESTA DESCONECTADO`;
+                    //            ToastrError("", mensaje);
+                    //            EscribirLog(mensaje);
+                    //        }
+                    //        //ActualizarConeccion(onuSeleccionada, model.fbConectado);
+                    //    }
+
+
+                    //}
+
+                });
+            }
+        });
+
+
+        function EscribirLog(mensaje)
+        {
+            var mensajeOriginal = $("#fcLog").val();
+            $("#fcLog").val(`${mensajeOriginal}${mensaje} - ${moment(new Date()).format("DD/MM/YYYY HH:mm:ss")}\n`);
+            Notification.requestPermission(function (result) {
+                if (result === 'granted') {
+                    navigator.serviceWorker.ready.then(function (registration) {
+                        registration.showNotification("Novanet", {
+                            body: mensaje,
+                            //image: img,
+                        });
+                    });
+                }
+            });
+        }
+
+        $("#TablaPrincipal thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+        tablaPrincipal.on("responsive-resize", function () {
+            var thead = $("#TablaPrincipal thead tr").toArray();
+            var buscadores = $(thead[0]).find("th").toArray();
+
+            var titulos = $(thead[1]).find("th").toArray();
+            for (var x = 0; x < titulos.length; x++) {
+                if ($(titulos[x]).css("display") == "none") {
+                    $(buscadores[x]).css("display", "none");
+                } else {
+                    $(buscadores[x]).css("display", "");
+                }
+            }
+        });
+
+
+        $("#TablaPrincipal tbody").on("click", "tr button[name=historial]", function () {
+            let tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            let tr = $(this).closest("tr");
+            Historial = tabla.row(tr).data();
+
+            VerModalConObjetoDeParametro({ fcTipoDispositivo: "ONU", propiedadUnica: "fiIDOrionSolicitud", valor: Historial.fiIDOrionSolicitud, titulo: `Historial de onu ${Historial.fcMacONU} (${Historial.fcIPONU}) del cliente ${Historial.fcNombreCliente}` }, "@Url.Action("ViewHistorialConeccionONU","Soporte")");
+        });
+
+
+        function HistorialOLT(fiIDOLT, group) {
+            VerModalConObjetoDeParametro({ fcTipoDispositivo: "OLT", propiedadUnica: "fiIDOrionSolicitud", valor: fiIDOLT, titulo: `Historial de OLT ${group}` }, "@Url.Action("ViewHistorialConeccionONU","Soporte")");
+        }
+
+
+        function ping(fcIP, fcNombre, fcDispositivo)
+        {
+            var ip = cleanAndValidateIp(fcIP);
+            if (ip != null)
+            {
+                VerModalConObjetoDeParametro({ fcIP: ip, fcNombre: fcNombre, fcDispositivo: fcDispositivo }, "@Url.Action("DoPing","Soporte")");
+            }
+        }
+
+        function DataONU(fcIP) {
+            var ip = cleanAndValidateIp(fcIP);
+            if (ip != null) {
+                VerModalConObjetoDeParametro({ fcIP: ip }, "@Url.Action("DataOnu", "Soporte")");
+            }
+        }
+
+
+        function cleanAndValidateIp(ipAddress) {
+            const cleaned = ipAddress.trim().replace(/[^0-9.]/g, '');
+            const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            return ipRegex.test(cleaned) ? cleaned : null;
+        }
+
+
+        $("#buscadorOLTs").keyup(function () {
+
+            var busqueda = $(this).val();
+            busqueda = busqueda.toUpperCase().replaceAll("_", "").replaceAll(" ", "");
+            var itemsOLT = $("#olts").children();
+
+            var dataOLTS = itemsOLT.toArray().map(x => { return { div: x, frase: $(x).data("filter-tags").toUpperCase().replaceAll("_","").replaceAll(" ","") } });
+
+            var itemsDIV = dataOLTS.filter(x => x.frase.includes(busqueda.toUpperCase()));
+
+            for (var i of dataOLTS) {
+                if (itemsDIV.some(x => x.div == i.div)) {
+                    $(i.div).show();
+                } else {
+                    $(i.div).hide();
+                }
+            }
+
+        });
+    </script>
+}

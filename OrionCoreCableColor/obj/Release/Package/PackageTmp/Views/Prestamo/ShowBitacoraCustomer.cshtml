@@ -1,0 +1,57 @@
+﻿
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+
+<style>
+    .timeline-with-icons {
+        border-left: 1px solid hsl(0, 0%, 90%);
+        position: relative;
+        list-style: none;
+    }
+
+        .timeline-with-icons .timeline-item {
+            position: relative;
+        }
+
+            .timeline-with-icons .timeline-item:after {
+                position: absolute;
+                display: block;
+                top: 0;
+            }
+
+        .timeline-with-icons .timeline-icon {
+            position: absolute;
+            left: -48px;
+            background-color: hsl(217, 88.2%, 90%);
+            color: hsl(217, 88.8%, 35.1%);
+            border-radius: 50%;
+            height: 31px;
+            width: 31px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+</style>
+<!-- Section: Timeline -->
+<section class="py-5">
+    @foreach (var item in Model.BitacorasClienteSoporte)
+    {
+        <ul class="timeline-with-icons">
+            <li class="timeline-item mb-5">
+                <span class="timeline-icon">
+                    <i class="fas fa-rocket text-primary fa-sm fa-fw"></i>
+                </span>
+                <p class="mar-no pad-btm">
+                    <a href="#" class="btn-link">@item.fcNombreCorto</a>registro
+                    <a href="#" class="text-semibold"><i>@item.fcGestion</i></a>
+                </p>
+                <p class="text-muted mb-2 fw-bold">@item.fdGestion.ToString("dd MMM yy HH:mm")</p>
+                <p class="text-muted">
+                    @item.fcBitacora
+                </p>
+            </li>
+        </ul>
+    }
+
+</section>
+<!-- Section: Timeline -->

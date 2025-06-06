@@ -1,0 +1,240 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle de Garantia</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div id="totalesProductos" class="row" style="width:100%;">
+
+        </div>
+
+
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TblDetalleInstalacion">
+                    <thead>
+                        <tr>
+                            <th class="text-center"></th>
+                            <th>Producto</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="GuardarCambiosInstalacion" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+<script>
+    var idSolicitud = @ViewBag.IDSolicitud;
+    var idEquifaxCliente = @ViewBag.idEquifaxCliente;
+    var listProductos = @Html.Raw(Json.Encode(ViewBag.ListarProductos));
+
+    function NuevaLinea() {
+        let tabla = $.fn.dataTable.Api("#TblDetalleInstalacion");
+        let data = tabla.rows().data().toArray();
+        let sig = Math.max(...(data.map(x => x.index))) + 1;
+        return {
+            fiIDProducto: 0,
+            fcToken: "",
+            fbNuevo: true,
+            fiIDSolicitud: idSolicitud,
+            fiIDEquifax: idEquifaxCliente
+        };
+    }
+
+    var TblDetalleInstalacion = $('#TblDetalleInstalacion').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        pageLength: 5,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        buttons: [
+
+            {
+                text: `<i class="fal fa-plus"></i>`,
+                className: 'btn btn-success',
+                attr: { "id": "manual" },
+                action: function (e, dt, node, config) {
+                    let tabla = $.fn.dataTable.Api("#TblDetalleInstalacion");
+                    //let lineas = parseInt($("#cantidadIngresar").val());
+                    tabla.row.add(NuevaLinea()).draw(false);
+
+                }
+            }
+
+        ],
+        ajax: {
+            url: "@Url.Action("ListarProductosGarantia", "Manto")",
+            method: "get",
+            data: { idSolicitud: idSolicitud, idEquifaxCliente: idEquifaxCliente },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: null,
+                className: "text-center",
+                render: function (data) {
+                    return `<label style="display:none;">${data.index}</label><button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbPorCodigo) {
+                        return data.fcProducto
+                    } else {
+                        return `<label style="display:none;">${data.fcProducto}</label><select class="form-control clsProducto" name="fiIDProducto"></select>`;
+                    }
+                }
+
+            },
+        ],
+        createdRow: function (row, data, index) {
+            $(row).find(".clsProducto").select2({
+                data: listProductos,
+                width: "100%",
+                dropdownParent: $("#MyModalBig")
+            }).val(data.fiIDProducto).trigger('change');
+            InformacionTable();
+            //$(row).find(".clsUbicacion").select2({ data: listUbicaciones, width: "100%" }).val(data.fiIDUbicacion).trigger('change');
+            //$(row).find(".clsTipoMovimiento").select2({ data: listTipoMovimiento, width: "100%" }).val(data.fiIDTipoMovimiento).trigger('change');
+        },
+        initComplete: function () {
+            InformacionTable();
+        },
+        order: [[0, "desc"]]
+    });
+
+
+    $("#TblDetalleInstalacion tbody").on("click", "tr button[name=eliminar]", function () {
+        let tblProductos = $.fn.dataTable.Api("#TblDetalleInstalacion");
+        let row = $(this).closest("tr");
+        if ($(row).attr('class') == "child") {
+
+            row = $(this).closest("tr").prev()[0];
+        }
+        tblProductos.row(row).remove().draw(false);
+        InformacionTable();
+    });
+
+
+    $("#TblDetalleInstalacion tbody").on("change", "tr select[name=fiIDProducto]", function () {
+        let tblProductos = $.fn.dataTable.Api("#TblDetalleInstalacion");
+        let row = $(this).closest("tr");
+        if ($(row).attr('class') == "child") {
+            row = $(this).closest("tr").prev()[0];
+        }
+
+        let data2 = tblProductos.row(row).data();
+        data2.fiIDProducto = $(this).val();
+        data2.fcProducto = $('option:selected', this).text();
+        InformacionTable();
+    });
+
+    function InformacionTable()
+    {
+
+        var tabla = $.fn.dataTable.Api("#TblDetalleInstalacion");
+        var data = tabla.rows().data().toArray();
+
+        var productos = data.map(x => {
+            return {
+                fiIdProducto: x.fiIDProducto,
+                fcProducto: x.fcProducto,
+                fnCantidad: 1
+            };
+
+
+        });
+
+        var totalesProductos = Object.groupBy(productos, ({ fiIdProducto }) => fiIdProducto);
+
+        $("#totalesProductos").empty();
+        var alingText = ["text-left", "text-center", "text-right"];
+        var i = 0;
+        for (let item in totalesProductos) {
+            var fcProducto = totalesProductos[item][0].fcProducto;
+            var fnTotal = totalesProductos[item].map(x => parseInt(x.fnCantidad)).reduce((a, b) => a + b);
+
+            if (fcProducto != "") {
+                var resultado = $(`<div class="col-lg-3"><i class="fal fa-circle text-success" style="background-color: orange; border-radius:50%;"></i> ${fcProducto}: ${fnTotal}</div>`);
+
+                $("#totalesProductos").append(resultado);
+            }
+
+        }
+    }
+
+
+
+    $("#GuardarCambiosInstalacion").click(function () {
+        $("#btnGuardarForm").hide();
+        var tabla = $.fn.DataTable.Api("#TblDetalleInstalacion");
+        var data = tabla.rows().data().toArray();
+
+        if (data.some(x => x.fiIDProducto == 0)) {
+            $("#btnGuardarForm").show();
+            ToastrError("Error", "Seleccione un producto");
+            return;
+        }
+
+
+        
+
+
+       var url = "@Url.Action("ActualizarProductosGarantia","Manto")";
+
+
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { model: data },
+            success: function (resp) {
+                if (resp.Estado) {
+                    ToastrSuccess("Instalacion", resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            }
+        });
+    });
+
+
+</script>

@@ -1,0 +1,80 @@
+﻿@model OrionCoreCableColor.Models.Permiso.CrearPermisoViewModel
+
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+
+    @if (Model.EsEditar)
+
+    {<h2 class="modal-title text-white">Editar Permiso</h2> }
+    else
+    {<h2 class="modal-title text-white">Crear Permiso</h2>}
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true"><i class="fal fa-times"></i></span>
+</button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+            <div class="input-group mar-btm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fal fa-key fa-fw"></i></span>
+                </div>
+                
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control input-lg" } })
+
+            </div>
+            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-secondary waves-effect waves-themed float-left" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button class="btn btn-primary waves-effect waves-themed float-right"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+            
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $("#MyFormModal").submit(function (event) {
+        event.preventDefault();
+        if (!$("#MyFormModal").valid()) {
+            return false;
+        }
+        var model = @Html.Raw(Json.Encode(Model));
+        model.Nombre = $("#Nombre").val();
+        var url = "@Url.Action("Crear","Permiso")";
+        if (str2bool('@Model.EsEditar')) {
+            url = "@Url.Action("Editar","Permiso")";
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify({ model: model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.Estado) {
+                    CerrarModal();
+                    $.fn.dataTable.Api("#TablaPrincipal").ajax.reload().draw(false);
+                }
+                AlertaAjax(data);
+            },
+            error: function (data) {
+                AlertaError();
+            },
+        });
+
+
+    });
+</script>

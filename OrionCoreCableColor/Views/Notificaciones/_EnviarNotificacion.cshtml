@@ -1,0 +1,110 @@
+﻿@model OrionCoreCableColor.Models.Notificaciones.NotificacionesViewModel
+
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Enviar Notificación por App</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyModal">
+
+        <div class="row">
+
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="selectedUsers" class="control-label">Usuarios Seleccionados</label>
+                    <textarea id="selectedUsers" class="form-control" rows="10" readonly style="resize: none;">
+                        @foreach (var user in Model.Users)
+                        {
+                            @user @:&#13;&#10;
+                        }
+                    </textarea>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                        </div>
+                        @Html.TextAreaFor(model => model.Message, new { @class = "form-control input-lg", rows = "10", style = "resize: none;" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button">
+                    <i class="text-lg ion-close-round"></i>
+                </button>
+                <button class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" type="submit">
+                    <i class="text-lg ion-checkmark-round"></i>
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    $("#MyModal").submit(function (event) {
+        event.preventDefault();
+
+        if (!$("#MyModal").valid()) {
+            return false;
+        }
+
+        var selectedUsers = $("#selectedUsers").val().trim().split(/\r?\n/).filter(function(user) {
+            return user.trim() !== "";
+        });
+        var message = $("#Message").val();
+
+        if (selectedUsers.length === 0) {
+            alert("Debe seleccionar al menos un usuario.");
+            return false;
+        }
+
+        if (message.trim() === "") {
+            alert("Debe ingresar un mensaje.");
+            return false;
+        }
+
+        var model = {
+            Users: selectedUsers,
+            Message: message,
+            FiIDUsuario: '@Model.FiIDUsuario'
+        };
+
+        var url = "@Url.Action("EnviarNotificacionApp", "Notificaciones")";
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify(model),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                CerrarModal();
+                AlertaAjax(data);
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.status + ': ' + xhr.statusText;
+                console.log("Error - " + errorMessage);
+                alert("Error al enviar la notificación: " + errorMessage);
+            },
+        });
+    });
+</script>
+

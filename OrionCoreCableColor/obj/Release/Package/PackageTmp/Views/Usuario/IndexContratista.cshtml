@@ -1,0 +1,217 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "Contratistas";
+}
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Lista de Usuarios</h2>
+        <div class="panel-toolbar " role="menu">
+            <a href="@Url.Action("AgregarUsuarioTecnico", "Usuario")/@Model" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Nuevo Tecnico</a>
+        </div>
+    </div>
+
+    <div class="panel-container">
+        <div class="col-lg-12" style="padding-top:12px; padding-bottom:15px;">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nombre Completo</th>
+                        <th>Usuario</th>
+                        <th>Activo</th>
+                        <th>Rol Usuario</th>
+                        <th>Correo Electronico</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Telefono</th>
+
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        function MostrarEditarInfo(id) {
+            $.ajax({
+                url: "@Url.Action("EditarInfoUsuario", "Usuario")",
+                method: "get",
+                data: { id: id },
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+        function MostrarEditarCuenta(id) {
+            $.ajax({
+                url: "@Url.Action("EditarCuentaUsuario","Usuario")",
+                method: "get",
+                data: { id: id },
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+        function MostrarCambiarContrasena(id) {
+            $.ajax({
+                url: "@Url.Action("CambiarContrasenaUsuario","Usuario")",
+                method: "get",
+                data: { id: id },
+                success: function (resp) {
+                    ShowModal(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+        function Desactivar(id) {
+            $.ajax({
+                url: "@Url.Action("DeshabilitarUsuario","Usuario")",
+                method: "post",
+                data: { id: id },
+                success: function (data) {
+                    if (data.Estado) {
+                        tablaPrincipal.ajax.reload().draw(false);
+                    }
+                    AlertaAjax(data);
+                },
+                Urlrror: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+
+
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaTecnicos", "Usuario")',
+                data: { id:@Model},
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="MostrarEditarInfo(' + data.fiIdUsuario + ')"> Editar Informacion Personal</a>';
+                    
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="MostrarEditarCuenta(' + data.fiIdUsuario + ')"> Editar Cuenta de Usuario</a>';
+                   
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="MostrarCambiarContrasena(' + data.fiIdUsuario + ')"> Cambiar Contraseña</a>';
+
+                        if ("@User.Identity.Name" != data.UserName) {
+                            opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="Desactivar(' + data.fiIdUsuario + ')"> ' + (data.fiEstado == 1 ? 'Deshabilitar Usuario' : 'Habilitar Usuario') + '</a>';
+                        }
+                        
+                   
+
+                        
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return data.fcPrimerNombre + " " + data.fcSegundoNombre + " " + data.fcPrimerApellido + " " + data.fcSegundoApellido;
+                    }
+                },
+                {
+                    data: 'UserName'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstado) {
+                            return '<div class="badge badge-success">SI</div>';
+                        } else {
+                            return '<div class="badge badge-danger">NO</div>';
+                        }
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return `<span class="badge badge-info">${data.NombreRol}</span>`;
+
+
+                    }
+                },
+
+                {
+                    data: 'fcBuzondeCorreo'
+                },
+                {
+                    visible: false,
+                    data: null,
+                    render: function (data) {
+
+                        return '<div style="display:none;">' + moment(data.FechaNacimiento) + '</div>' + moment(data.FechaNacimiento).format("DD/MM/YYYY");
+                    }
+                },
+
+                {
+                    data: 'fcTelefonoMovil'
+                },
+
+
+
+
+
+            ]
+
+        });
+
+
+    </script>
+}

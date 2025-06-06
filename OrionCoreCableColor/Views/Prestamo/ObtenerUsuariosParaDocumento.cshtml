@@ -1,0 +1,94 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        <i class="fal fa-camera"></i>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row" id="BtnEnviar" style="padding-top: 10px;">
+        <div class="col-sm-12">
+            <select class="form-control" id="selectUsuarios">
+            </select>
+        </div>
+        <div class="col-sm-12">
+            <label>&nbsp;</label>
+            <button type="button" class="form-control btn btn-success" id="enviarFormulario">Enviar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var usuariosConectados = [];
+    pantallaPrincipal = 1;
+
+    $("#selectUsuarios").select2({ dropdownParent: $("#MyModalSm") });
+
+
+    chat.on('insertarUsuarios', function (resp, userPeticion) {
+        if ("@User.Identity.Name" == userPeticion) {
+            if (!usuariosConectados.some(x => x.UserName == resp.UserName)) {
+                usuariosConectados.push(resp);
+                let newOption = new Option(resp.UserName, resp.UserName, false, false);
+                $("#selectUsuarios").append(newOption).trigger("change");
+            }
+        }
+
+    });
+
+
+
+    $.ajax({
+        url: "@Url.Action("GetUsuariosConectados","Base")",
+        method: "Get",
+        success: function (resp) {
+
+            //$("#BtnEnviar").append();
+        }
+    });
+
+    $("#enviarFormulario").click(function () {
+        var usuarioSeleccionado = usuariosConectados.find(x => x.UserName == $("#selectUsuarios").val());
+        $.ajax({
+            url: "@Url.Action("EnviarModalParaDocumento", "Prestamo")",
+            type: "Post",
+            data: { usuario: usuarioSeleccionado, usuarioPeticion: "@User.Identity.Name" },
+            success: function (resp) {
+
+            }
+        });
+
+    });
+
+    chat.on("retornarDocumento", function (model) {
+        if ("@User.Identity.Name" == model.UsuarioPeticion)
+        {
+            var documento = dataURLtoFile(`data:${model.Type};base64,` + model.Documento, model.Nombre);
+            mostrarArchivo(documento);
+            $("#MyModalSm").modal("hide");
+            $("#MyModalBodySm").empty();
+
+        }
+    });
+
+
+      function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[arr.length - 1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    $(document).on("hidden.bs.modal", "#MyModalSm", function () {
+        pantallaPrincipal = 0;
+        chat.off("insertarUsuarios");
+        chat.off("RetornarFotografia");
+    });
+
+</script>

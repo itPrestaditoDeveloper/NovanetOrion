@@ -1,0 +1,330 @@
+﻿
+@{
+    ViewBag.Title = "Bandeja_Credito";
+}
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Bandeja Credito Servicios</h2>
+
+    </div>
+    @*<div class="table-responsive p-0 mb-1">
+            <div class="btn-group btn-group-toggle col-lg-12 p-0" data-toggle="buttons">
+                <label class="btn btn-secondary active cursor-pointer">
+                    <input id="general" type="radio" name="filtros" value="0" />
+                    General
+                </label>
+                <label class="btn btn-secondary cursor-pointer">
+                    <input id="recepcion" type="radio" name="filtros" value="5" />
+                    Enviado
+                </label>
+                <label class="btn btn-secondary cursor-pointer">
+                    <input id="analisis" type="radio" name="filtros" value="4" />
+                    Pendiente
+                </label>
+                <label class="btn btn-warning cursor-pointer">
+                    <input id="campo" type="radio" name="filtros" value="2" />
+                    Pendiente Instalacion
+                </label>
+                <label class="btn btn-success cursor-pointer">
+                    <input id="pendientes" type="radio" name="filtros" value="6" />
+
+                    Aprobado
+                </label>
+                <label class="btn btn-success cursor-pointer">
+                    <input id="aprobadas" type="radio" name="filtros" value="7" />
+                    Instalado
+                </label>
+
+            </div>
+        </div>*@
+
+
+    <div class="row mb-1  justify-content-center">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Estado</label>
+            <select id="ddlEstado" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Vigente">Vigente</option>
+
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Mes</label>
+            <select id="ddlMesIngreso" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6" style="display: none">
+            <label class="col-form-label">Búsqueda por Fecha</label>
+            <div class="input-daterange input-group" id="date-range">
+                <input type="text" class="form-control form-control-sm" name="fecha-minima" id="fecha-minima" />
+                <input type="text" class="form-control form-control-sm" name="fecha-maxima" id="fecha-maxima" />
+            </div>
+        </div>
+        <div class=" col-lg-2 col-md-2 col-sm-6 col-6 align-self-end" style="display: none">
+            <label class="col-form-label">Búsqueda por Año</label>
+            <input id="ddlAnioIngreso" class="form-control form-control-sm" type="text" />
+        </div>
+    </div>
+
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaPrestamo">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th>Accciones</th>
+                        <th></th>
+                        <th>Cliente</th>
+                        <th>Identidad</th>
+                        <th>Credito</th>
+                        <th>Producto</th>
+                        <th>Fecha Servicio</th>
+                        <th>Saldo</th>
+                        <th>Contratista</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+
+    <script>
+
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        let FiltroAnio = '';
+        let filtroMes = '';
+        $('#ddlMesIngreso').on('change', function () {
+            debugger;
+            filtroMes = this.value != '' ? this.value : '';
+            MesAnio();
+        });
+
+
+
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+
+
+
+        var tablaPrincipal = $('#BandejaPrestamo').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("ListaPrestamo", "Prestamo")',
+                method: "Get",
+                dataSrc: function (data) {
+                    console.log(data);
+                    return data;
+
+                }
+            },
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data) {
+
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += `<a href="@Url.Action("MenuDetallePrestamo", "Prestamo")?idSolicitud=${data.fiIDSolicitud}&idPrestamo=${data.fcIDPrestamo}&idIDentidad=${data.fcIdentidad}&idClienteSAF=${data.fcClienteSAF}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Informacion Servicio</a>`;
+                        opciones += '<a href="javascript:void(0)" onclick="ModalVerBitacorasCliente(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Bitacoras</a>';
+                        opciones += '<a href="javascript:void(0)" onclick="ModalCrearBitacoras(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Crear Bitacora</a>';
+                        opciones += '<a href="javascript:void(0)" onclick="ModalAgregarCodigoPromocion(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Colocar Codigo Promocion</a>';
+                        opciones += '<a href="javascript:void(0)" onclick="ModalCrearSolicitudDesconexionNovanet(\'' + data.fcNombreCliente + '\',' + data.fiIDSolicitud + ',' + data.fiIDEstadoInstalacion + ' , ' + data.fiIDEquifax +  ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Cancelacion de Servicio</a>';
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opt = "";
+                        opt = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)" ><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                        return opt;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreCliente + ' | ' + data.fcTelefono;
+                    }
+
+                },
+                {
+                    data: "fcIdentidad"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcIDPrestamo + ' | ' + 'Sol : ' + data.fiIDSolicitud ;
+                    }
+
+                },
+                {
+                    data: 'fcProducto'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacion).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: 'fnCapitalFinanciado'
+                },
+                {
+                    data: 'fcNombreEmpresaContratistan'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fcEstadoPrestamo == "Pendiente") {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        if (data.fcEstadoPrestamo == "Vigente") {
+                            return '<div class="badge badge-success">Vigente</div>';
+                        }
+
+                    }
+                }
+            ]
+
+        });
+
+        function ModalConfirmacionPrimerPago(Nombre, Identidad, IDSolicitud, idCliente) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Identidad: Identidad, IDSolicitud: IDSolicitud, idCliente: idCliente }, "@Url.Action("ModalEnviarComprobantePago", "Solicitudes")");
+        }
+
+
+       function ModalCrearBitacoras(Nombre, IDSolicitud) {
+
+           VerModalConObjetoDeParametro({ Nombre: Nombre,  IDSolicitud: IDSolicitud, }, "@Url.Action("ModalCrearBitacoras", "Prestamo")");
+
+       }
+        function ModalAgregarCodigoPromocion(Nombre, IDSolicitud) {
+
+           VerModalConObjetoDeParametro({ Nombre: Nombre,  IDSolicitud: IDSolicitud, }, "@Url.Action("ModalAgregarCodigoPromocion", "Prestamo")");
+
+        }
+        function ModalCrearSolicitudDesconexionNovanet(Nombre, IDSolicitud, fiIDEstadoInstalacion, fiIDEquifax) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, IDSolicitud: IDSolicitud, fiIDEstadoInstalacion, fiIDEquifax }, "@Url.Action("ModalCrearSolicitudCorteNovanet", "Prestamo")");
+
+       }
+       function ModalVerBitacorasCliente(Nombre, IDSolicitud) {
+
+            $.ajax({
+                url: "@Url.Action("ModalVerBitacorasCliente", "Prestamo")",
+                method: "get",
+                data: { Nombre: Nombre, IDSolicitud: IDSolicitud },
+                success: function (resp) {
+
+                    ShowModalBig(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        $("#BandejaPrestamo thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#BandejaPrestamo");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+        $('#BandejaPrestamo tbody').on('click', 'a.details-productos', function () {
+            var table = $.fn.dataTable.Api("#BandejaPrestamo");
+            var i = $(this).find("i");
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var data = table.row(row).data();
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child('');
+                row.child.hide();
+                tr.removeClass('info');
+                $(i).removeClass("fa-minus").removeClass("text-danger").addClass("fa-plus").addClass("text-success");
+            }
+            else {
+                //row.child("Test").show();
+                $(i).removeClass("fa-plus").removeClass("text-success").addClass("fa-minus").addClass("text-danger");
+
+                debugger;
+                $.ajax({
+                    url: '@Url.Action("ViewListaProductosInstalados", "Prestamo")',
+                    data: { fiIDEquifax: data.fiIDEquifax },
+                    type: 'Get',
+                    success: function (data) {
+                        row.child(data).show();
+                        tr.addClass('info');
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        AlertaError();
+                    },
+                });
+            }
+        });
+
+    </script>
+}

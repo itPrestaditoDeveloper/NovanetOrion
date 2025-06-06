@@ -1,0 +1,256 @@
+﻿@model OrionCoreCableColor.Models.Mantenimiento.CrearPaqueteViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        @if (Model.fbEditar)
+        {
+            <text>Editar Paquete</text>
+        }
+        else
+        {
+            if (Model.fbClonar)
+            {
+                <text>Clonar Paquete</text>
+            }
+            else
+            {
+                <text>Crear Paquete</text>
+            }
+
+        }
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcPaquete, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcPaquete, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcPaquete, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiIDMoneda, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+
+                    @Html.DropDownListFor(model => model.fiIDMoneda, new SelectList(ViewBag.ListaMonedas, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fiIDMoneda, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorMensual, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorMensual, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorMensual, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnTasaDeInteresAnual, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-percentage fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnTasaDeInteresAnual, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnTasaDeInteresAnual, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-6 float-left">
+            <div class="custom-control custom-checkbox">
+                <input @(Model.fbServicio ? "checked" : "") id="fbServicio" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla"> <label></label>
+                <label class="custom-control-label" for="fbServicio">Solo Servicio</label>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <br />
+        </div>
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TblProductosSeleccionados">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Productos</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="Guardar" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#fiIDMoneda").select2({ dropdownParent: $("#MyModalBig") });
+    var tablaPrincipal = $('#TblProductosSeleccionados').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        language:
+        {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        buttons:
+            [
+                {
+                    text: `<i class="fal fa-plus"></i>`,
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
+
+
+                        VerModalSmConObjetoDeParametro({}, "@Url.Action("ListProductos","Mantenimiento")");
+                    }
+                }
+            ],
+
+        data: model.Productos,
+        columns:
+            [
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                    }
+                },
+                {
+                    data: "fcProducto"
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<input type="number" name="fiCantidad" class="form-control InputDecimal" data_class="ClaseDecimal" value=${data.fiCantidad} />`;
+                    }
+                }
+            ]
+    });
+
+
+    $("#TblProductosSeleccionados tbody").on("change", "input[name=fiCantidad]", function () {
+        debugger;
+        var tabla = $.fn.dataTable.Api("#TblProductosSeleccionados");
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+        data.fiCantidad = parseInt($(this).val());
+
+    });
+
+
+    $("#TblProductosSeleccionados tbody").on("click", "button[name=eliminar]", function () {
+
+        var tabla = $.fn.dataTable.Api("#TblProductosSeleccionados");
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).remove().draw(false);
+
+    });
+
+
+    $("#Guardar").click(function ()
+    {
+        if ($("#fcPaquete").val() == "") {
+            ToastrError("Error", "Ingrese nombre del paquete");
+            return;
+        }
+
+        if ($("#fnValorMensual").val() == 0 || $("#fnValorMensual").val() == "")
+        {
+            ToastrError("Error", "Ingrese el valor mensual");
+            return;
+        }
+
+        if ($("#fnTasaDeInteresAnual").val() == 0 || $("#fnTasaDeInteresAnual").val() == "") {
+            ToastrError("Error", "Ingrese tasa de interes anual");
+            return;
+        }
+
+
+        var tabla = $.fn.dataTable.Api("#TblProductosSeleccionados");
+        var productos = tabla.rows().data().toArray();
+        if (tabla.rows().data().toArray().length < 2) {
+            ToastrError("Error", "la cantidad de productos en el paquete debe ser mayor a 1");
+            return;
+        }
+        var productoEn0 = productos.filter(x => x.fiCantidad == 0);
+        debugger;
+        if (productoEn0.length > 0)
+        {
+            ToastrError("Error","Productos agregados tienen cantidad 0");
+            return;
+        }
+
+        model.fcPaquete = $("#fcPaquete").val();
+        model.fnValorMensual = $("#fnValorMensual").val();
+        model.fnTasaDeInteresAnual = $("#fnTasaDeInteresAnual").val();
+        model.fbServicio = $("#fbServicio").prop("checked");
+        model.fiIDMoneda = $("#fiIDMoneda").val();
+        model.Productos = productos;
+        var url = "@Url.Action("CrearPaquete","Mantenimiento")";
+        if (model.fbEditar) {
+            url = "@Url.Action("EditarPaquete","Mantenimiento")"
+        }
+
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { model: model },
+            success: function (data) {
+                if (data.Estado) {
+                    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaT.ajax.reload();
+                    ToastrSuccess("Aprobada", data.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                }
+            }
+        });
+    });
+
+
+
+</script>

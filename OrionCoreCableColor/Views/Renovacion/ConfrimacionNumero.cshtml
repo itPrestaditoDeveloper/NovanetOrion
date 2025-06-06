@@ -1,0 +1,280 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Verificar Datos</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h3>Datos del Cliente</h3>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-12 text-center">
+                    <hr />
+                    <h3>Datos del Contrato</h3>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fcDireccionDetallada, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-map fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fcDireccionDetallada, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fcDireccionDetallada, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fcDescripcionEstadoCivil, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-ring fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fcDescripcionEstadoCivil, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fcDescripcionEstadoCivil, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fcArticulosdelContrato, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-list fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fcArticulosdelContrato, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fcArticulosdelContrato, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fcDescripcionTelevisor, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-tv fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fcDescripcionTelevisor, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fcDescripcionTelevisor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fnValorGarantia, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fnValorGarantia, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fnValorGarantia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fnMontoFinalFinanciar, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fnMontoFinalFinanciar, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fnMontoFinalFinanciar, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fnCuotaMensual, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fnCuotaMensual, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fnCuotaMensual, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fnTasaAnual, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fnTasaAnual, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fnTasaAnual, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fnTotalValorContrato, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fnTotalValorContrato, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fnTotalValorContrato, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fiPlazoSeleccionado, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-calendar fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fiPlazoSeleccionado, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fiPlazoSeleccionado, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fdFechaIniciodeCredito, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-calendar fa-fw"></i></span>
+                            </div>
+                            <input type="text" id="fdFechaIniciodeCredito" value="@Model.DatosContrato.fdFechaIniciodeCredito.ToString("dd/MM/yyyy")" class="form-control" />
+                            @*@Html.EditorFor(model => model.DatosContrato.fdFechaIniciodeCredito, new { htmlAttributes = new { @class = "form-control" } })*@
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fdFechaIniciodeCredito, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosContrato.fcCorreo, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-mailbox fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosContrato.fcCorreo, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosContrato.fcCorreo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre").prop("disabled", true);
+    $("#Telefono").prop("disabled", true);
+    $("#DatosContrato_fcDireccionDetallada").prop("disabled", true);
+    $("#DatosContrato_fcDescripcionEstadoCivil").prop("disabled", true);
+    $("#DatosContrato_fcArticulosdelContrato").prop("disabled", true);
+    $("#DatosContrato_fcDescripcionTelevisor").prop("disabled", true);
+    $("#DatosContrato_fnValorGarantia").prop("disabled", true);
+    $("#DatosContrato_fnMontoFinalFinanciar").prop("disabled", true);
+    $("#DatosContrato_fnCuotaMensual").prop("disabled", true);
+    $("#DatosContrato_fnTasaAnual").prop("disabled", true);
+    $("#DatosContrato_fnTotalValorContrato").prop("disabled", true);
+    $("#DatosContrato_fiPlazoSeleccionado").prop("disabled", true);
+    $("#fdFechaIniciodeCredito").prop("disabled", true);
+    $("#DatosContrato_fcCorreo").prop("disabled", true);
+
+    function generarRandom(num) {
+        const characters = "0123456789";
+        const charactersLength = characters.length;
+        let result = "";
+        for (let i = 0; i < num; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+
+        return result;
+    }
+
+    $("#btnConfirmarEnvio").click(function () {
+        debugger;
+        var token = generarRandom(7);
+        $.ajax({
+                url: "@Url.Action("MensajeToken", "Renovacion")",
+                type: "POST",
+            data: { model: model, Token: token},
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

@@ -1,0 +1,121 @@
+﻿@model OrionCoreCableColor.Models.Usuario.CrearUsuarioViewModel
+
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Cuenta de Usuario</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+        @Html.HiddenFor(model => model.fiIdUsuario)
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdRol, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm" style="width:100%;">
+                        @Html.DropDownListFor(model => model.IdRol, new SelectList(ViewBag.ListaRoles, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcBuzondeCorreo, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.fcBuzondeCorreo, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcBuzondeCorreo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<!--Modal footer-->
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+
+    @if (!User.IsInRole("coreseguridad_AccesoAlSistema")) 
+    { 
+        <text>  $("#IdRol").prop("disabled", true); </text>
+    }
+
+    $("#IdRol").select2({
+    dropdownParent: $("#MyModalBig")
+    });
+
+   
+
+    $("#MyFormModal").submit(function (event) {
+        event.preventDefault();
+        if (!$("#MyFormModal").valid()) {
+            return false;
+        }
+        var model = @Html.Raw(Json.Encode(Model));
+        model.fcBuzondeCorreo = $("#fcBuzondeCorreo").val();
+        model.UserName = $("#UserName").val();
+        model.IdRol = $("#IdRol").val();
+
+        $.ajax({
+            url: '@Url.Action("EditarCuentaUsuario","Usuario")',
+            type: 'POST',
+            data: JSON.stringify({ model: model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.Estado) {
+                    CerrarModal();
+                    tablaPrincipal.ajax.reload().draw(false);
+                }
+                AlertaAjax(data);
+            },
+            error: function (data) {
+                AlertaError();
+            },
+        });
+
+
+    });
+</script>

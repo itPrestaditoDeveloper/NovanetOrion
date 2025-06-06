@@ -1,0 +1,239 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionCreditoClienteViewModel 
+
+
+<div class="row">
+    <div class="col-sm-12">
+
+
+        <div class="row">
+            <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                <br />
+                <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                    <div class="form-group text-center">
+                        <h2>Fotografias Instalacion</h2>
+                        <div class="row" id="galeriaFotos">
+                            @foreach (var item in Model.ListaImagenesInstalacion)
+                            {
+                                <img class="img-thumbnail col-lg-3 col-sm-3" onclick="ShowBigImage(this)" style="width:100%;height:300px" alt="@item.fcDescription" src="@item.fcUrlFile"
+                                     data-image="@item.fcUrlFile"
+                                     data-description="@item.fcDescription">
+                            }
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+
+        @if (Model.fcProducto != null)
+            {
+        <div class="table-responsive">
+            <table class="table tableInfoTop" style="margin-bottom:0px;">
+
+                <thead>
+                    <tr><th COLSPAN="4" style="text-align:center"><span class="text-info text-bold">Paquete Adquirido:</span></th></tr>
+                    <tr>
+                        <th>N#</th>
+                        <th>Porducto</th>
+                        <th>Valor Moneda Extranjera</th>
+                        <th>Valor Moneda Nacional</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ListaGarantia)
+                    {
+                        <tr>
+                            <td>@item.fiIDProducto</td>
+                            <td>@item.fcProducto</td>
+                            <td>@item.fnValorProductoME</td>
+                            <td>@item.fnValorProductoMN</td>
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        }
+
+    </div>
+
+    <div class="col-sm-6">
+        <div class="table-responsive">
+            <table class="table tableInfoTop" style="margin-bottom: 0px;">
+                <tbody>
+                    <tr>
+
+                        <td><span class="text-info text-bold">INFO PRESTAMO</span></td>
+                        <td></td>
+
+                    </tr>
+                    <tr>
+
+                        <td><span class="text-main text-bold">Estado</span></td>
+                        @*<td><span class="label label-table label-@Model.AutoLoanInfo.fcStatusClass">@Model.AutoLoanInfo.fcStatusName</span></td>*@
+                        <td><span class="label label-table label-danger">Vigente</span></td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td><span> Número de préstamo</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fcPrestamo)
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td><span> Tipo de producto</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fcProducto)
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td><span> Agencia</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fcNombreAgencia)
+                        </td>
+
+                    </tr>
+
+
+
+                    <tr>
+
+                        <td><span> Plazos</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fiTotalCuotas) (@Model.fcTipoDePlazo)
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td><span>  Frecuencia</span></td>
+                        <td>
+                            @Html.DisplayFor(model => @Model.fcTipoDePlazo)
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td><span>Cantidad de pagos </span></td>
+                        <td>
+                            @*@Html.DisplayFor(model => model.PaymentsQuantity)*@
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td><span>Cuota</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fnValorCuota)
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td><span>Fecha inicio</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fdFechaInicioPrestamo)
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td><span>   Fecha primer pago</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fdFechaPrimerPagoPrestamo)
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td><span>  Fecha ultimo pago</span></td>
+                        <td>
+                            @Html.DisplayFor(model => model.fdFechaVencePrestamo)
+                        </td>
+
+                    </tr>
+                    <tr>
+
+                        <td></td>
+                        <td> </td>
+
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+</div>
+
+
+
+@*@if (Model.AutoLoanInfo != null)
+    {
+        <br />
+
+        <hr />
+        <div class="row">
+
+
+
+        </div>
+        <script>
+            $(document).ready(function () {
+
+
+                $("#galleryWarranty").unitegallery({
+                    gallery_theme: "tilesgrid"
+                });
+            });
+
+
+            $("#labelStatusLoan").html(`Status: <span class="label label-md label-${'@Model.AutoLoanInfo.fcStatusClass'}" style="width:150px;">${'@Model.AutoLoanInfo.fcStatusName'}</span>`);
+
+        </script>
+
+
+    }*@
+
+
+
+
+<script>
+    $(document).ready(function () {
+        //$("#galleryExtras").unitegallery({
+        //    gallery_theme: "tilesgrid"
+        //});
+
+        $("#galleryWarranty").unitegallery({
+            gallery_theme: "tilesgrid"
+        });
+    });
+</script>

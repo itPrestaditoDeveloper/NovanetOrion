@@ -1,0 +1,736 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CoreFinancieroModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="fn_NumerosaLetras" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="lnNumeroaConvertir" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="sp_CREDGarantias_ActualizarSerieDeProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+          <Parameter Name="pcSerieProducto" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Facturacion_ConsultarFactura" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDTransaccion" Type="int" Mode="In" />
+          <Parameter Name="pcFactura" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Facturacion_ConsultarFactura_NovaNet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDTransaccion" Type="int" Mode="In" />
+          <Parameter Name="pcFactura" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_GeoBarrios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piPais" Type="smallint" Mode="In" />
+          <Parameter Name="piDepartamento" Type="smallint" Mode="In" />
+          <Parameter Name="piMunicipio" Type="smallint" Mode="In" />
+          <Parameter Name="piPoblado" Type="smallint" Mode="In" />
+          <Parameter Name="piBarrio" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="sp_GeoDepartamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piPais" Type="smallint" Mode="In" />
+          <Parameter Name="piDepartamento" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="sp_GeoMunicipio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piPais" Type="smallint" Mode="In" />
+          <Parameter Name="piDepartamento" Type="smallint" Mode="In" />
+          <Parameter Name="piMunicipio" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="sp_GeoPais" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piPais" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="sp_GeoPoblado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piPais" Type="int" Mode="In" />
+          <Parameter Name="piDepartamento" Type="int" Mode="In" />
+          <Parameter Name="piMunicipio" Type="int" Mode="In" />
+          <Parameter Name="piPoblado" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_OperacionesBanco_CuentasdeBanco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDSesion" Type="int" Mode="In" />
+          <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_OperacionesCaja_AplicarAbono_NovaNet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="pcIP" Type="varchar" Mode="In" />
+          <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+          <Parameter Name="pnValordelAbono" Type="decimal" Mode="In" />
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+          <Parameter Name="pcComentarioAdicional" Type="varchar" Mode="In" />
+          <Parameter Name="pcCuentaOrigenMonedaNacional" Type="varchar" Mode="In" />
+          <Parameter Name="pcReferencia" Type="varchar" Mode="In" />
+          <Parameter Name="piIDTransaccion" Type="int" Mode="InOut" />
+          <Parameter Name="pdFechadeTransaccion" Type="datetime" Mode="In" />
+          <Parameter Name="piIDMovimientoPrimerPago" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuarioSRC" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_OperacionesCaja_ConsultarAbono" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDTransaccion" Type="int" Mode="In" />
+          <Parameter Name="piInformacionFactura" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_OperacionesCaja_ConsultarCliente_NovaNet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDSesion" Type="int" Mode="In" />
+          <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_OperacionesCaja_ConsultarCliente_NovaNet_PorPrestamo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDSesion" Type="int" Mode="In" />
+          <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_OperacionesCaja_UltimosMovimientos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SRCClientesPlandePago" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pcIDCLiente" Type="varchar" Mode="In" />
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_SRCEstadoDeCuenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="pcIDCLiente" Type="varchar" Mode="In" />
+          <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="CoreFinancieroModelStoreContainer" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CoreFinancieroModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CoreFinancieroEntities2" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="sp_Facturacion_ConsultarFactura" ReturnType="Collection(CoreFinancieroModel.sp_Facturacion_ConsultarFactura_Result)">
+            <Parameter Name="piIDTransaccion" Mode="In" Type="Int32" />
+            <Parameter Name="pcFactura" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_OperacionesBanco_CuentasdeBanco" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesBanco_CuentasdeBanco_Result)">
+            <Parameter Name="piIDSesion" Mode="In" Type="Int32" />
+            <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_OperacionesCaja_AplicarAbono_NovaNet" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_AplicarAbono_NovaNet_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="pcIP" Mode="In" Type="String" />
+            <Parameter Name="pcIdentidad" Mode="In" Type="String" />
+            <Parameter Name="pnValordelAbono" Mode="In" Type="Decimal" />
+            <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+            <Parameter Name="pcComentarioAdicional" Mode="In" Type="String" />
+            <Parameter Name="pcCuentaOrigenMonedaNacional" Mode="In" Type="String" />
+            <Parameter Name="pcReferencia" Mode="In" Type="String" />
+            <Parameter Name="piIDTransaccion" Mode="InOut" Type="Int32" />
+            <Parameter Name="pdFechadeTransaccion" Mode="In" Type="DateTime" />
+            <Parameter Name="piIDMovimientoPrimerPago" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuarioSRC" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_OperacionesCaja_UltimosMovimientos" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_UltimosMovimientos_Result)">
+          <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_OperacionesCaja_ConsultarAbono" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_ConsultarAbono_Result)">
+            <Parameter Name="piIDTransaccion" Mode="In" Type="Int32" />
+            <Parameter Name="piInformacionFactura" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Facturacion_ConsultarFactura_NovaNet" ReturnType="Collection(CoreFinancieroModel.sp_Facturacion_ConsultarFactura_NovaNet_Result)">
+            <Parameter Name="piIDTransaccion" Mode="In" Type="Int32" />
+            <Parameter Name="pcFactura" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo" ReturnType="Collection(CoreFinancieroModel.sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo_Result)">
+          <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SRCClientesPlandePago" ReturnType="Collection(CoreFinancieroModel.sp_SRCClientesPlandePago_Result)">
+            <Parameter Name="pcIDCLiente" Mode="In" Type="String" />
+            <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_SRCEstadoDeCuenta">
+            <Parameter Name="pcIDCLiente" Mode="In" Type="String" />
+            <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GeoBarrios" ReturnType="Collection(CoreFinancieroModel.sp_GeoBarrios_Result)">
+            <Parameter Name="piPais" Mode="In" Type="Int16" />
+            <Parameter Name="piDepartamento" Mode="In" Type="Int16" />
+            <Parameter Name="piMunicipio" Mode="In" Type="Int16" />
+            <Parameter Name="piPoblado" Mode="In" Type="Int16" />
+            <Parameter Name="piBarrio" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GeoDepartamento" ReturnType="Collection(CoreFinancieroModel.sp_GeoDepartamento_Result)">
+            <Parameter Name="piPais" Mode="In" Type="Int16" />
+            <Parameter Name="piDepartamento" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GeoMunicipio" ReturnType="Collection(CoreFinancieroModel.sp_GeoMunicipio_Result)">
+            <Parameter Name="piPais" Mode="In" Type="Int16" />
+            <Parameter Name="piDepartamento" Mode="In" Type="Int16" />
+            <Parameter Name="piMunicipio" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GeoPais" ReturnType="Collection(CoreFinancieroModel.sp_GeoPais_Result)">
+          <Parameter Name="piPais" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GeoPoblado" ReturnType="Collection(CoreFinancieroModel.sp_GeoPoblado_Result)">
+            <Parameter Name="piPais" Mode="In" Type="Int32" />
+            <Parameter Name="piDepartamento" Mode="In" Type="Int32" />
+            <Parameter Name="piMunicipio" Mode="In" Type="Int32" />
+            <Parameter Name="piPoblado" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_OperacionesCaja_ConsultarCliente_NovaNet" ReturnType="Collection(CoreFinancieroModel.sp_OperacionesCaja_ConsultarCliente_NovaNet_Result)">
+            <Parameter Name="piIDSesion" Mode="In" Type="Int32" />
+            <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="pcIdentidad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_OperacionesCaja_ConsultarCliente_NovaNet_PorPrestamo">
+            <Parameter Name="piIDSesion" Mode="In" Type="Int32" />
+            <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="pcIdentidad" Mode="In" Type="String" />
+            <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CREDGarantias_ActualizarSerieDeProducto" ReturnType="Collection(Int32)">
+            <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
+            <Parameter Name="pcIDPrestamo" Mode="In" Type="String" />
+            <Parameter Name="pcSerieProducto" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_Facturacion_ConsultarFactura_Result">
+          <Property Type="String" Name="fcNombreAgencia" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcFactura" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="fcDireccionAgenca" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="fcDireccionAgencia" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="fcCAI" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="fdFechaFactura" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fdFechaRangoInicialFacturacion" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechaRangoFinalFacturacion" Nullable="false" />
+          <Property Type="String" Name="fcRangoInicialFacturacion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcRangoFinalFacturacion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcNombreCliente" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="fcRTN" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcRenglonDetalle1" Nullable="false" MaxLength="7" />
+          <Property Type="Decimal" Name="fnRenglonValor1" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="fcRenglonDetalle2" Nullable="false" MaxLength="17" />
+          <Property Type="Decimal" Name="fnRenglonValor2" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="fcRenglonDetalle3" Nullable="false" MaxLength="8" />
+          <Property Type="Decimal" Name="fnRenglonValor3" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="fnSubtotal" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnImporteExento" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnImporteExonerado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnImporteGravado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnImpuestos" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="String" Name="fcFormaPago" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="fnTotal" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="String" Name="fcProductoDescripcion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcValorenLetras" Nullable="true" MaxLength="180" />
+          <Property Type="Decimal" Name="fnTasadeCambio" Nullable="false" Precision="13" Scale="4" />
+          <Property Type="Decimal" Name="fnValorLempiras" Nullable="true" Precision="13" Scale="2" />
+          <Property Type="String" Name="fcValorLempiras" Nullable="true" MaxLength="180" />
+          <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="sp_OperacionesBanco_CuentasdeBanco_Result">
+          <Property Type="String" Name="fcCuentaContable" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fcDescripcionCuenta" Nullable="true" MaxLength="180" />
+        </ComplexType>
+        <ComplexType Name="sp_OperacionesCaja_AplicarAbono_NovaNet_Result">
+          <Property Type="String" Name="fcPrestamoSeleccionado" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="fnValorentraso" Nullable="true" Precision="13" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_OperacionesCaja_UltimosMovimientos_Result">
+          <Property Type="DateTime" Name="fdFechaTransaccion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcNombreCorto" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="fcOperacion" Nullable="false" MaxLength="9" />
+          <Property Type="Decimal" Name="fnValorMovimiento" Nullable="true" Precision="28" Scale="2" />
+          <Property Type="String" Name="fcReferencia" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="sp_OperacionesCaja_ConsultarAbono_Result">
+          <Property Type="Int16" Name="fiIDEmpresadelPrestamo" Nullable="false" />
+          <Property Type="String" Name="fcNombreEmpresa" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="fiIDTransaccion" Nullable="false" />
+          <Property Type="String" Name="fcIDPrestamo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcNombreAgencia" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="fcIdentidadCliente" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="fcNombreCliente" Nullable="true" MaxLength="120" />
+          <Property Type="String" Name="fcProducto" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="fdFechaVencimiento" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="fdUltimoAbono" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="fnCapital" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnInteres" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnInteresMoratorio" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguros" Nullable="true" Precision="16" Scale="2" />
+          <Property Type="Decimal" Name="fnOtros" Nullable="true" Precision="21" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoActualCapital" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnTotalAbonado" Nullable="true" Precision="28" Scale="2" />
+          <Property Type="String" Name="fcUsuarioDominio" Nullable="true" MaxLength="30" />
+          <Property Type="DateTime" Name="fdFechaTransaccion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcAvancedeCuotas" Nullable="true" MaxLength="24" />
+          <Property Type="String" Name="fcFrecuencia" Nullable="false" MaxLength="9" />
+          <Property Type="Decimal" Name="fnValorCuota" Nullable="true" Precision="20" Scale="2" />
+          <Property Type="Int32" Name="fiMostrarMensaje" Nullable="false" />
+          <Property Type="String" Name="fcMensajeAdicional" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fcMoneda" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="fcOrigenOperacion" Nullable="false" MaxLength="5" />
+          <Property Type="Int32" Name="fiMostrarMensaje2" Nullable="false" />
+          <Property Type="String" Name="fcMensajeAdicional2" Nullable="true" MaxLength="92" />
+          <Property Type="String" Name="fcTelefonoSMS" Nullable="true" MaxLength="8000" />
+          <Property Type="Int32" Name="fiIDFormatodeRecibo" Nullable="false" />
+          <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="sp_Facturacion_ConsultarFactura_NovaNet_Result">
+          <Property Type="String" Name="fcNombreAgencia" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcFactura" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="fcDireccionAgenca" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="fcDireccionAgencia" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="fcCAI" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="fdFechaFactura" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fdFechaRangoInicialFacturacion" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechaRangoFinalFacturacion" Nullable="false" />
+          <Property Type="String" Name="fcRangoInicialFacturacion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcRangoFinalFacturacion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcNombreCliente" Nullable="false" MaxLength="60" />
+          <Property Type="String" Name="fcRTN" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcRenglonDetalle1" Nullable="false" MaxLength="7" />
+          <Property Type="Decimal" Name="fnRenglonValor1" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="fcRenglonDetalle2" Nullable="false" MaxLength="17" />
+          <Property Type="Decimal" Name="fnRenglonValor2" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="String" Name="fcRenglonDetalle3" Nullable="false" MaxLength="8" />
+          <Property Type="Decimal" Name="fnRenglonValor3" Nullable="true" Precision="38" Scale="2" />
+          <Property Type="Decimal" Name="fnSubtotal" Nullable="true" Precision="14" Scale="2" />
+          <Property Type="Decimal" Name="fnImporteExento" Nullable="true" Precision="14" Scale="2" />
+          <Property Type="Decimal" Name="fnImporteExonerado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnImporteGravado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnImpuestos" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="String" Name="fcFormaPago" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="fnTotal" Nullable="true" Precision="14" Scale="2" />
+          <Property Type="String" Name="fcProductoDescripcion" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fcValorenLetras" Nullable="true" MaxLength="8000" />
+          <Property Type="Decimal" Name="fnTasadeCambio" Nullable="false" Precision="13" Scale="4" />
+          <Property Type="Decimal" Name="fnValorLempiras" Nullable="true" Precision="13" Scale="2" />
+          <Property Type="String" Name="fcValorLempiras" Nullable="true" MaxLength="180" />
+          <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo_Result">
+          <Property Type="Int16" Name="fiCuota" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechadeCuota" Nullable="false" />
+          <Property Type="Decimal" Name="fnCapitalPactado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnInteresPactado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoCapital" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoInteres" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguro1" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguro2" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguro3" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguro4" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoServicio1" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoServicio2" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoServicio3" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoOtros" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguros" Nullable="true" Precision="16" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoServicios" Nullable="true" Precision="15" Scale="2" />
+          <Property Type="Decimal" Name="fnTotalCuota" Nullable="true" Precision="22" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_SRCClientesPlandePago_Result">
+          <Property Type="Int16" Name="fiCuota" Nullable="false" />
+          <Property Type="Int32" Name="fiMes" Nullable="true" />
+          <Property Type="DateTime" Name="fdFechaCuota" Nullable="false" />
+          <Property Type="Decimal" Name="fnCapitalInicial" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnCapitalPactado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnInteresPactado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguro1" Nullable="true" Precision="15" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguro2" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnServicio1" Nullable="true" Precision="15" Scale="2" />
+          <Property Type="Decimal" Name="fnValorCuota" Nullable="true" Precision="22" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoCapital" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoInteres" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguro1" Nullable="true" Precision="15" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoSeguro2" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoServicio1" Nullable="true" Precision="15" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoCuota" Nullable="true" Precision="22" Scale="2" />
+        </ComplexType>
+        <ComplexType Name="sp_GeoBarrios_Result">
+          <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+          <Property Type="Int16" Name="fiCodDepartamento" Nullable="false" />
+          <Property Type="Int16" Name="fiCodMunicipio" Nullable="false" />
+          <Property Type="Int16" Name="fiCodBarrio" Nullable="true" />
+          <Property Type="Int16" Name="fiCodPoblado" Nullable="false" />
+          <Property Type="String" Name="fcBarrioColonia" Nullable="true" MaxLength="8000" />
+        </ComplexType>
+        <ComplexType Name="sp_GeoDepartamento_Result">
+          <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+          <Property Type="Int16" Name="fiCodDepartamento" Nullable="false" />
+          <Property Type="String" Name="fcDepartamento" Nullable="true" MaxLength="8000" />
+        </ComplexType>
+        <ComplexType Name="sp_GeoMunicipio_Result">
+          <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+          <Property Type="Int32" Name="fiCodDepartamento" Nullable="true" />
+          <Property Type="Int32" Name="fiCodMunicipio" Nullable="true" />
+          <Property Type="String" Name="fcMunicipio" Nullable="true" MaxLength="8000" />
+        </ComplexType>
+        <ComplexType Name="sp_GeoPais_Result">
+          <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+          <Property Type="String" Name="fcPais" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcNombreMoneda" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="fcAbreviacionMoneda" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="fcSimboloMoneda" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="fcDominoInternet" Nullable="false" MaxLength="2" />
+        </ComplexType>
+        <ComplexType Name="sp_GeoPoblado_Result">
+          <Property Type="Int16" Name="fiCodPais" Nullable="false" />
+          <Property Type="Int32" Name="fiCodDepartamento" Nullable="true" />
+          <Property Type="Int32" Name="fiCodMunicipio" Nullable="true" />
+          <Property Type="Int32" Name="fiCodPoblado" Nullable="true" />
+          <Property Type="String" Name="fcPoblado" Nullable="true" MaxLength="8000" />
+        </ComplexType>
+        <ComplexType Name="sp_OperacionesCaja_ConsultarCliente_NovaNet_Result">
+          <Property Type="String" Name="fcIDPrestamo" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcIDCliente" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="fcNombreCliente" Nullable="true" MaxLength="120" />
+          <Property Type="Int32" Name="fiDiasAtraso" Nullable="false" />
+          <Property Type="Decimal" Name="fnCapitalAtrasado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnInteresAtrasado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnInteresMoratorio" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguroAtrasado1" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguroAtrasado2" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguroAtrasado3" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSeguroAtrasado4" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnServicioAtrasado1" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnServicioAtrasado2" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnServicioAtrasado3" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnOtrosCargosAtrasado" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnRecargos" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnTotalAtrasado" Nullable="true" Precision="28" Scale="2" />
+          <Property Type="Decimal" Name="fnTotalAtrasadoMonedaNacional" Nullable="true" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoActualCapital" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnValorCuota" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnValorCuotaMonedaNacional" Nullable="true" Precision="13" Scale="2" />
+          <Property Type="Decimal" Name="fnMontoMaximoAbonoCapital" Nullable="true" Precision="14" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoParaLiquidarPrestamo" Nullable="true" Precision="29" Scale="2" />
+          <Property Type="Decimal" Name="fnSaldoParaLiquidarPrestamoSeguroMesActual" Nullable="true" Precision="29" Scale="2" />
+          <Property Type="String" Name="fcMensajeTWS" Nullable="false" MaxLength="4" />
+          <Property Type="Int16" Name="fiCuotasPagadas" Nullable="false" />
+          <Property Type="Int16" Name="fiCuotasAtrasadas" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechaInicio" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="fdFechaVencimiento" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="fdUltimoAbono" Nullable="true" Precision="23" />
+          <Property Type="Int16" Name="fiIDProducto" Nullable="false" />
+          <Property Type="String" Name="fcProducto" Nullable="false" MaxLength="100" />
+          <Property Type="Int32" Name="fiTipoPlandeAmortizacion" Nullable="false" />
+          <Property Type="String" Name="fcIDRespuestaWebService" Nullable="false" MaxLength="2" />
+          <Property Type="Int16" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="Decimal" Name="fnInteresesdelPeriodo" Nullable="true" Precision="13" Scale="2" />
+          <Property Type="Byte" Name="fiAlertadeCliente" Nullable="false" />
+          <Property Type="String" Name="fcMensajedeAlerta" Nullable="false" MaxLength="300" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CoreFinancieroModelStoreContainer" CdmEntityContainer="CoreFinancieroEntities2" >
+          <FunctionImportMapping FunctionImportName="sp_Facturacion_ConsultarFactura" FunctionName="CoreFinancieroModel.Store.sp_Facturacion_ConsultarFactura">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_Facturacion_ConsultarFactura_Result">
+                <ScalarProperty Name="fcNombreAgencia" ColumnName="fcNombreAgencia" />
+                <ScalarProperty Name="fcFactura" ColumnName="fcFactura" />
+                <ScalarProperty Name="fcDireccionAgenca" ColumnName="fcDireccionAgenca" />
+                <ScalarProperty Name="fcDireccionAgencia" ColumnName="fcDireccionAgencia" />
+                <ScalarProperty Name="fcCAI" ColumnName="fcCAI" />
+                <ScalarProperty Name="fdFechaFactura" ColumnName="fdFechaFactura" />
+                <ScalarProperty Name="fdFechaRangoInicialFacturacion" ColumnName="fdFechaRangoInicialFacturacion" />
+                <ScalarProperty Name="fdFechaRangoFinalFacturacion" ColumnName="fdFechaRangoFinalFacturacion" />
+                <ScalarProperty Name="fcRangoInicialFacturacion" ColumnName="fcRangoInicialFacturacion" />
+                <ScalarProperty Name="fcRangoFinalFacturacion" ColumnName="fcRangoFinalFacturacion" />
+                <ScalarProperty Name="fcNombreCliente" ColumnName="fcNombreCliente" />
+                <ScalarProperty Name="fcRTN" ColumnName="fcRTN" />
+                <ScalarProperty Name="fcRenglonDetalle1" ColumnName="fcRenglonDetalle1" />
+                <ScalarProperty Name="fnRenglonValor1" ColumnName="fnRenglonValor1" />
+                <ScalarProperty Name="fcRenglonDetalle2" ColumnName="fcRenglonDetalle2" />
+                <ScalarProperty Name="fnRenglonValor2" ColumnName="fnRenglonValor2" />
+                <ScalarProperty Name="fcRenglonDetalle3" ColumnName="fcRenglonDetalle3" />
+                <ScalarProperty Name="fnRenglonValor3" ColumnName="fnRenglonValor3" />
+                <ScalarProperty Name="fnSubtotal" ColumnName="fnSubtotal" />
+                <ScalarProperty Name="fnImporteExento" ColumnName="fnImporteExento" />
+                <ScalarProperty Name="fnImporteExonerado" ColumnName="fnImporteExonerado" />
+                <ScalarProperty Name="fnImporteGravado" ColumnName="fnImporteGravado" />
+                <ScalarProperty Name="fnImpuestos" ColumnName="fnImpuestos" />
+                <ScalarProperty Name="fcFormaPago" ColumnName="fcFormaPago" />
+                <ScalarProperty Name="fnTotal" ColumnName="fnTotal" />
+                <ScalarProperty Name="fcProductoDescripcion" ColumnName="fcProductoDescripcion" />
+                <ScalarProperty Name="fcValorenLetras" ColumnName="fcValorenLetras" />
+                <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+                <ScalarProperty Name="fnValorLempiras" ColumnName="fnValorLempiras" />
+                <ScalarProperty Name="fcValorLempiras" ColumnName="fcValorLempiras" />
+                <ScalarProperty Name="fcSimboloMoneda" ColumnName="fcSimboloMoneda" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_OperacionesBanco_CuentasdeBanco" FunctionName="CoreFinancieroModel.Store.sp_OperacionesBanco_CuentasdeBanco">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_OperacionesBanco_CuentasdeBanco_Result">
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_OperacionesCaja_AplicarAbono_NovaNet" FunctionName="CoreFinancieroModel.Store.sp_OperacionesCaja_AplicarAbono_NovaNet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_OperacionesCaja_AplicarAbono_NovaNet_Result">
+                <ScalarProperty Name="fcPrestamoSeleccionado" ColumnName="fcPrestamoSeleccionado" />
+                <ScalarProperty Name="fnValorentraso" ColumnName="fnValorentraso" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_OperacionesCaja_UltimosMovimientos" FunctionName="CoreFinancieroModel.Store.sp_OperacionesCaja_UltimosMovimientos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_OperacionesCaja_UltimosMovimientos_Result">
+                <ScalarProperty Name="fdFechaTransaccion" ColumnName="fdFechaTransaccion" />
+                <ScalarProperty Name="fcNombreCorto" ColumnName="fcNombreCorto" />
+                <ScalarProperty Name="fcOperacion" ColumnName="fcOperacion" />
+                <ScalarProperty Name="fnValorMovimiento" ColumnName="fnValorMovimiento" />
+                <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_OperacionesCaja_ConsultarAbono" FunctionName="CoreFinancieroModel.Store.sp_OperacionesCaja_ConsultarAbono">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_OperacionesCaja_ConsultarAbono_Result">
+                <ScalarProperty Name="fiIDEmpresadelPrestamo" ColumnName="fiIDEmpresadelPrestamo" />
+                <ScalarProperty Name="fcNombreEmpresa" ColumnName="fcNombreEmpresa" />
+                <ScalarProperty Name="fiIDTransaccion" ColumnName="fiIDTransaccion" />
+                <ScalarProperty Name="fcIDPrestamo" ColumnName="fcIDPrestamo" />
+                <ScalarProperty Name="fcNombreAgencia" ColumnName="fcNombreAgencia" />
+                <ScalarProperty Name="fcIdentidadCliente" ColumnName="fcIdentidadCliente" />
+                <ScalarProperty Name="fcNombreCliente" ColumnName="fcNombreCliente" />
+                <ScalarProperty Name="fcProducto" ColumnName="fcProducto" />
+                <ScalarProperty Name="fdFechaVencimiento" ColumnName="fdFechaVencimiento" />
+                <ScalarProperty Name="fdUltimoAbono" ColumnName="fdUltimoAbono" />
+                <ScalarProperty Name="fnCapital" ColumnName="fnCapital" />
+                <ScalarProperty Name="fnInteres" ColumnName="fnInteres" />
+                <ScalarProperty Name="fnInteresMoratorio" ColumnName="fnInteresMoratorio" />
+                <ScalarProperty Name="fnSeguros" ColumnName="fnSeguros" />
+                <ScalarProperty Name="fnOtros" ColumnName="fnOtros" />
+                <ScalarProperty Name="fnSaldoActualCapital" ColumnName="fnSaldoActualCapital" />
+                <ScalarProperty Name="fnTotalAbonado" ColumnName="fnTotalAbonado" />
+                <ScalarProperty Name="fcUsuarioDominio" ColumnName="fcUsuarioDominio" />
+                <ScalarProperty Name="fdFechaTransaccion" ColumnName="fdFechaTransaccion" />
+                <ScalarProperty Name="fcAvancedeCuotas" ColumnName="fcAvancedeCuotas" />
+                <ScalarProperty Name="fcFrecuencia" ColumnName="fcFrecuencia" />
+                <ScalarProperty Name="fnValorCuota" ColumnName="fnValorCuota" />
+                <ScalarProperty Name="fiMostrarMensaje" ColumnName="fiMostrarMensaje" />
+                <ScalarProperty Name="fcMensajeAdicional" ColumnName="fcMensajeAdicional" />
+                <ScalarProperty Name="fcMoneda" ColumnName="fcMoneda" />
+                <ScalarProperty Name="fcOrigenOperacion" ColumnName="fcOrigenOperacion" />
+                <ScalarProperty Name="fiMostrarMensaje2" ColumnName="fiMostrarMensaje2" />
+                <ScalarProperty Name="fcMensajeAdicional2" ColumnName="fcMensajeAdicional2" />
+                <ScalarProperty Name="fcTelefonoSMS" ColumnName="fcTelefonoSMS" />
+                <ScalarProperty Name="fiIDFormatodeRecibo" ColumnName="fiIDFormatodeRecibo" />
+                <ScalarProperty Name="fcSimboloMoneda" ColumnName="fcSimboloMoneda" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Facturacion_ConsultarFactura_NovaNet" FunctionName="CoreFinancieroModel.Store.sp_Facturacion_ConsultarFactura_NovaNet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_Facturacion_ConsultarFactura_NovaNet_Result">
+                <ScalarProperty Name="fcNombreAgencia" ColumnName="fcNombreAgencia" />
+                <ScalarProperty Name="fcFactura" ColumnName="fcFactura" />
+                <ScalarProperty Name="fcDireccionAgenca" ColumnName="fcDireccionAgenca" />
+                <ScalarProperty Name="fcDireccionAgencia" ColumnName="fcDireccionAgencia" />
+                <ScalarProperty Name="fcCAI" ColumnName="fcCAI" />
+                <ScalarProperty Name="fdFechaFactura" ColumnName="fdFechaFactura" />
+                <ScalarProperty Name="fdFechaRangoInicialFacturacion" ColumnName="fdFechaRangoInicialFacturacion" />
+                <ScalarProperty Name="fdFechaRangoFinalFacturacion" ColumnName="fdFechaRangoFinalFacturacion" />
+                <ScalarProperty Name="fcRangoInicialFacturacion" ColumnName="fcRangoInicialFacturacion" />
+                <ScalarProperty Name="fcRangoFinalFacturacion" ColumnName="fcRangoFinalFacturacion" />
+                <ScalarProperty Name="fcNombreCliente" ColumnName="fcNombreCliente" />
+                <ScalarProperty Name="fcRTN" ColumnName="fcRTN" />
+                <ScalarProperty Name="fcRenglonDetalle1" ColumnName="fcRenglonDetalle1" />
+                <ScalarProperty Name="fnRenglonValor1" ColumnName="fnRenglonValor1" />
+                <ScalarProperty Name="fcRenglonDetalle2" ColumnName="fcRenglonDetalle2" />
+                <ScalarProperty Name="fnRenglonValor2" ColumnName="fnRenglonValor2" />
+                <ScalarProperty Name="fcRenglonDetalle3" ColumnName="fcRenglonDetalle3" />
+                <ScalarProperty Name="fnRenglonValor3" ColumnName="fnRenglonValor3" />
+                <ScalarProperty Name="fnSubtotal" ColumnName="fnSubtotal" />
+                <ScalarProperty Name="fnImporteExento" ColumnName="fnImporteExento" />
+                <ScalarProperty Name="fnImporteExonerado" ColumnName="fnImporteExonerado" />
+                <ScalarProperty Name="fnImporteGravado" ColumnName="fnImporteGravado" />
+                <ScalarProperty Name="fnImpuestos" ColumnName="fnImpuestos" />
+                <ScalarProperty Name="fcFormaPago" ColumnName="fcFormaPago" />
+                <ScalarProperty Name="fnTotal" ColumnName="fnTotal" />
+                <ScalarProperty Name="fcProductoDescripcion" ColumnName="fcProductoDescripcion" />
+                <ScalarProperty Name="fcValorenLetras" ColumnName="fcValorenLetras" />
+                <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+                <ScalarProperty Name="fnValorLempiras" ColumnName="fnValorLempiras" />
+                <ScalarProperty Name="fcValorLempiras" ColumnName="fcValorLempiras" />
+                <ScalarProperty Name="fcSimboloMoneda" ColumnName="fcSimboloMoneda" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo" FunctionName="CoreFinancieroModel.Store.sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo_Result">
+                <ScalarProperty Name="fiCuota" ColumnName="fiCuota" />
+                <ScalarProperty Name="fdFechadeCuota" ColumnName="fdFechadeCuota" />
+                <ScalarProperty Name="fnCapitalPactado" ColumnName="fnCapitalPactado" />
+                <ScalarProperty Name="fnInteresPactado" ColumnName="fnInteresPactado" />
+                <ScalarProperty Name="fnSaldoCapital" ColumnName="fnSaldoCapital" />
+                <ScalarProperty Name="fnSaldoInteres" ColumnName="fnSaldoInteres" />
+                <ScalarProperty Name="fnSaldoSeguro1" ColumnName="fnSaldoSeguro1" />
+                <ScalarProperty Name="fnSaldoSeguro2" ColumnName="fnSaldoSeguro2" />
+                <ScalarProperty Name="fnSaldoSeguro3" ColumnName="fnSaldoSeguro3" />
+                <ScalarProperty Name="fnSaldoSeguro4" ColumnName="fnSaldoSeguro4" />
+                <ScalarProperty Name="fnSaldoServicio1" ColumnName="fnSaldoServicio1" />
+                <ScalarProperty Name="fnSaldoServicio2" ColumnName="fnSaldoServicio2" />
+                <ScalarProperty Name="fnSaldoServicio3" ColumnName="fnSaldoServicio3" />
+                <ScalarProperty Name="fnSaldoOtros" ColumnName="fnSaldoOtros" />
+                <ScalarProperty Name="fnSaldoSeguros" ColumnName="fnSaldoSeguros" />
+                <ScalarProperty Name="fnSaldoServicios" ColumnName="fnSaldoServicios" />
+                <ScalarProperty Name="fnTotalCuota" ColumnName="fnTotalCuota" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_SRCClientesPlandePago" FunctionName="CoreFinancieroModel.Store.sp_SRCClientesPlandePago">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_SRCClientesPlandePago_Result">
+                <ScalarProperty Name="fiCuota" ColumnName="fiCuota" />
+                <ScalarProperty Name="fiMes" ColumnName="fiMes" />
+                <ScalarProperty Name="fdFechaCuota" ColumnName="fdFechaCuota" />
+                <ScalarProperty Name="fnCapitalInicial" ColumnName="fnCapitalInicial" />
+                <ScalarProperty Name="fnCapitalPactado" ColumnName="fnCapitalPactado" />
+                <ScalarProperty Name="fnInteresPactado" ColumnName="fnInteresPactado" />
+                <ScalarProperty Name="fnSeguro1" ColumnName="fnSeguro1" />
+                <ScalarProperty Name="fnSeguro2" ColumnName="fnSeguro2" />
+                <ScalarProperty Name="fnServicio1" ColumnName="fnServicio1" />
+                <ScalarProperty Name="fnValorCuota" ColumnName="fnValorCuota" />
+                <ScalarProperty Name="fnSaldoCapital" ColumnName="fnSaldoCapital" />
+                <ScalarProperty Name="fnSaldoInteres" ColumnName="fnSaldoInteres" />
+                <ScalarProperty Name="fnSaldoSeguro1" ColumnName="fnSaldoSeguro1" />
+                <ScalarProperty Name="fnSaldoSeguro2" ColumnName="fnSaldoSeguro2" />
+                <ScalarProperty Name="fnSaldoServicio1" ColumnName="fnSaldoServicio1" />
+                <ScalarProperty Name="fnSaldoCuota" ColumnName="fnSaldoCuota" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_SRCEstadoDeCuenta" FunctionName="CoreFinancieroModel.Store.SP_SRCEstadoDeCuenta" />
+          <FunctionImportMapping FunctionImportName="sp_GeoBarrios" FunctionName="CoreFinancieroModel.Store.sp_GeoBarrios">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_GeoBarrios_Result">
+                <ScalarProperty Name="fiCodPais" ColumnName="fiCodPais" />
+                <ScalarProperty Name="fiCodDepartamento" ColumnName="fiCodDepartamento" />
+                <ScalarProperty Name="fiCodMunicipio" ColumnName="fiCodMunicipio" />
+                <ScalarProperty Name="fiCodBarrio" ColumnName="fiCodBarrio" />
+                <ScalarProperty Name="fiCodPoblado" ColumnName="fiCodPoblado" />
+                <ScalarProperty Name="fcBarrioColonia" ColumnName="fcBarrioColonia" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GeoDepartamento" FunctionName="CoreFinancieroModel.Store.sp_GeoDepartamento">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_GeoDepartamento_Result">
+                <ScalarProperty Name="fiCodPais" ColumnName="fiCodPais" />
+                <ScalarProperty Name="fiCodDepartamento" ColumnName="fiCodDepartamento" />
+                <ScalarProperty Name="fcDepartamento" ColumnName="fcDepartamento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GeoMunicipio" FunctionName="CoreFinancieroModel.Store.sp_GeoMunicipio">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_GeoMunicipio_Result">
+                <ScalarProperty Name="fiCodPais" ColumnName="fiCodPais" />
+                <ScalarProperty Name="fiCodDepartamento" ColumnName="fiCodDepartamento" />
+                <ScalarProperty Name="fiCodMunicipio" ColumnName="fiCodMunicipio" />
+                <ScalarProperty Name="fcMunicipio" ColumnName="fcMunicipio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GeoPais" FunctionName="CoreFinancieroModel.Store.sp_GeoPais">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_GeoPais_Result">
+                <ScalarProperty Name="fiCodPais" ColumnName="fiCodPais" />
+                <ScalarProperty Name="fcPais" ColumnName="fcPais" />
+                <ScalarProperty Name="fcNombreMoneda" ColumnName="fcNombreMoneda" />
+                <ScalarProperty Name="fcAbreviacionMoneda" ColumnName="fcAbreviacionMoneda" />
+                <ScalarProperty Name="fcSimboloMoneda" ColumnName="fcSimboloMoneda" />
+                <ScalarProperty Name="fcDominoInternet" ColumnName="fcDominoInternet" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GeoPoblado" FunctionName="CoreFinancieroModel.Store.sp_GeoPoblado">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_GeoPoblado_Result">
+                <ScalarProperty Name="fiCodPais" ColumnName="fiCodPais" />
+                <ScalarProperty Name="fiCodDepartamento" ColumnName="fiCodDepartamento" />
+                <ScalarProperty Name="fiCodMunicipio" ColumnName="fiCodMunicipio" />
+                <ScalarProperty Name="fiCodPoblado" ColumnName="fiCodPoblado" />
+                <ScalarProperty Name="fcPoblado" ColumnName="fcPoblado" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_OperacionesCaja_ConsultarCliente_NovaNet" FunctionName="CoreFinancieroModel.Store.sp_OperacionesCaja_ConsultarCliente_NovaNet">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreFinancieroModel.sp_OperacionesCaja_ConsultarCliente_NovaNet_Result">
+                <ScalarProperty Name="fcIDPrestamo" ColumnName="fcIDPrestamo" />
+                <ScalarProperty Name="fcIDCliente" ColumnName="fcIDCliente" />
+                <ScalarProperty Name="fcNombreCliente" ColumnName="fcNombreCliente" />
+                <ScalarProperty Name="fiDiasAtraso" ColumnName="fiDiasAtraso" />
+                <ScalarProperty Name="fnCapitalAtrasado" ColumnName="fnCapitalAtrasado" />
+                <ScalarProperty Name="fnInteresAtrasado" ColumnName="fnInteresAtrasado" />
+                <ScalarProperty Name="fnInteresMoratorio" ColumnName="fnInteresMoratorio" />
+                <ScalarProperty Name="fnSeguroAtrasado1" ColumnName="fnSeguroAtrasado1" />
+                <ScalarProperty Name="fnSeguroAtrasado2" ColumnName="fnSeguroAtrasado2" />
+                <ScalarProperty Name="fnSeguroAtrasado3" ColumnName="fnSeguroAtrasado3" />
+                <ScalarProperty Name="fnSeguroAtrasado4" ColumnName="fnSeguroAtrasado4" />
+                <ScalarProperty Name="fnServicioAtrasado1" ColumnName="fnServicioAtrasado1" />
+                <ScalarProperty Name="fnServicioAtrasado2" ColumnName="fnServicioAtrasado2" />
+                <ScalarProperty Name="fnServicioAtrasado3" ColumnName="fnServicioAtrasado3" />
+                <ScalarProperty Name="fnOtrosCargosAtrasado" ColumnName="fnOtrosCargosAtrasado" />
+                <ScalarProperty Name="fnRecargos" ColumnName="fnRecargos" />
+                <ScalarProperty Name="fnTotalAtrasado" ColumnName="fnTotalAtrasado" />
+                <ScalarProperty Name="fnTotalAtrasadoMonedaNacional" ColumnName="fnTotalAtrasadoMonedaNacional" />
+                <ScalarProperty Name="fnSaldoActualCapital" ColumnName="fnSaldoActualCapital" />
+                <ScalarProperty Name="fnValorCuota" ColumnName="fnValorCuota" />
+                <ScalarProperty Name="fnValorCuotaMonedaNacional" ColumnName="fnValorCuotaMonedaNacional" />
+                <ScalarProperty Name="fnMontoMaximoAbonoCapital" ColumnName="fnMontoMaximoAbonoCapital" />
+                <ScalarProperty Name="fnSaldoParaLiquidarPrestamo" ColumnName="fnSaldoParaLiquidarPrestamo" />
+                <ScalarProperty Name="fnSaldoParaLiquidarPrestamoSeguroMesActual" ColumnName="fnSaldoParaLiquidarPrestamoSeguroMesActual" />
+                <ScalarProperty Name="fcMensajeTWS" ColumnName="fcMensajeTWS" />
+                <ScalarProperty Name="fiCuotasPagadas" ColumnName="fiCuotasPagadas" />
+                <ScalarProperty Name="fiCuotasAtrasadas" ColumnName="fiCuotasAtrasadas" />
+                <ScalarProperty Name="fdFechaInicio" ColumnName="fdFechaInicio" />
+                <ScalarProperty Name="fdFechaVencimiento" ColumnName="fdFechaVencimiento" />
+                <ScalarProperty Name="fdUltimoAbono" ColumnName="fdUltimoAbono" />
+                <ScalarProperty Name="fiIDProducto" ColumnName="fiIDProducto" />
+                <ScalarProperty Name="fcProducto" ColumnName="fcProducto" />
+                <ScalarProperty Name="fiTipoPlandeAmortizacion" ColumnName="fiTipoPlandeAmortizacion" />
+                <ScalarProperty Name="fcIDRespuestaWebService" ColumnName="fcIDRespuestaWebService" />
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fnInteresesdelPeriodo" ColumnName="fnInteresesdelPeriodo" />
+                <ScalarProperty Name="fiAlertadeCliente" ColumnName="fiAlertadeCliente" />
+                <ScalarProperty Name="fcMensajedeAlerta" ColumnName="fcMensajedeAlerta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_OperacionesCaja_ConsultarCliente_NovaNet_PorPrestamo" FunctionName="CoreFinancieroModel.Store.sp_OperacionesCaja_ConsultarCliente_NovaNet_PorPrestamo" />
+          <FunctionImportMapping FunctionImportName="sp_CREDGarantias_ActualizarSerieDeProducto" FunctionName="CoreFinancieroModel.Store.sp_CREDGarantias_ActualizarSerieDeProducto" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

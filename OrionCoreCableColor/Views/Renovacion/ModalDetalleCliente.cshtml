@@ -1,0 +1,552 @@
+﻿
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+@using OrionCoreCableColor.App_Helper
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle del Cliente</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcIdentidad, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcIdentidad, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcIdentidad, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fdFechaNacimiento, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-calendar fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fdFechaNacimiento, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fdFechaNacimiento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @if (Model.TelefonoSecundario != null)
+                {
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TelefonoSecundario, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.TelefonoSecundario, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.TelefonoSecundario, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                }
+
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcCorreo, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-mail-bulk fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcCorreo, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcCorreo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcDescripcionEstadoCivil, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcDescripcionEstadoCivil, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcDescripcionEstadoCivil, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcLugarTrabajo, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcLugarTrabajo, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcLugarTrabajo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcDepartamento, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcDepartamento, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcDepartamento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcMunicipio, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcMunicipio, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcMunicipio, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcBarrio, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcBarrio, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcBarrio, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcDireccionDetallada, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcDireccionDetallada, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcDireccionDetallada, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcDescripcionTipoVivienda, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcDescripcionTipoVivienda, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcDescripcionTipoVivienda, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fnCuotaMensual, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-dollar-sign fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fnCuotaMensual, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fnCuotaMensual, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fnCuotaMensualMonedaNacional, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-money fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fnCuotaMensualMonedaNacional, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fnCuotaMensualMonedaNacional, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcOrigen, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcOrigen, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcOrigen, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcCodigoVendedor, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcCodigoVendedor, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcCodigoVendedor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fiIDTipoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fiIDTipoCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fiIDTipoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcNombreEmpresaJuridica, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcNombreEmpresaJuridica, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcNombreEmpresaJuridica, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcRtnEmpresaJuridico, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcRtnEmpresaJuridico, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcRtnEmpresaJuridico, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fiDIa, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fiDIa, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fiDIa, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcNumeroOrdenCfeus, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcNumeroOrdenCfeus, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcNumeroOrdenCfeus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcCodigoCliente, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcCodigoCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcCodigoCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcNumeroOrdenTrabajoChepeus, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcNumeroOrdenTrabajoChepeus, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcNumeroOrdenTrabajoChepeus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcMesGratis, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcMesGratis, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcMesGratis, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fiPlazoSeleccionado, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fiPlazoSeleccionado, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fiPlazoSeleccionado, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>Documentos</h4>
+                </div>
+                @foreach (var item in Model.DatosDocumentoListado)
+                {
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="input-group mar-btm">
+                                @if (item.fcTipoDocumento == "pdf")
+                                {
+
+                                    <a href="javascript:ShowBigPdf('@item.fcNombreArchivo','@item.fcRuta')" class="text-info"> <i class="fal fa-2x fa-file-pdf"> </i> @item.fcDescripcion</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0)" data-Description="@item.fcDescripcion" class="text-info" onclick="ShowBigImage(this)" src="@(MemoryLoadManager.Helper)?type=img&carpeta=@(item.fcRuta)&documento=@(item.fcNombreArchivo)"> <i class="fal fa-2x fa-file-image"> </i>  @item.fcDescripcion</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                @*<a href="no-script.html" target="_blank" download id="btnAutorizacionProductoYServicios" class="FormatoBotonesIconoCuadrado40 " style="position: relative; margin-top: 3px; margin-left: 5px; ">
+                        Autorizacion Servicio
+                    </a>*@
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="SolicitudesReferencia">
+
+                        <thead>
+                            <tr><th COLSPAN="3" style="text-align:center">Referencia Personales:</th></tr>
+                            <tr>
+
+                                <th>Nombre</th>
+                                <th>Telefono</th>
+                                <th>Parentesto</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.ListaReferencia)
+                            {
+                                <tr>
+                                    <td>@item.NombreRefrencia</td>
+                                    <td>@item.fcTelefonoReferencia</td>
+                                    <td>@item.fcDescripcionParentesco</td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="SolicitudesReferencia">
+                        <thead>
+                            <tr><th COLSPAN="4" style="text-align:center">Paquete Adquiridos:</th></tr>
+                            <tr>
+                                <th>N#</th>
+                                <th>Porducto</th>
+                                <th>Valor Moneda Extranjera</th>
+                                <th>Valor Moneda Nacional</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.ListaGarantia)
+                            {
+                                <tr>
+                                    <td>@item.fiIDProducto</td>
+                                    <td>@item.fcProducto</td>
+                                    <td>@item.fnValorProductoME</td>
+                                    <td>@item.fnValorProductoMN</td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="SolicitudesReferencia">
+                        <thead>
+                            <tr><th COLSPAN="4" style="text-align:center">Dispositivos en Ubicacion:</th></tr>
+                            <tr>
+                                <th>N#</th>
+                                <th>Porducto</th>
+                                <th>Modelo</th>
+                                <th>Serie</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.ListaInventarioPorUbicacion)
+                            {
+                                <tr>
+                                    <td>@item.fiIDProducto</td>
+                                    <td>@item.fcProducto</td>
+                                    <td>@item.fcModelo</td>
+                                    <td>@item.fcNumerodeSerie1</td>
+                                </tr>
+
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre,#Telefono,#TelefonoSecundario,#DatosCLientes_fdFechaNacimiento,#DatosCLientes_fcCorreo,#DatosCLientes_fcDescripcionEstadoCivil,#DatosCLientes_fcLugarTrabajo,#DatosCLientes_fcDepartamento,#DatosCLientes_fcMunicipio,#DatosCLientes_fcBarrio,#DatosCLientes_fcDireccionDetallada, #DatosCLientes_fnCuotaMensual, #DatosCLientes_fcIdentidad, #DatosCLientes_fcDescripcionTipoVivienda").prop("disabled", true);
+    $("#DatosCLientes_fcOrigen,#DatosCLientes_fcCodigoVendedor,#DatosCLientes_fiIDTipoCliente,#DatosCLientes_fcCodigoVendedor,#DatosCLientes_fcNombreEmpresaJuridica,#DatosCLientes_fcRtnEmpresaJuridico,#DatosCLientes_fiDIa, #DatosCLientes_fnCuotaMensualMonedaNacional, #DatosCLientes_fcNumeroOrdenCfeus , #DatosCLientes_fcCodigoCliente , #DatosCLientes_fcNumeroOrdenTrabajoChepeus , #DatosCLientes_fcMesGratis , #DatosCLientes_fiPlazoSeleccionado").prop("disabled", true);
+    $("#btnConfirmarEnvio").click(function () {
+
+    });
+     //$("#btnAutorizacionProductoYServicios").click(function (e) {
+     //       e.preventDefault();
+     //      NombreArchivo = "PlantillaOrdenTrabajo";
+     //       ImprimirDoc(NombreArchivo);
+     //});
+    //function ImprimirDoc(NombreArchivo) {
+    //
+    //    debugger;
+    //    $.ajax({
+    //        url: "@Url.Action("ImprimirDOC", "Solicitudes")",
+    //        type: "POST",
+    //        data: { NombreArchivo: NombreArchivo, IdSolicitud: model.IdSolicitud },
+    //        success: function (resp) {
+    //            console.log(resp);
+    //            if (resp == "") {
+    //                ToastrError("Error", resp.Mensaje);
+
+    //            } else {
+    //                window.location.href = resp;
+    //            }
+    //        },
+    //        error: function (data) {
+    //            ToastrError("Error", "Error de Red");
+    //        },
+    //    });
+    //}
+
+</script>

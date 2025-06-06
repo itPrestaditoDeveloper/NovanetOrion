@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "ClientesPrimeraCuota";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Clientes Primera Cuota</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaClientesPrimeraCuota">
+                <thead>
+                    <tr>
+                        <th>Identidad</th>
+                        <th>Nombre</th>
+                        <th>Tipo Solocitud</th>
+                        <th>Articulos</th>
+                        <th>Numero de Cuota</th>
+                        <th>Telefono</th>
+                        <th>Cuota</th>
+                        <th>Cuota Matriz</th>
+                        <th>Fecha Cuota</th>
+                        <th>Saldo</th>
+                        <th>Fecha Instalacion</th>
+                        <th>Estatus Para Posteo</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            debugger;
+            var fecha = new Date(),
+                month = '' + (fecha.getMonth() + 1),
+                day = '' + fecha.getDate(),
+                year = fecha.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+            var date = [year, month, day].join('-');
+
+
+            PagosHoyListado(date);
+        });
+
+
+        function PagosHoyListado(fecha)
+        {
+            $('#TablaClientesPrimeraCuota').DataTable({
+                autoWidth: true,
+                responsive: true,
+                destroy: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+                dom: 'Bfrtip',
+            order: [[6, "desc"]],
+              ajax: {
+                url: '@Url.Action("ConsultarClientesPrimeraCuotaPagoHoy", "Prestamo")',
+                  method: "Get",
+                  data: { Fecha: fecha },
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                    data: 'fcIdentidad'
+                },
+
+                {
+                    data: 'fcNombreSAF'
+                },
+                {
+                    data: 'fcTipoSolicitud'
+                },
+                {
+                    data: 'fcArticulosdelContrato'
+                },
+                {
+                    data: 'fiCuota'
+                },
+
+                {
+                    data: 'fcTelefonos'
+                },
+
+                {
+                    data: 'fnValorCuota'
+                },
+                {
+                    data: 'CuotaMatriz'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechadeCuota).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: 'fnSaldoCuota'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY") != "01/01/1900") {
+                            return moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY");
+                        } else {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDEstadoInstalacion == 4 || data.fiIDEstadoInstalacion == 6) {
+                            return '<div class="badge badge-success">Listo para Postear</div>';
+                        }
+                        if (data.fiIDEstadoInstalacion != 4) {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        
+
+                    }
+
+                },
+                ],
+                buttons: [
+
+                    //{
+                    //    extend: 'pdfHtml5',
+                    //    text: 'PDF',
+                    //    titleAttr: 'Generate PDF',
+                    //    className: 'btn-outline-danger btn-sm mr-1'
+                    //},
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        titleAttr: 'Generate Excel',
+                        className: 'btn-outline-success btn-sm mr-1'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'CSV',
+                        titleAttr: 'Generate CSV',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copy',
+                        titleAttr: 'Copy to clipboard',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        titleAttr: 'Print Table',
+                        className: 'btn-outline-primary btn-sm'
+                    }
+                ]
+
+            });
+        }
+
+
+    </script>
+
+}

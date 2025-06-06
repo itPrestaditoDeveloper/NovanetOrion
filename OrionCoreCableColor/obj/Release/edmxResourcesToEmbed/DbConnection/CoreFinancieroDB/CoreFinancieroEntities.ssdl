@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CoreFinancieroModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <Function Name="fn_NumerosaLetras" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+    <Parameter Name="lnNumeroaConvertir" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_CREDGarantias_ActualizarSerieDeProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+    <Parameter Name="pcSerieProducto" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_ConsultarFactura" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTransaccion" Type="int" Mode="In" />
+    <Parameter Name="pcFactura" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_ConsultarFactura_NovaNet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTransaccion" Type="int" Mode="In" />
+    <Parameter Name="pcFactura" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_GeoBarrios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piPais" Type="smallint" Mode="In" />
+    <Parameter Name="piDepartamento" Type="smallint" Mode="In" />
+    <Parameter Name="piMunicipio" Type="smallint" Mode="In" />
+    <Parameter Name="piPoblado" Type="smallint" Mode="In" />
+    <Parameter Name="piBarrio" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="sp_GeoDepartamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piPais" Type="smallint" Mode="In" />
+    <Parameter Name="piDepartamento" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="sp_GeoMunicipio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piPais" Type="smallint" Mode="In" />
+    <Parameter Name="piDepartamento" Type="smallint" Mode="In" />
+    <Parameter Name="piMunicipio" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="sp_GeoPais" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piPais" Type="smallint" Mode="In" />
+  </Function>
+  <Function Name="sp_GeoPoblado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piPais" Type="int" Mode="In" />
+    <Parameter Name="piDepartamento" Type="int" Mode="In" />
+    <Parameter Name="piMunicipio" Type="int" Mode="In" />
+    <Parameter Name="piPoblado" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OperacionesBanco_CuentasdeBanco" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSesion" Type="int" Mode="In" />
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OperacionesCaja_AplicarAbono_NovaNet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIP" Type="varchar" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="pnValordelAbono" Type="decimal" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+    <Parameter Name="pcComentarioAdicional" Type="varchar" Mode="In" />
+    <Parameter Name="pcCuentaOrigenMonedaNacional" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferencia" Type="varchar" Mode="In" />
+    <Parameter Name="piIDTransaccion" Type="int" Mode="InOut" />
+    <Parameter Name="pdFechadeTransaccion" Type="datetime" Mode="In" />
+    <Parameter Name="piIDMovimientoPrimerPago" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioSRC" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OperacionesCaja_ConsultarAbono" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTransaccion" Type="int" Mode="In" />
+    <Parameter Name="piInformacionFactura" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OperacionesCaja_ConsultarCliente_NovaNet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSesion" Type="int" Mode="In" />
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_OperacionesCaja_ConsultarCliente_NovaNet_PorPrestamo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSesion" Type="int" Mode="In" />
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_OperacionesCaja_UltimosMovimientos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_SRCClientesPlandePago" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIDCLiente" Type="varchar" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="SP_SRCEstadoDeCuenta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIDCLiente" Type="varchar" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="CoreFinancieroModelStoreContainer" />
+</Schema>

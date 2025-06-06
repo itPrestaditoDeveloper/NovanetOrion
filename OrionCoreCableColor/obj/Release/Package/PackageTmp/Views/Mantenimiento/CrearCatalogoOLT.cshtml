@@ -1,0 +1,151 @@
+﻿
+@model OrionCoreCableColor.Models.Mantenimiento.CrearCatalogoOLTViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        @if (Model.fbEditar)
+        {
+            <text>Editar OLT</text>
+        }
+        else
+        {
+            <text>Crear OLT</text>
+        }
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcDescripcionOLT, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcDescripcionOLT, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcDescripcionOLT, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcDireccion, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcDireccion, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcDireccion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcLatitude, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcLatitude, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcLatitude, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcLongitud, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-map-marked fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcLongitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcLongitud, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcIPOLT, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcIPOLT, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcIPOLT, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="GuardarRegistro" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $("#GuardarRegistro").click(function () {
+
+        if ($("#fcDescripcionOLT").val() == "") {
+            ToastrWarning("Advertencia","La OLT no puede ir vacia");
+            return;
+        }
+
+        var model = @Html.Raw(Json.Encode(Model));
+
+        model.fcDescripcionOLT = $("#fcDescripcionOLT").val();
+        model.fcDireccion = $("#fcDireccion").val();
+        model.fcLatitude = $("#fcLatitude").val();
+        model.fcLongitud = $("#fcLongitud").val();
+        model.fcIPOLT = $("#fcIPOLT").val();
+
+        if (model.fbEditar) {
+            var url = "@Url.Action("EditarDatosOLT", "Mantenimiento")";
+        } else {
+            var url = "@Url.Action("CrearCatalogoOLT", "Mantenimiento")";
+        }
+
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { model: model },
+            success: function (data) {
+                debugger;
+                if (data.Estado) {
+                    var tablaT = $.fn.dataTable.Api("#TablaOLT");
+                    tablaT.ajax.reload();
+                    ToastrSuccess("Aprobada", data.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                }
+            },
+            error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+            }
+        });
+    });
+
+
+
+</script>

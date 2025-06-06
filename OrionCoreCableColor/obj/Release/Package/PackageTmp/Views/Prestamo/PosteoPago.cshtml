@@ -1,0 +1,568 @@
+﻿
+@{
+    ViewBag.Title = "PosteoPago";
+}
+
+<div class="panel panel-primary panel-bordered col-sm-8">
+    <div class="panel-heading text-info">
+        <h1 class="panel-title color-white">
+            Postear Pago
+        </h1>
+
+    </div>
+    <div class="panel-body ">
+
+        <div class="panel-body">
+            <div class="col-sm-12">
+                <form id="MyFormModal">
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label" for="button-addon5">Ingresar numero de Identidad:</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="9999-9999-9999" aria-label="Recipient's username" id="txtIDentidadCliente" aria-describedby="button-addon5">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary waves-effect waves-themed" type="button" id="button-addon5" onclick="ConsultarPago()"><i class="fal fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-9">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Nombre Cliente:</label>
+                                <input type="text" id="txtNombreCliente" class="form-control" disabled="">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Prestamo:</label>
+                                <select type="text" id="txtPrestamo" class="form-control" disabled=""></select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="form-label text-muted">Producto:</label>
+                                <input type="text" id="txtProducto" class="form-control " disabled="">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="form-label text-muted">Dias atraso:</label>
+                                <input type="text" id="txtAtraso" class="form-control " disabled="">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Cuota:</label>
+                                <input type="text" id="txtCuota" class="form-control" disabled="">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Cuota en Lempiras:</label>
+                                <input type="text" id="txtCuotaLempiras" class="form-control" disabled="">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="form-label text-muted">Total atraso:</label>
+                                <input type="text" id="txtTotalAtraso" class="form-control " disabled="">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="form-label text-muted" for="simpleinput-disabled">Total atraso en Lempiras:</label>
+                                <input type="text" id="txtTotalAtrasoLempiras" class="form-control" disabled="">
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="border">
+                        <br />
+                        <div class="col-sm-12 row">
+
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label text-muted">Monto a abonar:</label>
+                                    <input type="text" id="txtMontoAbono" class="form-control " disabled="">
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label text-muted">Referencia:</label>
+                                    <input type="text" id="txtReferencia" class="form-control " disabled="">
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label text-muted">Origen:</label>
+                                    <select type="text" id="txtOrigen" class="form-control " disabled=""></select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label text-muted">Fecha de abono:</label>
+                                    <select type="text" id="txtFechaAbono" class="form-control " disabled=""></select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="form-label text-muted">Comentario:</label>
+                                    <textarea id="txtComentario" class="form-control" disabled=""></textarea>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+
+                    <br />
+                    @*<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">*@
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%; display:none" id="TablaUltimosMovimientos">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Nombre</th>
+                                <th>Operacion</th>
+                                <th>Valor</th>
+                                <th>Referencia</th>
+                                @*<th></th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+
+
+
+                </form>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="panel-footer text-right">
+        <button class="btn btn-danger" onclick="Limpiar()"><i class="text-lg ion-close-round"></i> Limpiar</button>
+        <button class="btn btn-success" style="display:none" id="btnGuardarForm" onclick="PostearPagoPrestamo()"><i class="text-lg ion-checkmark-round"></i> Procesar</button>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(".mascara-identidad").inputmask("9999999999999");
+        var IDEquifax = 0;
+        var NombreCliente = "";
+        var EstadoPrecalificadoScore = "";
+        var prestamo = "";
+
+
+
+        function ConvertirADecimal(nStr) {
+
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        function UltimoMovimientos(IdPrestamo)
+        {
+            debugger;
+            $('#TablaUltimosMovimientos').css('display', 'block')
+            $('#TablaUltimosMovimientos').DataTable({
+            autoWidth: true,
+            responsive: true,
+            destroy:true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 't',
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("ConsultarClienteUltimosMovimientios", "Prestamo")',
+                  method: "Get",
+                  data: { idPRestamo: IdPrestamo },
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaTransaccion).format("DD/MM/YYYY");
+                    }
+
+                },
+
+                {
+                    data: 'fcNombreCorto'
+                },
+
+                {
+                    data: 'fcOperacion'
+                },
+
+                {
+                    data: 'fnValorMovimiento'
+                },
+
+                {
+                    data: 'fcReferencia'
+                },
+            ]
+
+            });
+        }
+
+        function Consulta()
+        {
+
+            var fcIdentidad = $("#txtIDentidadCliente").val();
+            $.ajax({
+                url: "@Url.Action("ConsultarClientePrestamo", "Prestamo")",
+                type: "GET",
+                data: { Identidad: fcIdentidad },
+                //data: { IdCliente: IdCliente, IDentidad: IDentidad, IdSolicitud: IdSolicitud},
+                success: function (resp) {
+                    if (resp.length == 1) {
+                        $("#txtNombreCliente").val(resp[0].fcNombreCliente);
+                        $("#txtProducto").val(resp[0].fcProducto);
+                        $("#txtAtraso").val(resp[0].fiDiasAtraso);
+                        $("#txtCuota").val(resp[0].fnValorCuota);
+                        $("#txtTotalAtrasoLempiras").val(resp[0].fnTotalAtrasadoMonedaNacional);
+                        $("#txtCuotaLempiras").val(resp[0].fnValorCuotaMonedaNacional);
+                        $("#txtTotalAtraso").val(resp[0].fnTotalAtrasado);
+                        $("#txtMontoAbono").prop("disabled", false);
+                        $("#txtReferencia").prop("disabled", false);
+                        $("#txtOrigen").prop("disabled", false);
+                        $("#txtComentario").prop("disabled", false);
+                        $("#btnGuardarForm").css('display', 'inline');
+
+                        var sampleArray = [{ id: resp[0].fcIDPrestamo, text: resp[0].fcIDPrestamo, selected: true }]
+
+                        $("#txtPrestamo").select2({ data: sampleArray, width: "100%" });
+                        UltimoMovimientos(resp[0].fcIDPrestamo);
+                    } else
+                    {
+                        var sampleArray = [{ id: '0', text: 'Seleccionar Prestamo', selected: true }]
+                        $("#txtNombreCliente").val(resp[0].fcNombreCliente);
+                        for (var i = 0; i < resp.length; i++)
+                        {
+                            sampleArray.push(resp[i].fcIDPrestamo);
+                        }
+                        $("#txtPrestamo").select2({ data: sampleArray, width: "100%" });
+                        $("#txtPrestamo").prop("disabled", false);
+                    }
+
+
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+        }
+
+        function ConsultaFechaAbono()
+        {
+            $.ajax({
+                url: "@Url.Action("listadoFechaAbono", "Prestamo")",
+                type: "GET",
+                data: {},
+                
+                success: function (resp) {
+                    debugger;
+                    if (resp.length > 0) {
+                        console.log('tiene datos');
+                        $("#txtFechaAbono").prop("disabled", false);
+                        $("#txtFechaAbono").select2({ data: resp, width: "100%" });
+                    } else
+                    {
+                        var datos = [];
+                        datos.push({ id: 'Hoy', text: 'Hoy' });
+                        $("#txtFechaAbono").prop("disabled", false);
+                        $("#txtFechaAbono").select2({ data: datos, width: "100%" });
+                    }
+
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+        }
+
+
+        function Listado()
+        {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ListadoCuentas", "Prestamo")",
+                type: "GET",
+                data: { },
+                //data: { IdCliente: IdCliente, IDentidad: IDentidad, IdSolicitud: IdSolicitud},
+                success: function (resp) {
+
+                    $("#txtOrigen").select2({ data: resp, width: "100%" });
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+        }
+
+        function ConsultarPago()
+        {
+            Consulta();
+            ConsultaFechaAbono();
+            Listado();
+        }
+
+        function Limpiar() {
+            $("#txtNombreCliente").val('');
+            $("#txtIDentidadCliente").val('');
+            $("#txtProducto").val('');
+            $("#txtAtraso").val('');
+            $("#txtCuota").val('');
+            $("#txtTotalAtrasoLempiras").val('');
+            $("#txtCuotaLempiras").val('');
+            $("#txtTotalAtraso").val('');
+            $("#txtMontoAbono").prop("disabled", false);
+            $("#txtMontoAbono").val('');
+            $("#txtReferencia").prop("disabled", false);
+            $("#txtReferencia").val('');
+            $("#txtOrigen").prop("disabled", false);
+            $('#txtOrigen').empty();
+            $("#txtComentario").prop("disabled", false);
+            $("#txtComentario").val('');
+            $('#TablaUltimosMovimientos').empty();
+            $("#txtPrestamo").empty();
+            $("#txtOrigen").empty();
+            $("#txtFechaAbono").empty();
+            $("#txtMontoAbono").prop("disabled", true);
+            $("#txtReferencia").prop("disabled", true);
+            $("#txtOrigen").prop("disabled", true);
+            $("#txtComentario").prop("disabled", true);
+            $("#btnGuardarForm").css('display', 'none');
+        }
+
+        $("#txtPrestamo").change(function ()
+        {
+            $("#txtPrestamo option:selected").each(function ()
+            {
+                var prestamo = $(this).val();
+                if ($(this).val() != 0)
+                {
+                    var fcIdentidad = $("#txtIDentidadCliente").val();
+                    $.ajax({
+                        url: "@Url.Action("ConsultarPrestamoPosteo", "Prestamo")",
+                        type: "GET",
+                        data: { idPRestamo: $(this).val(), Identidad: fcIdentidad},
+                        //data: { IdCliente: IdCliente, IDentidad: IDentidad, IdSolicitud: IdSolicitud},
+                        success: function (resp) {
+                            debugger;
+                            $("#txtNombreCliente").val(resp[0].fcNombreCliente);
+                            $("#txtProducto").val(resp[0].fcProducto);
+                            $("#txtAtraso").val(resp[0].fiDiasAtraso);
+                            $("#txtCuota").val(resp[0].fnValorCuota);
+                            $("#txtTotalAtrasoLempiras").val(resp[0].fnTotalAtrasadoMonedaNacional);
+                            $("#txtCuotaLempiras").val(resp[0].fnValorCuotaMonedaNacional);
+                            $("#txtTotalAtraso").val(resp[0].fnTotalAtrasado);
+                            $("#txtMontoAbono").prop("disabled", false);
+                            $("#txtReferencia").prop("disabled", false);
+                            $("#txtOrigen").prop("disabled", false);
+                            $("#txtComentario").prop("disabled", false);
+                            $("#btnGuardarForm").css('display', 'inline');
+                            Listado();
+                            UltimoMovimientos(prestamo);
+
+                        },
+                        error: function (data) {
+                            ToastrError("Error", "Error de Red");
+                        },
+                    });
+                } else
+                {
+                    $("#txtNombreCliente").val('');
+                    $("#txtProducto").val('');
+                    $("#txtAtraso").val('');
+                    $("#txtCuota").val('');
+                    $("#txtTotalAtrasoLempiras").val('');
+                    $("#txtCuotaLempiras").val('');
+                    $("#txtTotalAtraso").val('');
+                    $("#txtMontoAbono").prop("disabled", false);
+                    $("#txtMontoAbono").val('');
+                    $("#txtReferencia").prop("disabled", false);
+                    $("#txtReferencia").val('');
+                    $("#txtOrigen").prop("disabled", false);
+                    $('#txtOrigen').empty();
+                    $("#txtComentario").prop("disabled", false);
+                    $("#txtComentario").val('');
+                    $('#TablaUltimosMovimientos').empty();
+                }
+
+
+            });
+
+        });
+
+
+        function PostearPagoPrestamo()
+        {
+            var identidad = $("#txtIDentidadCliente").val();
+            var Nombre = $("#txtNombreCliente").val();
+            var monto = $("#txtMontoAbono").val();
+            var prestamo = $("#txtPrestamo").val();
+            var Comentario = $("#txtComentario").val();
+            var CuentaBanco = $("#txtOrigen").val();
+            var FehcaAbono = $("#txtFechaAbono").val();
+            var Referencias = $("#txtReferencia").val();
+
+            if (identidad == '') {
+
+                ToastrError('Error', 'Identidad Vacio');
+                return;
+            }
+            if (FehcaAbono == '') {
+
+                ToastrError('Error', 'Fecha de Abono');
+                return;
+            }
+            if (monto == '') {
+
+                ToastrError('Error', 'Monto a bonar vacio');
+                return;
+            }
+            if (prestamo == 0) {
+
+                ToastrError('Error', 'Escoja un prestamo');
+                return;
+            }
+            if (Comentario == '') {
+
+                ToastrError('Error', 'Colocar un comentario');
+                return;
+            }
+            if (CuentaBanco == 0) {
+
+                ToastrError('Error', 'Escoja un Origen');
+                return;
+            }
+            if (Referencias == '') {
+
+                ToastrError('Error', 'Colocar Referencia');
+                return;
+            }
+
+            bootbox.confirm({
+                title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta seguro del Posteo <span class='fw-500'></span>`,
+                message: "<span><strong>Datos del posteo:</strong><br/>Identidad: " + identidad + "<br/>Nombre: " + Nombre + "<br/>Prestamo: " + prestamo + "<br/>Monto: " + monto + "<br/>Fecha de Abono: " + FehcaAbono +" </span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'SI',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+
+                    if (result == true) {
+                        debugger;
+                        $.ajax({
+                            url: "@Url.Action("PostearPago", "Prestamo")",
+                            type: "Post",
+                            data: { Identidad: identidad, abono: parseFloat(monto), idPRestamo: prestamo, Comentario: Comentario, Cuenta: CuentaBanco, referencia: Referencias, FehcaAbonos: FehcaAbono},
+                            success: function (resp) {
+
+                                ToastrSuccess('Posteo', 'Se Posteo el pago');
+                                $("#txtNombreCliente").val('');
+                                $("#txtIDentidadCliente").val('');
+                                $("#txtProducto").val('');
+                                $("#txtAtraso").val('');
+                                $("#txtCuota").val('');
+                                $("#txtTotalAtrasoLempiras").val('');
+                                $("#txtCuotaLempiras").val('');
+                                $("#txtTotalAtraso").val('');
+                                $("#txtMontoAbono").prop("disabled", false);
+                                $("#txtMontoAbono").val('');
+                                $("#txtReferencia").prop("disabled", false);
+                                $("#txtReferencia").val('');
+                                $("#txtOrigen").prop("disabled", false);
+                                $('#txtOrigen').empty();
+                                $("#txtComentario").prop("disabled", false);
+                                $("#txtComentario").val('');
+                                $('#TablaUltimosMovimientos').empty();
+                                $("#txtPrestamo").empty();
+                                $("#txtOrigen").empty();
+                                $("#txtFechaAbono").empty();
+                                $("#txtMontoAbono").prop("disabled", true);
+                                $("#txtReferencia").prop("disabled", true);
+                                $("#txtOrigen").prop("disabled", true);
+                                $("#txtComentario").prop("disabled", true);
+                                $("#btnGuardarForm").css('display', 'none');
+                            },
+                            error: function (data) {
+                                ToastrError("Error", "Error de Red");
+                            },
+                        });
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+
+
+        }
+
+    </script>
+
+}

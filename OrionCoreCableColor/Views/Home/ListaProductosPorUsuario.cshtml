@@ -1,0 +1,176 @@
+﻿@model IEnumerable<OrionCoreCableColor.Models.Home.ListUbicacionesPorUsuarioViewModel>
+
+
+
+@foreach (var item in Model)
+{
+    
+    <div class="col-lg-12 inventarioUbicaciones">
+        <div id="panel-1" class="panel" style="flex: 1;">
+            <div class="panel-hdr">
+                <h2>
+                    @item.fcUbicacion
+                </h2>
+                <div class="panel-toolbar">
+                    <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                    <button class="btn btn-panel" data-action="" data-toggle="tooltip" data-offset="0,10" data-original-title="Pantalla Completa" id="fullscreen-btn"><i class="fal fa-expand-arrows"></i></button>
+                </div>
+            </div>
+            <div class="panel-container show">
+                <div class="panel-content">
+
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal-@item.fiIDUbicacion">
+                        <thead>
+                            <tr id="pendientes-@item.fiIDUbicacion">
+                                <th colspan="6"></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>Producto</th>
+                                <th>Serie1</th>
+                                <th>Serie2/Mac</th>
+                                <th>Cantidad</th>
+                                <th>Referencia</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+<script>
+    @{
+        var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        serializer.MaxJsonLength = int.MaxValue;
+    }
+    var lista = @Html.Raw(serializer.Serialize(Model));
+    debugger;
+    for (let item of lista)
+    {
+        $(`#TablaPrincipal-${item.fiIDUbicacion}`).DataTable({
+            dom: `<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>` +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            buttons: [
+                {
+
+                    extend: 'excelHtml5',
+                    text: 'Excel',
+                    titleAttr: 'Generate Excel',
+                    className: 'btn-outline-success btn-sm mr-1'
+                },
+                {
+                    text: `<i class="fal fa-upload rotate-90"></i>`,
+                    className: `btn btn-danger ${item.fbUsuarioPrincipal ? '' : 'hidden-button'}`,
+                    attr: { "id": `salida-${item.fiIDUbicacion}` },
+                    action: function (e, dt, node, config) {
+                        let tabla = $.fn.dataTable.Api(`#TablaPrincipal-${item.fiIDUbicacion}`);
+                        let data = tabla.rows().data().toArray();
+                        let filtrado = data.filter(x => x.fbSeleccionado);
+                        let encabezado = { ...item };
+
+
+                        debugger;
+                        if ((filtrado?.length ?? 0) == 0) {
+                            ToastrWarning("Advertencia", "Seleccione Productos");
+                            return;
+                        }
+
+                        encabezado.Productos = filtrado;
+
+                        $.ajax({
+                            url: "@Url.Action("ViewMovimientoInventario","Home")",
+                            method: "post",
+                            data: { model: encabezado },
+                            success: function (resp) {
+                                ShowModalBigScroll(resp);
+                            },
+                            error: function (resp) {
+                                alert("Error");
+                            }
+                        });
+
+
+
+                    }
+                },
+
+            ],
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            //dom: `<"row" <"#add.col-sm-4"><"col-sm-4 left"B><"col-sm-4"f>>rtip`,
+            //"aaSorting": [],
+            data: item.Productos,
+            columns: [
+                {
+                    data: null,
+                    visible: item.fbUsuarioPrincipal,
+                    className: "text-center",
+                    render: function (data) {
+                        return `<div class="col-lg-12 float-left">
+                                <div class="custom-control custom-checkbox">
+                                    <input ${(data.fbSeleccionado == 1 ? "checked" : "")} onclick="Seleccionar(this,'#TablaPrincipal-${item.fiIDUbicacion}')" id="fiProductoSeleccionable-${data.fiIDProducto}-${data.fiIDMovimiento}" name="fbSeleccionado-${data.fiIDProducto}-${data.fiIDMovimiento}" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla">
+                                    <label class="custom-control-label" style="cursor:pointer;" for="fiProductoSeleccionable-${data.fiIDProducto}-${data.fiIDMovimiento}"></label>
+                                </div>
+                            </div>`;
+                    }
+                },
+                {
+                    data: "fcProducto",
+
+                },
+                {
+                    data: "fcCodigoSerie1",
+
+                },
+                {
+                    data: "fcCodigoSerie2",
+                },
+                {
+                    data: "fnCantidad",
+
+                },
+                {
+                    data: "fcReferenciaMovimiento"
+                }
+            ],
+            initComplete: function () {
+
+            }
+
+
+        });
+
+
+    }
+
+    function Seleccionar(input, tabla) {
+        let tablePrincipal = $.fn.dataTable.Api(tabla);
+        let row = $(input).closest("tr");
+        let data = tablePrincipal.row(row).data();
+        data.fbSeleccionado = $(input).prop("checked");
+
+
+    }
+
+
+</script>

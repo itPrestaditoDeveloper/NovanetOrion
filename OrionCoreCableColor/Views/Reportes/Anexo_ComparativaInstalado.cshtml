@@ -1,0 +1,241 @@
+﻿@model OrionCoreCableColor.Models.Reportes.ComparativaInstaladoViewModel
+
+<style>
+	:root {
+		--primary: #007bff;
+		--success: #28a745;
+		--light: #f8f9fa;
+		--shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		--border-radius: 8px;
+	}
+
+	.products-section {
+		max-width: 800px;
+		margin: 2rem auto;
+		padding: 1rem;
+		background: #fff;
+		border-radius: var(--border-radius);
+		box-shadow: var(--shadow);
+	}
+
+	.section-title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #1a202c;
+		margin-bottom: 1.5rem;
+		position: relative;
+		padding-bottom: 0.5rem;
+	}
+
+		.section-title::after {
+			content: '';
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 50px;
+			height: 3px;
+			background: var(--primary);
+		}
+
+	.installed-products {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 2rem;
+	}
+
+		.installed-products li {
+			padding: 0.75rem 1rem;
+			background: var(--light);
+			margin-bottom: 0.5rem;
+			border-radius: 6px;
+			font-size: 0.95rem;
+			color: #2d3748;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+			.installed-products li::before {
+				content: '✔';
+				color: var(--success);
+				font-size: 1rem;
+			}
+
+	.no-products {
+		font-style: italic;
+		color: #718096;
+	}
+
+	.product-checkbox {
+		display: flex;
+		align-items: center;
+		padding: 0.75rem 1rem;
+		background: #fff;
+		margin-bottom: 0.5rem;
+		border: 1px solid #e2e8f0;
+		border-radius: 6px;
+		transition: border-color 0.2s ease, background 0.2s ease;
+		cursor: pointer;
+	}
+
+		.product-checkbox:hover {
+			border-color: var(--primary);
+			background: #f1f3f5;
+		}
+
+		.product-checkbox input {
+			margin-right: 0.75rem;
+			cursor: pointer;
+		}
+
+		.product-checkbox label {
+			flex-grow: 1;
+			font-size: 0.95rem;
+			color: #2d3748;
+			cursor: pointer;
+		}
+
+	.selected-products {
+		margin-top: 2rem;
+		padding: 1rem;
+		background: var(--light);
+		border-radius: var(--border-radius);
+		display: none;
+	}
+
+		.selected-products.show {
+			display: block;
+		}
+
+		.selected-products h5 {
+			font-size: 1.25rem;
+			font-weight: 600;
+			color: #1a202c;
+			margin-bottom: 1rem;
+		}
+
+		.selected-products ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.selected-products li {
+			padding: 0.5rem 0;
+			font-size: 0.9rem;
+			color: #2d3748;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+			.selected-products li::before {
+				content: '→';
+				color: var(--primary);
+			}
+</style>
+
+<div class="products-section">
+	@*<h4 class="section-title">Cliente: @Model.fcNombre</h4>
+	<h4 class="section-title">Identidad: @Model.fcIdentidad</h4>*@
+
+	<h4 class="section-title">Productos Instalados</h4>
+	<ul class="installed-products">
+		@if (Model.jsonArticulosEntregados != null && Model.jsonArticulosEntregados.Any())
+		{
+			foreach (var item in Model.jsonArticulosEntregados)
+			{
+				<li>@item.fnCantidad @item.fcProducto</li>
+			}
+		}
+		else
+		{
+			<li class="no-products">No hay productos instalados registrados.</li>
+		}
+	</ul>
+
+	<h4 class="section-title">Confirme los productos que le instalaron</h4>
+	<div class="confirm-products">
+		@if (Model.jsonArticulosPaquete != null && Model.jsonArticulosPaquete.Any())
+		{
+			foreach (var item in Model.jsonArticulosPaquete)
+			{
+				<div class="product-checkbox">
+					<input type="checkbox" value="@item.fiIDProducto" id="prod_@item.fiIDProducto" data-name="@item.fcProducto" data-cantidad="@item.fnCantidad" onchange="updateSelectedProducts()">
+					<label for="prod_@item.fiIDProducto">@item.fnCantidad @item.fcProducto</label>
+				</div>
+			}
+		}
+		else
+		{
+			<p class="no-products">No hay productos para confirmar.</p>
+		}
+	</div>
+
+	<div class="selected-products" id="selectedProducts">
+		<h5>Productos seleccionados</h5>
+		<ul id="selectedProductsList"></ul>
+	</div>
+</div>
+
+<script>
+	function updateSelectedProducts() {
+		const checkboxes = document.querySelectorAll('.product-checkbox input:checked');
+		const selectedList = document.getElementById('selectedProductsList');
+		const selectedContainer = document.getElementById('selectedProducts');
+
+		selectedList.innerHTML = '';
+		const selectedProducts = Array.from(checkboxes).map(checkbox => ({
+			id: checkbox.value,
+			name: checkbox.dataset.name,
+			cantidad: checkbox.dataset.cantidad
+		}));
+
+		if (selectedProducts.length > 0) {
+			selectedProducts.forEach(product => {
+				const li = document.createElement('li');
+				li.textContent = `${product.cantidad} ${product.name}`;
+				selectedList.appendChild(li);
+			});
+			selectedContainer.classList.add('show');
+		} else {
+			selectedContainer.classList.remove('show');
+		}
+	}
+
+
+function enviarConfirmaciones() {
+	const checkboxes = document.querySelectorAll('.product-checkbox input:checked');
+	const solicitudId = @Model.fiIDContratistaSolicitud;
+
+	const productosConfirmados = Array.from(checkboxes).map(checkbox => ({
+		fiProducto: parseInt(checkbox.value),
+		fnCantidad: parseFloat(checkbox.dataset.cantidad),
+		fcSerie: checkbox.dataset.serie || null,
+		fcMac: checkbox.dataset.mac || null
+	}));
+
+	if (productosConfirmados.length === 0) {
+		ToastrError("Debes seleccionar al menos un producto.");
+		return;
+	}
+
+	$.ajax({
+		url: '@Url.Action("InsertarConfirmacionCliente", "Reportes")',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			solicitudId: solicitudId,
+			productos: productosConfirmados
+		}),
+		success: function (response) {
+		
+		},
+		error: function () {
+			toastr.error("Error de red al registrar la confirmación.");
+		}
+	});
+}
+
+
+</script>

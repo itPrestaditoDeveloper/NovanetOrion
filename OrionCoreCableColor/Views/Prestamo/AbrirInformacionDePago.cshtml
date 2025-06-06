@@ -1,0 +1,756 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionCreditoClienteViewModel
+
+<style>
+    .bord-success {
+        border: 2px solid green;
+    }
+
+    .bord-primary {
+        border: 1px solid lightgrey;
+    }
+</style>
+
+<br />
+<!--Nav Tabs-->
+<ul class="nav nav-pills text-info">
+    <li class="active">
+        <a  class="nav-link active" data-toggle="pill" href="#lft-tab-PaymentInfo"><i class="fa fa-dollar fa-fw"></i> @*Payment Info*@ Información de pago</a>
+    </li>
+
+    <li class="">
+        <a  class="nav-link" data-toggle="pill" href="#lft-tab-PaymentStatement"><i class="fa fa-dollar fa-fw"></i> @*Payment Statement*@ Estado de cuenta</a>
+    </li>
+
+
+    <li class="">
+        <a class="nav-link" data-toggle="pill" href="#lft-tab-PaymentPlan"><i class="fa fa-dollar fa-fw"></i> @*Payment Plan*@ Plan de pago</a>
+    </li>
+
+</ul>
+
+<!--Tabs Content-->
+<div class="tab-content">
+    <div id="lft-tab-PaymentInfo" class="tab-pane fade active show">
+       
+        <div class="panel">
+            <div class="panel-body">
+                @*<div class="panel-body" style="padding: 10px 0px 0px;">*@
+                    @*<div class="row">*@
+                    <div class="table-responsive " style="border:none;">
+                        <div class="row">
+                            <div class="clearfix" style="width:100%;">
+                                <div class="col-sm-6 float-left">
+                                    <table class="table tableInfoTop" style="margin-bottom: 0px;">
+                                        <tbody>
+                                            <tr>
+
+                                                <td><span class="text-info text-bold"> INFORMACIÓN GENERAL</span></td>
+                                                <td></td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>   Valor de Garantia</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.ValorMercadoGarantia)
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span> Prima</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.DownPayment)
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>Desembolso</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.fnValorAPrestar)
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>GPS</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.fnCostoGPS)
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>Gastos de cierre</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.fnGastosDeCierre)
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td></td>
+                                                <td class="text-right"></td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span><b>Total Financiado</b> </span></td>
+                                                <td class="text-right ">
+                                                    <b>@Html.DisplayFor(model => model.fnCapitalOtorgado)</b>
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td><span></span></td>
+                                                <td class="text-right"></td>
+
+                                            </tr>
+
+
+
+                                        </tbody>
+                                    </table>
+                                    <br />
+                                    <table class="table tableInfoTop" style="margin-bottom: 0px;">
+                                        <tbody>
+
+                                            <tr>
+
+                                                <td><span>  Saldo actual</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.fnSaldoActual)
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td><span>   Total cuotas </span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.fiTotalCuotas) (Meses)
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>   Cantidad de pagos</span></td>
+                                                <td class="text-right">
+                                                    @Html.DisplayFor(model => model.PaymentsQuantity)
+                                                </td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td><span>  @Html.DisplayNameFor(model => model.APR) </span></td>
+                                                <td class="text-right">
+                                                    @Model.APR.ToString("p02")
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span></span></td>
+                                                <td class="text-right"></td>
+
+                                            </tr>
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-sm-6 float-right">
+                                    <table class="table tableInfoTop bord-success">
+                                        <tbody>
+                                            <tr>
+
+                                                <td><span class="text-info text-bold"> ESTADO ACTUAL</span></td>
+                                                <td></td>
+
+                                            </tr>
+
+                                            <tr>
+                                                <td><span>Último pago recibido</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fdUltimoAbono)</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td><span class="text-danger text-bold">Días atrasados</span></td>
+                                                <td class="text-right text-danger text-bold">@Model.fiDiasAtraso</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>Cuotas Atraso</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fiCuotasAtraso)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td class="text-bold"><span>Cantidad vencida</span></td>
+                                                <td class="text-right text-bold">@Html.DisplayFor(model => model.fnSaldoPonerAlDia)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>&emsp; Capital Vencido</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fnCapitalVencido)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>&emsp; Intereses vencidos</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fnInteresesVencidos)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>&emsp; Otros atrasos</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fnRecargos)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span>Total cuenta</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fnTotalCuenta)</td>
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-sm-6 float-right">
+                                    <table class="table tableInfoTop">
+                                        <tbody>
+                                            <tr>
+
+                                                <td><span class="text-info text-bold">  RENDIMIENTO DEL CLIENTE</span></td>
+                                                <td></td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span class=""> Pagos completados</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.fiCuotasPagadas)</td>
+
+                                            </tr>
+
+                                            <tr>
+
+                                                <td><span class=""> Principal pagado</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.Amount_Principal)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span class=""> Intereses pagados</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.Amount_Interest)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span class=""> Atrasado pagados</span></td>
+                                                <td class="text-right">@Html.DisplayFor(model => model.Amount_LateFees)</td>
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span class=""> Otros pagados</span></td>
+                                                @*<td class="text-right">@Html.DisplayFor(model => model.Amount_Others)</td>*@
+
+                                            </tr>
+                                            <tr>
+
+                                                <td><span class=""> Seguro pagado</span></td>
+                                                @*<td class="text-right">@Html.DisplayFor(model => model.Amount_Insurance)</td>*@
+
+                                            </tr>
+                                            <tr><td style="padding:1px;"></td> <td style="padding:0px;"></td></tr>
+                                            <tr>
+
+                                                <td><span class="text-bold">Total pagado</span></td>
+                                                @*<td class="text-right text-bold">@Html.DisplayFor(model => model.TotalAmountReceived)</td>*@
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                             
+
+                            </div>
+
+
+                        </div>
+                    @*</div>*@
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+
+    <div id="lft-tab-PaymentStatement" class="tab-pane fade in">
+
+        <div class="pad-top">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" style="width:100%;" id="TablaDetalleEstadoCuenta">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Documentos</th>
+                            <th>Operador</th>
+                            <th>Fecha</th>
+                            <th>Referencia</th>
+                            <th>Otros Cargos</th>
+                            <th>Seguro 1</th>
+                            <th>Seguro 2</th>
+                            <th>Servicios</th>
+                            <th>Interés Ord</th>
+                            <th>Intereses mora</th>
+                            <th>Capital</th>
+                            <th>Total</th>
+                            <th>Balance</th>
+                        </tr>
+
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr class="info">
+                            <th colspan="5">SALDOS</th>
+                            @*<th></th>
+                                <th></th>
+                                <th></th>*@
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div id="lft-tab-PaymentPlan" class="tab-pane fade in">
+
+        <div class="pad-top">
+            <div class="row">
+                <a onclick="ExportHtmlToPdf('#contentPaymentPlan','PaymentPlan')" class="btn btn-link pull-right" href="javascript:void(0)"><i class="fa fa-print fa-fw"></i> Print Report </a>
+                @*<a onclick="SendEmailPaymentPlan('#contentPaymentPlan','PaymentPlan')" class="btn btn-link pull-right" href="#"><i class="fa fa-send-o fa-fw"></i> Send Email </a>*@
+
+            </div>
+
+            <div id="contentPaymentPlan">
+                <div class="text-center">
+                    <h4>PLAN DE PAGO</h4>
+                    <h5>@Model.fcIDCliente  @Model.fcNombre</h5>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" style="width:100%;" id="TablaPlanDePago">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fecha</th>
+                                <th>Capital Inicial</th>
+                                <th>Capital Pactado</th>
+                                <th>Interes Pactado</th>
+                                <th>Seguro 1</th>
+                                <th>Seguro 2</th>
+                                <th>Servicio 1</th>
+                                <th>Valor Cuota</th>
+
+                                <th>Saldo Capital</th>
+                                <th>Saldo Interes</th>
+                                <th>Saldo Seg 1</th>
+                                <th>Saldo Seg 2</th>
+                                <th>Saldo Serv 1</th>
+                                <th>Saldo Cuota</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr class="info">
+                                <th colspan=9>SALDOS</th>
+
+
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+</div>
+
+<script>
+
+    
+    $('#TablaDetalleEstadoCuenta').DataTable({
+        dom: "f",
+           paging:false,
+           autoWidth: true,
+          // responsive: true,
+           ordering:false,
+            ajax: {
+                url: '@Url.Action("LoadListStatementAccount", "Prestamo")',
+                data: { idCustomer: '@Model.fcIDCliente', idLoan: '@Model.fcPrestamo', idClienteSAF: '@Model.fcClienteSAF' },
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+        },
+        rowCallback: function (row, data) {
+            if (data.fnTotal <0) {
+                $(row).addClass("success");
+            }
+        },
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+
+            var totOtrosCargos = 0;
+            var totSegurouno = 0;
+            var totSegurodos = 0;
+
+            var totServicio = 0;
+            var totInteresOrdinario = 0;
+            var totInteresMora = 0;
+            var totCapital = 0;
+            data.forEach(function (x) {
+                totOtrosCargos += x.fnOtrosCargos;
+                totSegurouno += x.fnSegurosDeuda;
+                totSegurodos += x.fnSegurosDanos;
+                totServicio += x.fnServicio1;
+                totInteresOrdinario += x.fnInteresOrdinario;
+                totInteresMora += x.fnInteresMoratorio;
+                totCapital += x.fnCapital;
+            });
+
+
+            $(api.column(5).footer()).html(ConvertirDecimal(totOtrosCargos.toFixed(2)));
+            $(api.column(6).footer()).html(ConvertirDecimal(totSegurouno.toFixed(2)));
+            $(api.column(7).footer()).html(ConvertirDecimal(totSegurodos.toFixed(2)));
+
+            $(api.column(8).footer()).html(ConvertirDecimal(totServicio.toFixed(2)));
+            $(api.column(9).footer()).html(ConvertirDecimal(totInteresOrdinario.toFixed(2)));
+            $(api.column(10).footer()).html(ConvertirDecimal(totInteresMora.toFixed(2)));
+            $(api.column(11).footer()).html(ConvertirDecimal(totCapital.toFixed(2)));
+
+
+
+
+        },
+        columns: [
+            {
+                data: "ItemNumber"
+            },
+
+            {
+                data: 'fcDocumento'
+            },
+            {
+                data: 'fcOperador'
+            },
+            {
+                data: null,
+                render: function (data) {
+
+                    return moment(data.fdFechaTran).utc().format("YYYY/MM/DD");
+                }
+            },
+
+            {
+                data: 'fcReferencia'
+            },
+
+            {
+                data: null,
+                className:"text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnOtrosCargos);
+                }
+            },
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSegurosDeuda);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSegurosDanos);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnServicio1);
+                }
+            },
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnInteresOrdinario);
+                }
+            },
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnInteresMoratorio);
+                }
+            },
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnCapital);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnTotal);
+                }
+            },
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return `<b>${ConvertirDecimal(data.SaldoDelPeriodo)}<b/>`;
+                }
+            },
+
+        ]
+    });
+
+
+
+    $('#TablaPlanDePago').DataTable({
+            dom: "f",
+               paging:false,
+               autoWidth: true,
+              // responsive: true,
+               ordering:false,
+                ajax: {
+                    url: '@Url.Action("ListaPlanDePago", "Prestamo")',
+                    data: { idCustomer: '@Model.fcIDCliente', idLoan: '@Model.fcPrestamo', idClienteSAF: '@Model.fcClienteSAF' },                    
+                    method: "Get",
+                    dataSrc: function (data) {
+                        return data;
+                    }
+            },
+            rowCallback: function (row, data) {
+
+              },
+              footerCallback: function (row, data, start, end, display) {
+                  var api = this.api();
+
+                  var totSaldoCapital = 0;
+                  var totSaldoInteres = 0;
+                  var totSaldoSeguro1 = 0;
+                  var totSaldoSeguro2 = 0;
+                  var totSaldoServicio = 0;
+
+
+
+                  data.forEach(function (x) {
+                      totSaldoCapital += x.fnSaldoCapital;
+                      totSaldoInteres += x.fnSaldoInteres;
+                      totSaldoSeguro1 += x.fnSaldoSeguro1;
+                      totSaldoSeguro2 += x.fnSaldoSeguro2;
+                      totSaldoServicio += x.fnSaldoServicio1;
+                  });
+
+
+                  $(api.column(9).footer()).html(ConvertirDecimal(totSaldoCapital.toFixed(2)));
+                  $(api.column(10).footer()).html(ConvertirDecimal(totSaldoInteres.toFixed(2)));
+                  $(api.column(11).footer()).html(ConvertirDecimal(totSaldoSeguro1.toFixed(2)));
+                  $(api.column(12).footer()).html(ConvertirDecimal(totSaldoSeguro2.toFixed(2)));
+                  $(api.column(13).footer()).html(ConvertirDecimal(totSaldoServicio.toFixed(2)));
+
+
+
+
+              },
+        columns: [
+            {
+                data: "ItemNumber"
+            },
+            {
+                data: null,
+                render: function (data) {
+
+                    return moment(data.fdFechaCuota).utc().format("YYYY/MM/DD");
+                }
+            },
+
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnCapitalInicial);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnCapitalPactado);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnInteresPactado);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSeguro1);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSeguro2);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnServicio1);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnValorCuota);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSaldoCapital);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSaldoInteres);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSaldoSeguro1);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSaldoSeguro2);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return ConvertirDecimal(data.fnSaldoServicio1);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+
+                    return `<b>${ConvertirDecimal(data.fnSaldoCuota)}<b/>`;
+                }
+            },
+
+        ]
+
+            });
+
+
+    </script>

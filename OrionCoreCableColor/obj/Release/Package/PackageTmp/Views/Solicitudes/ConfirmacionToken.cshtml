@@ -1,0 +1,85 @@
+﻿
+@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        <text>Ingrese Token</text>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcMensaje, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.fcMensaje, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcMensaje, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="EnviarToken" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+      var model = @Html.Raw(Json.Encode(Model));
+    $("#EnviarToken").click(function () {
+
+        if ($("#fcMensaje").val() == "") {
+            ToastrWarning("Advertencia","Ingrese Token");
+            return;
+        }
+        var Token = $("#fcMensaje").val();
+
+        var url = "@Url.Action("VerificarToken", "Solicitudes")";
+        $.ajax({
+            url: url,
+            type: "Get",
+            data: { Token: Token ,  },
+            success: function (data) {
+              
+                if (data.Mensaje == "Token Autorizado!") {
+                    ToastrSuccess("Token Autorizado!", "Token Autorizado!");                    
+                    $("#fcMensaje").val("");   
+                    
+                    $("#MyModalSm").modal("hide");                    
+                    $("##MyModalSm").empty();
+
+                } else {
+                    ToastrWarning("Advertencia", "Token Invalido");
+                    //ToastrError("Error", data.fcMensaje);
+                }
+            },
+            error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+            }
+        });
+    });
+
+
+
+</script>

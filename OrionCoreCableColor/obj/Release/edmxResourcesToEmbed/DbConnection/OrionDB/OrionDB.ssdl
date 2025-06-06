@@ -1,0 +1,1684 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ORIONModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <Function Name="fn_ConvertirTextoaFecha" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+    <Parameter Name="pcTexto" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="fn_ExisteArchivo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="bit">
+    <Parameter Name="path" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="fn_ProperCase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+    <Parameter Name="Text" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Actualizar_DocumentosOrion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcNombreArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="pcExtencion" Type="varchar" Mode="In" />
+    <Parameter Name="pcRutaArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="pcURL" Type="varchar" Mode="In" />
+    <Parameter Name="piIDDocumento" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piEstadoFirma" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ActualizarEstatusSolicitudProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="piEstadoProductoServicio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ActualizarInfoClientePorSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="nvarchar" Mode="In" />
+    <Parameter Name="pdFechaNacimiento" Type="datetime" Mode="In" />
+    <Parameter Name="pcTelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcCorreo" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcLugarTrabajo" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcDireccionDetallada" Type="nvarchar" Mode="In" />
+    <Parameter Name="piCodDepartamento" Type="int" Mode="In" />
+    <Parameter Name="piCodMunicipio" Type="int" Mode="In" />
+    <Parameter Name="piCodColonia" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ActualizarInstalacion_Tecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="fiIDEstadoInstalacion" Type="int" Mode="In" />
+    <Parameter Name="fnMetrosFibra" Type="decimal" Mode="In" />
+    <Parameter Name="fcComentarioInstalacion" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_ActualizarInstalacionaProceso" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="fiIDEstadoInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_AsignarSolicitud_Contratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ASPNETUSER_ObtenerInformacionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcUsuario" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_BaseCallCenter_AvanceGeneral_Filtro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BaseCallCenter_Estadistica" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pdFechaOperativa" Type="datetime" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDAgente" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BasesCallCenter_AvanceGlobal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BasesCallCenter_Bitacoras" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDCliente" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BasesCallCenter_Bitacoras_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDCliente" Type="int" Mode="In" />
+    <Parameter Name="pcComentarioGestion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDGestion" Type="int" Mode="In" />
+    <Parameter Name="pcTelefonoContacto" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_BasesCallCenter_CatalogoGestiones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BasesCallCenter_Cliente_Informacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDCliente" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BasesCallCenter_Clientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BitacoraMantenimientoHistorialSolicitudLista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_BitacoraSolicitudHistorialMantenimiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fiIdCliente" Type="int" Mode="In" />
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="fcObservaciones" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcOpcionSeleccionada" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_BodegasConStock_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_CambiarVinietaSolicitud_Temp" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idsolicitud" Type="int" Mode="In" />
+    <Parameter Name="fcNumeroVinieta" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_AntiguedadLaboral_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Configuraciones_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombreLlave" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcValorLlave" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Configuraciones_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdConfiguraciones" Type="int" Mode="In" />
+    <Parameter Name="pcValorLlave" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Configuraciones_EditarPorNombreLlave" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombreLlave" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcValorLlave" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Configuraciones_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Configuraciones_ObtenerPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdConfiguraciones" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_EstadoCivil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_catalogo_FotosInstalacion_lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Marcas_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcMarca" Type="varchar" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Marcas_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdMarca" Type="int" Mode="In" />
+    <Parameter Name="pcMarca" Type="varchar" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Marcas_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdMarca" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Marcas_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Modelos_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMarca" Type="int" Mode="In" />
+    <Parameter Name="pcModelo" Type="varchar" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Modelos_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDModelo" Type="int" Mode="In" />
+    <Parameter Name="piIDMarca" Type="int" Mode="In" />
+    <Parameter Name="pcModelo" Type="varchar" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Modelos_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDModelo" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Modelos_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Parentescos_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_RangoSalarial_Select" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_TipoMovimiento_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcTipoMovimiento" Type="varchar" Mode="In" />
+    <Parameter Name="piTipoAfectacion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_TipoMovimiento_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="pcTipoMovimiento" Type="varchar" Mode="In" />
+    <Parameter Name="piTipoAfectacion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_TipoMovimiento_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdTipoMovimiento" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_TipoMovimiento_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_TipoPersona_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_TipoProducto_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcTipoProducto" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_TipoProducto_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdTipoProducto" Type="int" Mode="In" />
+    <Parameter Name="pcTipoProducto" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_TipoProducto_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdTipoProducto" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_TipoProducto_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Ubicaciones_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcUbicacion" Type="varchar" Mode="In" />
+    <Parameter Name="pcUbicacionFisica" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="sp_Catalogo_Ubicaciones_CrearUbicacionPorCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Ubicaciones_CrearUbicacionPorUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuarioMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Ubicaciones_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="pcUbicacion" Type="varchar" Mode="In" />
+    <Parameter Name="pcUbicacionFisica" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piEstadoUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Ubicaciones_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Ubicaciones_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Ubicaciones_ListarExterno" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Catalogo_Ubicaciones_ListarTipoUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Catalogo_Ubicaciones_ObtenerPorIdEquifax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_CatalogoSistemaDocumentos_Lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_cliente_NombreTelefono" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_cliente_obtenerDatos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDReferencia" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_ObtenerIdCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDReferencia" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_ObtenerIdentidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_ObtenerNombre" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_Referencia_EditarNumeroReferencia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdReferencia" Type="int" Mode="In" />
+    <Parameter Name="pcTelefonoReferencia" Type="varchar" Mode="In" />
+    <Parameter Name="pcNombreCompletoReferencia" Type="varchar" Mode="In" />
+    <Parameter Name="piIDParentesco" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_Referencia_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="fcNombreCompletoReferencia" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcTelefonoReferencia" Type="varchar" Mode="In" />
+    <Parameter Name="fiIDParentescoReferencia" Type="int" Mode="In" />
+    <Parameter Name="fiUsuarioCrea" Type="int" Mode="In" />
+    <Parameter Name="fcApellido" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_Referencia_Respuestas_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiDReferencia" Type="int" Mode="In" />
+    <Parameter Name="fbAceptoSerReferencia" Type="int" Mode="In" />
+    <Parameter Name="fiRespuestasAcertadas" Type="int" Mode="In" />
+    <Parameter Name="fiRespuestasNoAcertadas" Type="int" Mode="In" />
+    <Parameter Name="fcRespuesta1" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcRespuesta2" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcRespuesta3" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_Referencia_ValidacionFormCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cliente_Referencia_ValidacionFormulario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDReferencia" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ClienteReferencia_ObtenerPorIdReferencia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDReferencia" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Clientes_Atrasados_LinkdePago_Agregar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="piNumerodeCuota" Type="int" Mode="In" />
+    <Parameter Name="pdFechaMaximoLink" Type="datetime" Mode="In" />
+    <Parameter Name="pcLinkdePago" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuarioCreador" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_clientes_Potenciales_Bitacoras_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdClientes_Potenciales" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="nvarchar" Mode="In" />
+    <Parameter Name="piEstatus" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_clientes_Potenciales_Bitacoras_Listado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdClientes_Potenciales" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIdRol" Type="int" Mode="In" />
+    <Parameter Name="piIdApp" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Clientes_Potenciales_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdClientesPotenciales" Type="int" Mode="In" />
+    <Parameter Name="pcNombreCliente" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcNumeroTelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcDireccionCliente" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="pcRazonEscribir" Type="nvarchar" Mode="In" />
+    <Parameter Name="piIdFuenteCliente" Type="int" Mode="In" />
+    <Parameter Name="pcUrlEnlace" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="piIdUsuarioGestion" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piEstatus" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Clientes_Potenciales_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdClientesPotenciales" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIdRol" Type="int" Mode="In" />
+    <Parameter Name="piIdApp" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Clientes_Potenciales_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombreCliente" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcNumeroTelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcDireccionCliente" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="pcRazonEscribir" Type="nvarchar" Mode="In" />
+    <Parameter Name="piIdFuenteCliente" Type="int" Mode="In" />
+    <Parameter Name="pcUrlEnlace" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="piIdUsuarioGestion" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piEstatus" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Clientes_Potenciales_Listado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIdRol" Type="int" Mode="In" />
+    <Parameter Name="piIdApp" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Clientes_Potenciales_Listado_ById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdClientesPotenciales" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIdRol" Type="int" Mode="In" />
+    <Parameter Name="piIdApp" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ColoniasFalsas_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Configuraciones" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Contratista_SolicitudInstalacion_Detalle_CodigoBarras_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista_SolicitudInstalacion_Detalle" Type="int" Mode="In" />
+    <Parameter Name="piIDMoviemiento" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Contratista_SolicitudInstalacion_Detalle_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista_SolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDInventario" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcSerie" Type="varchar" Mode="In" />
+    <Parameter Name="pcMac" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Contratista_SolicitudInstalacion_Detalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista_SolicitudInstalacion_Detalle" Type="int" Mode="In" />
+    <Parameter Name="piIDContratista_SolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDInventario" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcSerie" Type="varchar" Mode="In" />
+    <Parameter Name="pcMac" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Contratista_SolicitudInstalacion_Detalle_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista_SolicitudInstalacion_Detalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Contratista_SolicitudInstalacion_ListarProductosInstalados" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Contratista_SolicitudIntalacion_TerminarInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratistaSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piIDEstadoInstalacion" Type="int" Mode="In" />
+    <Parameter Name="pcimages" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="pcmateriales" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcVineta" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Contratista_SolicitudIntalacion_TerminarInstalacion_ProductosExtra" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratistaSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piIDEstadoInstalacion" Type="int" Mode="In" />
+    <Parameter Name="pcimages" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="pcmateriales" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ContratistaSolicitudInstalacion_Lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_ContratistaSolicitudInstalacion_ObtenerPorSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ContratistaSolicitudInstalacionDetalle_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista_SolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDInventario" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcSerie" Type="varchar" Mode="In" />
+    <Parameter Name="pcMac" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ContratistaSolicitudInstalacionDetalle_ValidarIDContratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista_SolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Cotizador_ProductosyServicios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Crear_DocumentosOrion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUSuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcNombreArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="pcExtencion" Type="varchar" Mode="In" />
+    <Parameter Name="pcRutaArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="pcURL" Type="varchar" Mode="In" />
+    <Parameter Name="piIDDocumento" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piIDFirma" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Crear_SolicitudDeclinada" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioSolicitante" Type="int" Mode="In" />
+    <Parameter Name="pcComentarioSolicitante" Type="varchar" Mode="In" />
+    <Parameter Name="piIDRazonSolicitante" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_CrearSolicitudFirma" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_CrearTokenFirma" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFirma" Type="int" Mode="In" />
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_DashBoard_Comparativo_ServiciosyPaquetes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_DashBoard_FacturacionMensual" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdusuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DashboardInformativo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DatosInstalacion_AsignarEmpresaContratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcfcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDAgenciaContratista" Type="int" Mode="In" />
+    <Parameter Name="piIDContratistaSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DatosInstalacion_CambiarEstado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pifiIDEstadoInstalacion" Type="int" Mode="In" />
+    <Parameter Name="pifiIDTipoSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DatosInstalacion_ReprogramarDiaInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fdFechaInstalacionAsignada" Type="datetime" Mode="In" />
+    <Parameter Name="pcfcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDAgenciaInstalacion" Type="int" Mode="In" />
+    <Parameter Name="piIDAgenciaContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DatosInstalacionCepheus_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcNumeroOrdenCfeus" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoCliente" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcNumeroOrdenTrabajoChepeus" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_DatosSolicitud_CambiarOficial" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piUsuarioOficial" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DevolucionDetalle_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDDevolucionMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie1" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoSerie2" Type="varchar" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcDescripcion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDInventarioMovimientoDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DevolucionDetalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoDetalle" Type="int" Mode="In" />
+    <Parameter Name="piIDDevolucionMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie1" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoSerie2" Type="varchar" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcDescripcion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DevolucionDetalle_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDDevolucionMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DevolucionMaestro_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacionInicial" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionDestino" Type="int" Mode="In" />
+    <Parameter Name="pcMotivoDevolucion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DevolucionMaestro_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacionInicial" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionDestino" Type="int" Mode="In" />
+    <Parameter Name="pcMotivoDevolucion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DevolucionMaestro_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_DevolucionMaestro_ObtenerPorMovimientoMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Documentos_Instalacion_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DocumentosInstalacion_SoporteTecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_DocumentosOrion_Verificar_Existente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcNombreArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="piExiste" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="sp_EditarTelefonoCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcNumeroTelefonico" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_EditarTelefonoClienteReferencia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDReferencia" Type="int" Mode="In" />
+    <Parameter Name="pcNumeroTelefonico" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_EliminarDocumentos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fiIDDocumento" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Empresas_Maestro_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Equifax_Cliente_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="pdFechaNacimiento" Type="date" Mode="In" />
+    <Parameter Name="pcLugarTrabajo" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcLugarVive" Type="nvarchar" Mode="In" />
+    <Parameter Name="piEstadoCivil" Type="int" Mode="In" />
+    <Parameter Name="pbTieneHijos" Type="bit" Mode="In" />
+    <Parameter Name="pcCiudad" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcDireccionDetallada" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcCorreo" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcProfesion" Type="nvarchar" Mode="In" />
+    <Parameter Name="piTipoVivienda" Type="int" Mode="In" />
+    <Parameter Name="piIdDepartamento" Type="int" Mode="In" />
+    <Parameter Name="piIdMunicipio" Type="int" Mode="In" />
+    <Parameter Name="piIdPoblado" Type="int" Mode="In" />
+    <Parameter Name="piIdColonia" Type="int" Mode="In" />
+    <Parameter Name="pcDiaPago" Type="int" Mode="In" />
+    <Parameter Name="pcRangoSalarial" Type="int" Mode="In" />
+    <Parameter Name="pcAntiguedadLaboral" Type="int" Mode="In" />
+    <Parameter Name="pcTelefonoSecundario" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Cliente_Actualizar_Telefono" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="fcTelefono" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Cliente_ActualizarUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcGeolocalizacion" Type="nvarchar" Mode="In" />
+    <Parameter Name="piIdEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Cliente_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fcIdentidad" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="fdFechaNacimiento" Type="date" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuarioCreador" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuarioCreador" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_MantoEditar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_MantoEliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_Garantia_MantoInsertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Equifax_GarantiaNuevoServicio_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuarioCreador" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_EquifaxCliente_ValidarUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_EstadodeCuentaUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_EstadoInstalacionSolicitud_ById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDTecnicoAsignado" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Estatus_Precalificado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_ActualizarSinopsis" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_ConfirmarVentaDeContado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Datos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Facturacion_Detalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionDetalle" Type="int" Mode="In" />
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorVentaDeContado" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pbAplicaImpuesto" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Detalle_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Detalle_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorVentaDeContado" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pbAplicaImpuesto" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Detalle_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Facturacion_Detalle_ListarPorIDFacturacionMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Detalle_ObtenerPorIdFacturacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Documentos_BuscarPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionDocumento" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Documentos_BuscarPorIdFacturacionMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Documentos_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionDocumento" Type="int" Mode="In" />
+    <Parameter Name="pcNombreArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="pcExtension" Type="varchar" Mode="In" />
+    <Parameter Name="pcRuta" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Documentos_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionDocumento" Type="int" Mode="In" />
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Documentos_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcNombreArchivo" Type="varchar" Mode="In" />
+    <Parameter Name="pcExtension" Type="varchar" Mode="In" />
+    <Parameter Name="pcRuta" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Documentos_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Facturacion_Maestro_Contabilizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Maestro_ContabilizarPago" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcCuentaContableBanco" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcReferenciaPago" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaDePago" Type="datetime" Mode="In" />
+    <Parameter Name="pcConceptoPago" Type="varchar" Mode="In" />
+    <Parameter Name="pnCantidadDigitada" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Maestro_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pdFechaTransaccion" Type="datetime" Mode="In" />
+    <Parameter Name="pcCorrelativoDocumento" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferenciaDocumento" Type="varchar" Mode="In" />
+    <Parameter Name="pcCAI" Type="varchar" Mode="In" />
+    <Parameter Name="pnSubTotal" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExento" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExonerado" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteGravado" Type="decimal" Mode="In" />
+    <Parameter Name="pcConcepto" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaVencimiento" Type="datetime" Mode="In" />
+    <Parameter Name="pcObservacion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcNombreCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcCorreoCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcTelefonoCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="pnImpuestos" Type="decimal" Mode="In" />
+    <Parameter Name="pnTotalFactura" Type="decimal" Mode="In" />
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Maestro_EditarEstado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Facturacion_Maestro_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pdFechaTransaccion" Type="datetime" Mode="In" />
+    <Parameter Name="pcCorrelativoDocumento" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferenciaDocumento" Type="varchar" Mode="In" />
+    <Parameter Name="pcCAI" Type="varchar" Mode="In" />
+    <Parameter Name="pnSubTotal" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExento" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExonerado" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteGravado" Type="decimal" Mode="In" />
+    <Parameter Name="pcConcepto" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaVencimiento" Type="datetime" Mode="In" />
+    <Parameter Name="pcObservacion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcNombreCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcCorreoCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcTelefonoCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+    <Parameter Name="pnImpuestos" Type="decimal" Mode="In" />
+    <Parameter Name="pnTotalFactura" Type="decimal" Mode="In" />
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="sp_Facturacion_Maestro_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Facturacion_Maestro_ObtenerPorIdFacturacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDFacturacionMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_FacturacionPrestadito_BuscarPorInventario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GenerarCreditoClienteConArticulo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="fiIdSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fiIdUsuarioCreacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Geo_ListaBarrioColonia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiCodDepartamento" Type="int" Mode="In" />
+    <Parameter Name="fiCodMunicipio" Type="int" Mode="In" />
+    <Parameter Name="fiCodPoblado" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_geo_ListaDepartamentos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Geo_ListaMunicipio_ByIdDepartamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiCodDepartamento" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Geo_ListaPoblado_ByIdMunicipio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiCodDepartamento" Type="int" Mode="In" />
+    <Parameter Name="fiCodMunicipio" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GeoPais_Lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_GetIdContratista_ById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDUser" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GetIdTecnico_ById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDUser" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GetUsuario_Contratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GetUsuario_Tecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTecnico" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GuardarFotoInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fiIDCatalogoFotoInstalacion" Type="int" Mode="In" />
+    <Parameter Name="fcUrlDocumento" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcNombreDocumento" Type="nvarchar" Mode="In" />
+    <Parameter Name="fcExtension" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_info_ConsultaAnalistas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_info_ConsultaAnalistasValidadoCredito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_InfoClientePorIdEquifax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InfoClientePorSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InformacionCliente_BySolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InformacionInstalacion_Tecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InformacionInstalacionSop" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InformacionTecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Instalacion_TecnicosExternos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratistaSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_ActualizarFacturacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcIDFactura" Type="varchar" Mode="InOut" />
+  </Function>
+  <Function Name="sp_Inventario_HistorialDeMovimiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_BuscarPorPrestamo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionInicial" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionDestino" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie1" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoSerie2" Type="varchar" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcDescripcion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDInventarioMovimientoDetalle" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoDetalle" Type="int" Mode="In" />
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionInicial" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionDestino" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie1" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoSerie2" Type="varchar" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="pcDescripcion" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_GetIDInventarioMovimientoMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Detalle_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Inventario_Movimiento_Maestro_CambiarEstado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piEstadoInventairoMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Maestro_ConfirmarSalidaInventario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcDocumentoFirma" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Maestro_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioDestino" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionDestino" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Maestro_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioDestino" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piEstadoInventairoMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionDestino" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Maestro_FacturacionBuscarPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Maestro_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Inventario_Movimiento_Maestro_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Inventario_Movimiento_Maestro_ListarFacturacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Inventario_Movimiento_Maestro_ListarFacturacion_Prestadito_Articulo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Inventario_Movimiento_Maestro_PendientesPorUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InventarioP_Movimiento_Maestro_Prestadito_Articulo_PorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InventarioPorUbicacionDetallado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_InventarioPorUbicacionGeneral" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Lista_SolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIdEmpresa" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ListaAgentes_BaseCallCenter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_ListaCatalogoInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Listado_SolicitudesDeclinadas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_ListadoCiudades" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_ListadoContratistas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_ListadoFotosSubidas_BySolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ListadoMaterialesInstalados_Articulos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ListadoMaterialesInstalados_BySolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ListarCatalogo_RazonDeclinar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_MantenimientoSolicitud_RecalculoCuota" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pnCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piPlazo" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcCorreo" Type="varchar" Mode="In" />
+    <Parameter Name="pcTelefono" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_MapaConInfoOnuyOlt" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_MaterialesInstalacion_ListarByInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratistaSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_MensajeriaMasiva_Detalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcTelefonoDestino" Type="varchar" Mode="In" />
+    <Parameter Name="pcMensaje" Type="varchar" Mode="In" />
+    <Parameter Name="pcURLArchivo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerDatosCliente_ByIdSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerDatosServicioRed_PorOrionSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerEmpresa_ByIdUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerEstado_SolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerMetrosFibra_Solicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerNombreUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDUser" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerReferencias_IDEquifax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerSolicitud_ByIdInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerSolicitud_Estado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ObtenerSolicitud_Idequifax" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="idequifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ONUsYOLTs_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Orion_ClienteBitacora_Registrar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDGestion" Type="int" Mode="In" />
+    <Parameter Name="pcBitacora" Type="varchar" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionCatalogo_OLT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionCatalogo_OLT_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDOlt" Type="int" Mode="In" />
+    <Parameter Name="pcDescripcionOLT" Type="varchar" Mode="In" />
+    <Parameter Name="pcDireccion" Type="varchar" Mode="In" />
+    <Parameter Name="pcLatitude" Type="varchar" Mode="In" />
+    <Parameter Name="pcLongitud" Type="varchar" Mode="In" />
+    <Parameter Name="pcIPOLT" Type="varchar" Mode="In" />
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionCatalogo_OLT_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcDescripcionOLT" Type="varchar" Mode="In" />
+    <Parameter Name="pcDireccion" Type="varchar" Mode="In" />
+    <Parameter Name="pcLatitude" Type="varchar" Mode="In" />
+    <Parameter Name="pcLongitud" Type="varchar" Mode="In" />
+    <Parameter Name="pcIPOLT" Type="varchar" Mode="In" />
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionCatalogo_OLT_ObtenerPorID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDOlt" Type="int" Mode="In" />
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionContratista_DetalleBySolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoOperacion" Type="int" Mode="In" />
+    <Parameter Name="piIDContratistaSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionJob_CrearClienteCepheus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionListaBitacoras_Clientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_CabiarEstadoPrimerPago" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="pnCuotaEnLempiras" Type="decimal" Mode="In" />
+    <Parameter Name="pcCuentaContable" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="sp_OrionSolicitud_ContratistaSolicitudInstalacio _Insertar">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDClienteEquifax" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDAgenciaInstalacion" Type="int" Mode="In" />
+    <Parameter Name="piIDAgenciaContratista" Type="int" Mode="In" />
+    <Parameter Name="pcCometarioContratista" Type="varchar" Mode="In" />
+    <Parameter Name="pcfcCodigoCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcNumeroOrdenCfeus" Type="varchar" Mode="In" />
+    <Parameter Name="piIDTipoSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcNumeroOrdenTrabajo" Type="varchar" Mode="In" />
+    <Parameter Name="fdFechaInstalacionAsignada" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_Detalle_ClienteListar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_DetalleClienteServicioContratado_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDOrionSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDOLT" Type="int" Mode="In" />
+    <Parameter Name="pcMac" Type="varchar" Mode="In" />
+    <Parameter Name="pcIP" Type="varchar" Mode="In" />
+    <Parameter Name="pcPom" Type="varchar" Mode="In" />
+    <Parameter Name="pcNombreWifi" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_detallePlantillaCorreo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piEmailTemplate" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_EquifaxCliente_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_InstalacionPorCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDCliente" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_InventarioPorCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDCliente" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_InventarioUbicacionPorSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_ListarInstalacionPorCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_OrionSolicitud_ListarInventarioPorCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_OrionSolicitud_ListarPaqueteCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_OrionSolicitud_LlenarListaGestion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_LlenarListas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_Maestro_ActualizarDatosServicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDOrigen" Type="int" Mode="In" />
+    <Parameter Name="pcOrigen" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="piIDTipoCliente" Type="int" Mode="In" />
+    <Parameter Name="pcNombreEmpresaJuridica" Type="varchar" Mode="In" />
+    <Parameter Name="pcRtnEmpresaJuridico" Type="varchar" Mode="In" />
+    <Parameter Name="pcfcComentarioPromocion" Type="varchar" Mode="In" />
+    <Parameter Name="fdFechaPagoInicial" Type="datetime" Mode="In" />
+    <Parameter Name="piIDPromocion" Type="int" Mode="In" />
+    <Parameter Name="piCodigoPromocion" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoPromocion" Type="varchar" Mode="In" />
+    <Parameter Name="piEstadoQrPromocion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_Mestro_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDClienteEquifax" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_Mestro_NuevoServicio_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDClienteEquifax" Type="int" Mode="In" />
+    <Parameter Name="pcDireccionDetallada" Type="varchar" Mode="In" />
+    <Parameter Name="pcGeolocalizacion" Type="varchar" Mode="In" />
+    <Parameter Name="piCodDepartamento" Type="int" Mode="In" />
+    <Parameter Name="piCodMunicipio" Type="int" Mode="In" />
+    <Parameter Name="piCodPoblado" Type="int" Mode="In" />
+    <Parameter Name="piCodColonia" Type="int" Mode="In" />
+    <Parameter Name="piTipoVivienda" Type="int" Mode="In" />
+    <Parameter Name="piUbicacionGuardada" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_PaqueteCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDCliente" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_Prestamo_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_Repartidor_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitud_ServiciosPorClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_OrionSolicitud_SolicitudEstadoProcesamiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionSolicitudes_InformacionDocumentacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDEquifax" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionVentas_VendedorCalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDVendedorRepartidor" Type="int" Mode="In" />
+    <Parameter Name="pcNombreVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="pcNumeroVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="pcIdentidadVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionVentas_VendedorCalle_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDVendedorRepartidor" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OrionVentas_VendedorCalle_Guardar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombreVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="pcNumeroVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="pcIdentidadVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoVendedor" Type="varchar" Mode="In" />
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Paquetes_Detalle_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Paquetes_Detalle_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piCantidad" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Paquetes_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Paquetes_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Paquetes_ListarProductosGarantia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Paquetes_Maestro_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDPaquete" Type="int" Mode="In" />
+    <Parameter Name="pcPaquete" Type="varchar" Mode="In" />
+    <Parameter Name="pnValorMensual" Type="decimal" Mode="In" />
+    <Parameter Name="pnTasadeInteresAnual" Type="decimal" Mode="In" />
+    <Parameter Name="piEstadoPaquete" Type="int" Mode="In" />
+    <Parameter Name="piIDMoneda" Type="int" Mode="In" />
+    <Parameter Name="pbSoloServicio" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="sp_Paquetes_Maestro_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcPaquete" Type="varchar" Mode="In" />
+    <Parameter Name="pnValorMensual" Type="decimal" Mode="In" />
+    <Parameter Name="pnTasadeInteresAnual" Type="decimal" Mode="In" />
+    <Parameter Name="piIDMoneda" Type="int" Mode="In" />
+    <Parameter Name="pbServicio" Type="bit" Mode="In" />
+  </Function>
+  <Function Name="sp_Parametro_ConversiondeMoneda" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piAnio" Type="smallint" Mode="In" />
+    <Parameter Name="piMes" Type="tinyint" Mode="In" />
+    <Parameter Name="pnValorMoneda" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_PermitirEscanearQR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Precalificado_Bandeja_Agentes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Prestamo_InformacionTotal_Novanet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDApp" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Prestamos_ClientesaPagarPorFecha" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pdFecha" Type="date" Mode="In" />
+  </Function>
+  <Function Name="sp_Prestamos_ClientesEnAtraso" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pdFecha" Type="date" Mode="In" />
+  </Function>
+  <Function Name="sp_Prestamos_Lista_Novanet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSesion" Type="int" Mode="In" />
+    <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Inventario_AgregarConsumibles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Maestro_BuscarPorCodigo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcCodigoDeBarras" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Maestro_Cotizador" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Producto_Maestro_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcCodigodeBarras" Type="varchar" Mode="In" />
+    <Parameter Name="pcProducto" Type="varchar" Mode="In" />
+    <Parameter Name="pcImagenProducto" Type="varchar" Mode="In" />
+    <Parameter Name="piIDModelo" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="piProductoInventariable" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piProductoEnPaquete" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Nuevo" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Nuevo" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorVentaDeContado" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Maestro_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pcCodigodeBarras" Type="varchar" Mode="In" />
+    <Parameter Name="pcProducto" Type="varchar" Mode="In" />
+    <Parameter Name="pcImagenProducto" Type="varchar" Mode="In" />
+    <Parameter Name="piIDModelo" Type="int" Mode="In" />
+    <Parameter Name="piIDTipoProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="piEstadoProducto" Type="int" Mode="In" />
+    <Parameter Name="piProductoInventariable" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piProductoEnPaquete" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Nuevo" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Nuevo" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Maestro_EditarValorVentaDeContado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorVentaDeContado" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Maestro_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Maestro_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Producto_Maestro_ListarConsumibles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Producto_Maestro_ListarPorUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_BuscarRepetidos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcCodigos" Type="varchar(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_ByCodigoSerie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcCodigoSerie" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie1" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoSerie2" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferenciaMovimiento" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="piIdProductoPreciosDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoSerie1" Type="varchar" Mode="In" />
+    <Parameter Name="pcCodigoSerie2" Type="varchar" Mode="In" />
+    <Parameter Name="pcReferenciaMovimiento" Type="varchar" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="piIdProductoPreciosDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_EditarMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimiento" Type="int" Mode="In" />
+    <Parameter Name="piIDMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimiento" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_GetByIDMovimientoMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Detalle_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Producto_Movimiento_Detallle_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimiento" Type="int" Mode="In" />
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Maestro_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNumeroFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaFactura" Type="datetime" Mode="In" />
+    <Parameter Name="pcReferenciaFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pcDescripcionFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pcCAI" Type="varchar" Mode="In" />
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="pnImporteGravado" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExcento" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExonerado" Type="decimal" Mode="In" />
+    <Parameter Name="pnSaldo" Type="decimal" Mode="In" />
+    <Parameter Name="pnISV" Type="decimal" Mode="In" />
+    <Parameter Name="pnTotalFactura" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcDocumentoFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pcDocumentoExtension" Type="varchar" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piIDMoneda" Type="int" Mode="In" />
+    <Parameter Name="piIDProveedor" Type="int" Mode="In" />
+    <Parameter Name="pbContabilizar" Type="bit" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Maestro_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="pcNumeroFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pdFechaFactura" Type="datetime" Mode="In" />
+    <Parameter Name="pcReferenciaFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pcDescripcionFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pcCAI" Type="varchar" Mode="In" />
+    <Parameter Name="piIDTipoMovimiento" Type="int" Mode="In" />
+    <Parameter Name="pnImporteGravado" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExcento" Type="decimal" Mode="In" />
+    <Parameter Name="pnImporteExonerado" Type="decimal" Mode="In" />
+    <Parameter Name="pnSaldo" Type="decimal" Mode="In" />
+    <Parameter Name="pnISV" Type="decimal" Mode="In" />
+    <Parameter Name="pnTotalFactura" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcDocumentoFactura" Type="varchar" Mode="In" />
+    <Parameter Name="pcDocumentoExtension" Type="varchar" Mode="In" />
+    <Parameter Name="piEstadoMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="piIDMoneda" Type="int" Mode="In" />
+    <Parameter Name="piIDProveedor" Type="int" Mode="In" />
+    <Parameter Name="pbContabilizar" Type="bit" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Maestro_ExisteFactura" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNumeroFactura" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Maestro_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimientoMaestro" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Movimiento_Maestro_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Producto_Precios_Detalle_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaCapital" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaInteres" Type="decimal" Mode="In" />
+    <Parameter Name="pnTasaAnualPlana" Type="decimal" Mode="In" />
+    <Parameter Name="pdFechaCreacion" Type="datetime" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Nuevo" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Nuevo" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Precios_Detalle_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdProductoPreciosDetalle" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="pnValorProductoMN" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorProductoME" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto1" Type="decimal" Mode="In" />
+    <Parameter Name="pnPorcentajeImpuesto2" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaCapital" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaInteres" Type="decimal" Mode="In" />
+    <Parameter Name="pnTasaAnualPlana" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pbEstadoPrecioActual" Type="bit" Mode="In" />
+    <Parameter Name="pbEstadoPrecio" Type="bit" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Cliente" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual12Nuevo" Type="decimal" Mode="In" />
+    <Parameter Name="pnValorCuotaMensual24Nuevo" Type="decimal" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Precios_Detalle_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Producto_Precios_Detalle_ObtenerPorID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdProductoPreciosDetalle" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Producto_Precios_Detalle_ObtenerPorProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Inventario_AjusteConsumible" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionInicial" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacionFinal" Type="int" Mode="In" />
+    <Parameter Name="pnCantidad" Type="decimal" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Inventario_BuscarPorIdProductoYUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Inventario_ExistenciaInventario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Inventario_SeriesPorTecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Productos_ListaPorCliente" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Maestro_ExistenciaInventario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Productos_Maestro_ExistenciaInventarioBodegas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Productos_Maestro_ExistenciaPorUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Maestro_GetIdMovimiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Maestro_IngresoTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Productos_Maestro_ListadoSeries" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDProducto" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Movimiento_Maestro_Contabilizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Productos_Propuesta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_ProductosExtras_Por_Solicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ProductosInstaladosPorSolicitud_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Proveedores_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="piTipoPersona" Type="int" Mode="In" />
+    <Parameter Name="pcRTN" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcContacto" Type="nvarchar" Mode="In" />
+    <Parameter Name="piCodPais" Type="int" Mode="In" />
+    <Parameter Name="piCodDepartamento" Type="int" Mode="In" />
+    <Parameter Name="piCodCiudad" Type="int" Mode="In" />
+    <Parameter Name="piCodAldeaPoblado" Type="int" Mode="In" />
+    <Parameter Name="pcDireccion1" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcDireccion2" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcTelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcTelefonoMovil" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcCorreoElectronico" Type="nvarchar" Mode="In" />
+    <Parameter Name="piIDCuentaPorPagar" Type="int" Mode="In" />
+    <Parameter Name="pcCAI" Type="nvarchar" Mode="In" />
+    <Parameter Name="pdFechaLimiteEmisionFactura" Type="datetime" Mode="In" />
+    <Parameter Name="pcPrefijoFactura" Type="nvarchar" Mode="In" />
+    <Parameter Name="piRangoInicialFactura" Type="int" Mode="In" />
+    <Parameter Name="pcRangoFinalFactura" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="nvarchar" Mode="In" />
+    <Parameter Name="piDiasLimiteCredito" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Proveedores_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProveedor" Type="int" Mode="In" />
+    <Parameter Name="pcNombre" Type="nvarchar" Mode="In" />
+    <Parameter Name="piTipoPersona" Type="int" Mode="In" />
+    <Parameter Name="pcRTN" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcContacto" Type="nvarchar" Mode="In" />
+    <Parameter Name="piCodPais" Type="int" Mode="In" />
+    <Parameter Name="piCodDepartamento" Type="int" Mode="In" />
+    <Parameter Name="piCodCiudad" Type="int" Mode="In" />
+    <Parameter Name="piCodAldeaPoblado" Type="int" Mode="In" />
+    <Parameter Name="pcDireccion1" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcDireccion2" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcTelefono" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcTelefonoMovil" Type="nvarchar" Mode="In" />
+    <Parameter Name="pcCorreoElectronico" Type="nvarchar" Mode="In" />
+    <Parameter Name="piIDCuentaPorPagar" Type="int" Mode="In" />
+    <Parameter Name="pcCAI" Type="nvarchar" Mode="In" />
+    <Parameter Name="pdFechaLimiteEmisionFactura" Type="datetime" Mode="In" />
+    <Parameter Name="pcPrefijoFactura" Type="nvarchar" Mode="In" />
+    <Parameter Name="piRangoInicialFactura" Type="int" Mode="In" />
+    <Parameter Name="pcRangoFinalFactura" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="nvarchar" Mode="In" />
+    <Parameter Name="piDiasLimiteCredito" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Proveedores_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Proveedores_ObtenerId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDProveedor" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Reiniciodecontrato" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ReinicioGeoLocalizacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIdCliente" Type="int" Mode="In" />
+    <Parameter Name="fiGeoReinicio" Type="int" Mode="In" />
+    <Parameter Name="fcLocalizacion" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_ReporteClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_ReporteClientes_ObtenerPorID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIdEquifax" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ReporteClientes_SinContestar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Roles_ObtenerPorRole" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombre" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Roles_PorUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Solicitud_Instalacion_Bitacoras_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Solicitud_Instalacion_Bitacoras_GetByfiIDSolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Solicitud_Instalacion_Bitacoras_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Solicitudes_AdicionProducto_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUSuario" Type="int" Mode="In" />
+    <Parameter Name="piIDSesion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Solicitudes_Bandeja" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDRol" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Solicitudes_Bandeja_Instalados" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Solicitudes_Bandeja_ObtenerPorIDSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_SolicitudesAsignadas_By_Tecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDTecnicoAsignado" Type="int" Mode="In" />
+    <Parameter Name="fiIDRol" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_SolicitudesAsignadas_ByTecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_SolicitudesDeclinadas_ResolicionDelcinar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+    <Parameter Name="piEstado" Type="int" Mode="In" />
+    <Parameter Name="pcComentario" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_SolicitudesIncidencias_Lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_SolicitudesInstalacion_Lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_SolicitudInstalacion_ObtenerComentarioInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_SolicitudOrion_ReiniciarSolicitudDeclinada" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitd" Type="int" Mode="In" />
+    <Parameter Name="piMoneda" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_SRC_Clientes_BuscarPorIdentidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_SRC_Clientes_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_SRCClienteDetalle_Novanet" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcIDCliente" Type="varchar" Mode="In" />
+    <Parameter Name="pcIDPrestamo" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_TecnicosPorContratista_Crear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuarioContratista" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioTecnico" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_TecnicosPorContratista_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTecnicosPorContratista" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioContratista" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioTecnico" Type="int" Mode="In" />
+    <Parameter Name="piIdUsuario" Type="int" Mode="In" />
+    <Parameter Name="piEstadoTecnicoPorContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_TecnicosPorContratista_GetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDTecnicosPorContratista" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_TecnicosPorContratista_GetByIdContratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_TecnicosPorContratista_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_TipoVivienda_Lista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_TrabajosFalsos_List" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_TrasladoNovanetPrestadito_Contabilizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDInventarioMovimientoMaestro" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UbicacionesPorUsuarios_BusarPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacionPorUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UbicacionesPorUsuarios_Editar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacionPorUsuario" Type="int" Mode="In" />
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioUbicacion" Type="int" Mode="In" />
+    <Parameter Name="pbUsuarioPrincipal" Type="bit" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UbicacionesPorUsuarios_Eliminar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacionPorUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UbicacionesPorUsuarios_Insertar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuarioUbicacion" Type="int" Mode="In" />
+    <Parameter Name="pbUsuarioPrincipal" Type="bit" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UbicacionesPorUsuarios_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_UbicacionesPorUsuarios_ListarPorUbicacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUbicacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UbicacionesPorUsuarios_ListarPorUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Usuarios_Maestros_ListarUsuarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Usuarios_Maestros_ObtenerIdUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcNombreCorto" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Usuarios_Maestros_ObtenerPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UsuariosPorEmpresaContratistaYRol" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDContratista" Type="int" Mode="In" />
+    <Parameter Name="piIDRol" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_Validar_SOP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+    <Parameter Name="fiIdSolicitud" Type="int" Mode="In" />
+    <Parameter Name="fiIdUsuarioCreacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ValidarQR_SolicitudInstalacion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="fiIDSolicitudInstalacion" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_VentaSolicitudCliente_Promocion_Actualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="pcCodigoPromocion" Type="varchar" Mode="In" />
+    <Parameter Name="piEstadoPromocion" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_VentaSolicitudCliente_Promocion_Codigo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+    <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_VerificarEstadoAnexo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_VerificarFirma" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_VerificarTokenFirma" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="pcToken" Type="varchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="ORIONModelStoreContainer" />
+</Schema>

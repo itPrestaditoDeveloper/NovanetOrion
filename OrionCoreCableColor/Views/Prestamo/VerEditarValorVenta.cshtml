@@ -1,0 +1,95 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.ListFacturacionDetalleViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Valor de contado
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label class="control-label">PRODUCTO: @Model.fcProducto.ToUpper()</label>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorVentaDeContado, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorVentaDeContado, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal", @min=0 })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorVentaDeContado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="GuardarValorDeContado" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    $("#GuardarValorDeContado").click(function () {
+
+        if ($("#fnValorVentaDeContado").val() == "" || $("#fnValorVentaDeContado").val() == 0) {
+            ToastrWarning("","El valor no puede ser 0");
+            return;
+        }
+
+        var model = @Html.Raw(Json.Encode(Model));
+
+        model.fnValorVentaDeContado = $("#fnValorVentaDeContado").val();
+
+        
+        var url = "@Url.Action("EditarValorDeContado", "Prestamo")";
+        debugger;
+        
+
+        $.ajax({
+            url: url,
+            type: "Post",
+            data: { model: model },
+            success: function (data) {
+                if (data.Estado) {
+                    var tabla = $.fn.dataTable.Api("#TablaProductos");
+                    var data = tabla.row(RowSeleccionado).data();
+                    data.fnValorVentaDeContado = parseFloat($("#fnValorVentaDeContado").val());
+                    tabla.row(RowSeleccionado).data(data);
+                    var lblPrecioContado = $(RowSeleccionado).find("label[name=lblPrecioVentaContado]").val(data.fnValorVentaDeContado);
+                    $(lblPrecioContado).text(`$ ${ConvertirDecimal(data.fnValorVentaDeContado)}`);
+                    CalcularValores(RowSeleccionado);
+                    CalcularTotales();
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                }
+            },
+            error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+            }
+        });
+    });
+
+
+
+</script>

@@ -1,0 +1,132 @@
+﻿@model IEnumerable<OrionCoreCableColor.Models.Productos.ListProductosPorClientes>
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white" id="titulo">
+        Productos por cliente
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaHistorial">
+                <thead>
+                    <tr>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        @foreach (var item in Model)
+                        {
+                            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        }
+                    </tr>
+                    <tr>
+                        <th>Solicitud</th>
+                        <th>Cliente</th>
+                        @foreach(var item in Model)
+                        {
+                            <th>@item.fcProducto</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td style="font-weight:bolder;">TOTAL</td>
+                        @foreach (var item in Model)
+                        {
+                            <td style="font-weight:bolder;" id="totalCantidad_@item.fcProducto.Replace(" ","_")"></td>
+                        }
+                    </tr>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    var tablaHistorial = $('#TablaHistorial').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: `fBrtip`,
+        order: [[0, "asc"]],
+
+        ajax: {
+            url: '@Url.Action("ListarTotalProductoPorClientes", "Productos")',
+            method: "Post",
+            data: { model: model },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: "fiIDSolicitud"
+            },
+            {
+                data: "fcNombre"
+            },
+            @foreach(var item in Model)
+            {
+                <text>
+                { data: "@Html.Raw(item.fcProducto.Replace(" ", "_"))" },
+                </text>
+            }
+        ],
+    });
+
+
+    function SumatoriaTablaHistorial()
+    {
+
+        let tablaHistorial = $.fn.dataTable.Api("#TablaHistorial");
+        let dataHistorial = tablaHistorial.rows({ "filter": "applied" }).data().toArray();
+
+        @foreach(var item in Model)
+        {
+            <text>
+                let listCantidad_@Html.Raw(item.fcProducto.Replace(" ", "_")) = dataHistorial.map(x => x.@Html.Raw(item.fcProducto.Replace(" ", "_")));
+                let cantidad_@Html.Raw(item.fcProducto.Replace(" ", "_")) = 0;
+
+                if (dataHistorial.length > 0) {
+                    cantidad_@Html.Raw(item.fcProducto.Replace(" ", "_")) = listCantidad_@Html.Raw(item.fcProducto.Replace(" ", "_"))?.reduce((a, b) => (a ?? 0) + (b ?? 0)) ?? 0;
+                }
+                $("#totalCantidad_@Html.Raw(item.fcProducto.Replace(" ", "_"))").html(ConvertirDecimal( cantidad_@Html.Raw(item.fcProducto.Replace(" ", "_"))));
+
+            </text>
+        }
+
+    }
+
+    tablaHistorial.on("draw", function () {
+        SumatoriaTablaHistorial();
+    });
+
+
+    $("#TablaHistorial thead th input[type=text]").on('keyup change', function () {
+        var tabla = new $.fn.dataTable.Api("#TablaHistorial");
+        tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+    });
+
+</script>

@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "Lista de Solicitudes de Adición de Producto";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"><i class="fal fa-file fa-fw"></i>Lista de Solicitudes de Adición de Producto</h2>
+        <div class="col-lg-2">
+            <button class="btn btn-primary" onclick="crearSolicitud()" id="ficoLink">Crear Solicitud</button>
+        </div>
+    </div>
+  
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaSolicitudesAdicion">
+                <thead>
+                    <tr>
+                        <th>Acciones</th>
+                        <th></th>
+                        <th style="display:none">Solicitud</th>
+                        <th>Nombre Cliente</th>
+                        <th>Identidad</th>
+                        <th>Articulos Solicitados</th>
+                        <th>Usuario Solicitante</th> 
+                        <th>Comentario</th>
+                        <th>Fecha Solicitud</th>
+                        <th>Usuario Aplicado</th>
+                        <th>Fecha Aplicado</th>
+                        <th>Comentario Autorizador</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+       var RolAdicionProductos = @(ViewBag.RolesAdmin != null && (bool)ViewBag.RolesAdmin ? "true" : "false");
+
+        function crearSolicitud() {
+            debugger;
+              $.ajax({
+                 url: "@Url.Action("ModalSolicitudesProductos", "Solicitudes")",
+                  method: "POST",
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "html",
+                 success: function (resp) {
+
+                   ShowModalBig(resp);
+                 },
+                 error: function (resp) {
+                     AlertaError();
+                 }
+             });
+        }
+
+        function ModalAutorizarSolicitud(fiIDAdicionProduto, fcNombreCliente, fcArticulos, fcComentarioVendedor) {
+            debugger;
+          $.ajax({
+              url: '@Url.Action("ModalAutorizarSolicitud", "Solicitudes")',
+              method: 'POST',
+              data: {
+                  fiIDAdicionProduto: fiIDAdicionProduto,
+                  fcNombreCliente: fcNombreCliente,
+                  fcArticulos: fcArticulos,
+                  fcComentarioVendedor: fcComentarioVendedor
+              },
+              success: function (resp) {
+
+                  ShowModalBig(resp);
+              },
+              error: function () {
+                  alert('Error al cargar el modal.');
+              }
+           });
+         }
+             var tablaSolicitudesAdicion = $('#TablaSolicitudesAdicion').DataTable({
+                 autoWidth: true,
+                 responsive: true,
+                 language: {
+                     "emptyTable": "No se encontraron resultados.",
+                     "paginate": {
+                         first: "Primero",
+                         previous: "Anterior",
+                         next: "Siguiente",
+                         last: "Último"
+                     },
+                     "lengthMenu": " _MENU_ ",
+                     "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                     "infoEmpty": "No hay registros para mostrar.",
+                 },
+                 order: [[1, "desc"]],
+                 ajax: {
+                     url: '@Url.Action("SolicitudesAdicionProductosList", "Solicitudes")',
+                     method: "GET",
+                     dataSrc: function (data) {
+                         return data;
+                     }
+                 },
+
+                 columns: [
+
+                     {
+                         data: null,
+                         render: function (data) {
+
+                             var opciones = `<div class='dropdown d-inline-block dropleft'>
+                                <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>\n\t\t\t\t\t\t\t\t<i class=\"fal fa-ellipsis-v\"></i>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t
+                                <div class='dropdown-menu'>`;
+                             if (RolAdicionProductos && data.fiDEstado==0) {
+                                 opciones += `<a onclick="ModalAutorizarSolicitud('${data.fiIDAdicionProduto}', '${data.fcNombreCliente}', '${data.fcArticulos}', '${data.fcComentarioVendedor}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Autorizar</a>`;
+                             }
+
+                             opciones += '</div></div>';
+                             return opciones;
+                         }
+                     },
+                     {
+                         className: 'details-control',
+                         orderable: false,
+                         data: null,
+                         defaultContent: ''
+                     },
+                     { data: 'fiIDSolicitud', visible: false },
+                     { data: 'fcNombreCliente' },
+                     { data: 'fcIdentidad' },
+                     { data: 'fcArticulos' },
+                     { data: 'NombreSolicitante' },
+                     { data: 'fcComentarioVendedor' },
+                     {
+                         data: null,
+                         render: function (data) {
+                             return moment(data.fdFechaSolicitud).format("DD/MM/YYYY");
+                         }
+
+                     },
+                     { data: 'UsuarioAplicado' },
+                     {
+                         data: "fdFechaSolicitudAplicado",
+                         render: function (data) {
+                             if (!data || data === "1900-01-01" || moment(data).isSame("1900-01-01", "day")) {
+                                 return ' ';
+                             }
+                             return moment(data).format("DD/MM/YYYY");
+                         }
+                     },
+                     { data: 'fcComentarioAutorizador' },
+                     {
+                         data: null,
+                         render: function (data) {
+                             if (data.fiDEstado == 0) {
+                                 return '<div class="badge badge-secondary">Pendiente</div>';
+                             }
+                             if (data.fiDEstado == 2) {
+                                 return '<div class="badge badge-danger">Denegado</div>';
+                             }
+                             if (data.fiDEstado == 1) {
+
+                                 return '<div class="badge badge-success">Aprobado</div>';
+                             }
+
+
+                         }
+                     }
+
+                   
+
+                 ]
+             });
+
+        $('#TablaSolicitudesAdicion tbody').on('click', 'td.details-control', function () {
+                 var table = $.fn.dataTable.Api("#TablaSolicitudesAdicion");
+                     var i = $(this).find("i");
+                     var tr = $(this).closest('tr');
+                     var row = table.row(tr);
+                     var data = table.row(row).data();
+                     if (row.child.isShown()) {
+                         // This row is already open - close it
+                         row.child('');
+                         row.child.hide();
+                         tr.removeClass('info');
+                         $(i).removeClass("fa-minus").removeClass("text-danger").addClass("fa-plus").addClass("text-success");
+                     }
+                     else {
+                         //row.child("Test").show();
+                         $(i).removeClass("fa-plus").removeClass("text-success").addClass("fa-minus").addClass("text-danger");
+                         $.ajax({
+                             url: '@Url.Action("ViewListaProductosNovanet", "Contratista")',
+                             data: { fiIDSolicitud: data.fiIDSolicitud },
+                             type: 'Get',
+                             success: function (data) {
+                                 row.child(data).show();
+                                 tr.addClass('info');
+                             },
+                             error: function (data) {
+                                 AlertaError();
+                             },
+                         });
+                     }
+                 })
+
+
+    </script>
+}

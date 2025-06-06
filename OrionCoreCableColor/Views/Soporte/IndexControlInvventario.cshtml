@@ -1,0 +1,145 @@
+﻿
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-upload fa-fw"></i> Control de Inventario</h2>
+        <div class="panel-toolbar " role="menu">
+            <a href="@Url.Action("CrearConteoInventario")" class="btn btn-success"> Registrar Conteo de Inventario</a>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Fecha</th>
+                        <th>Ubicacion</th>
+                        <th>Usuario</th>
+                        <th>Observacion</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    
+    <script>
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaBitacoraInventario", "Soporte")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opt = "";
+                        opt = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)" ><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                        return opt;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<label style="display:none;">${data.fdFechaBitacora}</label>` + moment(data.fdFechaBitacora).format("DD/MM/YYYY HH:mm:ss");
+                    }
+                },
+
+                {
+                    data: "fcUbicacion",
+                },
+                {
+                    data: "fcNombreCorto",
+                },
+                {
+                    data: "fcObservacion"
+                }
+
+            ]
+
+        });
+
+
+        $('#TablaPrincipal tbody').on('click', 'a.details-productos', function () {
+            var table = $.fn.dataTable.Api("#TablaPrincipal");
+            var i = $(this).find("i");
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var data = table.row(row).data();
+            if (row.child.isShown()) {
+
+                row.child('');
+                row.child.hide();
+                tr.removeClass('info');
+                $(i).removeClass("fa-minus").removeClass("text-danger").addClass("fa-plus").addClass("text-success");
+            }
+            else {
+
+                $(i).removeClass("fa-plus").removeClass("text-success").addClass("fa-minus").addClass("text-danger");
+
+
+                $.ajax({
+                    url: '@Url.Action("ViewListaDetalleBitacora", "Soporte")',
+                    data: { fiIDInventarioBitacoraMaestro: data.fiIDInventarioBitacoraMaestro },
+                    type: 'Get',
+                    success: function (data) {
+                        row.child(data).show();
+                        tr.addClass('info');
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        AlertaError();
+                    },
+                });
+            }
+        });
+
+
+        $("#TablaPrincipal thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+    </script>
+
+
+    }

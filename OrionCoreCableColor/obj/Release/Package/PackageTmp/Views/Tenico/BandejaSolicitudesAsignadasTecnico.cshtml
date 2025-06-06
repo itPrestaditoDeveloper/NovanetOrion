@@ -1,0 +1,447 @@
+﻿
+@{
+    ViewBag.Title = "BandejaSolicitudesAsignadasTecnico";
+}
+<style>
+
+
+    #reader {
+        width: 80%;
+    }
+
+    #result {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+</style>
+<h2>Mis Asignaciones</h2>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Solicitudes de instalación</h2>
+
+    </div>
+
+    <div id="panelprincipal" class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudes">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th>Acciones</th>
+                        <th>Solicitud</th>
+                        <th>Orden Cepheus</th>
+                        <th>Codigo Cliente</th>
+                        <th>Cliente</th>
+                        <th>Articulos a instalar</th>
+                        <th>Fecha instalación</th>
+                        <th>Comentario</th>
+                        <th>Departamento</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+    <div id="divQR">
+
+    </div>
+    <div id="alerta">
+
+    </div>
+
+</div>
+@section Scripts{
+
+
+    <script src="~/Content/js/qr/html5-qrcode.min.js"></script>
+
+    <script>
+
+
+        var infoUser = @Html.Raw(Json.Encode(ViewBag.IdInfoUser));
+        var dato_archivo;
+        //var fbEstadoAprobado;
+        //var fbEstadoDenegado;
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+
+
+        var tablaPrincipal = $('#BandejaSolicitudes').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListaSolicitudes")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      //console.log(data);
+                      return data;
+                  }
+            },
+            rowCallback: function (row, data, index) {
+                if (data.fbArticulosExtra) { // aqui es donde se pinta las solicitudes si tienen articulos
+                    $(row).css('background-color', "#EEEEEE");
+                }
+            },
+            columns: [
+
+                {
+                data: null,
+                render: function (data) {
+                    let cliente = "'" + data.fcNombreCliente + "'";
+                    let ubicacion = "'" + data.fcubicacion + "'";
+
+
+
+                    var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                    opciones += '<div class="dropdown-menu">';
+                    if (data.fiIDEstadoInstalacion == 2) {
+                        opciones += `<a  href="javascript:void(0)" onclick="EnviarAProceso('${data.fiIDSolicitudInstalacion}','${data.fcNombreCliente}','${data.fcPaquete}')" class="dropdown-item"><i class="fal fa-check-circle"></i>Iniciar Instalacion</a>`;
+                    }
+
+                    else {
+                        //console.log(data);
+                        if(data.fbPermisoInstalacion) {
+                            if (data.fiIDEstadoInstalacion == 7 || data.fiIDEstadoInstalacion == 4 || data.fiIDEstadoInstalacion == 8) {
+                                //opciones += `<a href="@(Url.Action("ViewRevisarDetalleInstalacion", "Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-edit fa-fw"></i> Revisar instalación</a>`;
+                                opciones += `<a onclick = "ModalVerDetalleSolicitud(${data.fiIDSolicitudInstalacion})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Detalle</a>`
+                            }
+
+                        }else {
+                            if (data.fiIDTipoSolicitud == 2) {
+                                opciones += `<a href="@(Url.Action("ViewDetalleInstalacionOrdenTrabajo","Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-edit fa-fw"></i> Terminar instalacion</a>`;
+                            } else if (data.fiIDEstadoInstalacion == 3){
+
+                                opciones += `<a href="@(Url.Action("ViewDetalleInstalacion","Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-edit fa-fw"></i> Terminar instalacion</a>`;
+                            }
+                        }
+                        if(data.fiIDTipoSolicitud == 2) {
+                        }else {
+                            opciones += (data.fiQRAcceso == 1 && data.fiIDEstadoInstalacion != 4)? `<a  href="javascript:void(0)" onclick="EscanearQR('${data.fiIDSolicitudInstalacion}')" class="dropdown-item"><i class="fal fa-camera"></i>Escanear QR</a>`:"";
+                        }
+                    }
+
+                    if (data.fcDescripcion == 'Pend Articulo') {
+
+                        if (data.fbArticulosExtra && data.fbPermisoValidarSoporte) {
+                            opciones += `<a href="@(Url.Action("ClientesConArticulos", "Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}&idsolicitud=${data.fiIDSolicitud}&idTipoSolicitud=${data.fiIDTipoSolicitud}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Entregar Articulo</a>`
+                        }
+                    }
+                      opciones += `<a href="@(Url.Action("ViewOrdenDeTrabajo","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver documentos</a>`;
+                       //opciones += data.fiUbicacionGuardada == 1 && data.fiIDEstado == 2 ? '<a href="javascript:void(0)" onclick="ModalEnviarLinkPago(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDFirma + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Enviar Link Pago</a>':'';
+                       //opciones += '<a href="javascript:void(0)" onclick="ModalDetalleCliente(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDFirma + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Detalle de la Solicitud</a>';
+                       //opciones += data.fiIDPagoInicial == 1? '<a href="javascript:void(0)" onclick="ModalGenerarOrdenCompra(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDFirma + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Generar Orden Compra</a>':'';
+                       //opciones += '<a href="javascript:void(0)" onclick="ModalConfirmacionCrearPrestamo(' + data.fiIDCliente + ',\'' + data.fcIdentidad + '\',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Crear Prestamo</a>';
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+
+                {
+                    data: 'fiIDSolicitud'
+                },
+
+                {
+                    data: 'fcNumeroOrdenCfeus'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcCodigoCliente;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcNombreCliente+"<br>"+data.fcTelefonoCliente;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        //return data.fcPaquete; //antes de la api
+                        return data.fcArticulosdelContrato;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaInstalacion).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcComentario;
+                    }
+
+                },
+                {
+                    data: "fcDepartamento"
+                },
+                {
+                    data: null,
+
+                    render: function (data) {
+                        return IrAMaps(data.fcubicacion, data.fcDireccionDetallada);
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+
+                        return `<span class="btn-sm btn-block badge badge-${data.fcClase} text-white">${data.fcDescripcion}</span>`;
+
+
+
+
+                        //else if (data.fiIDEstado == 2) {
+                        //    return '<div class="badge badge-success">Aprobado</div>';
+                        //}
+                    }
+
+                }
+
+                //,
+
+
+                //{
+                //    data: null,
+                //    render: function (data) {
+                //        if (data.fiEstadoInstalacion == 0) {
+                //            return '<div class="badge badge-secondary text-white">Pendiente</div>';
+                //        }
+                //        else if (data.fiEstadoInstalacion == 1) {
+                //            return '<div class="badge badge-warning text-white">Instalado</div>';
+                //        }
+                //        //else if (data.fiIDEstado == 2) {
+                //        //    return '<div class="badge badge-success">Aprobado</div>';
+                //        //}
+                //    }
+
+                //}
+
+
+
+
+
+            ]
+
+        });
+
+        $("#BandejaSolicitudes thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#BandejaSolicitudes");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+        function ModalVerDetalleSolicitud(idsolicitudinstalacion) {
+             $.ajax({
+                url: "@Url.Action("ModalDetalleInstalacion", "Contratista")",
+                method: "get",
+                 data: { idSolicitudInstalacion: idsolicitudinstalacion},
+                success: function (resp) {
+
+                    ShowModalBigScroll(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        tablaPrincipal.on("responsive-resize", function () {
+            var thead = $("#BandejaSolicitudes thead tr").toArray();
+            var buscadores = $(thead[0]).find("th").toArray();
+
+            var titulos = $(thead[1]).find("th").toArray();
+            for (var x = 0; x < titulos.length; x++) {
+                if ($(titulos[x]).css("display") == "none") {
+
+                    $(buscadores[x]).css("display", "none");
+                } else {
+                    $(buscadores[x]).css("display", "");
+                }
+            }
+        });
+
+        function ModalConfirmacion(fiIDSolicitudInstalacion, fiIDContratista,cliente,ubicacion) {
+
+            VerModalConObjetoDeParametro({ fiIDSolicitudInstalacion: fiIDSolicitudInstalacion,fiIDContratista:fiIDContratista,cliente:cliente,ubicacion:ubicacion }, "@Url.Action("ShowAsignacionContratista")");
+
+        }
+        function EscanearQR(fiIDSolicitudInstalacion) {
+            VerModalConObjetoDeParametro({ fiIDSolicitudInstalacion: fiIDSolicitudInstalacion}, "@Url.Action("FotoQr")");
+            //$("#divQR").html('<input id="file-input-'+fiIDSolicitudInstalacion + '"  type="file" accept="image/png,image/jpeg,image/jpg" style="height:0.5px;width:0.5px">');
+            //$('#file-input-' + fiIDSolicitudInstalacion).click();
+
+            //$('#file-input-' + fiIDSolicitudInstalacion).change(function () {
+
+            //    dato_archivo = $('#file-input-' + fiIDSolicitudInstalacion).prop("files")[0];
+
+            //    //EscanearQRBack(dato_archivo, fiIDSolicitudInstalacion);
+
+            //})
+        }
+        function EscanearQRBack(file,idInstalacion) {
+            var form_data = new FormData()
+        form_data.append("file", file);
+        $.ajax({
+            url: "@Url.Action("GetInformacionBarCodeQr")",
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ModalUrlAdendun(idInstalacion,resp.producto)
+
+                    //var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    //tablaT.ajax.reload();
+            } else {
+
+                ToastrError("Error!", resp.Mensaje);
+            }
+                    ToastrError("Error", resp.Mensaje);
+                    //$("#btnGuardarForm").show();
+
+
+
+
+            }, error: function (resp) {
+                ToastrError("Error", resp.Mensaje);
+                //$("#btnGuardarForm").show();
+            }
+        });
+        }
+
+        function ModalUrlAdendun(fiIDSolicitudInstalacion, url) {
+            alert(url)
+          //  ToastrSuccess("Listo!", url);
+           //  VerModalConObjetoDeParametro({ fiIDSolicitudInstalacion: fiIDSolicitudInstalacion,url:url }, "@Url.Action("ShowUrlAdendun","Tenico")");
+        }
+        function ModalConfirmacionCrearPrestamo(IdCliente, Identidad, IDSolicitud) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ConfirmacionPrestamo", "Solicitudes")",
+                method: "get",
+                data: { IdCliente: IdCliente, Identidad: Identidad, IDSolicitud: IDSolicitud},
+                success: function (resp) {
+                    //ShowModalBig(resp);
+                    ShowModalSmall(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function ModalDetalleCliente(Nombre, Telefono, IDFirma) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ModalDetalleCliente", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function EnviarAProceso(fiIDSolicitudInstalacion,cliente,arti) {
+            debugger;
+            // VerModalSmConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma }, "@Url.Action("ConfrimacionNumero", "Solicitudes")");
+            $.ajax({
+                url: "@Url.Action("ActualizarEstadoaProceso")",
+                method: "get",
+                data: { fiIDSolicitudInstalacion: fiIDSolicitudInstalacion, nombrecliente: cliente, articulos: arti},
+                success: function (data) {
+                    console.log(data)
+                    //ShowModalSmall(resp)
+                    ToastrSuccess("Listo!", data.Titulo);
+                    //window.location.reload();
+                    location.reload();
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function IrAMaps(Localizacion, fcDireccionDetallada) {
+            let Latitud = Localizacion.split(',')[0];
+            let Longitud = Localizacion.split(',')[1];
+            let link = `https://www.google.com/maps?z=12&t=k&q=${Latitud},${Longitud}`;
+            let a = `<label style="display:none;">${fcDireccionDetallada}</label><a title="${fcDireccionDetallada}" class="btn btn-sm bg-success text-white" href="${link}" target="_blank"><i class="fal fa-map-marker-alt"></i>Google Maps</a>`;
+
+            //`<a class="btn btn-sm bg-success text-white" href="${link}" target="_blank"><i class="fal fa-map-marker-alt"></i>Google Maps</a>`
+            //<i class="fa fa-google fa-fw"></i>
+            //let a = `<a class="btn btn-link"  href="${link}" target="_blank">${fcDireccionDetallada}</a>`
+            return a;
+        }
+
+        ////singal R en tecnicos
+
+        chat.client.ModificarFilaTecnico = function (tecnicoViewModel) {
+            //console.log(ticket);
+
+            var tabla = $.fn.dataTable.Api("#BandejaSolicitudes");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIDSolicitudInstalacion == tecnicoViewModel.fiIDSolicitudInstalacion);
+            tabla.row(node).data(tecnicoViewModel).draw(false);
+
+        }
+
+
+    </script>
+}
+
+

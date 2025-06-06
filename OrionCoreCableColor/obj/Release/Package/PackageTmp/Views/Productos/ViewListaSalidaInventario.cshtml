@@ -1,0 +1,54 @@
+﻿@model IEnumerable<OrionCoreCableColor.Models.Productos.ListInventarioMovimientoDetalleViewModel>
+
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="tbHistoricoProductos-@Model.FirstOrDefault().fiIDInventarioMovimientoMaestro" style="width:100%;">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Serie 1</th>
+            <th>Serie2 / Mac</th>
+            <th>Cantidad</th>
+            <th>Referencia</th>
+            <th>Ubicacion Inicial</th>
+            <th>Ubicacion Destino</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.fcProducto</td>
+                <td>@item.fcPrecios</td>
+                <td>@item.fcCodigoSerie1</td>
+                <td>@item.fcCodigoSerie2</td>
+                <td>@item.fnCantidad.ToString("n")</td>
+                <td>@item.fcDescripcion</td>
+                <td>@item.fcUbicacionInicial</td>
+                <td>@item.fcUbicacionDestino</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    var tablaPrincipal = $('#tbHistoricoProductos-@Model.FirstOrDefault().fiIDInventarioMovimientoMaestro').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            //dom: 'Bfrtip',
+            //order: [[1, "desc"]],
+        });
+</script>

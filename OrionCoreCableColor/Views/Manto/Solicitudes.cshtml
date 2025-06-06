@@ -1,0 +1,770 @@
+﻿
+@{
+    ViewBag.Title = "Solicitudes";
+}
+
+<style>
+    .FormatoBotonesIconoCuadrado {
+        position: absolute;
+        background-color: white;
+        border-style: solid;
+        /*color: white;*/
+        /*padding: 5px 5px;*/
+        border-color: lightgray;
+        border-width: 1px;
+        margin: 0;
+        white-space: normal !important;
+        vertical-align: text-top;
+        text-align: center;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 55px;
+        padding-bottom: 5px;
+        height: 95px;
+        width: 80px;
+        font-size: 12px;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position-y: 10px;
+        background-position-x: center;
+        display: inline-block;
+        text-wrap: normal;
+        color: #808080;
+    }
+</style>
+
+
+<h2>Mantenimiento de solicitud de crédito <span id="lblIdSolicitud" style=""></span><span id="lblMensajeEstadoPrestamo" style="display: none;"></span></h2>
+<div class="card h-100">
+    <div class="card-body">
+        <div class="form-inline" id="divParametrosBusqueda">
+            <div class="form-group mb-0">
+                <label class="form-control-plaintext font-weight-bold">No. Solicitud</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-0">
+                <input name="txtNoSolicitud" id="txtNoSolicitud" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+            </div>
+            <button id="btnBuscarSolicitud" type="button" onclick="BuscarSolicitud()" class="btn btn-md btn-secondary">
+                Buscar
+            </button>
+        </div>
+        <div class="row mt-3 mb-0">
+            <div class="col-6">
+                <div class="table-responsive">
+                    <table class="table table-sm" style="margin-bottom: 0px;">
+                        <tbody>
+                            <tr>
+                                <td><span class="font-weight-bold">Información del cliente</span></td>
+                                <td><input id="txtNoSolicitudContratista" class="form-control mascara-enteros text-left" type="tel" style="text-align: right; display:none"></td>
+                                <td><input id="txtNoSolicitudbd" class="form-control mascara-enteros text-left" type="tel" style="text-align: right; display:none"></td>
+                                <td><input id="txtidclientedbd" class="form-control mascara-enteros text-left" type="tel" style="text-align: right; display:none"></td>
+
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Cliente</span></td>
+                                <td><span class="label label-table label-success" id="lblNombreCliente"></span></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Identidad</span></td>
+                                <td id="lblIdentidadCliente"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">RTN numérico</span></td>
+                                <td id="lblRtn"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Teléfono</span></td>
+                                <td id="lblTelefono"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="table-responsive">
+                    <table class="table table-sm" style="margin-bottom: 0px;">
+                        <tbody>
+                            <tr>
+                                <td><span class="font-weight-bold">Información de la solicitud</span></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Paquete</span></td>
+                                <td id="lblPaquete"></td>
+                                <td><button onclick="EditarPaquete()" id="btnEditPaquete" class="btn btn-xs btn-warning" style="display:none;"><i class="fal fa-edit"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Producto</span></td>
+                                <td id="lblProducto"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Tipo de solicitud</span></td>
+                                <td id="lblTipoDeSolicitud"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">CC / Vendedor</span></td>
+                                <td id="lblAgenciaYVendedorAsignado"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><span class="font-weight-bold text-muted">Gestor asignado</span></td>
+                                <td id="lblGestorAsignado"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="divInformacionSolicitud" style="display: none " class="">
+            <ul class="nav nav-tabs nav-tabs-custom nav-justified mt-1" role="tablist" id="navTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#tabOpcionesCreditos" role="tab" aria-selected="false">
+                        <span class="d-none d-sm-block">Opciones de mantenimiento</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active bg-light" id="tabOpcionesCreditos" role="tabpanel">
+                    <div class="form-group row justify-content-center mb-0">
+                        <div class="col-auto mt-2 mb-2 justify-content-center">
+
+                            <button id="btnReiniciarGeoReferencia" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/refresh_40px.png');">
+                                Reiniciar Geo Ref.
+                            </button>
+                            <button id="btnReiniciarContrato" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                Reiniciar Contrato
+                            </button>
+                            <button id="btnEliminarDocumentos" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/edit_file_50px.png');">
+                                Modificar Docs
+                            </button>
+                            <button id="btnPagare" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/document_50px.png');">
+                                Subir Pagare
+                            </button>
+                            @*<button id="btnReferencias" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/crowd_40px.png');">
+            Referencias
+        </button>*@
+
+                            <button id="btnEditarCuota" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/edit_file_50px.png');">
+                                Editar Cuota Mensual
+                            </button>
+                            @if (User.IsInRole("Orion_Acceso_MantoSolicitudes_EditarGarantia"))
+                            {
+                                <button id="btnEditarGarantia" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                    Editar Garantia
+                                </button>
+                            }
+
+                            @if (User.IsInRole("Orion_Acceso_Manto_EditarGarantia_Supervisor"))
+                            {
+                                <button id="btnEditarGarantiaToken" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                    Editar Garantia
+                                </button>
+                            }
+
+                            <button id="btnEditarInstalacion" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                Editar Instalacion
+                            </button>
+                            <button id="btnEditarDatosCepheus" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                Editar Datos Cepheus
+                            </button>
+                            <button id="btnEditarVisitaInstalacion" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                Reprograma Instalacion
+                            </button>
+                            <button id="btnEditarEstadoInstalacion" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                Estado Instalacion
+                            </button>
+                            <button id="btnReaccinarOficial" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/refresh_40px.png');">
+                                Cambiar Oficial
+                            </button>
+                            <button id="btnInfoCliente" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/iconoAnalisis16.png');">
+                                Cambiar Info Cliente
+                            </button>
+                            <button id="btnPrimerPago" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/iconoAnalisis16.png');">
+                                Confirmar Primer Pago
+                            </button>
+                            <button id="btnMesGratis" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/iconoAnalisis16.png');">
+                                Mes Gratis
+                            </button>
+
+                            <button type="button" class="FormatoBotonesIconoCuadrado" onclick="redirigirConParametros()" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/edit_file_50px.png');">
+                                Docs Instalación
+                            </button>
+                            <button id="btnReiniciarSolicitud" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/refresh_40px.png');">
+                                Reiniciar Solicitud
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group row mb-0">
+
+                    <h6 class="font-weight-bold pl-3">Historial de mantenimientos</h6>
+
+                    <div class="col-12 justify-content-center table-responsive">
+                        <div id="tblHistorialMantenimiento_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-sm table-bordered table-hover cursor-pointer dataTable no-footer dtr-inline" id="tblHistorialMantenimiento" style="width: 100%;" role="grid" aria-describedby="tblHistorialMantenimiento_info">
+                                        <thead class="thead-light">
+                                            <tr role="row">
+                                                <th class="sorting" aria-label="Fecha: Activar para ordenar la columna de manera ascendente">Fecha</th>
+                                                <th class="sorting" aria-label="CC: Activar para ordenar la columna de manera ascendente">Opcion</th>
+                                                <th class="sorting" aria-label="Usuario: Activar para ordenar la columna de manera ascendente">Usuario</th>
+                                                <th class="no-sort sorting_disabled" aria-label="Observaciones">Observaciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje de advertencias y errores -->
+        <div id="PanelMensajeErrores" class="form-group row mb-0">
+            <span id="lblMensaje" class="col-sm-2 col-form-label text-danger"></span>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+        var idsol = 0;
+        var fnValorPagadoPrimerPago = 0;
+        var idPlazo = 0;
+        var idPaquete = 0;
+        var Model = null;
+        function BuscarSolicitud() {
+
+            var divinfo = document.getElementById('divInformacionSolicitud');//funcion que se usa para desocultar y ocultar las opciones de mantenimiento, al darle click al boton buscar
+            if (divinfo.style.display != 'none') {
+
+            } else {
+                divinfo.style.display = (divinfo.style.display === 'none') ? 'block' : 'none';
+            }
+
+            idsol = $(`#txtNoSolicitud`).val();
+            CargarDatatable(idsol);
+            //tablaPrincipal.ajax.destroy();
+            //tablaPrincipal.ajax.reload()
+
+            $.ajax({
+                url: "@Url.Action("BuscarSolicitud", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsol },
+                success: function (resp)
+                {
+                    Model = resp;
+                    $(`#lblNombreCliente`).text(resp.DetalleCliente.fcNombre);
+                    $(`#txtNoSolicitudbd`).val(resp.DetalleCliente.fiIDSolicitud);
+                    $(`#txtNoSolicitudContratista`).val(resp.DetalleCliente.IdcontratistaSolicitud);
+                    $(`#txtidclientedbd`).val(resp.DetalleCliente.fiIDCliente);
+                    $(`#lblIdentidadCliente`).text(resp.DetalleCliente.fcIdentidad);
+                    $(`#lblRtn`).text();
+                    $(`#lblTelefono`).text(resp.DetalleCliente.fcTelefono);//
+                    var prod = "";
+                    for (const item of resp.DetalleProducto) {
+                        prod += item.fcProducto + '\\'
+                    }
+                    $(`#lblProducto`).text(prod);
+                    $(`#lblTipoDeSolicitud`).text();
+                    $(`#lblAgenciaYVendedorAsignado`).text(resp.DetalleCliente.fcCodigoVendedor);
+                    $(`#lblGestorAsignado`).text();
+                    fnValorPagadoPrimerPago = resp.DetalleCliente.fnValorPagadoPrimerPagoLempiras;
+                    idPlazo = resp.DetalleCliente.fiPlazoSeleccionado;
+                    $(`#lblPaquete`).text(resp.DetalleCliente.fcPaquete);
+                    if (resp.DetalleCliente.fiIDEstadoInstalacion == 0) {
+                        $(`#btnEditPaquete`).css("display", "block");
+                    } else {
+                        $(`#btnEditPaquete`).css("display", "none");
+                    }
+
+                    if (resp.DetalleCliente.fiEstadoSolicitud == 3) {
+                        $(`#btnReiniciarSolicitud`).css("display", "block");
+                    } else {
+                        $(`#btnReiniciarSolicitud`).css("display", "none");
+                    }
+
+                    idPaquete = resp.DetalleCliente.fiIDPaquete;
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            });
+        }
+
+        $(`#btnReiniciarGeoReferencia`).on("click", function () {
+            var idsoli = $(`#txtNoSolicitudbd`).val(); // id solicitud, no es la del boton de buscar, por que pude pasar de que el usuario cambie y no le de al boton buscar y por erro cambie otro que no es,
+            var idclien = $(`#txtidclientedbd`).val();
+            $.ajax({
+                url: "@Url.Action("ViewReiniciarGeoReferencia", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsoli, idCliente: idclien},
+                success: function (datas) {
+                    //var dataParaAlert = { Estado: true, Titulo: "Atencion!", Mensaje: "Ya enviaste esta información, muchas gracias!" };
+                    //AlertaAjax(dataParaAlert);
+                    ShowModal(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Reiniciar Geo Referencia", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+
+        });
+
+        $(`#btnReiniciarContrato`).on("click", function () {
+            console.log(`Dio click en reinicio de contrato`);
+            var idclien = $(`#txtidclientedbd`).val();
+
+            bootbox.confirm({
+                title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro que desea Reiniciar el contrato <span class='fw-500'></span>`,
+                message: "<span><strong>Advertencia!:</strong> Esta Accion no se puede Reversar</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+                    //console.log(result)
+                    if (result == true) {
+
+                    $.ajax({
+                        url: "@Url.Action("ReiniciarContrato", "Manto")",
+                        type: "POST",
+                        data: { IdSolicitud: idsol },
+                        success: function (datas) {
+                            var resultado = datas[0];
+                            if (resultado.fiMensaje == "1") {
+                                $.ajax({
+                                    url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                                    type: "POST",
+                                    data: { IdSolicitud: idsol, IdCliente: idclien, Observaciones: " ", Opcion: 'Reiniciar Contrato' },
+                                    success: function (respuesta) {
+                                        var dataerror = { Titulo: "Exito", Mensaje: "Contrato Reiniciado Correctamente", Estado: true }
+                                        AlertaAjax(dataerror)
+                                        CerrarSuitAlert();
+                                    },
+                                    error: function (respuesta) {
+                                        var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Agregar la Bitacora", Estado: false }
+                                        AlertaAjax(dataerror)
+                                    }
+                                })
+                            } else if (resultado.fiMensaje == "2") {
+
+                                var dataerror = { Titulo: "Advertencia!", Mensaje: "Contrato Ya Se Ha Reiniciado", Estado: false }
+                                AlertaAjax(dataerror)
+                                CerrarSuitAlert();
+                            }
+                        },
+                        error: function (datae) {
+                            var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Reiniciar Contrato", Estado: false }
+                            AlertaAjax(dataerror)
+                        }
+                    })
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+
+
+        });
+
+        function redirigirConParametros() {
+            var idclien = $(`#txtidclientedbd`).val();
+            var idsol = $(`#txtNoSolicitudbd`).val();
+            var idsolContra = $(`#txtNoSolicitudContratista`).val();
+            var url = `ViewInstalacionDocumentosContratista/Manto?idsol=${idsol}&idsolContra=${idsolContra}&idclien=${idclien}`;
+            window.location.href = url;
+        }
+
+        $(`#btnEliminarDocumentos`).on("click", function () {
+            var idclien = $(`#txtidclientedbd`).val();
+
+            $.ajax({
+                //url: "Url.Action("ViewElimiardocumentos", "Manto")",
+                url: "@Url.Action("ViewDocumentosSolicitud", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsol, idCliente: idclien},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Documento", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        });
+        $(`#btnEditarDatosCepheus`).on("click", function () {
+            var idclien = $(`#txtidclientedbd`).val();
+
+            $.ajax({
+                url: "@Url.Action("ViewEditarDatosCepheus", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsol, idCliente: idclien},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        });
+
+        $(`#btnEditarVisitaInstalacion`).on("click", function () {
+
+            var idclien = $(`#txtidclientedbd`).val();
+
+            $.ajax({
+                url: "@Url.Action("ViewEditarDatosVisitaInstalacion", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsol, idCliente: idclien},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        });
+
+        $(`#btnEditarEstadoInstalacion`).on("click", function () {
+
+            var idclien = $(`#txtidclientedbd`).val();
+
+            $.ajax({
+                url: "@Url.Action("ViewEditarDatosEstadoInstalacion", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsol, idCliente: idclien},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        });
+        $(`#btnReaccinarOficial`).on("click", function () {
+
+            var idclien = $(`#txtidclientedbd`).val();
+
+            $.ajax({
+                url: "@Url.Action("ViewCambiarOfical", "Manto")",
+                type: "POST",
+                data: { IdSolicitud: idsol, idCliente: idclien},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        });
+        $(`#btnReferencias`).on("click", function () {
+            var idclien = $(`#txtidclientedbd`).val();
+
+            $.ajax({
+                url: "@Url.Action("VistaReferencias", "Manto")",
+                type: "POST",
+                data: { id: idclien},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar las Referencias", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+        });
+
+        $(`#btnEditarCuota`).on("click", function () {
+            var idclien = $(`#txtidclientedbd`).val();
+          //  VerModalConObjetoDeParametro({ Nombre: "Edgardo", IDCliente: idclien, IDSolicitud: idsol}, "@Url.Action("ConfrimacionNumero", "Manto")");
+            VerModalSmConObjetoDeParametro({ Nombre: "", IDCliente: idclien, IDSolicitud: idsol, codigoToken: "N001", Identidad: '', ValorMonedaNacional: 0.00}, "@Url.Action("ConfirmacionToken", "Manto")");
+
+        });
+
+        $("#btnEditarInstalacion").click(function () {
+            VerModalScrollConObjetoDeParametro({ IDSolicitud: idsol, idEquifaxCliente: $(`#txtidclientedbd`).val() }, "@Url.Action("ViewDetalleInstalacion", "Manto")");
+        });
+
+
+        $("#btnEditarGarantia").click(function () {
+            var idclien = $(`#txtidclientedbd`).val();
+            VerModalScrollConObjetoDeParametro({ IDSolicitud: idsol, idEquifaxCliente: $(`#txtidclientedbd`).val() }, "@Url.Action("ViewDetalleGarantia","Manto")");
+           // VerModalSmConObjetoDeParametro({ Nombre: "", IDCliente: idclien, IDSolicitud: idsol , , codigoToken: "N004"}, "@Url.Action("ConfirmacionToken", "Manto")");
+        });
+
+        $("#btnReiniciarSolicitud").click(function () {
+
+
+
+            debugger;
+            var nom = $(`#lblNombreCliente`).text();
+            var identi = $(`#lblIdentidadCliente`).text();
+            var sol = $(`#txtNoSolicitud`).val();
+            var idclien = $(`#txtidclientedbd`).val();
+            VerModalSmConObjetoDeParametro({ Nombre: nom, IDCliente: idclien, IDSolicitud: sol, codigoToken: "N005", Identidad: '', ValorMonedaNacional: 0.00 }, "@Url.Action("ConfirmacionToken", "Manto")");
+
+            //VerModalSmConObjetoDeParametro({ Nombre: nom, IDSolicitud: sol }, "@Url.Action("ViewReinicioSolicitud", "Manto")");
+        });
+
+        $("#btnEditarGarantiaToken").click(function () {
+            var idclien = $(`#txtidclientedbd`).val();
+            VerModalSmConObjetoDeParametro({ Nombre: "", IDCliente: idclien, IDSolicitud: idsol, codigoToken: "N004", Identidad: '', ValorMonedaNacional: 0.00}, "@Url.Action("ConfirmacionToken", "Manto")");
+        });
+
+        $(`#btnPagare`).on("click", function () {
+            console.log(`entro en el boton de eliminar`);
+            var idclien = $(`#txtidclientedbd`).val();
+            //idsol  // es el id de la solicitud
+
+            bootbox.confirm({
+                title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro que desea Generar y Guardar el Pagare <span class='fw-500'></span>`,
+                message: "<span><strong>Advertencia!:</strong> Esta Accion no se puede Reversar</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+
+                    if (result == true) {
+                        $.ajax({
+                            url: "@Url.Action("GenerarPagareSolicitud", "Reportes")",
+                            method: "Get",
+                            data: { idSolicitud: idsol },
+
+                            success: function () {
+                                //window.open("@Url.Action("GetPdf", "Base")", "_blank");
+                                $.ajax({
+                                    url: "@Url.Action("SubirPagare", "Manto")",
+                                    method: "Get",
+                                    data: { idSolicitud: idsol },
+                                    success: function (respuesta) {
+                                        var dataerror = { Titulo: "Exito", Mensaje: "Pagare Subido Correctamente", Estado: true }
+                                        AlertaAjax(dataerror)
+                                    },
+                                    error: function (respuesta) {
+                                        var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Subir el Pagare", Estado: false }
+                                        AlertaAjax(dataerror)
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+
+        });
+
+        $(`#btnInfoCliente`).on("click", function () {
+            var idclien = $(`#txtidclientedbd`).val();
+           //VerModalSmConObjetoDeParametro({ Nombre: "", IDCliente: idclien, IDSolicitud: idsol , codigoToken: "N003"}, "@Url.Action("ConfirmacionToken", "Manto")");
+
+            $.ajax({
+                url: "@Url.Action("InfoCliente", "Manto")",
+                type: "GET",
+                data: { idssolicitud: idsol},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+
+        });
+
+        $(`#btnMesGratis`).on("click", function () {
+
+          // VerModalSmConObjetoDeParametro({ Nombre: "", IDCliente: idclien, IDSolicitud: idsol , codigoToken: "N002"}, "@Url.Action("ConfirmacionToken", "Manto")");
+            debugger
+            var idclien = $(`#txtidclientedbd`).val();
+            var nom = $(`#lblNombreCliente`).text();
+            var identi = $(`#lblIdentidadCliente`).text();
+            var fiPlazoSeleccionado = idPlazo;
+
+            $.ajax({
+                url: "@Url.Action("ModalAgregarDatosCliente", "Manto")",
+                type: "GET",
+                data: { Nombre: nom, Identidad: identi, IDSolicitud: idsol, idCliente: idclien, fiPlazoSeleccionado : fiPlazoSeleccionado},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });
+
+        });
+
+        $(`#btnPrimerPago`).on("click", function () {
+            
+            debugger
+            var idclien = $(`#txtidclientedbd`).val();
+            var nom = $(`#lblNombreCliente`).text();
+            var identidad = $(`#lblIdentidadCliente`).text();
+            VerModalSmConObjetoDeParametro({ Nombre: nom, IDCliente: idclien, IDSolicitud: idsol, codigoToken: "N006", Identidad: identidad, ValorMonedaNacional: fnValorPagadoPrimerPago }, "@Url.Action("ConfirmacionToken", "Manto")");
+            @*$.ajax({
+                url: "@Url.Action("ModalEnviarComprobantePago", "Manto")",
+                type: "GET",
+                data: { Nombre: nom, Identidad: identi, IDSolicitud: idsol, idCliente: idclien, ValorMonedaNacional: fnValorPagadoPrimerPago},
+                success: function (datas) {
+                    ShowModalBigScroll(datas);
+                },
+                error: function (datae) {
+                    var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
+                    AlertaAjax(dataerror)
+                }
+            });*@
+        });
+
+        function CargarDatatable(ids) {
+            var tablaPrincipal = $('#tblHistorialMantenimiento').DataTable({
+                "destroy": true,
+                autoWidth: true,
+                responsive: true,
+                language: {
+                    "emptyTable": "No se encontraron resultados.",
+                    //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                    "paginate": {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    "lengthMenu": " _MENU_ ",
+                    "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                    "infoEmpty": "No hay registros para mostrar.",
+                },
+                dom: 'Bfrtip',
+                order: [[0, "desc"]],
+                ajax: {
+                    url: '@Url.Action("ListSolicitudesMantenimiento", "Manto")',
+                    data: { IdSolicitud: ids },
+                    method: "Get",
+                    dataSrc: function (data) {
+                        return data;
+                    }
+                },
+                columns: [
+
+                    {
+                        data: null,
+                        render: function (data) {
+                            //console.log(data);
+                            return `<label style="display:none;">${data.fdFechaMantenimiento}</label>` + moment(data.fdFechaMantenimiento).format("DD/MM/YYYY");
+                        }
+                    },
+
+                    {
+                        data: 'fcOpcionSeleccionada'
+                    },
+                    {
+                        data: 'fcNombre',
+
+                    },
+                    {
+                        data: 'fcObservaciones',
+
+                    },
+                ]
+            });
+        }
+
+        function EditarPaquete()
+        {
+            model = {
+                fiIDSolicitud: idsol,
+                fiIDPaquete: Model.DetalleCliente.fiIDPaquete,
+                Productos: []
+            };
+
+
+            for (let item of Model.DetalleProducto)
+            {
+                model.Productos.push({
+                    fiIDProducto: item.fiIDProducto,
+                    fiCantidad: item.fnCantidad,
+                    fbIncluido: false,
+                    fbEditar: true
+                });
+            }
+
+            $.ajax({
+                url: "@Url.Action("ViewMantoEditarPaquete","Manto")",
+                method: "Post",
+                data: { model: model },
+                success: function (resp) {
+                    ShowModalBigScroll(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        }
+
+
+
+
+    </script>
+}

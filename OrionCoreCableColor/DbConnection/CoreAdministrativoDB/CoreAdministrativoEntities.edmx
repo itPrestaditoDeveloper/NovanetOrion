@@ -1,0 +1,1115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CoreAdministrativoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Catalogo_Contable">
+          <Key>
+            <PropertyRef Name="fiIDCatalogoCuentaContable" />
+          </Key>
+          <Property Name="fiIDEmpresa" Type="int" Nullable="false" />
+          <Property Name="fcCuentaContable" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fiRubro" Type="tinyint" Nullable="false" />
+          <Property Name="fcNivelC" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="fiBalanza" Type="tinyint" Nullable="false" />
+          <Property Name="fcAceptaPosteo" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="fcDescripcionCuenta" Type="varchar" MaxLength="180" />
+          <Property Name="fcTipo" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="fcCuentaContablePadre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fcCuentaVieja" Type="varchar" MaxLength="100" />
+          <Property Name="fcCuentaPresupuestoP" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fcCuentaPresupuestoD" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fcCuentaPresupuestoC" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fiTieneAuxiliar" Type="tinyint" Nullable="false" />
+          <Property Name="fcModuloAuxiliar" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="fiCuentaDebito" Type="tinyint" Nullable="false" />
+          <Property Name="fiCuentaCredito" Type="tinyint" Nullable="false" />
+          <Property Name="fiDolar" Type="tinyint" Nullable="false" />
+          <Property Name="fiReferencia" Type="tinyint" Nullable="false" />
+          <Property Name="fiLiquida" Type="tinyint" Nullable="false" />
+          <Property Name="fcMonedaEquivalenter" Type="varchar" MaxLength="22" Nullable="false" />
+          <Property Name="fiMoneda" Type="smallint" Nullable="false" />
+          <Property Name="fiNumero" Type="int" Nullable="false" />
+          <Property Name="fiNumeroLimite" Type="int" Nullable="false" />
+          <Property Name="fcCuentaBloqueada" Type="varchar" MaxLength="1" />
+          <Property Name="fcEmpresa" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="fdFechaCreado" Type="datetime" Nullable="false" />
+          <Property Name="fcUltimaActualizacion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fcToken" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="fcCentrodeCosto" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="fcCuentaEspejo" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fcCompaniaEspejo" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="fiEsEncaje" Type="tinyint" Nullable="false" />
+          <Property Name="fiIDUsuarioCreador" Type="int" Nullable="false" />
+          <Property Name="fiIDCatalogoCuentaContable" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Control_MesContable">
+          <Key>
+            <PropertyRef Name="fiIDControlMesContable" />
+          </Key>
+          <Property Name="fiIDControlMesContable" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fiIDEmpresa" Type="int" Nullable="false" />
+          <Property Name="fiAnio" Type="int" Nullable="false" />
+          <Property Name="fiMes" Type="int" Nullable="false" />
+          <Property Name="fbMesCerrado" Type="bit" Nullable="false" />
+          <Property Name="fcComentario" Type="varchar" MaxLength="1000" />
+          <Property Name="fdFechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="fdFechaModificacion" Type="datetime" Nullable="false" />
+          <Property Name="fcUsuarioCreador" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fcUsuarioModificador" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fbActivo" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Diario_Detalle">
+          <Key>
+            <PropertyRef Name="IDGUID" />
+          </Key>
+          <Property Name="fiIDEmpresa" Type="int" Nullable="false" />
+          <Property Name="fcPartida" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fdFechaPartida" Type="date" Nullable="false" />
+          <Property Name="fcCuentaContable" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="fcAuxiliar" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="fcAuxiliarCodigo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fnDebito" Type="decimal" Precision="20" Scale="2" />
+          <Property Name="fnCredito" Type="decimal" Precision="20" Scale="2" />
+          <Property Name="fcDebitooCredito" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="fnTasadeCambio" Type="decimal" Precision="13" Scale="4" Nullable="false" />
+          <Property Name="fcEstado" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="fcTipoPartida" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="fcFondo" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="fcCentrodeCosto" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="fcPrograma" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="fcDocumento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fcOrigen" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="fdFechaMigracion" Type="datetime" Nullable="false" />
+          <Property Name="fdFechaCreacionPartida" Type="datetime" Nullable="false" />
+          <Property Name="fcCuenta" Type="varchar" MaxLength="22" Nullable="false" />
+          <Property Name="fcPartidaAnterior" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fiPresu_VistoBueno" Type="tinyint" Nullable="false" />
+          <Property Name="fiConvertida" Type="tinyint" Nullable="false" />
+          <Property Name="fiIDFila" Type="int" Nullable="false" />
+          <Property Name="fcCierreSAF" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="fcEmpresaSAF" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="fdUltimaActualizacion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fcToken" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="fcAutoGUID" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="fcReferencia" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="fcSAFMigradoPor" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="fcSAFOperador" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="fiIDUsuario" Type="int" Nullable="false" />
+          <Property Name="fiPartidaMayorizada" Type="tinyint" Nullable="false" />
+          <Property Name="fdFechadeMayorizacion" Type="datetime" Nullable="false" />
+          <Property Name="fiIDUsuarioMayorizacion" Type="int" Nullable="false" />
+          <Property Name="IDGUID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fbExentoFactura" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Diario_Maestro">
+          <Key>
+            <PropertyRef Name="IDGUID" />
+          </Key>
+          <Property Name="fiIDEmpresa" Type="int" Nullable="false" />
+          <Property Name="fcPartida" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fdFechaPartida" Type="date" Nullable="false" />
+          <Property Name="fcLote" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fcReferencia" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="fcTipoPartida" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="fcEstadoPartida" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="fiMoneda" Type="smallint" Nullable="false" />
+          <Property Name="fcAutoriza" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="fdFechaAutorizacion" Type="datetime" Nullable="false" />
+          <Property Name="fcOrigen" Type="varchar" MaxLength="6" Nullable="false" />
+          <Property Name="fdFechaMigracion" Type="datetime" Nullable="false" />
+          <Property Name="fcPartidaOrigen" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="fdFechaOrigen" Type="datetime" Nullable="false" />
+          <Property Name="fcCreador" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="fdFechaCreacion" Type="datetime" Nullable="false" />
+          <Property Name="fcPartidaAnterior" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="fcCierreSAF" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="fcEmpresaSAF" Type="varchar" MaxLength="2" Nullable="false" />
+          <Property Name="fdUltimaActualizacion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fcToken" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="fcSinopsis" Type="varchar(max)" />
+          <Property Name="fcAutGuid" Type="varchar" MaxLength="224" Nullable="false" />
+          <Property Name="fcUsuarioMigrador" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="fnValorPartida" Type="decimal" Precision="20" Scale="2" />
+          <Property Name="fiIDUsuarioCreador" Type="int" Nullable="false" />
+          <Property Name="fiPartidaMayorizada" Type="tinyint" Nullable="false" />
+          <Property Name="fdFechadeMayorizacion" Type="datetime" Nullable="false" />
+          <Property Name="fiIDUsuarioMayorizacion" Type="int" Nullable="false" />
+          <Property Name="fcPartidaSeguimiento" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IDGUID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Function Name="sp_Catalogo_Contable_ObtenerPorCuentaContable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcCuentaContable" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Catalogo_TipoPartida_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_CatalogoCorrelativo_VerCorrelativo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcPrefijoCorrelativo" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_CentroCosto_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_CorePartidas_Nuevo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_CuentasContables_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="piIDMoneda" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_CuentasContables_Prestamo_Seguros" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDPrestamo" Type="varchar" Mode="In" />
+          <Parameter Name="pcPolizadeSeguro" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Fondos_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_ObtenerTasaDeCambioMoneda" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piMes" Type="int" Mode="In" />
+          <Parameter Name="piAnio" Type="int" Mode="In" />
+          <Parameter Name="piPaisOrigen" Type="int" Mode="In" />
+          <Parameter Name="piPaisDestino" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_PartidaDiario_ConvertirdeDolaresaLempiras" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDempresa" Type="int" Mode="In" />
+          <Parameter Name="pcPartidaEnDolares" Type="varchar" Mode="In" />
+          <Parameter Name="piMostrarDetalle" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="sp_PartidaDiario_CrearDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+          <Parameter Name="pdFechaPartida" Type="date" Mode="In" />
+          <Parameter Name="piIDFila" Type="int" Mode="In" />
+          <Parameter Name="pcCuentaContable" Type="varchar" Mode="In" />
+          <Parameter Name="pcAuxiliar" Type="varchar" Mode="In" />
+          <Parameter Name="pcAuxiliarCodigo" Type="varchar" Mode="In" />
+          <Parameter Name="pnDebito" Type="decimal" Mode="In" />
+          <Parameter Name="pnCredito" Type="decimal" Mode="In" />
+          <Parameter Name="pcDebitooCredito" Type="varchar" Mode="In" />
+          <Parameter Name="pnTasadeCambio" Type="decimal" Mode="In" />
+          <Parameter Name="pcEstado" Type="varchar" Mode="In" />
+          <Parameter Name="pcTipoPartida" Type="varchar" Mode="In" />
+          <Parameter Name="pcFondo" Type="varchar" Mode="In" />
+          <Parameter Name="pcCentrodeCosto" Type="varchar" Mode="In" />
+          <Parameter Name="pcPrograma" Type="varchar" Mode="In" />
+          <Parameter Name="pcDocumento" Type="varchar" Mode="In" />
+          <Parameter Name="pcOrigen" Type="varchar" Mode="In" />
+          <Parameter Name="pcReferencia" Type="varchar" Mode="In" />
+          <Parameter Name="pcExentoFactura" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="sp_PartidaDiario_CrearMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="smallint" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pdFechaPartida" Type="datetime" Mode="In" />
+          <Parameter Name="pcLote" Type="varchar" Mode="In" />
+          <Parameter Name="pcReferencia" Type="varchar" Mode="In" />
+          <Parameter Name="pcSinopsis" Type="varchar" Mode="In" />
+          <Parameter Name="pcTipoPartida" Type="varchar" Mode="In" />
+          <Parameter Name="pcEstadoPartida" Type="varchar" Mode="In" />
+          <Parameter Name="piMoneda" Type="smallint" Mode="In" />
+          <Parameter Name="pcAutoriza" Type="varchar" Mode="In" />
+          <Parameter Name="pdFechaAutorizacion" Type="datetime" Mode="In" />
+          <Parameter Name="pcOrigen" Type="varchar" Mode="In" />
+          <Parameter Name="pnTotalPartida" Type="decimal" Mode="In" />
+          <Parameter Name="pcPartidaSeguimiento" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_PartidaDiario_ListarDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_PartidaDiario_VerDetalle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+          <Parameter Name="piIdFila" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_PartidaDiario_VerMaestro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+          <Parameter Name="pcPartida" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Programas_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="piIDApp" Type="int" Mode="In" />
+          <Parameter Name="piIDUsuario" Type="int" Mode="In" />
+          <Parameter Name="piIDEmpresa" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="CoreAdministrativoModelStoreContainer">
+          <EntitySet Name="Catalogo_Contable" EntityType="Self.Catalogo_Contable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Control_MesContable" EntityType="Self.Control_MesContable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Diario_Detalle" EntityType="Self.Diario_Detalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Diario_Maestro" EntityType="Self.Diario_Maestro" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CoreAdministrativoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CoreAdministrativoEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="sp_PartidaDiario_CrearDetalle">
+            <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPartida" Mode="In" Type="String" />
+            <Parameter Name="pdFechaPartida" Mode="In" Type="DateTime" />
+            <Parameter Name="piIDFila" Mode="In" Type="Int32" />
+            <Parameter Name="pcCuentaContable" Mode="In" Type="String" />
+            <Parameter Name="pcAuxiliar" Mode="In" Type="String" />
+            <Parameter Name="pcAuxiliarCodigo" Mode="In" Type="String" />
+            <Parameter Name="pnDebito" Mode="In" Type="Decimal" />
+            <Parameter Name="pnCredito" Mode="In" Type="Decimal" />
+            <Parameter Name="pcDebitooCredito" Mode="In" Type="String" />
+            <Parameter Name="pnTasadeCambio" Mode="In" Type="Decimal" />
+            <Parameter Name="pcEstado" Mode="In" Type="String" />
+            <Parameter Name="pcTipoPartida" Mode="In" Type="String" />
+            <Parameter Name="pcFondo" Mode="In" Type="String" />
+            <Parameter Name="pcCentrodeCosto" Mode="In" Type="String" />
+            <Parameter Name="pcPrograma" Mode="In" Type="String" />
+            <Parameter Name="pcDocumento" Mode="In" Type="String" />
+            <Parameter Name="pcOrigen" Mode="In" Type="String" />
+            <Parameter Name="pcReferencia" Mode="In" Type="String" />
+            <Parameter Name="pcExentoFactura" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PartidaDiario_CrearMaestro" ReturnType="Collection(String)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int16" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pdFechaPartida" Mode="In" Type="DateTime" />
+            <Parameter Name="pcLote" Mode="In" Type="String" />
+            <Parameter Name="pcReferencia" Mode="In" Type="String" />
+            <Parameter Name="pcSinopsis" Mode="In" Type="String" />
+            <Parameter Name="pcTipoPartida" Mode="In" Type="String" />
+            <Parameter Name="pcEstadoPartida" Mode="In" Type="String" />
+            <Parameter Name="piMoneda" Mode="In" Type="Int16" />
+            <Parameter Name="pcAutoriza" Mode="In" Type="String" />
+            <Parameter Name="pdFechaAutorizacion" Mode="In" Type="DateTime" />
+            <Parameter Name="pcOrigen" Mode="In" Type="String" />
+            <Parameter Name="pnTotalPartida" Mode="In" Type="Decimal" />
+            <Parameter Name="pcPartidaSeguimiento" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Catalogo_Contable_ObtenerPorCuentaContable" ReturnType="Collection(CoreAdministrativoModel.sp_Catalogo_Contable_ObtenerPorCuentaContable_Result)">
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcCuentaContable" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PartidaDiario_ListarDetalle" ReturnType="Collection(CoreAdministrativoModel.sp_PartidaDiario_ListarDetalle_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPartida" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PartidaDiario_VerDetalle" ReturnType="Collection(CoreAdministrativoModel.sp_PartidaDiario_VerDetalle_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPartida" Mode="In" Type="String" />
+            <Parameter Name="piIdFila" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PartidaDiario_VerMaestro" ReturnType="Collection(CoreAdministrativoModel.sp_PartidaDiario_VerMaestro_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPartida" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CatalogoCorrelativo_VerCorrelativo" ReturnType="Collection(CoreAdministrativoModel.sp_CatalogoCorrelativo_VerCorrelativo_Result)">
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPrefijoCorrelativo" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Catalogo_TipoPartida_Listar" ReturnType="Collection(CoreAdministrativoModel.sp_Catalogo_TipoPartida_Listar_Result)" />
+          <FunctionImport Name="sp_CuentasContables_Prestamo_Seguros" ReturnType="Collection(CoreAdministrativoModel.sp_CuentasContables_Prestamo_Seguros_Result)">
+            <Parameter Name="piIDPrestamo" Mode="In" Type="String" />
+            <Parameter Name="pcPolizadeSeguro" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CuentasContables_Listar">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="piIDMoneda" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CentroCosto_Listar" ReturnType="Collection(CoreAdministrativoModel.sp_CentroCosto_Listar_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Fondos_Listar" ReturnType="Collection(CoreAdministrativoModel.sp_Fondos_Listar_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Programas_Listar" ReturnType="Collection(CoreAdministrativoModel.sp_Programas_Listar_Result)">
+            <Parameter Name="piIDApp" Mode="In" Type="Int32" />
+            <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ObtenerTasaDeCambioMoneda" ReturnType="Collection(CoreAdministrativoModel.sp_ObtenerTasaDeCambioMoneda_Result)">
+            <Parameter Name="piMes" Mode="In" Type="Int32" />
+            <Parameter Name="piAnio" Mode="In" Type="Int32" />
+            <Parameter Name="piPaisOrigen" Mode="In" Type="Int32" />
+            <Parameter Name="piPaisDestino" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Diario_Detalle" EntityType="CoreAdministrativoModel.Diario_Detalle" />
+          <EntitySet Name="Diario_Maestro" EntityType="CoreAdministrativoModel.Diario_Maestro" />
+          <EntitySet Name="Catalogo_Contable" EntityType="CoreAdministrativoModel.Catalogo_Contable" />
+          <EntitySet Name="Control_MesContable" EntityType="CoreAdministrativoModel.Control_MesContable" />
+          <FunctionImport Name="sp_CorePartidas_Nuevo">
+            <Parameter Name="piIDEmpresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPartida" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PartidaDiario_ConvertirdeDolaresaLempiras">
+            <Parameter Name="piIDempresa" Mode="In" Type="Int32" />
+            <Parameter Name="pcPartidaEnDolares" Mode="In" Type="String" />
+            <Parameter Name="piMostrarDetalle" Mode="In" Type="Byte" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_Catalogo_Contable_ObtenerPorCuentaContable_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcCuentaContable" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fcDescripcionCuenta" Nullable="true" MaxLength="180" />
+        </ComplexType>
+        <ComplexType Name="sp_PartidaDiario_ListarDetalle_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcPartida" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="fdFechaPartida" Nullable="false" />
+          <Property Type="String" Name="fcCuentaContable" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fcAuxiliar" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="fcAuxiliarCodigo" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="fnDebito" Nullable="true" Precision="20" Scale="2" />
+          <Property Type="Decimal" Name="fnCredito" Nullable="true" Precision="20" Scale="2" />
+          <Property Type="String" Name="fcDebitooCredito" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="fnTasadeCambio" Nullable="false" Precision="13" Scale="4" />
+          <Property Type="String" Name="fcEstado" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="fcTipoPartida" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="fcFondo" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcCentrodeCosto" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcPrograma" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcDocumento" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcOrigen" Nullable="false" MaxLength="5" />
+          <Property Type="DateTime" Name="fdFechaMigracion" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fdFechaCreacionPartida" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcCuenta" Nullable="false" MaxLength="22" />
+          <Property Type="String" Name="fcPartidaAnterior" Nullable="false" MaxLength="20" />
+          <Property Type="Byte" Name="fiPresu_VistoBueno" Nullable="false" />
+          <Property Type="Byte" Name="fiConvertida" Nullable="false" />
+          <Property Type="Int32" Name="fiIDFila" Nullable="false" />
+          <Property Type="String" Name="fcCierreSAF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fcEmpresaSAF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fdUltimaActualizacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="false" MaxLength="512" />
+          <Property Type="String" Name="fcAutoGUID" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="fcReferencia" Nullable="false" MaxLength="2000" />
+          <Property Type="String" Name="fcSAFMigradoPor" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="fcSAFOperador" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="fiIDUsuario" Nullable="false" />
+          <Property Type="Byte" Name="fiPartidaMayorizada" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechadeMayorizacion" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fiIDUsuarioMayorizacion" Nullable="false" />
+          <Property Type="Guid" Name="IDGUID" Nullable="false" />
+          <Property Type="Boolean" Name="fbExentoFactura" Nullable="false" />
+          <Property Type="String" Name="fcDescripcionCuenta" Nullable="true" MaxLength="180" />
+        </ComplexType>
+        <ComplexType Name="sp_PartidaDiario_VerDetalle_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcPartida" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="fdFechaPartida" Nullable="false" />
+          <Property Type="String" Name="fcCuentaContable" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fcAuxiliar" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="fcAuxiliarCodigo" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="fnDebito" Nullable="true" Precision="20" Scale="2" />
+          <Property Type="Decimal" Name="fnCredito" Nullable="true" Precision="20" Scale="2" />
+          <Property Type="String" Name="fcDebitooCredito" Nullable="false" MaxLength="1" />
+          <Property Type="Decimal" Name="fnTasadeCambio" Nullable="false" Precision="13" Scale="4" />
+          <Property Type="String" Name="fcEstado" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="fcTipoPartida" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="fcFondo" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcCentrodeCosto" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcPrograma" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcDocumento" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcOrigen" Nullable="false" MaxLength="5" />
+          <Property Type="DateTime" Name="fdFechaMigracion" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fdFechaCreacionPartida" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcCuenta" Nullable="false" MaxLength="22" />
+          <Property Type="String" Name="fcPartidaAnterior" Nullable="false" MaxLength="20" />
+          <Property Type="Byte" Name="fiPresu_VistoBueno" Nullable="false" />
+          <Property Type="Byte" Name="fiConvertida" Nullable="false" />
+          <Property Type="Int32" Name="fiIDFila" Nullable="false" />
+          <Property Type="String" Name="fcCierreSAF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fcEmpresaSAF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fdUltimaActualizacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="false" MaxLength="512" />
+          <Property Type="String" Name="fcAutoGUID" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="fcReferencia" Nullable="false" MaxLength="2000" />
+          <Property Type="String" Name="fcSAFMigradoPor" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="fcSAFOperador" Nullable="false" MaxLength="30" />
+          <Property Type="Int32" Name="fiIDUsuario" Nullable="false" />
+          <Property Type="Byte" Name="fiPartidaMayorizada" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechadeMayorizacion" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fiIDUsuarioMayorizacion" Nullable="false" />
+          <Property Type="Guid" Name="IDGUID" Nullable="false" />
+          <Property Type="Boolean" Name="fbExentoFactura" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_PartidaDiario_VerMaestro_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcPartida" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="fdFechaPartida" Nullable="false" />
+          <Property Type="String" Name="fcLote" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcReferencia" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="fcTipoPartida" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="fcEstadoPartida" Nullable="false" MaxLength="1" />
+          <Property Type="Int16" Name="fiMoneda" Nullable="false" />
+          <Property Type="String" Name="fcAutoriza" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="fdFechaAutorizacion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcOrigen" Nullable="false" MaxLength="6" />
+          <Property Type="DateTime" Name="fdFechaMigracion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcPartidaOrigen" Nullable="false" MaxLength="15" />
+          <Property Type="DateTime" Name="fdFechaOrigen" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcCreador" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="fdFechaCreacion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcPartidaAnterior" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="fcCierreSAF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fcEmpresaSAF" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fdUltimaActualizacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="false" MaxLength="36" />
+          <Property Type="String" Name="fcSinopsis" Nullable="true" MaxLength="8000" />
+          <Property Type="String" Name="fcAutGuid" Nullable="false" MaxLength="224" />
+          <Property Type="String" Name="fcUsuarioMigrador" Nullable="false" MaxLength="30" />
+          <Property Type="Decimal" Name="fnValorPartida" Nullable="true" Precision="20" Scale="2" />
+          <Property Type="Int32" Name="fiIDUsuarioCreador" Nullable="false" />
+          <Property Type="Byte" Name="fiPartidaMayorizada" Nullable="false" />
+          <Property Type="DateTime" Name="fdFechadeMayorizacion" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fiIDUsuarioMayorizacion" Nullable="false" />
+          <Property Type="String" Name="fcPartidaSeguimiento" Nullable="false" MaxLength="20" />
+          <Property Type="Guid" Name="IDGUID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_CatalogoCorrelativo_VerCorrelativo_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="true" />
+          <Property Type="String" Name="fcCorrelativo" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="fcDescripcionCorrelativo" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="fiNumeroConsecutivo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Catalogo_TipoPartida_Listar_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcTipoPartida" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="fcDescripcionTipoOperacion" Nullable="false" MaxLength="40" />
+          <Property Type="Int32" Name="fiNumeroCorrelativo" Nullable="false" />
+          <Property Type="Byte" Name="fiModificable" Nullable="false" />
+          <Property Type="String" Name="fcTipoDocumento" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="fcModulo" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="fcEmpresa" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="fcUltimaActualizacion" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="true" MaxLength="512" />
+        </ComplexType>
+        <ComplexType Name="sp_CuentasContables_Prestamo_Seguros_Result">
+          <Property Type="String" Name="fcCuentaContable" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fcDescripcionCuenta" Nullable="true" MaxLength="180" />
+          <Property Type="String" Name="fcAceptaPosteo" Nullable="false" MaxLength="1" />
+          <Property Type="String" Name="fcCuentaBloqueada" Nullable="true" MaxLength="1" />
+        </ComplexType>
+        <ComplexType Name="sp_CentroCosto_Listar_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcCentrodeCosto" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcDescripcionAgencia" Nullable="false" MaxLength="50" />
+          <Property Type="Byte" Name="fcNivel" Nullable="false" />
+          <Property Type="String" Name="fcPrefijoAgencia" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="fcRegion" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fcDireccionAgencia" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="fcSectorAgencia" Nullable="false" MaxLength="10" />
+          <Property Type="Byte" Name="fiEsAgenciaCorporativo" Nullable="false" />
+          <Property Type="Int32" Name="fiIDCiudad" Nullable="false" />
+          <Property Type="Int32" Name="fcUsuarioGerente" Nullable="false" />
+          <Property Type="String" Name="NombreGerence" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="fcRegistroSucursal" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fcEmpresa" Nullable="false" MaxLength="2" />
+          <Property Type="DateTime" Name="fdFechaCreacion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcUltimaActualizacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="false" MaxLength="512" />
+          <Property Type="String" Name="fcInstiutoCBNS" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="fcCreadoPor" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="fcTelefonoAgencia" Nullable="false" MaxLength="40" />
+        </ComplexType>
+        <ComplexType Name="sp_Fondos_Listar_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcFondo" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcDescripcionFondo" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcPrefijoFondo" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="fcEmpresa" Nullable="false" MaxLength="2" />
+          <Property Type="String" Name="fcUltimaActualizacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="false" MaxLength="512" />
+          <Property Type="Decimal" Name="fnMontodelFondo" Nullable="false" Precision="13" Scale="2" />
+          <Property Type="Byte" Name="fiFondeador" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_Programas_Listar_Result">
+          <Property Type="Int32" Name="fiIDEmpresa" Nullable="false" />
+          <Property Type="String" Name="fcPrograma" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="fcDescripcionPrograma" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcPrefijoPrograma" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="fcEmpresa" Nullable="false" MaxLength="2" />
+          <Property Type="DateTime" Name="fdCreacion" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fcUltimaActualizacion" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fcToken" Nullable="false" MaxLength="512" />
+        </ComplexType>
+        <ComplexType Name="sp_ObtenerTasaDeCambioMoneda_Result">
+          <Property Type="Decimal" Name="fiAno" Nullable="false" Precision="4" Scale="0" />
+          <Property Type="Byte" Name="fiMes" Nullable="false" />
+          <Property Type="Int16" Name="fiCodPaisOrigen" Nullable="false" />
+          <Property Type="Int16" Name="fiCodPaisDestino" Nullable="false" />
+          <Property Type="Decimal" Name="fnTasadeCambio" Nullable="true" Precision="10" Scale="4" />
+        </ComplexType>
+        <EntityType Name="Diario_Detalle">
+          <Key>
+            <PropertyRef Name="IDGUID" />
+          </Key>
+          <Property Name="fiIDEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="fcPartida" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaPartida" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fcCuentaContable" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fcAuxiliar" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="fcAuxiliarCodigo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fnDebito" Type="Decimal" Precision="20" Scale="2" />
+          <Property Name="fnCredito" Type="Decimal" Precision="20" Scale="2" />
+          <Property Name="fcDebitooCredito" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fnTasadeCambio" Type="Decimal" Nullable="false" Precision="13" Scale="4" />
+          <Property Name="fcEstado" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fcTipoPartida" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="fcFondo" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="fcCentrodeCosto" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="fcPrograma" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="fcDocumento" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fcOrigen" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaMigracion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fdFechaCreacionPartida" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcCuenta" Type="String" Nullable="false" MaxLength="22" FixedLength="false" Unicode="false" />
+          <Property Name="fcPartidaAnterior" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fiPresu_VistoBueno" Type="Byte" Nullable="false" />
+          <Property Name="fiConvertida" Type="Byte" Nullable="false" />
+          <Property Name="fiIDFila" Type="Int32" Nullable="false" />
+          <Property Name="fcCierreSAF" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="fcEmpresaSAF" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="fdUltimaActualizacion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fcToken" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="fcAutoGUID" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="fcReferencia" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="fcSAFMigradoPor" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="fcSAFOperador" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="fiIDUsuario" Type="Int32" Nullable="false" />
+          <Property Name="fiPartidaMayorizada" Type="Byte" Nullable="false" />
+          <Property Name="fdFechadeMayorizacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fiIDUsuarioMayorizacion" Type="Int32" Nullable="false" />
+          <Property Name="IDGUID" Type="Guid" Nullable="false" />
+          <Property Name="fbExentoFactura" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Diario_Maestro">
+          <Key>
+            <PropertyRef Name="IDGUID" />
+          </Key>
+          <Property Name="fiIDEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="fcPartida" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaPartida" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="fcLote" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fcReferencia" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="fcTipoPartida" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="fcEstadoPartida" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fiMoneda" Type="Int16" Nullable="false" />
+          <Property Name="fcAutoriza" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaAutorizacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcOrigen" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaMigracion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcPartidaOrigen" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaOrigen" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcCreador" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcPartidaAnterior" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="fcCierreSAF" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="fcEmpresaSAF" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="fdUltimaActualizacion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fcToken" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="fcSinopsis" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="fcAutGuid" Type="String" Nullable="false" MaxLength="224" FixedLength="false" Unicode="false" />
+          <Property Name="fcUsuarioMigrador" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="fnValorPartida" Type="Decimal" Precision="20" Scale="2" />
+          <Property Name="fiIDUsuarioCreador" Type="Int32" Nullable="false" />
+          <Property Name="fiPartidaMayorizada" Type="Byte" Nullable="false" />
+          <Property Name="fdFechadeMayorizacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fiIDUsuarioMayorizacion" Type="Int32" Nullable="false" />
+          <Property Name="fcPartidaSeguimiento" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="IDGUID" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Catalogo_Contable">
+          <Key>
+            <PropertyRef Name="fiIDCatalogoCuentaContable" />
+          </Key>
+          <Property Name="fiIDEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="fcCuentaContable" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fiRubro" Type="Byte" Nullable="false" />
+          <Property Name="fcNivelC" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fiBalanza" Type="Byte" Nullable="false" />
+          <Property Name="fcAceptaPosteo" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fcDescripcionCuenta" Type="String" MaxLength="180" FixedLength="false" Unicode="false" />
+          <Property Name="fcTipo" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fcCuentaContablePadre" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fcCuentaVieja" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fcCuentaPresupuestoP" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fcCuentaPresupuestoD" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fcCuentaPresupuestoC" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fiTieneAuxiliar" Type="Byte" Nullable="false" />
+          <Property Name="fcModuloAuxiliar" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="fiCuentaDebito" Type="Byte" Nullable="false" />
+          <Property Name="fiCuentaCredito" Type="Byte" Nullable="false" />
+          <Property Name="fiDolar" Type="Byte" Nullable="false" />
+          <Property Name="fiReferencia" Type="Byte" Nullable="false" />
+          <Property Name="fiLiquida" Type="Byte" Nullable="false" />
+          <Property Name="fcMonedaEquivalenter" Type="String" Nullable="false" MaxLength="22" FixedLength="false" Unicode="false" />
+          <Property Name="fiMoneda" Type="Int16" Nullable="false" />
+          <Property Name="fiNumero" Type="Int32" Nullable="false" />
+          <Property Name="fiNumeroLimite" Type="Int32" Nullable="false" />
+          <Property Name="fcCuentaBloqueada" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="fcEmpresa" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaCreado" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcUltimaActualizacion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fcToken" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="fcCentrodeCosto" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="fcCuentaEspejo" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="fcCompaniaEspejo" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="fiEsEncaje" Type="Byte" Nullable="false" />
+          <Property Name="fiIDUsuarioCreador" Type="Int32" Nullable="false" />
+          <Property Name="fiIDCatalogoCuentaContable" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Control_MesContable">
+          <Key>
+            <PropertyRef Name="fiIDControlMesContable" />
+          </Key>
+          <Property Name="fiIDControlMesContable" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fiIDEmpresa" Type="Int32" Nullable="false" />
+          <Property Name="fiAnio" Type="Int32" Nullable="false" />
+          <Property Name="fiMes" Type="Int32" Nullable="false" />
+          <Property Name="fbMesCerrado" Type="Boolean" Nullable="false" />
+          <Property Name="fcComentario" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="fdFechaCreacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fdFechaModificacion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fcUsuarioCreador" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fcUsuarioModificador" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fbActivo" Type="Boolean" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CoreAdministrativoModelStoreContainer" CdmEntityContainer="CoreAdministrativoEntities" >
+          <FunctionImportMapping FunctionImportName="sp_PartidaDiario_CrearDetalle" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_CrearDetalle" />
+          <FunctionImportMapping FunctionImportName="sp_PartidaDiario_CrearMaestro" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_CrearMaestro" />
+          <FunctionImportMapping FunctionImportName="sp_Catalogo_Contable_ObtenerPorCuentaContable" FunctionName="CoreAdministrativoModel.Store.sp_Catalogo_Contable_ObtenerPorCuentaContable">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Catalogo_Contable_ObtenerPorCuentaContable_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_PartidaDiario_ListarDetalle" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_ListarDetalle">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_PartidaDiario_ListarDetalle_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+                <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fcAuxiliar" ColumnName="fcAuxiliar" />
+                <ScalarProperty Name="fcAuxiliarCodigo" ColumnName="fcAuxiliarCodigo" />
+                <ScalarProperty Name="fnDebito" ColumnName="fnDebito" />
+                <ScalarProperty Name="fnCredito" ColumnName="fnCredito" />
+                <ScalarProperty Name="fcDebitooCredito" ColumnName="fcDebitooCredito" />
+                <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+                <ScalarProperty Name="fcEstado" ColumnName="fcEstado" />
+                <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+                <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+                <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+                <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+                <ScalarProperty Name="fcDocumento" ColumnName="fcDocumento" />
+                <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+                <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+                <ScalarProperty Name="fdFechaCreacionPartida" ColumnName="fdFechaCreacionPartida" />
+                <ScalarProperty Name="fcCuenta" ColumnName="fcCuenta" />
+                <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+                <ScalarProperty Name="fiPresu_VistoBueno" ColumnName="fiPresu_VistoBueno" />
+                <ScalarProperty Name="fiConvertida" ColumnName="fiConvertida" />
+                <ScalarProperty Name="fiIDFila" ColumnName="fiIDFila" />
+                <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+                <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+                <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fcAutoGUID" ColumnName="fcAutoGUID" />
+                <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+                <ScalarProperty Name="fcSAFMigradoPor" ColumnName="fcSAFMigradoPor" />
+                <ScalarProperty Name="fcSAFOperador" ColumnName="fcSAFOperador" />
+                <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+                <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+                <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+                <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+                <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+                <ScalarProperty Name="fbExentoFactura" ColumnName="fbExentoFactura" />
+                <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_PartidaDiario_VerDetalle" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_VerDetalle">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_PartidaDiario_VerDetalle_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+                <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fcAuxiliar" ColumnName="fcAuxiliar" />
+                <ScalarProperty Name="fcAuxiliarCodigo" ColumnName="fcAuxiliarCodigo" />
+                <ScalarProperty Name="fnDebito" ColumnName="fnDebito" />
+                <ScalarProperty Name="fnCredito" ColumnName="fnCredito" />
+                <ScalarProperty Name="fcDebitooCredito" ColumnName="fcDebitooCredito" />
+                <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+                <ScalarProperty Name="fcEstado" ColumnName="fcEstado" />
+                <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+                <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+                <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+                <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+                <ScalarProperty Name="fcDocumento" ColumnName="fcDocumento" />
+                <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+                <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+                <ScalarProperty Name="fdFechaCreacionPartida" ColumnName="fdFechaCreacionPartida" />
+                <ScalarProperty Name="fcCuenta" ColumnName="fcCuenta" />
+                <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+                <ScalarProperty Name="fiPresu_VistoBueno" ColumnName="fiPresu_VistoBueno" />
+                <ScalarProperty Name="fiConvertida" ColumnName="fiConvertida" />
+                <ScalarProperty Name="fiIDFila" ColumnName="fiIDFila" />
+                <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+                <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+                <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fcAutoGUID" ColumnName="fcAutoGUID" />
+                <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+                <ScalarProperty Name="fcSAFMigradoPor" ColumnName="fcSAFMigradoPor" />
+                <ScalarProperty Name="fcSAFOperador" ColumnName="fcSAFOperador" />
+                <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+                <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+                <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+                <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+                <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+                <ScalarProperty Name="fbExentoFactura" ColumnName="fbExentoFactura" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_PartidaDiario_VerMaestro" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_VerMaestro">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_PartidaDiario_VerMaestro_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+                <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+                <ScalarProperty Name="fcLote" ColumnName="fcLote" />
+                <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+                <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+                <ScalarProperty Name="fcEstadoPartida" ColumnName="fcEstadoPartida" />
+                <ScalarProperty Name="fiMoneda" ColumnName="fiMoneda" />
+                <ScalarProperty Name="fcAutoriza" ColumnName="fcAutoriza" />
+                <ScalarProperty Name="fdFechaAutorizacion" ColumnName="fdFechaAutorizacion" />
+                <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+                <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+                <ScalarProperty Name="fcPartidaOrigen" ColumnName="fcPartidaOrigen" />
+                <ScalarProperty Name="fdFechaOrigen" ColumnName="fdFechaOrigen" />
+                <ScalarProperty Name="fcCreador" ColumnName="fcCreador" />
+                <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+                <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+                <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+                <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+                <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fcSinopsis" ColumnName="fcSinopsis" />
+                <ScalarProperty Name="fcAutGuid" ColumnName="fcAutGuid" />
+                <ScalarProperty Name="fcUsuarioMigrador" ColumnName="fcUsuarioMigrador" />
+                <ScalarProperty Name="fnValorPartida" ColumnName="fnValorPartida" />
+                <ScalarProperty Name="fiIDUsuarioCreador" ColumnName="fiIDUsuarioCreador" />
+                <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+                <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+                <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+                <ScalarProperty Name="fcPartidaSeguimiento" ColumnName="fcPartidaSeguimiento" />
+                <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_CatalogoCorrelativo_VerCorrelativo" FunctionName="CoreAdministrativoModel.Store.sp_CatalogoCorrelativo_VerCorrelativo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_CatalogoCorrelativo_VerCorrelativo_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcCorrelativo" ColumnName="fcCorrelativo" />
+                <ScalarProperty Name="fcDescripcionCorrelativo" ColumnName="fcDescripcionCorrelativo" />
+                <ScalarProperty Name="fiNumeroConsecutivo" ColumnName="fiNumeroConsecutivo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Catalogo_TipoPartida_Listar" FunctionName="CoreAdministrativoModel.Store.sp_Catalogo_TipoPartida_Listar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Catalogo_TipoPartida_Listar_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+                <ScalarProperty Name="fcDescripcionTipoOperacion" ColumnName="fcDescripcionTipoOperacion" />
+                <ScalarProperty Name="fiNumeroCorrelativo" ColumnName="fiNumeroCorrelativo" />
+                <ScalarProperty Name="fiModificable" ColumnName="fiModificable" />
+                <ScalarProperty Name="fcTipoDocumento" ColumnName="fcTipoDocumento" />
+                <ScalarProperty Name="fcModulo" ColumnName="fcModulo" />
+                <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+                <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_CuentasContables_Prestamo_Seguros" FunctionName="CoreAdministrativoModel.Store.sp_CuentasContables_Prestamo_Seguros">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_CuentasContables_Prestamo_Seguros_Result">
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+                <ScalarProperty Name="fcAceptaPosteo" ColumnName="fcAceptaPosteo" />
+                <ScalarProperty Name="fcCuentaBloqueada" ColumnName="fcCuentaBloqueada" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_CuentasContables_Listar" FunctionName="CoreAdministrativoModel.Store.sp_CuentasContables_Listar" />
+          <FunctionImportMapping FunctionImportName="sp_CentroCosto_Listar" FunctionName="CoreAdministrativoModel.Store.sp_CentroCosto_Listar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_CentroCosto_Listar_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+                <ScalarProperty Name="fcDescripcionAgencia" ColumnName="fcDescripcionAgencia" />
+                <ScalarProperty Name="fcNivel" ColumnName="fcNivel" />
+                <ScalarProperty Name="fcPrefijoAgencia" ColumnName="fcPrefijoAgencia" />
+                <ScalarProperty Name="fcRegion" ColumnName="fcRegion" />
+                <ScalarProperty Name="fcDireccionAgencia" ColumnName="fcDireccionAgencia" />
+                <ScalarProperty Name="fcSectorAgencia" ColumnName="fcSectorAgencia" />
+                <ScalarProperty Name="fiEsAgenciaCorporativo" ColumnName="fiEsAgenciaCorporativo" />
+                <ScalarProperty Name="fiIDCiudad" ColumnName="fiIDCiudad" />
+                <ScalarProperty Name="fcUsuarioGerente" ColumnName="fcUsuarioGerente" />
+                <ScalarProperty Name="NombreGerence" ColumnName="NombreGerence" />
+                <ScalarProperty Name="fcRegistroSucursal" ColumnName="fcRegistroSucursal" />
+                <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+                <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+                <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fcInstiutoCBNS" ColumnName="fcInstiutoCBNS" />
+                <ScalarProperty Name="fcCreadoPor" ColumnName="fcCreadoPor" />
+                <ScalarProperty Name="fcTelefonoAgencia" ColumnName="fcTelefonoAgencia" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Fondos_Listar" FunctionName="CoreAdministrativoModel.Store.sp_Fondos_Listar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Fondos_Listar_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+                <ScalarProperty Name="fcDescripcionFondo" ColumnName="fcDescripcionFondo" />
+                <ScalarProperty Name="fcPrefijoFondo" ColumnName="fcPrefijoFondo" />
+                <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+                <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fnMontodelFondo" ColumnName="fnMontodelFondo" />
+                <ScalarProperty Name="fiFondeador" ColumnName="fiFondeador" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Programas_Listar" FunctionName="CoreAdministrativoModel.Store.sp_Programas_Listar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_Programas_Listar_Result">
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+                <ScalarProperty Name="fcDescripcionPrograma" ColumnName="fcDescripcionPrograma" />
+                <ScalarProperty Name="fcPrefijoPrograma" ColumnName="fcPrefijoPrograma" />
+                <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+                <ScalarProperty Name="fdCreacion" ColumnName="fdCreacion" />
+                <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_ObtenerTasaDeCambioMoneda" FunctionName="CoreAdministrativoModel.Store.sp_ObtenerTasaDeCambioMoneda">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CoreAdministrativoModel.sp_ObtenerTasaDeCambioMoneda_Result">
+                <ScalarProperty Name="fiAno" ColumnName="fiAno" />
+                <ScalarProperty Name="fiMes" ColumnName="fiMes" />
+                <ScalarProperty Name="fiCodPaisOrigen" ColumnName="fiCodPaisOrigen" />
+                <ScalarProperty Name="fiCodPaisDestino" ColumnName="fiCodPaisDestino" />
+                <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Diario_Detalle">
+            <EntityTypeMapping TypeName="CoreAdministrativoModel.Diario_Detalle">
+              <MappingFragment StoreEntitySet="Diario_Detalle">
+                <ScalarProperty Name="fbExentoFactura" ColumnName="fbExentoFactura" />
+                <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+                <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+                <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+                <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+                <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+                <ScalarProperty Name="fcSAFOperador" ColumnName="fcSAFOperador" />
+                <ScalarProperty Name="fcSAFMigradoPor" ColumnName="fcSAFMigradoPor" />
+                <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+                <ScalarProperty Name="fcAutoGUID" ColumnName="fcAutoGUID" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+                <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+                <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+                <ScalarProperty Name="fiIDFila" ColumnName="fiIDFila" />
+                <ScalarProperty Name="fiConvertida" ColumnName="fiConvertida" />
+                <ScalarProperty Name="fiPresu_VistoBueno" ColumnName="fiPresu_VistoBueno" />
+                <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+                <ScalarProperty Name="fcCuenta" ColumnName="fcCuenta" />
+                <ScalarProperty Name="fdFechaCreacionPartida" ColumnName="fdFechaCreacionPartida" />
+                <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+                <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+                <ScalarProperty Name="fcDocumento" ColumnName="fcDocumento" />
+                <ScalarProperty Name="fcPrograma" ColumnName="fcPrograma" />
+                <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+                <ScalarProperty Name="fcFondo" ColumnName="fcFondo" />
+                <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+                <ScalarProperty Name="fcEstado" ColumnName="fcEstado" />
+                <ScalarProperty Name="fnTasadeCambio" ColumnName="fnTasadeCambio" />
+                <ScalarProperty Name="fcDebitooCredito" ColumnName="fcDebitooCredito" />
+                <ScalarProperty Name="fnCredito" ColumnName="fnCredito" />
+                <ScalarProperty Name="fnDebito" ColumnName="fnDebito" />
+                <ScalarProperty Name="fcAuxiliarCodigo" ColumnName="fcAuxiliarCodigo" />
+                <ScalarProperty Name="fcAuxiliar" ColumnName="fcAuxiliar" />
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+                <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Diario_Maestro">
+            <EntityTypeMapping TypeName="CoreAdministrativoModel.Diario_Maestro">
+              <MappingFragment StoreEntitySet="Diario_Maestro">
+                <ScalarProperty Name="IDGUID" ColumnName="IDGUID" />
+                <ScalarProperty Name="fcPartidaSeguimiento" ColumnName="fcPartidaSeguimiento" />
+                <ScalarProperty Name="fiIDUsuarioMayorizacion" ColumnName="fiIDUsuarioMayorizacion" />
+                <ScalarProperty Name="fdFechadeMayorizacion" ColumnName="fdFechadeMayorizacion" />
+                <ScalarProperty Name="fiPartidaMayorizada" ColumnName="fiPartidaMayorizada" />
+                <ScalarProperty Name="fiIDUsuarioCreador" ColumnName="fiIDUsuarioCreador" />
+                <ScalarProperty Name="fnValorPartida" ColumnName="fnValorPartida" />
+                <ScalarProperty Name="fcUsuarioMigrador" ColumnName="fcUsuarioMigrador" />
+                <ScalarProperty Name="fcAutGuid" ColumnName="fcAutGuid" />
+                <ScalarProperty Name="fcSinopsis" ColumnName="fcSinopsis" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fdUltimaActualizacion" ColumnName="fdUltimaActualizacion" />
+                <ScalarProperty Name="fcEmpresaSAF" ColumnName="fcEmpresaSAF" />
+                <ScalarProperty Name="fcCierreSAF" ColumnName="fcCierreSAF" />
+                <ScalarProperty Name="fcPartidaAnterior" ColumnName="fcPartidaAnterior" />
+                <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+                <ScalarProperty Name="fcCreador" ColumnName="fcCreador" />
+                <ScalarProperty Name="fdFechaOrigen" ColumnName="fdFechaOrigen" />
+                <ScalarProperty Name="fcPartidaOrigen" ColumnName="fcPartidaOrigen" />
+                <ScalarProperty Name="fdFechaMigracion" ColumnName="fdFechaMigracion" />
+                <ScalarProperty Name="fcOrigen" ColumnName="fcOrigen" />
+                <ScalarProperty Name="fdFechaAutorizacion" ColumnName="fdFechaAutorizacion" />
+                <ScalarProperty Name="fcAutoriza" ColumnName="fcAutoriza" />
+                <ScalarProperty Name="fiMoneda" ColumnName="fiMoneda" />
+                <ScalarProperty Name="fcEstadoPartida" ColumnName="fcEstadoPartida" />
+                <ScalarProperty Name="fcTipoPartida" ColumnName="fcTipoPartida" />
+                <ScalarProperty Name="fcReferencia" ColumnName="fcReferencia" />
+                <ScalarProperty Name="fcLote" ColumnName="fcLote" />
+                <ScalarProperty Name="fdFechaPartida" ColumnName="fdFechaPartida" />
+                <ScalarProperty Name="fcPartida" ColumnName="fcPartida" />
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Catalogo_Contable">
+            <EntityTypeMapping TypeName="CoreAdministrativoModel.Catalogo_Contable">
+              <MappingFragment StoreEntitySet="Catalogo_Contable">
+                <ScalarProperty Name="fiIDCatalogoCuentaContable" ColumnName="fiIDCatalogoCuentaContable" />
+                <ScalarProperty Name="fiIDUsuarioCreador" ColumnName="fiIDUsuarioCreador" />
+                <ScalarProperty Name="fiEsEncaje" ColumnName="fiEsEncaje" />
+                <ScalarProperty Name="fcCompaniaEspejo" ColumnName="fcCompaniaEspejo" />
+                <ScalarProperty Name="fcCuentaEspejo" ColumnName="fcCuentaEspejo" />
+                <ScalarProperty Name="fcCentrodeCosto" ColumnName="fcCentrodeCosto" />
+                <ScalarProperty Name="fcToken" ColumnName="fcToken" />
+                <ScalarProperty Name="fcUltimaActualizacion" ColumnName="fcUltimaActualizacion" />
+                <ScalarProperty Name="fdFechaCreado" ColumnName="fdFechaCreado" />
+                <ScalarProperty Name="fcEmpresa" ColumnName="fcEmpresa" />
+                <ScalarProperty Name="fcCuentaBloqueada" ColumnName="fcCuentaBloqueada" />
+                <ScalarProperty Name="fiNumeroLimite" ColumnName="fiNumeroLimite" />
+                <ScalarProperty Name="fiNumero" ColumnName="fiNumero" />
+                <ScalarProperty Name="fiMoneda" ColumnName="fiMoneda" />
+                <ScalarProperty Name="fcMonedaEquivalenter" ColumnName="fcMonedaEquivalenter" />
+                <ScalarProperty Name="fiLiquida" ColumnName="fiLiquida" />
+                <ScalarProperty Name="fiReferencia" ColumnName="fiReferencia" />
+                <ScalarProperty Name="fiDolar" ColumnName="fiDolar" />
+                <ScalarProperty Name="fiCuentaCredito" ColumnName="fiCuentaCredito" />
+                <ScalarProperty Name="fiCuentaDebito" ColumnName="fiCuentaDebito" />
+                <ScalarProperty Name="fcModuloAuxiliar" ColumnName="fcModuloAuxiliar" />
+                <ScalarProperty Name="fiTieneAuxiliar" ColumnName="fiTieneAuxiliar" />
+                <ScalarProperty Name="fcCuentaPresupuestoC" ColumnName="fcCuentaPresupuestoC" />
+                <ScalarProperty Name="fcCuentaPresupuestoD" ColumnName="fcCuentaPresupuestoD" />
+                <ScalarProperty Name="fcCuentaPresupuestoP" ColumnName="fcCuentaPresupuestoP" />
+                <ScalarProperty Name="fcCuentaVieja" ColumnName="fcCuentaVieja" />
+                <ScalarProperty Name="fcCuentaContablePadre" ColumnName="fcCuentaContablePadre" />
+                <ScalarProperty Name="fcTipo" ColumnName="fcTipo" />
+                <ScalarProperty Name="fcDescripcionCuenta" ColumnName="fcDescripcionCuenta" />
+                <ScalarProperty Name="fcAceptaPosteo" ColumnName="fcAceptaPosteo" />
+                <ScalarProperty Name="fiBalanza" ColumnName="fiBalanza" />
+                <ScalarProperty Name="fcNivelC" ColumnName="fcNivelC" />
+                <ScalarProperty Name="fiRubro" ColumnName="fiRubro" />
+                <ScalarProperty Name="fcCuentaContable" ColumnName="fcCuentaContable" />
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Control_MesContable">
+            <EntityTypeMapping TypeName="CoreAdministrativoModel.Control_MesContable">
+              <MappingFragment StoreEntitySet="Control_MesContable">
+                <ScalarProperty Name="fbActivo" ColumnName="fbActivo" />
+                <ScalarProperty Name="fcUsuarioModificador" ColumnName="fcUsuarioModificador" />
+                <ScalarProperty Name="fcUsuarioCreador" ColumnName="fcUsuarioCreador" />
+                <ScalarProperty Name="fdFechaModificacion" ColumnName="fdFechaModificacion" />
+                <ScalarProperty Name="fdFechaCreacion" ColumnName="fdFechaCreacion" />
+                <ScalarProperty Name="fcComentario" ColumnName="fcComentario" />
+                <ScalarProperty Name="fbMesCerrado" ColumnName="fbMesCerrado" />
+                <ScalarProperty Name="fiMes" ColumnName="fiMes" />
+                <ScalarProperty Name="fiAnio" ColumnName="fiAnio" />
+                <ScalarProperty Name="fiIDEmpresa" ColumnName="fiIDEmpresa" />
+                <ScalarProperty Name="fiIDControlMesContable" ColumnName="fiIDControlMesContable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_CorePartidas_Nuevo" FunctionName="CoreAdministrativoModel.Store.sp_CorePartidas_Nuevo" />
+          <FunctionImportMapping FunctionImportName="sp_PartidaDiario_ConvertirdeDolaresaLempiras" FunctionName="CoreAdministrativoModel.Store.sp_PartidaDiario_ConvertirdeDolaresaLempiras" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

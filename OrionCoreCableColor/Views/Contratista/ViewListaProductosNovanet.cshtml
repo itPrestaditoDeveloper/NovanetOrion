@@ -1,0 +1,228 @@
+﻿@model int
+
+
+
+
+<ul class="nav nav-pills" role="tablist">
+    <li class="nav-item ml-2"><a class="nav-link active" data-toggle="pill" href="#nav_pills_default-1-@Model">Paquete <span><i class="fal fa-box"></i></span></a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-2-@Model">Instalado <span><i class="fal fa-tools"></i></span></a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-3-@Model">Inventario <span><i class="fal fa-toolbox"></i></span></a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#nav_pills_default-4-@Model">Confirmacion de Cliente <span><i class="fal fa-tools"></i></span></a></li>
+</ul>
+
+
+
+<div class="tab-content py-3">
+    <div class="tab-pane fade active show" id="nav_pills_default-1-@Model" role="tabpanel">
+        <div class="col-lg-12">
+            <h5>Paquete</h5>
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tblPaquete-@Model">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav_pills_default-2-@Model" role="tabpanel">
+        <div class="col-lg-12">
+            <h5>Instalacion</h5>
+
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tblInstalacion-@Model">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav_pills_default-3-@Model" role="tabpanel">
+        <div class="col-lg-12">
+            <h5>Inventario</h5>
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tblInventario-@Model">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Serie</th>
+                        <th>Serie2/Mac/IMEI</th>
+                        <th>Solicitud</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="nav_pills_default-4-@Model" role="tabpanel">
+        <div class="col-lg-12">
+            <h5>Confirmacion Cliente Instalacion</h5>
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tblConfirmacionCliente-@Model">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+
+    $('#tblPaquete-@Model').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: `<"row"<"col-sm-12"fBl>>rtip`,
+        ajax: {
+            url: '@Url.Action("CargarPaqueteSolicitud", "Contratista")',
+            method: "Get",
+            data: { fiIDSolicitud: @Model },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns:
+            [
+                { data: "fcProducto" },
+                {
+                    data: null,
+                    render: function (data) {
+                        return 1;
+                    }
+                }
+            ]
+
+    });
+
+
+    $('#tblInstalacion-@Model').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: `<"row"<"col-sm-12"fBl>>rtip`,
+        ajax: {
+            url: '@Url.Action("CargarInstalacionSolicitud", "Contratista")',
+            method: "Get",
+            data: { fiIDSolicitud: @Model },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns:
+            [
+                { data: "fcProducto" },
+                { data: "fnCantidad" }
+            ]
+    });
+
+    $('#tblInventario-@Model').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: `<"row"<"col-sm-12"fBl>>rtip`,
+        ajax: {
+            url: '@Url.Action("CargarInventarioSolicitud", "Contratista")',
+            method: "Get",
+            data: { fiIDSolicitud: @Model },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns:
+            [
+                { data: "fcProducto" },
+                { data: "fnCantidad" },
+                { data: "fcNumerodeSerie1" },
+                { data: "fcNumerodeSerie2" },
+                { data: "fiIDSolicitud" }
+            ]
+    });
+
+    $('#tblConfirmacionCliente-@Model').DataTable({
+    autoWidth: true,
+    responsive: true,
+    language: {
+        "emptyTable": "No se encontraron resultados.",
+        //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+        "paginate": {
+            first: "Primero",
+            previous: "Anterior",
+            next: "Siguiente",
+            last: "Ultimo"
+        },
+        "lengthMenu": " _MENU_ ",
+        "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+        "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: `<"row"<"col-sm-12"fBl>>rtip`,
+        ajax: {
+            url: '@Url.Action("CargarConfirmacionCliente", "Contratista")',
+            method: "Get",
+            data: { fiIDSolicitud: @Model },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        rowCallback: function (row, data, index) {
+            if (data.fnCantidad == 0) { // aqui es donde se pinta las solicitudes si tienen articulos
+                $(row).css('background-color', "#ff6a6a");
+            }
+        },
+        columns:
+        [
+            { data: "fcProducto" },
+            { data: "fnCantidad" },
+            
+        ]
+    });
+
+</script>

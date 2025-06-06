@@ -1,0 +1,333 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+@using OrionCoreCableColor.App_Helper
+@{
+    ViewBag.Title = "ViewElimiardocumentos";
+}
+
+<link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle Documentos</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <input id="txtidsolicitud" class="form-control mascara-enteros text-left" value="@ViewBag.IdSolicitud" type="tel" style="text-align: right; display:none">
+        <input id="txtidcliente" class="form-control mascara-enteros text-left" value="@ViewBag.IdCliente" type="tel" style="text-align: right; display:none">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tabledocumento">
+                    <thead>
+                        <tr>
+                            <th>Nombre </th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/loading/loading.js"></script>
+<script>
+
+    var listadoFotos = [];
+
+    var tablaPrincipalDocumentos = $('#tabledocumento').DataTable({
+           //"destroy": true,
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+              ajax: {
+                  url: '@Url.Action("DocumentosPorSolicitud", "Manto")',
+                  data: { IdSolicitud: idsol},
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                    data: 'fcDescripcion',
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        console.log(data);
+                        let boton = '';
+                        if (data.EstaenLista) {
+
+                            boton += `<button class="btn btn-danger" id="" onclick="desactivardocumentos(${data.fiIDDocumento},'${data.fcDescripcion}')">Eliminar</button>`
+
+                        } else {
+                            llenardrop(data.fiIDDocumento)
+                            //boton = `<button class="btn btn-success waves-effect waves-themed" id="" onclick="SubirImagen(${data.fiIDTipoArchivo},'${data.fcDescripcion}')">Subir Documento</button>`
+                            boton += `<div class="form-group">
+
+                                <form id="Imagen-dropzone-${data.fiIDDocumento}" action="@Url.Action("FormFileResponse","Base")" method="post" enctype="multipart/form-data" class="dropzone needsclick">
+                                    <div class="dz-message needsclick">
+
+                                        <div class="dz-icon">
+                                            <i class="fal fa-cloud-upload text-muted mb-3"></i>
+                                        </div>
+                                        <div>
+                                            <span class="dz-text">Arrastre Imagen</span>
+                                            <p class="text-sm text-muted">O Click para elegirla manualmente</p>
+
+
+                                        </div>
+                                    </div>
+                                </form>
+                                <canvas src="#" style="display: none" alt="Mi identidad" id="fotopreviacanva-${data.fiIDDocumento}" class="img-thumbail"></canvas>
+                            </div>
+                            <button onclick="guardarimagen(${data.fiIDDocumento})" class="btn btn-success col-lg-12 col-sm-12 col-md-12 col-xl-12">Guardar</button>`;
+                        }
+                        return boton;
+                    }
+                },
+            ]
+    });
+
+
+    function llenardrop(iddocumento) {
+        let name = iddocumento + 1;
+        window['myDropzone' + name] = $('#Imagen-dropzone-' + iddocumento).dropzone({
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            maxFiles: 1,
+            init: function () {
+                var myDropzone = this;
+                myDropzone.on('maxfilesexceeded', function (file) {
+                    AlertaMensaje("Remueva una imagen para colocar uno nuevo");
+                    var _ref = file.previewElement;
+                    if (_ref != null) {
+                        _ref.parentNode.removeChild(file.previewElement);
+                    }
+                    return;
+                });
+
+
+                myDropzone.on('thumbnail', function (file, dataURL) {
+                    console.log(file);
+                    //const [file] = this.files
+                    //RedimencionarImagen(`fotopreviacanva-${iddocumento}`, file, "fotoprevia2");
+                    RedimencionarImagen(`fotopreviacanva-${iddocumento}`, file, "fotoprevia2", file.name, iddocumento);
+
+                });
+            },
+            removedfile: function (file) {
+
+                var _ref = file.previewElement;
+                if (_ref != null) {
+                    var divImagenes = $("#imagenesPrevias").children().toArray();
+                    $(divImagenes.find(x => x.id == file.name)).remove();
+                    this.files = this.files.filter(x => x != file);
+                }
+                return _ref != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+            }
+        });
+    }
+
+
+
+
+    function guardarimagen(iddocumento) {
+        debugger
+        H5_loading.show();
+        //console.log(`se esta guardando la imagen`);
+        //console.log($(`#customFile`).val());
+        //var nomb = $(`#this`).val().split(`\\`);
+        //console.log(nomb);
+        //$(`#labelcustomefile`).text(nomb[2])
+        var idclient = $(`#txtidcliente`).val();
+        let name = iddocumento + 1;
+        var drp = window['myDropzone' + name];
+        var canvas = document.getElementById(`fotopreviacanva-${iddocumento}`);
+        var fil = dataURLtoFile(canvas.toDataURL('image/jpeg', 0.7), drp[0].dropzone.files[0].name);
+        console.log(canvas.toDataURL('image/jpeg', 0.7)); // aqui para saber el base64 de la imagen
+
+        var form_data = new FormData();
+        form_data.append("fiIDSolicitud", idsol);
+
+
+        for(var i = 0; i < fotosredimencionadas.length; i++) {
+            form_data.append(`fotosbase[${i}].base64string`, fotosredimencionadas[i].basesesentaycuatro)
+            form_data.append(`fotosbase[${i}].nombrearchivo`, fotosredimencionadas[i].nombreArchivo)
+            form_data.append(`fotosbase[${i}].numimagen`, fotosredimencionadas[i].numimagen)
+        }
+
+
+
+        let url = '@Url.Action("GuardarFotos", "DatosCliente")';
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (data) {
+
+                $.ajax({
+                    url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                    type: "POST",
+                    data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: `Se Guardo Un Documento`, Opcion: 'Modificar Documentos'},
+                    success: function (datas) {
+                        var datasus = { Titulo: "Exito", Mensaje: "Documento eliminado Correctamente", Estado: true }
+                        AlertaAjax(datasus);
+                    },
+                    error: function (datae) {
+                        var dataerror = { Titulo: "Error", Mensaje: "Error al querer Guardar la Bitacora", Estado: false }
+                        AlertaAjax(dataerror);
+                    }
+                });
+                ToastrSuccess("Listo!", "Subido correctamente");
+                tablaPrincipalDocumentos.ajax.reload();
+                H5_loading.hide();
+                window.location.reload()
+
+
+            }, error: function () {
+                ToastrError("Error", resp.Mensaje);
+
+                // $("#btnGuardarForm").show();
+            }
+        });
+    }
+
+    function desactivardocumentos(iddocumento,Descripcion) {
+        //console.log(`entro en la funcion de desactivar`);
+        var idclient = $(`#txtidcliente`).val();
+
+        bootbox.confirm({
+            title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro que desea Eliminar Este Documento <span class='fw-500'></span>`,
+            message: "<span><strong>Advertencia!:</strong> Esta Accion no se puede Reversar</span>",
+            centerVertical: true,
+            swapButtonOrder: true,
+            buttons: {
+                confirm: {
+                    label: 'Si',
+                    className: 'btn-danger shadow-0'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-default'
+                }
+            },
+            className: "modal-alert",
+            closeButton: false,
+            callback: function (result) {
+                if (result == true) {
+                    $.ajax({
+                        url: "@Url.Action("DesactivarDocumentos", "Manto")",
+                        type: "POST",
+                        data: { IdSolicitud: idsol, idDocumento: iddocumento},
+                        success: function (datas) {
+                            $.ajax({
+                                url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                                type: "POST",
+                                data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: `Se elimino el Documento de ${Descripcion}`, Opcion: 'Modificar Documentos Documentos'},
+                                success: function (datas) {
+                                    var datasus = { Titulo: "Exito", Mensaje: "Documento eliminado Correctamente", Estado: true }
+                                    AlertaAjax(datasus);
+                                },
+                                error: function (datae) {
+                                    var dataerror = { Titulo: "Error", Mensaje: "Error al querer Guardar la Bitacora", Estado: false }
+                                    AlertaAjax(dataerror);
+                                }
+                            });
+
+                            tablaPrincipalDocumentos.ajax.reload();
+                            window.location.reload()
+                        },
+                        error: function (datae) {
+                            var dataerror = { Titulo: "Error", Mensaje: "Error al querer Eliminar el Documento", Estado: false }
+                            AlertaAjax(dataerror);
+                        }
+                    });
+                }
+                if (result == false) {
+
+                }
+            }
+        })
+
+    }
+
+
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[arr.length - 1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    var fotosredimencionadas = [];
+    function RedimencionarImagen(idcanva, eimagencaptada, idimg, NombreArchivo, numeroimagen) {
+        debugger;
+        var ctx = document.getElementById(idcanva).getContext('2d'); // capturamos el id del camva para ponerlo la imagen oculta ahi y asi poder tomar esa imagen y no la que se esta mostrando
+        var img = new Image;
+        img.src = URL.createObjectURL(eimagencaptada); // insertamos la imagen que el cliente subio para posteriormente hacer la reduccion
+        img.onload = function () {
+            var canvas = document.getElementById(idcanva);
+            var maxAncho = 900; //aqui le ponemos unas medidas estandar que pueden cambiar en un futuro,
+            var maxAlto = 1500;
+
+            var proporcion = Math.min(maxAncho / img.width, maxAlto / img.height); // aqui hacemos una proporcion de las imagenes con respecto al tamaño de la imagen original y al estandar que tenemos nosotros aqui adentro
+            var propdos = img.width / img.height;
+            var ancho = img.width * proporcion;
+            var alto = img.height * proporcion;
+
+            canvas.width = (img.width / propdos); // ponemos el tamaño en el canva oculto
+            canvas.height = (img.height / propdos);
+
+            ctx.drawImage(img, 0, 0, (img.width / propdos), (img.height / propdos));
+            //console.log(canvas.toDataURL('image/jpeg', 0.7)); // tira el base 64
+            fotosredimencionadas.push({ canva: idcanva, basesesentaycuatro: canvas.toDataURL('image/jpeg', 0.7), nombreArchivo: NombreArchivo, numimagen: numeroimagen });
+            console.log(fotosredimencionadas);
+            //var urlbase64 = getBase64Image(img); // tira el base 64
+
+            document.getElementById(idimg).src = canvas.toDataURL('image/jpeg', 0.7); // el 07 es la calidad de la imagen si no estoy mal eso decia en la documentacion
+            //document.getElementById(idcanva).style.display = "block"; //mostrar la imagen que esta oculta
+        }
+        console.log(fotosredimencionadas);
+    }
+
+</script>
+

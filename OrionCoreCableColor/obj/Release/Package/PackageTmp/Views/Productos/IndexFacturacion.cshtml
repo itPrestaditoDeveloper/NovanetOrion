@@ -1,0 +1,297 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-shopping-cart fa-fw"></i> Ventas </h2>
+        
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Factura</th>
+                        <th>Identidad</th>
+                        <th>Cliente</th>
+                        <th>Ubicacion</th>
+                        <th>Destinatario</th>
+                        <th>Fecha</th>
+                        <th>Recibido</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+
+
+
+
+        function EditarIngresoInventario(fiIDMovimientoMaestro)
+        {
+            location.href = "@Url.Action("EditarFacturacionInventario", "Productos")?fiIDInventarioMovimientoMaestro=" + fiIDMovimientoMaestro;
+        }
+
+        function Logueados() {
+            VerModalSmConObjetoDeParametro({},"@Url.Action("ListaDeUsuarios","Productos")");
+        }
+
+        function SolicitudFirmaInventario(fiIDInventarioMovimientoMaestro) {
+            VerModalScrollConObjetoDeParametro({ fiIDInventarioMovimientoMaestro: fiIDInventarioMovimientoMaestro},"@Url.Action("RptInventarioSalida","Productos")");
+        }
+
+
+        function VerDocumento(fiIDInventarioMovimientoMaestro)
+        {
+            var model = { fiIDInventarioMovimientoMaestro: fiIDInventarioMovimientoMaestro };
+            $.ajax({
+                url: "@Url.Action("GetPDFSalidaInventario","Productos")",
+                method: "Post",
+                data: { model: model },
+                success: function (resp) {
+
+                    window.open("@Url.Action("GetPdf", "Base")", "_blank");
+                }
+            });
+        }
+
+
+
+
+        function EnviarInventarioCorreo(fiIDInventarioMovimientoMaestro) {
+            $.ajax({
+                url: "@Url.Action("EnviarCorreoSalidaDeInventario", "Productos")",
+                method: "Get",
+                data: { fiIDInventarioMovimientoMaestro: fiIDInventarioMovimientoMaestro },
+                success:function()
+                {
+                    ToastrSuccess("Inventario","Correo de inventario enviado");
+                }
+            });
+        }
+
+        function EnviarWhatsapp(fiIDInventarioMovimientoMaestro) {
+            $.ajax({
+                url: "@Url.Action("MensajesWhatsappSalidasInventario", "Productos")",
+                method: "Get",
+                data: { fiIDInventarioMovimientoMaestro: fiIDInventarioMovimientoMaestro },
+                success:function(resp)
+                {
+                    ToastrSuccess("Inventario", resp.Mensaje);
+                }
+            });
+        }
+
+        function CambiarStatus(fiIDInventarioMovimientoMaestro, fiEstadoInventairoMovimientoMaestro)
+        {
+            Swal.fire({
+                //type: "warning",
+                title: `¿Seguro que desea ${fiEstadoInventairoMovimientoMaestro == 1 ? "Deshabilitar" : "Habilitar"} el inventario?`,
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                confirmButtonColor: '#d33',
+                cancelButtonText: 'No',
+                allowOutsideClick: () => !swal.isLoading()
+            }).then((result) => {
+
+                if (result.value == true)
+                {
+                    $.ajax({
+                        url:"@Url.Action("CambiarStatusSalidaInventario", "Productos")",
+                        type: "Get",
+                        data: { fiIDInventarioMovimientoMaestro: fiIDInventarioMovimientoMaestro },
+                        success: function (data) {
+                            ToastrSuccess("", data.Mensaje);
+                            var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                            tablaT.ajax.reload();
+                        }
+                    });
+                }
+
+            });
+        }
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[7, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaFacturacionInventario", "Productos")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+
+                        if (data.fiFacturaConfirmada == 1)
+                        {
+                            opciones += data.fiEstadoInventairoMovimientoMaestro == 1 ? data.fiFirma == 0 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarIngresoInventario(' + data.fiIDInventarioMovimientoMaestro + ')"> Editar</a>' : '' : '';
+                            opciones += data.fiEstadoInventairoMovimientoMaestro == 1 ? data.fiFirma == 0 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="SolicitudFirmaInventario(' + data.fiIDInventarioMovimientoMaestro + ')"> Confirmar Entrega </a>' : '' : '';
+                            opciones += data.fiEstadoInventairoMovimientoMaestro == 1 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="VerDocumento(' + data.fiIDInventarioMovimientoMaestro + ')">Documento de entrega</a>' : '';
+                        }
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opt = "";
+                        opt = `<a class="btn btn-link btn-xs view-control details-productos" href="javascript:void(0)" ><i class="fal fa-plus fa-fw text-success"></i></a>`;
+                        return opt;
+                    }
+                },
+                {
+                    data:"fcReferenciaDocumento"
+                },
+                {
+                    data:"fcIdentidad"
+                },
+                {
+                    data:"fcNombreCliente"
+                },
+                {
+                    data: "fcUbicacion",
+                },
+                { data: "fcDestinatario" },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<label style="display:none;">${data.fdFechaCreacion}</label>` + moment(data.fdFechaCreacion).format("DD/MM/YYYY  HH:mm:ss");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiFirma == 1) {
+                            return '<i class="fal fa-check text-success"></i>';
+                        } else {
+                            return '<i class="fal fa-times text-danger"></i>';
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoInventairoMovimientoMaestro == 1) {
+                            return '<div class="badge badge-success">Activo</div>';
+                        } else {
+                            return '<div class="badge badge-danger">Inactivo</div>';
+                        }
+                    }
+                }
+
+            ]
+
+        });
+
+        chat.client.actualizarSalidaInventario = function (userPeticion) {
+
+            if (userPeticion == "@User.Identity.Name") {
+                var table = $.fn.DataTable.Api('#TablaPrincipal');
+                table.ajax.reload();
+            }
+        }
+
+
+        $('#TablaPrincipal tbody').on('click', 'a.details-productos', function () {
+            var table = $.fn.dataTable.Api("#TablaPrincipal");
+            var i = $(this).find("i");
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var data = table.row(row).data();
+            if (row.child.isShown()) {
+
+                row.child('');
+                row.child.hide();
+                tr.removeClass('info');
+                $(i).removeClass("fa-minus").removeClass("text-danger").addClass("fa-plus").addClass("text-success");
+            }
+            else {
+
+                $(i).removeClass("fa-plus").removeClass("text-success").addClass("fa-minus").addClass("text-danger");
+
+
+                $.ajax({
+                    url: '@Url.Action("ViewListaSalidaInventario", "Productos")',
+                    data: { fiIDInventarioMovimientoMaestro: data.fiIDInventarioMovimientoMaestro },
+                    type: 'Get',
+                    success: function (data) {
+                        row.child(data).show();
+                        tr.addClass('info');
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        AlertaError();
+                    },
+                });
+            }
+        });
+
+        $("#TablaPrincipal thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+
+        });
+
+
+        tablaPrincipal.on("responsive-resize", function () {
+            var thead = $("#TablaPrincipal thead tr").toArray();
+            var buscadores = $(thead[0]).find("th").toArray();
+
+            var titulos = $(thead[1]).find("th").toArray();
+            for (var x = 0; x < titulos.length; x++) {
+                if ($(titulos[x]).css("display") == "none") {
+
+                    $(buscadores[x]).css("display", "none");
+                } else {
+                    $(buscadores[x]).css("display", "");
+                }
+            }
+        });
+
+    </script>
+
+}

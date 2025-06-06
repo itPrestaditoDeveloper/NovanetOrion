@@ -1,0 +1,129 @@
+﻿@model OrionCoreCableColor.Models.Productos.ListMovimientoDetalleViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Editar Inventario de Producto: @Model.fcProducto
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcProducto, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-router fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fcProducto, new { @class = "form-control", @readonly=true } )
+                </div>
+                @Html.ValidationMessageFor(model => model.fcProducto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fiIDUbicacion, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    @Html.DropDownListFor(model => model.fiIDUbicacion, new SelectList(ViewBag.Ubicaciones, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fiIDUbicacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCodigoSerie1, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-barcode-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fcCodigoSerie1, new { @class = "form-control", @readonly = true })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCodigoSerie1, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCodigoSerie2, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-barcode-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fcCodigoSerie2, new { @class = "form-control", @readonly = true })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCodigoSerie2, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnCantidad, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-sort-numeric-down-alt fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnCantidad, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnCantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarProductoMovimientoDetalle()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+
+</div>
+<script>
+
+    var model = @Html.Raw(Json.Encode(Model));
+
+    $("#fiIDUbicacion").select2({
+        dropdownParent: $("#MyModalSm")
+    });
+
+
+
+    $(document).ready(function () {
+        model.fbConsumible ? $("#fnCantidad").prop("readonly", false) : $("#fnCantidad").prop("readonly", true);
+    });
+
+
+    function GuardarProductoMovimientoDetalle()
+    {
+        debugger;
+        $("#EditarProductoMovimientoDetalle").hide();
+        model.fiIDUbicacion = $("#fiIDUbicacion").val();
+        model.fnCantidad = $("#fnCantidad").val();
+
+        $.ajax({
+            url: "@Url.Action("EditarProductoMovimientoDetalle","Productos")",
+            method: "Post",
+            data: { model: model },
+            success: function (resp) {
+                if (resp.Estado) {
+                    
+                    ToastrSuccess("Inventario", resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    $("#EditarProductoMovimientoDetalle").show();
+                    ToastrError("Error",resp.Mensaje)
+                }
+            }
+        });
+    }
+
+</script>

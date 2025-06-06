@@ -1,0 +1,347 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionCreditoClienteViewModel
+
+
+<style>
+	/* Updated styles for improved design */
+	.section-title {
+		font-size: 1.75rem;
+		font-weight: 600;
+		color: #333;
+		margin-bottom: 1.5rem;
+		border-bottom: 2px solid #007bff;
+		display: inline-block;
+		padding-bottom: 0.25rem;
+	}
+
+	.gallery-container {
+		background-color: #f8f9fa;
+		padding: 1.5rem;
+		border-radius: 8px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		text-align: center;
+	}
+
+	.gallery-placeholder {
+		color: #777;
+		font-style: italic;
+		padding: 3rem;
+		background-color: #f1f1f1;
+		border-radius: 8px;
+		border: 2px dashed #ccc;
+		font-size: 1.1rem;
+		width: 100%;
+		box-sizing: border-box;
+		margin: 0 auto;
+	}
+
+	.gallery-image {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+		border-radius: 8px;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		cursor: pointer;
+	}
+
+		.gallery-image:hover {
+			transform: scale(1.05);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+		}
+
+	.table-container {
+		background-color: #fff;
+		border-radius: 8px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		padding: 1.5rem;
+		margin-bottom: 1.5rem;
+		border: 1px solid #e9ecef;
+	}
+
+	.table-professional {
+		width: 100%;
+		border-collapse: separate;
+		border-spacing: 0;
+		font-size: 1rem;
+		color: #1f2937;
+		font-family: 'Arial', sans-serif;
+	}
+
+		.table-professional th, .table-professional td {
+			padding: 1.2rem 1.5rem;
+			text-align: left;
+			border-bottom: 1px solid #e5e7eb;
+			vertical-align: middle;
+		}
+
+		.table-professional th {
+			background: linear-gradient(90deg, #1e3a8a, #2d5bff);
+			color: #fff;
+			font-weight: 700;
+			text-transform: uppercase;
+			font-size: 0.95rem;
+			position: sticky;
+			top: 0;
+			z-index: 1;
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
+		}
+
+		.table-professional tbody tr {
+			transition: background-color 0.3s ease;
+		}
+
+			.table-professional tbody tr:hover {
+				background-color: #f3f4f6;
+			}
+
+			.table-professional tbody tr:nth-child(even) {
+				background-color: #f9fafb;
+			}
+
+		.table-professional .text-main {
+			color: #1f2937;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+		}
+
+		.table-professional .status-icon {
+			margin-right: 0.75rem;
+			font-size: 1.2rem;
+			color: #10b981;
+		}
+
+		.table-professional .label-status {
+			background-color: #dc3545;
+			color: #fff;
+			padding: 0.4rem 1rem;
+			border-radius: 16px;
+			font-size: 0.9rem;
+			display: inline-block;
+			text-transform: capitalize;
+		}
+
+	.row-spacing {
+		margin-bottom: 2rem;
+	}
+
+	/* Ultra-compact square card styles for Paquete Adquirido */
+	.card-container {
+		background-color: #fff;
+		border-radius: 8px;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		padding: 0.5rem; /* Further reduced padding */
+		border: 1px solid #e5e7eb;
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		width: 100%; /* Ensure full width within column */
+		aspect-ratio: 1 / 1; /* Force square aspect ratio */
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		text-align: center; /* Center content */
+	}
+
+		.card-container:hover {
+			transform: translateY(-2px); /* Reduced hover lift */
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Reduced hover shadow */
+		}
+
+
+
+		.card-title i {
+			margin-right: 0.2rem; /* Reduced icon spacing */
+			color: #2e7d32; /* Darker green for icon */
+			font-size: 0.8rem; /* Further reduced icon size */
+		}
+
+	.card-content {
+		font-size: 0.8rem; /* Further reduced font size */
+		color: #4b5563;
+	}
+
+		.card-content div {
+			margin-bottom: 0.2rem; /* Further reduced spacing */
+		}
+
+		.card-content .label {
+			font-weight: 600;
+			color: #1f2937;
+		}
+
+		.card-content .value {
+			color: #4b5563;
+		}
+
+	.card-placeholder {
+		color: #777;
+		font-style: italic;
+		padding: 2rem;
+		background-color: #f9fafb;
+		border-radius: 8px;
+		border: 1px dashed #ccc;
+		font-size: 1rem;
+		text-align: center;
+	}
+</style>
+
+<div class="container-fluid py-4">
+	<div class="row row-spacing">
+		<div class="col-12">
+			<!-- Fotografias Instalacion Section -->
+			<div class="gallery-container">
+				<div class="text-center">
+					<h2 class="section-title">Fotografías de Instalación</h2>
+				</div>
+				<div class="row" id="galeriaFotos">
+					@if (Model.ListaImagenesInstalacion != null && Model.ListaImagenesInstalacion.Any())
+					{
+						foreach (var item in Model.ListaImagenesInstalacion)
+						{
+							<div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+								<img class="gallery-image"
+									 onclick="ShowBigImage(this)"
+									 alt="@item.fcDescription"
+									 src="@item.fcUrlFile"
+									 data-image="@item.fcUrlFile"
+									 data-description="@item.fcDescription">
+							</div>
+						}
+					}
+					else
+					{
+						<div class="gallery-placeholder">
+							<i class="fal fa-image fa-2x mb-2"></i> No hay fotografías de instalación disponibles.
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row row-spacing">
+		<!-- Paquete Adquirido Section -->
+		<div class="col-lg-6 col-md-12 mb-4">
+			@if (Model.fcProducto != null && Model.ListaGarantia != null && Model.ListaGarantia.Any())
+			{
+				<div class="text-center mb-4">
+					<h2 class="section-title">Paquete Adquirido</h2>
+				</div>
+				<div class="row">
+					@foreach (var item in Model.ListaGarantia)
+					{
+						<div class="col-lg-4 col-md-6 col-sm-12 mb-3">
+							<!-- Grid layout: 3 per row on lg, 2 on md, 1 on sm -->
+							<div class="card-container" style="padding: 0.6rem; background-color: #f9f9f9; border: 1px solid #e0e0e0;">
+								<div class="card-title" style="font-size: 0.95rem; margin-bottom: 0.2rem; padding: 0.2rem 0.4rem; background-color: #464773; border-radius: 4px 4px 0 0; text-align: center; color: white ">
+									<i class="fal fa-box-open" style="color: white; font-size: 0.8rem; margin-right: 0.2rem;"></i> Producto #@item.fiIDProducto
+								</div>
+								<div class="card-content" style="font-size: 0.85rem; padding: 0.3rem; text-align: center;">
+									<div style="font-size: 1rem; font-weight: 600; margin-bottom: 0.3rem;">@item.fcProducto</div>
+									<div style="margin-bottom: 0.2rem;"><span class="label" style="font-weight: 500;">Valor ME:</span> <span class="value"><i class="fal fa-dollar-sign" style="color: #454672b5; margin-right: 0.1rem;"></i> @item.fnValorProductoME</span></div>
+									<div><span class="label" style="font-weight: 500;">Valor MN:</span> <span class="value"><i class="fal fa-coins" style="color: #464773; margin-right: 0.1rem; "></i> @item.fnValorProductoMN</span></div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			}
+			else
+			{
+				<div class="table-container">
+					<div class="card-placeholder">
+						No hay información de paquete adquirido disponible.
+					</div>
+				</div>
+			}
+		</div>
+
+		<!-- Info Prestamo Section -->
+		<div class="col-lg-6 col-md-12 mb-4">
+			<div class="text-center mb-4">
+				<h2 class="section-title">
+					Información del Préstamo
+				</h2>
+			</div>
+			<div class="table-container">
+				<table class="table-professional">
+					<tbody>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-info-circle status-icon"></i> Estado
+							</td>
+							<td><span class="label-status">Vigente</span></td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-hashtag status-icon"></i> Número de Préstamo
+							</td>
+							<td>@Html.DisplayFor(model => model.fcPrestamo)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-box-open status-icon"></i> Tipo de Producto
+							</td>
+							<td>@Html.DisplayFor(model => model.fcProducto)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-building status-icon"></i> Agencia
+							</td>
+							<td>@Html.DisplayFor(model => model.fcNombreAgencia)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-calendar-alt status-icon"></i> Plazos
+							</td>
+							<td>@Html.DisplayFor(model => model.fiTotalCuotas) (@Model.fcTipoDePlazo)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-clock status-icon"></i> Frecuencia
+							</td>
+							<td>@Html.DisplayFor(model => model.fcTipoDePlazo)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-money-check-alt status-icon"></i> Cantidad de Pagos
+							</td>
+							<td>@(Model.PaymentsQuantity)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-coins status-icon"></i> Cuota
+							</td>
+							<td>@Html.DisplayFor(model => model.fnValorCuota)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-calendar-day status-icon"></i> Fecha de Inicio
+							</td>
+							<td>@Html.DisplayFor(model => model.fdFechaInicioPrestamo)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-calendar-check status-icon"></i> Fecha Primer Pago
+							</td>
+							<td>@Html.DisplayFor(model => model.fdFechaPrimerPagoPrestamo)</td>
+						</tr>
+						<tr>
+							<td class="text-main">
+								<i class="fal fa-calendar-times status-icon"></i> Fecha Último Pago
+							</td>
+							<td>@Html.DisplayFor(model => model.fdFechaVencePrestamo)</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$("#galleryWarranty").unitegallery({
+			gallery_theme: "tilesgrid"
+		});
+	});
+</script>

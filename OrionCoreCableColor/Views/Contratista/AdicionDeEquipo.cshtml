@@ -1,0 +1,482 @@
+﻿@model OrionCoreCableColor.Models.Contratista.AdicionEquipoViewModel
+<link href="~/Content/css/controller/View/AdicionEquipo/adicion-equipo.css" rel="stylesheet" />
+
+<div class="container col-lg-12">
+    <div class="header"><i class="fal fa-file-alt fa-fw"></i> Solicitud Adición de Equipo</div>
+    @*<form id="MyFormModal">*@
+<form id="MyFormModal" enctype="multipart/form-data">
+    <div class="content">
+        <!-- Sección de Búsqueda -->
+        <div class="section">
+            <h3>Consultar Cliente</h3>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="9999-9999-9999" id="mascara-identidad">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick="ConsultarCliente()">
+                        <i class="fal fa-search"></i>
+                    </button>
+
+                    <button class="btn btn-secondary" type="button" onclick="LimpiarDatos()">
+                        <i class="fal fa-eraser"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="info" style="display:none">
+
+                @Html.TextBoxFor(model => model.CuotaMensualMonedaNacional, new { @class = "form-control readOnly", @readonly = "readonly " })
+                @Html.TextBoxFor(model => model.fiIDEquifax, new { @class = "form-control readOnly", @readonly = "readonly " })
+                @Html.TextBoxFor(model => model.fiIDSolicitud, new { @class = "form-control readOnly", @readonly = "readonly " })
+                @Html.TextBoxFor(model => model.fiIDFirma, new { @class = "form-control readOnly", @readonly = "readonly " })
+            </div>
+            <div class="info">
+                <span>Nombre:</span>
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control readOnly", @readonly = "readonly" })
+            </div>
+            <div class="info">
+                <span>Telefono:</span>
+                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control readOnly", @readonly = "readonly" })
+            </div>
+
+            <h3>Paquete Contratado</h3>
+
+            <div class="team-list panel-container" style="padding-top:12px; padding-bottom:15px;">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <td>Seleccione</td>
+                            <th>#Solicitud</th>
+                            <th>Paquete</th>
+                            <th>Cantidad</th>
+                            <th style="width:15%">Cuota L</th>
+                            <th style="width:15%">Cuota $</th>
+                        </tr>
+                    </thead>
+                    <tbody id="equiposCliente">
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+
+        <!-- Sección de Adición de Equipos -->
+        <div class="section">
+            <h3>Equipo a Adicionar</h3>
+
+            <div class="input-group-inline">
+                <select id="ddlProductos" class="form-control">
+                    <option value="">Seleccione un Producto</option>
+                    @foreach (var producto in (IEnumerable<dynamic>)ViewBag.ListadoProductos)
+                    {
+                        <option value="@producto.fiIDProducto" data-cuota="@producto.CuotaMensualMonedaNacional">
+                            @producto.Articulos.Trim()
+                        </option>
+                    }
+                </select>
+
+
+
+                <button type="button" onclick="validarAdicionEquipo()">
+                    <i class="ni ni-big-plus"></i> Agregar
+                </button>
+            </div>
+            <br />
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Equipo</th>
+                        <th style="width:15%">Cantidad</th>
+                        @*<th style="width:15%">Monto</th>*@
+                        <th style="width:15%">Precio Arrendamiento</th>
+                        <th style="width:10%">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="productosAgregados"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-end"><strong>Total</strong></td>
+                        @*<td id="subtotal" class="text-bold">L. 0.00</td>*@
+                        <td id="totalArrendamiento" class="text-bold">L. 0.00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <h3>Subtotal: <span id="montoTotal"></span></h3>
+            <button type="button" onclick="Guardar()" class="btn-submit">Crear Solicitud</button>
+
+        </div>
+    </div>
+
+    <!-- Sección de Subir Comprobante -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="section">
+                <h3>Subir Comprobante de Pago</h3>
+                <div class="form-group file-upload">
+                    <label for="comprobantePago" class="file-label">
+                        <i class="fal fa-cloud-upload-alt"></i> Seleccione un archivo
+                    </label>
+                    <input type="file" id="comprobantePago" name="comprobantePago" class="form-control file-input" accept="image/*" onchange="mostrarVistaPrevia(event)">
+
+                    <!-- Contenedor de la vista previa -->
+                    <div class="preview-container" id="previewContainer" style="display: none;">
+                        <img id="previewImage" src="#" alt="Vista previa del comprobante" onclick="ShowBigImage(this)" data-description="Comprobante de pago" class="preview-image">
+
+                        <!-- Botón para eliminar la imagen debajo de la imagen -->
+                        <button type="button" class="btn btn-danger btn-sm remove-btn" onclick="removerImagen()" style="display: none !important; margin-top: 10px !important; margin-left: 49% !important;">
+                            X
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</form>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+
+
+         @Html.Raw(Json.Encode(ViewBag.ListadoProductos));
+         const limiteCantidadPorEquipo = @Html.Raw(Json.Encode(ViewBag.LimitesEquipos));
+         var PreciosArrendamiento = JSON.parse(@Html.Raw(Json.Encode(ViewBag.PreciosArrendamiento)));
+
+
+        $("#ddlProductos").select2();
+        $("#mascara-identidad").inputmask("9999999999999");
+
+        /**  Función para obtener el precio de arrendamiento por ID de producto */
+        function obtenerPrecioArrendamiento(idProducto) {
+            idProducto = parseInt(idProducto);
+            let precioEncontrado = PreciosArrendamiento.find(item =>
+                item.IDS === idProducto || (Array.isArray(item.IDS) && item.IDS.includes(idProducto))
+            );
+
+            return precioEncontrado ? precioEncontrado.Precio : 0;
+        }
+
+
+        function ConsultarCliente() {
+            var identidad = document.getElementById("mascara-identidad").value;
+
+            if (identidad.trim() === "") {
+                AlertaErrorMensaje("Ingrese la Identidad");
+                return false;
+            }
+
+            $.ajax({
+                url: '@Url.Action("ConsultarCliente", "Contratista")',
+                type: "GET",
+                data: { identidad: identidad },
+                success: function (data) {
+                    if (data.length > 0) {
+                        let cliente = data[0];
+                        $("#mascara-identidad").val(cliente.Identidad);
+                        $("#fcIDPrestamo").val(cliente.fcIDPrestamo);
+                        $("#fiIDEquifax").val(cliente.fiIDEquifax);
+                        $("#fiIDSolicitud").val(cliente.fiIDSolicitud);
+                        $("#fiIDFirma").val(cliente.fiIDFirma);
+                        $("#Nombre").val(cliente.Nombre);
+                        $("#Telefono").val(cliente.Telefono);
+                        $("#CuotaMensualMonedaNacional").val(cliente.CuotaMensualMonedaNacional);
+
+                        $("#equiposCliente").empty();
+                        cliente.equiposCliente.forEach((equipo, index) => {
+                            let radioId = `solicitud_${index}`;
+                            $("#equiposCliente").append(
+                                `<tr>
+                            <td>
+                                <input type="radio" id="${radioId}" class="solicitudSeleccionada" name="solicitudSeleccionada" value="${equipo.fiIDSolicitud}" onclick="seleccionarSolicitud(this)">
+                                <label for="${radioId}"></label>
+                            </td>
+                            <td>${equipo.fiIDSolicitud}</td>
+                            <td>${equipo.Articulos}</td>
+                            <td>${equipo.fiCantidad}</td>
+                            <td>${equipo.CuotaMensualMonedaNacional}</td>
+                            <td>${equipo.CuotaMensualMonedaE}</td>
+                        </tr>`
+                            );
+                        });
+                    } else {
+                        AlertaErrorMensaje("No se encontraron datos para esta identidad.");
+                    }
+                },
+                error: function () {
+                    alert("Error al consultar los datos del cliente.");
+                }
+            });
+        }
+
+        function seleccionarSolicitud(radio) {
+            document.querySelectorAll('input[name="solicitudSeleccionada"]').forEach(el => {
+                if (el !== radio) el.checked = false;
+            });
+
+            let idSolicitudSeleccionada = radio.value;
+            console.log("Solicitud seleccionada:", idSolicitudSeleccionada);
+        }
+
+        //validar momto total
+        function validarMontoTotal() {
+            var MontoHumbral = parseFloat($("#montoTotal").text().replace("L.", "").trim()) || 0;
+            var botonGuardar = $(".btn-submit");
+
+            if (MontoHumbral > 2000) {
+                AlertaErrorMensaje("Monto total superado.");
+                botonGuardar.prop("disabled", true).addClass("boton-deshabilitado"); // Deshabilitar y agregar la clase
+            } else {
+                botonGuardar.prop("disabled", false).removeClass("boton-deshabilitado"); // Habilitar y quitar la clase
+            }
+
+        }
+
+
+        // Función para validar cantidad máxima permitida
+        function validarCantidad(input) {
+            debugger;
+
+            var fila = $(input).closest("tr");
+            var idProducto = fila.find(".producto-id").val();
+            var cantidad = parseInt($(input).val()) || 1;
+
+            if (limiteCantidadPorEquipo[idProducto] && cantidad > limiteCantidadPorEquipo[idProducto]) {
+                AlertaErrorMensaje(`La cantidad máxima permitida para este equipo es ${limiteCantidadPorEquipo[idProducto]}.`);
+                $(input).val(limiteCantidadPorEquipo[idProducto]);
+            }
+
+            actualizarTotal();
+        }
+
+
+        function actualizarTotal() {
+            var subtotal = 0;
+            var totalArrendamiento = 0;
+
+            $("#productosAgregados tr").each(function () {
+                var cantidad = parseInt($(this).find(".cantidad-input").val()) || 1;
+               // var precio = parseFloat($(this).find(".precio").text().replace("L.", "").trim()) || 0;
+                var precioArrendamiento = parseFloat($(this).find(".precio-arrendamiento").text().replace("L.", "").trim()) || 0;
+
+               // subtotal += cantidad * precio;
+                totalArrendamiento += cantidad * precioArrendamiento;
+            });
+
+           // var MontoHumbral = subtotal + totalArrendamiento;
+            var cuotaL = parseFloat($("#CuotaMensualMonedaNacional").val()) || 0;
+            var montoTotal = cuotaL + totalArrendamiento;
+
+            //$("#subtotal").text("L. " + subtotal.toFixed(2));
+            $("#totalArrendamiento").text("L. " + totalArrendamiento.toFixed(2));
+            $("#montoTotal").text("L. " + montoTotal.toFixed(2));
+
+            validarMontoTotal();
+        }
+
+
+        // Función para añadir equipo
+        function validarAdicionEquipo() {
+            var fcIdentidad = $("#mascara-identidad").val();
+            var selectedProduct = $("#ddlProductos option:selected");
+            var idProducto = parseInt(selectedProduct.val());
+            var articulo = selectedProduct.text().trim();
+           // var precio = parseFloat(selectedProduct.data("cuota")) || 0;
+
+            if (!fcIdentidad) {
+                AlertaErrorMensaje("Ingrese la Identidad");
+                return;
+            }
+
+            if (!idProducto) {
+                AlertaErrorMensaje("Debe seleccionar un producto.");
+                return;
+            }
+
+
+            // Buscar el precio de arrendamiento basado en el ID del producto
+            let precioArrendamiento = obtenerPrecioArrendamiento(idProducto);
+
+            var existe = false;
+            $("#productosAgregados tr").each(function () {
+                var productoExistente = $(this).find(".producto-id").val();
+                if (productoExistente == idProducto) {
+                    existe = true;
+                    var cantidadInput = $(this).find(".cantidad-input");
+                    var nuevaCantidad = parseInt(cantidadInput.val()) + 1;
+
+                    // Validación de límite máximo
+                    if (limiteCantidadPorEquipo[idProducto] && nuevaCantidad > limiteCantidadPorEquipo[idProducto]) {
+                        AlertaErrorMensaje(`La cantidad máxima permitida para este equipo es ${limiteCantidadPorEquipo[idProducto]}.`);
+                        return;
+                    }
+
+                    cantidadInput.val(nuevaCantidad);
+                    actualizarTotal();
+                }
+            });
+           /* <td class="precio">L. ${precio.toFixed(2)}</td>*/
+            if (!existe) {
+                $("#productosAgregados").append(
+                    `<tr id="row-${idProducto}">
+                <td>${articulo}</td>
+                <td>
+                    <input type="hidden" class="producto-id" value="${idProducto}">
+                    <input type="number" class="form-control cantidad-input" value="1" min="1" oninput="validarCantidad(this)">
+                </td>
+
+               <td class="precio-arrendamiento">L. ${precioArrendamiento.toFixed(2)}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removerEquipo(${idProducto})">
+                       X
+                    </button>
+                </td>
+            </tr>`
+                );
+            }
+
+            actualizarTotal();
+        }
+         function removerEquipo(idProducto) {
+             $("#row-" + idProducto).remove();
+            actualizarTotal();
+         }
+
+         //mostrar vista previa de la imagen
+        function mostrarVistaPrevia(event) {
+            var input = event.target;
+            var previewContainer = document.getElementById("previewContainer");
+            var previewImage = document.getElementById("previewImage");
+            var removeBtn = document.querySelector(".remove-btn");
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = "block";
+                    removeBtn.style.display = "block";
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewContainer.style.display = "none";
+                removeBtn.style.display = "none";
+            }
+        }
+
+        // Función para remover la imagen y limpiar el input file
+        function removerImagen() {
+            var previewContainer = document.getElementById("previewContainer");
+            var previewImage = document.getElementById("previewImage");
+            var fileInput = document.getElementById("comprobantePago");
+            var removeBtn = document.querySelector(".remove-btn");
+
+            // Limpiar el input file
+            fileInput.value = "";
+
+            //Ocultar la vista previa y el botón de eliminar
+            previewImage.src = "#";
+            previewContainer.style.display = "none";
+            removeBtn.style.display = "none";
+        }
+
+
+        function LimpiarDatos() {
+            $("#mascara-identidad").val("");
+            $("#Nombre").val("");
+            $("#fcIDPrestamo").val("");
+            $("#Telefono").val("");
+            $("#CuotaMensualMonedaNacional").val("");
+            $("#equiposCliente").empty();
+            $("#productosAgregados").empty();
+            $("#subtotal").empty();
+           /* $("#montoTotal").empty();*/
+        }
+
+   function Guardar() {
+    debugger;
+    let solicitudSeleccionada = $("input[name='solicitudSeleccionada']:checked").val();
+    if (!solicitudSeleccionada) {
+        AlertaErrorMensaje("Debe seleccionar una solicitud antes de continuar.");
+        return;
+    }
+
+    var productos = [];
+    $("#productosAgregados tr").each(function () {
+        var idProducto = $(this).find(".producto-id").val();
+        var cantidad = parseInt($(this).find(".cantidad-input").val());
+
+        productos.push({
+            fiIDProducto: idProducto,
+            fiCantidad: cantidad
+        });
+    });
+
+    if (productos.length === 0) {
+        AlertaErrorMensaje("Debe seleccionar un producto.");
+        return;
+    }
+
+    var formData = new FormData();
+    formData.append("IDCliente", $("#fiIDEquifax").val());
+    formData.append("IdSolicitud", solicitudSeleccionada);
+    formData.append("jsondetalles", JSON.stringify(productos));
+
+    // Agregar archivo de comprobante de pago si existe
+    var comprobanteFile = $("#comprobantePago")[0].files[0];
+    if (comprobanteFile) {
+        formData.append("comprobantePago", comprobanteFile);
+        formData.append("fcExtension", comprobanteFile.name.split('.').pop());
+    } else {
+        AlertaErrorMensaje("Debe adjuntar el comprobante de pago.");
+        return;
+    }
+
+    // Enviar correo
+    $.ajax({
+        url: "@Url.Action("CorreoSolicitudFirmaAdendumAdicionEquipo", "Contratista")",
+        method: "POST",
+        data: { IdSolicitud: solicitudSeleccionada }
+    }).done(function (correoResp) {
+       // console.log("Correo enviado correctamente:", correoResp);
+
+        $.ajax({
+            url: "@Url.Action("GuardarAdicionEquipo", "Contratista")",
+            method: "POST",
+            contentType: false,
+            processData: false,
+            data: formData,
+            beforeSend: function () {
+                $(".btn-submit").prop("disabled", true).text("Guardando...");
+            },
+            success: function (response) {
+                $(".btn-submit").prop("disabled", false).text("Crear Solicitud");
+
+                if (response.Estado) {
+                    console.log("ID Generado:", response.IdGenerado);
+                    ToastrSuccess(response.Titulo, response.Mensaje);
+                    setTimeout(function () {
+                        window.location.href = "@Url.Action("Index", "SolicitudesAdicion")";
+                    }, 1000);
+                } else {
+                    ToastrError(response.Titulo, response.Mensaje);
+                }
+            },
+            error: function (error) {
+                $(".btn-submit").prop("disabled", false).text("Crear Solicitud");
+                AlertaErrorMensaje("Ocurrió un error en el proceso.");
+                console.error(error);
+            }
+        });
+    });
+}
+
+    </script>
+
+}

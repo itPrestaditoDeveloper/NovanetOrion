@@ -1,0 +1,313 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle Documentos</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <!--<div id="detalleImagenes" class="container-fluid" style="margin-top: 20px;">-->
+    <div id="detalleImagenes">
+        <div class="card" style="padding: 20px;">
+            <div class="card-body">
+                <div class="row">
+                    <!-- Sección de tabla (lado izquierdo) -->
+                    <div class="col-md-7">
+                        <div class="table-responsive mt-3" style="max-height: 500px; overflow-y: auto;">
+                            <table id="tblListadoTipoDocumento" class="table table-bordered table-hover cursor-pointer" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Visualizar</th>
+                                        <th>Nombre</th>
+                                        <th>Accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3" class="text-center">Cargando información...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sección de previsualización (lado derecho) -->
+                    <div class="col-md-5 d-flex flex-column align-items-center">
+                        <label class="font-weight-bold font-14">Previsualización del documento</label>
+                        <div id="divPrevisualizacionDocumento_TipoDeDocumento" class="preview-image-container" style="width: 100%; max-height: 400px; overflow: hidden; text-align: center;">
+                            <a id="previewLink" href="~/Content/img/imagen_no_disponible.png" data-lightbox="image-1" data-title="Imagen no disponible">
+                                <img id="previewImage" src="~/Content/img/imagen_no_disponible.png" alt="Previsualización del documento"
+                                     onerror="this.src='/Content/img/imagen_no_disponible.png'" style="max-width: 100%; max-height: 350px;">
+                                <i class="fas fa-search zoom-icon"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div> <!-- Fin de row -->
+                <button id="btnEnviarArchivos" class="btn btn-success mt-3" onclick="enviarArchivosAlServidor()">
+                    <i class="fa-solid fa-upload"></i> Enviar Archivos
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Content/js/loading/loading.js"></script>
+
+<script>
+    // Array global para almacenar archivos en Base64 y su ID
+    var archivosSubidos = [];
+    $(document).ready(function () {
+        // Ocultar el botón de enviar archivos al cargar la página
+        $("#btnEnviarArchivos").hide();
+    });
+    var tablaPrincipalDocumentos = $('#tblListadoTipoDocumento').DataTable({
+           //"destroy": true,
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+              ajax: {
+                  url: '@Url.Action("ListaDocumentosSolicitud", "Manto")',
+                  data: { fiIdSolicitud: idsol},
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var boton = ``;
+                        if (data.fbDocumentoExiste) {
+                            boton = `<button class="btn btn-sm btn-secondary"
+                            onclick="MostrarVistaPrevia('${data.fcDireccion}', '${data.fcDocumento}')"
+                            title="Ver">
+                            Ver Archivo
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>`
+                        } else {
+                            boton = `<button class="btn btn-sm btn-secondary"
+                            onclick="MostrarVistaPrevia('${data.fcDireccion}', '${data.fcDocumento}')"
+                            title="Ver">
+                            Sin Archivo
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>`
+                        }
+
+
+
+                        return boton;
+                    }
+                },
+                {
+                    data: 'fcDocumento',
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fbDocumentoExiste) {
+                            return `<button class="btn btn-danger btn-sm"
+                                onclick="EliminarDocumento('${data.fiIDDocumento}','${data.fcDocumento}')">
+                                <i class="fa-solid fa-trash"></i> Eliminar
+                             </button>`;
+                        } else {
+                            return `<div class="custom-file">
+                                <input type="file" class="custom-file-input" id="fileInput_${data.fiIDDocumento}"
+                                    onchange="convertirABase64(event, '${data.fiIDDocumento}')">
+                                <label class="custom-file-label" for="fileInput_${data.fiIDDocumento}">Seleccionar archivo</label>
+                            </div>`;
+                        }
+                        return '';
+                    }
+                }
+            ]
+    });
+
+    function convertirABase64(event, idDocumento) {
+        let input = event.target;
+        if (input.files.length > 0) {
+            let archivo = input.files[0];
+            let reader = new FileReader();
+
+            reader.onloadend = function () {
+                let base64String = reader.result.split(',')[1]; // Obtener solo Base64
+
+                // Verifica si ya existe un archivo con el mismo ID y lo reemplaza
+                let index = archivosSubidos.findIndex(x => x.idDocumento === idDocumento);
+                if (index !== -1) {
+                    archivosSubidos[index] = {
+                        idDocumento: idDocumento,
+                        base64: base64String,
+                        nombreArchivo: archivo.name
+                    };
+                } else {
+                    archivosSubidos.push({
+                        numimagen: idDocumento,
+                        base64string: base64String,
+                        nombrearchivo: archivo.name
+                    });
+                }
+
+                console.log("Archivos en memoria:", archivosSubidos);
+
+                // Mostrar el botón cuando hay archivos listos
+                if (archivosSubidos.length > 0) {
+                    $("#btnEnviarArchivos").show();
+                }
+            };
+
+            reader.readAsDataURL(archivo);
+        }
+    }
+
+
+    // Función para enviar los archivos al servidor mediante AJAX
+    function enviarArchivosAlServidor() {
+        H5_loading.show();
+        debugger
+        if (archivosSubidos.length === 0) {
+            alert("No hay archivos para enviar.");
+            return;
+        }
+        var form_data = new FormData();
+        form_data.append("fiIDSolicitud", idsol);
+        for (var i = 0; i < archivosSubidos.length; i++) {
+            form_data.append(`fotosbase[${i}].base64string`, archivosSubidos[i].base64string)
+            form_data.append(`fotosbase[${i}].nombrearchivo`, archivosSubidos[i].nombrearchivo)
+            form_data.append(`fotosbase[${i}].numimagen`, archivosSubidos[i].numimagen)
+        }
+
+        let url = '@Url.Action("GuardarFotos", "DatosCliente")';
+        $.ajax({
+            url: url, // Ruta del controlador en C#
+            type: 'POST',
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (data) {
+                //alert("Archivos enviados correctamente.");
+                //console.log(response);
+
+                // Limpiar el array y ocultar el botón después de enviar
+                archivosSubidos = [];
+                $("#btnEnviarArchivos").hide();
+
+                $.ajax({
+                    url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                    type: "POST",
+                    data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: `Se Guardo Un Documento`, Opcion: 'Modificar Documentos'},
+                    success: function (datas) {
+                        var datasus = { Titulo: "Exito", Mensaje: "Documento Guardado Correctamente", Estado: true }
+                        AlertaAjax(datasus);
+                    },
+                    error: function (datae) {
+                        var dataerror = { Titulo: "Error", Mensaje: "Error al querer Guardar la Bitacora", Estado: false }
+                        AlertaAjax(dataerror);
+                    }
+                });
+                ToastrSuccess("Listo!", "Subido correctamente");
+                tablaPrincipalDocumentos.ajax.reload();
+                H5_loading.hide();
+                window.location.reload()
+
+
+
+
+            },
+            error: function (error) {
+                console.error("Error al enviar archivos:", error);
+                alert("Hubo un problema al enviar los archivos.");
+            }
+        });
+    }
+
+
+    function EliminarDocumento(iddocumento, Descripcion) {
+         //console.log(`entro en la funcion de desactivar`);
+        var idclient = $(`#txtidcliente`).val();
+
+        bootbox.confirm({
+            title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro que desea Eliminar Este Documento <span class='fw-500'></span>`,
+            message: "<span><strong>Advertencia!:</strong> Esta Accion no se puede Reversar</span>",
+            centerVertical: true,
+            swapButtonOrder: true,
+            buttons: {
+                confirm: {
+                    label: 'Si',
+                    className: 'btn-danger shadow-0'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-default'
+                }
+            },
+            className: "modal-alert",
+            closeButton: false,
+            callback: function (result) {
+                if (result == true) {
+                    $.ajax({
+                        url: "@Url.Action("DesactivarDocumentos", "Manto")",
+                        type: "POST",
+                        data: { IdSolicitud: idsol, idDocumento: iddocumento},
+                        success: function (datas) {
+                            $.ajax({
+                                url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                                type: "POST",
+                                data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: `Se elimino el Documento de ${Descripcion}`, Opcion: 'Modificar Documentos Documentos'},
+                                success: function (datas) {
+                                    var datasus = { Titulo: "Exito", Mensaje: "Documento eliminado Correctamente", Estado: true }
+                                    AlertaAjax(datasus);
+                                },
+                                error: function (datae) {
+                                    var dataerror = { Titulo: "Error", Mensaje: "Error al querer Guardar la Bitacora", Estado: false }
+                                    AlertaAjax(dataerror);
+                                }
+                            });
+
+                            tablaPrincipalDocumentos.ajax.reload();
+                            window.location.reload()
+                        },
+                        error: function (datae) {
+                            var dataerror = { Titulo: "Error", Mensaje: "Error al querer Eliminar el Documento", Estado: false }
+                            AlertaAjax(dataerror);
+                        }
+                    });
+                }
+                if (result == false) {
+
+                }
+            }
+        })
+    }
+
+    function MostrarVistaPrevia(urlImagen, nombreDocumento) {
+        if (!urlImagen || urlImagen.trim() === "") {
+            urlImagen = "/Content/img/imagen_no_disponible.png"; // Imagen por defecto si no hay URL
+        }
+
+        // Actualiza la imagen en el modal
+        $("#previewImage").attr("src", urlImagen);
+        $("#previewLink").attr("href", urlImagen);
+        $("#previewLink").attr("data-title", nombreDocumento);
+    }
+
+</script>

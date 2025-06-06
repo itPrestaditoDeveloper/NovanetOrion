@@ -1,0 +1,156 @@
+﻿@model IEnumerable<string>
+
+<style>
+    .dataTables_filter {
+        float: left;
+    }
+    .dt-buttons {
+        float: left;
+    }
+
+    .dataTables_length {
+        float: right;
+    }
+</style>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-file-alt fa-fw"></i> Resumen de Existencia</h2>
+
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th>PRODUCTO</th>
+                        @foreach (var item in Model)
+                        {
+                            <th>@item.Replace("_"," ")</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+
+        var encabezados = @Html.Raw(Json.Encode(Model));
+
+        function setRow(data) {
+            var model = {
+                fcProducto : data.fcProducto,
+                @foreach(var item in Model)
+                {
+                    <text> "fn@(item)": ("@(item)" == data.TipoUbicacion ? data.fnCantidad : 0), </text>
+                }
+                fcEncabezado: data.TipoUbicacion
+            }
+            return model;
+        }
+
+        function newRow(producto) {
+            var model = {
+                fcProducto : producto,
+                @foreach(var item in Model)
+                {
+                    <text> "fn@(item)": 0, </text>
+                }
+            }
+            return model;
+        }
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            
+            dom: `<"row"<"col-sm-12"fBl>>rtip`,
+            "aaSorting": [],
+            ajax: {
+                url: '@Url.Action("ListaResumenInventario", "Productos")',
+                method: "Get",
+                dataSrc: function (data)
+                {
+                    var setData = [];
+                    var newData = [];
+                    for (var item of data) {
+                        setData.push(setRow(item));
+                    }
+                    var productos = Object.groupBy(setData, ({ fcProducto }) => fcProducto);
+                    for (var producto in productos) {
+                        var fcProducto = productos[producto][0].fcProducto;
+                        var row = newRow(fcProducto);
+                        @foreach(var item in Model)
+                        {
+                            <text> var fn@(item) = productos[producto].map(x => parseInt(x.fn@(item))).reduce((a, b) => a + b);</text>
+                            <text> row["fn@(item)"] = fn@(item); </text>
+                        }
+
+                        newData.push(row);
+                    }
+                    return newData;
+                }
+            },
+            buttons: [
+                {
+                    extend: 'colvis',
+                    text: 'Columnas',
+                },
+                {
+                    extend: 'excel',
+                    text: 'Excel',
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: showColumns(5),
+                    visible: false
+                }
+            ],
+            columns: [
+                { data: "fcProducto" },
+            @foreach(var item in Model)
+                {
+                    <text>{ className: "noVis" ,data: "fn@(item)"  },</text>
+                }
+            ],
+           
+
+        });
+
+
+        function showColumns(mostrar)
+        {
+            var lista = [];
+            var colCount = 0;
+            var columnas = $("#TablaPrincipal th").toArray();
+            for (var item of columnas) {
+                if (colCount > mostrar) {
+                    lista.push(colCount);
+                }
+                colCount++;
+            }
+            return lista;
+        }
+    </script>
+
+}

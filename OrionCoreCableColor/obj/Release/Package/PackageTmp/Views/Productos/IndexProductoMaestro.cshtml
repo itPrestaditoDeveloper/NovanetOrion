@@ -1,0 +1,265 @@
+﻿
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-router fa-fw"></i> Productos</h2>
+        <div class="panel-toolbar " role="menu">
+            <button onclick="CrearProducto()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Registrar Producto</button>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+         
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Tipo</th>
+                        <th>Codigo</th>
+                        <th>Precio L.</th>
+                        <th>Precio $</th>
+                        <th>Cantidad Existencia</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        function CrearProducto()
+        {
+
+            VerModalScrollConObjetoDeParametro({}, "@Url.Action("CrearProducto","Productos")");
+            @*Swal.fire({
+                //type: "warning",
+                title: 'Escanee la serie',
+                input: "text",
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                confirmButtonColor: 'rgba(29, 201, 183, 0.5)',
+                cancelButtonText: 'No',
+                allowOutsideClick: () => !swal.isLoading()
+            }).then((result) => {
+                if (result.value != "") {
+                    debugger;
+                    $.ajax({
+                        url: "@Url.Action("ValidarNumeroDeSerie", "Productos")",
+                        type: "Get",
+                        data: { fcCodigoDeBarra: result.value },
+                        success: function (data) {
+                            if (!data.Estado) {
+                                VerModalConObjetoDeParametro({}, "@Url.Action("CrearProducto","Productos")");
+                            } else {
+                                ToastrError("Error", data.Mensaje);
+                            }
+
+                        }
+                    });
+                }
+            });*@
+        }
+
+
+
+        function EditarProducto(fiIDProducto) {
+            VerModalScrollConObjetoDeParametro({ fiIDProducto: fiIDProducto},"@Url.Action("EditarProducto","Productos")");
+        }
+
+        function ActualizarPrecio(fiIDProducto) {
+             VerModalConObjetoDeParametro({ fiIDProducto: fiIDProducto},"@Url.Action("ActualizarPrecio", "Productos")");
+        }
+
+        function CambiarStatus(fiIdProducto, fiEstadoProducto) {
+            Swal.fire({
+                //type: "warning",
+                title: `¿Seguro que desea ${ fiEstadoProducto == 1 ? "deshabilitar" : "Habilitar"} este Producto?`,
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                confirmButtonColor: '#d33',
+                cancelButtonText: 'No',
+                allowOutsideClick: () => !swal.isLoading()
+            }).then((result) => {
+
+                if (result.value == true)
+                {
+
+                    $.ajax({
+                        url:"@Url.Action("CambiarStatusProducto", "Productos")",
+                        type: "Get",
+                        data: { fiIdProducto: fiIdProducto },
+                        success: function (data) {
+                            ToastrSuccess("", data.Mensaje);
+                            var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                            tablaT.ajax.reload();
+                        }
+                    });
+                }
+
+            });
+        }
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaProductos", "Productos")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += data.fiEstadoProducto == 1 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="EditarProducto(' + data.fiIDProducto + ')"> Editar</a>' : '';
+                        opciones += data.fiEstadoProducto == 1 ? '<a href="javascript:void(0)" class="dropdown-item" onclick="ActualizarPrecio(' + data.fiIDProducto + ')"> Actualizar Precio</a>' : '';
+                        opciones += `<a href="javascript:void(0)" data-Description='${data.fcProducto}' src="${data.fcImagenProducto}" class="dropdown-item" onclick="ShowBigImage(this)">Ver Foto</a>`;
+                        opciones += '<a href="javascript:void(0)" class="dropdown-item" onclick="CambiarStatus(' + data.fiIDProducto + ')">' + (data.fiEstadoProducto == 1 ? "Deshabilitar" : "Habilitar") + '</a>';
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        var opt = "";
+                        if (data.fiCantidad > 0) {
+                            opt = `<a class="btn btn-link btn-xs view-control details-control-precios" href="javascript:void(0)" ><i class="fal fa-plus fa-fw"></i></a>`;
+                        } else {
+                            
+                        }
+                        return opt;
+                    }
+                },
+                {
+                    data: null,
+                    visible: false,
+                    render: function (data)
+                    {
+                        if (data.fcImagenProducto == "") {
+                            return "";
+                        }
+                        return `<img onclick="ShowBigImage(this)" data-Description="" src="${data.fcImagenProducto}" alt="img" class="img-square img-md img-thumbnail" style="cursor:pointer;width:100%;">`;
+                    }
+
+                },
+                {
+                    data: "fcProducto",
+
+                },
+                {
+                    data: "fcMarca",
+
+                },
+                {
+                    data: "fcModelo"
+                },
+                {
+                    data: "fcTipoProducto",
+                },
+                {
+                    data: "fcCodigodeBarras",
+
+                },
+                {
+                    data: null,
+                    className:"text-right",
+                    render: function (data) {
+                        return "L. " + ConvertirDecimal(data.fnValorProductoMN);
+                    }
+                },
+                {
+                    data: null,
+                    className: "text-right",
+                    render: function (data) {
+                        return "$ " + ConvertirDecimal(data.fnValorProductoME);
+                    }
+                },
+                {
+                    data: null,
+                    visible:false,
+                    render: function (data) {
+                        return data.fiCantidad;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoProducto == 1) {
+                            return '<div class="badge badge-success">Activo</div>';
+                        } else {
+                            return '<div class="badge badge-danger">Inactivo</div>';
+                        }
+                    }
+                }
+
+            ]
+
+        });
+
+        $('#TablaPrincipal tbody').on('click', 'a.details-control-precios', function () {
+            debugger
+            //var tr = $(this).closest('tr');
+            //    var row = tablaPrincipal.row(tr);
+            var table = $.fn.dataTable.Api("#TablaPrincipal");
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            var data = table.row(row).data();
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child('');
+                row.child.hide();
+                tr.removeClass('info');
+            }
+            else {
+                //row.child("Test").show();
+
+                $.ajax({
+                    url: '@Url.Action("ViewHistoricoPrecio", "Productos")',
+                    data: { idproducto: data.fiIDProducto },
+                    type: 'Post',
+                    success: function (data) {
+                        row.child(data).show();
+                        tr.addClass('info');
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        AlertaError();
+                    },
+                });
+            }
+        });
+
+    </script>
+
+}

@@ -1,0 +1,285 @@
+﻿@model OrionCoreCableColor.Models.Usuario.CrearUsuarioViewModel
+
+@{
+    ViewBag.Title = "CrearUsuario";
+}
+
+
+
+
+    <div class="panel">
+        <div class="panel-hdr">
+            @if (Model.fbTecnico)
+            {
+                <h1 class="panel-title">Crear Tecnico</h1>
+            }
+            else
+            {
+                <h1 class="panel-title">Crear Usuario</h1>
+            }
+        </div>
+        <div class="panel-content">
+
+
+            <form id="MyFormModal" style="padding-left:5px;padding-right:5px;" >
+                @Html.HiddenFor(model => model.fiIdUsuario)
+                <div class="row" >
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcPrimerNombre, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcPrimerNombre, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcPrimerNombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcSegundoNombre, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcSegundoNombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcSegundoNombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcPrimerApellido, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcPrimerApellido, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcPrimerApellido, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcSegundoApellido, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcSegundoApellido, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcSegundoApellido, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+
+                    @*<div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaNacimiento, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+                    <span class="input-group-addon"><i class="fa fa-calendar-alt"></i></span>
+                    @Html.EditorFor(model => model.FechaNacimiento, new { htmlAttributes = new { @class = "form-control", @Value = Model.FechaNacimiento.ToString("yyyy-MM-dd") } })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.FechaNacimiento, "", new { @class = "text-danger" })
+            </div>
+
+        </div>*@
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcDocumentoIdentificacion, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcDocumentoIdentificacion, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcDocumentoIdentificacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcTelefonoMovil, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcTelefonoMovil, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcTelefonoMovil, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+
+                    <div class="col-sm-6">
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcBuzondeCorreo, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user width-1 text-align-center"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcBuzondeCorreo, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcBuzondeCorreo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.IdRol, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm" style="width:100%;">
+
+                                @Html.DropDownListFor(model => model.IdRol, new SelectList(ViewBag.ListaRoles, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+                  
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fiIDEmpresa, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm" style="width:100%;">
+
+                                    @Html.DropDownListFor(model => model.fiIDEmpresa, new SelectList(ViewBag.ListaEmpresas, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fiIDEmpresa, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcPassword, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-comment-dots"></i></span>
+                                </div>
+                                
+                                @Html.EditorFor(model => model.fcPassword, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-comment-dots"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+
+                <div class="modal-footer">
+                    <a class="btn btn-default pull-left" href="@Url.Action("Index","Usuario")"><i class="text-lg ion-close-round"></i> Cancelar</a>
+                    <button class="btn btn-success"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+                </div>
+            </form>
+
+
+
+        </div>
+    </div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+
+
+     //   $('#FechaNacimiento').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
+    $("#IdRol").select2();
+
+    $("#MyFormModal").submit(function (event) {
+        event.preventDefault();
+        if (!$("#MyFormModal").valid()) {
+            return false;
+        }
+        var model = @Html.Raw(Json.Encode(Model));
+        model.fcPrimerNombre = $("#fcPrimerNombre").val();
+        model.fcSegundoNombre = $("#fcSegundoNombre").val();
+        model.fcPrimerApellido = $("#fcPrimerApellido").val();
+        model.fcSegundoApellido = $("#fcSegundoApellido").val();
+        model.fcTelefonoMovil = $("#fcTelefonoMovil").val();
+        model.fcDocumentoIdentificacion = $("#fcDocumentoIdentificacion").val();
+      
+            model.fiIDEmpresa = $("#fiIDEmpresa").val();
+      
+      
+        model.FechaNacimiento = $("#FechaNacimiento").val();
+
+
+        model.UserName = $("#UserName").val();
+        model.fcBuzondeCorreo = $("#fcBuzondeCorreo").val();
+        model.IdRol = $("#IdRol").val();
+        model.fcPassword = $("#fcPassword").val();
+        model.ConfirmPassword = $("#ConfirmPassword").val();
+
+        var url = '@Url.Action("CrearUsuario","Usuario")';
+        if (model.fbTecnico) {
+            var url = '@Url.Action("CrearTecnico","Usuario")';
+        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify({ model: model }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                AlertaCrear(data, "@Url.Action("Index","Usuario")");
+            },
+            error: function (data) {
+                AlertaError();
+            },
+        });
+
+
+    });
+</script>
+}
+

@@ -1,0 +1,290 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionCreditoClienteViewModel
+
+<style>
+    /* Panel styling */
+    .panel {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+    }
+
+    .panel-body {
+        padding: 2rem;
+    }
+
+    /* Table container */
+    .table-responsive {
+        border: none;
+    }
+
+    /* Table styling */
+    .tableInfoTop {
+        margin-bottom: 0;
+        border-collapse: collapse;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .tableInfoTop tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+    .tableInfoTop tbody tr:hover {
+        background-color: #f1f3f5;
+    }
+
+    .tableInfoTop td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 0.95rem;
+        color: #343a40;
+    }
+
+    .tableInfoTop td:first-child {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .tableInfoTop td.text-right {
+        font-weight: 500;
+        color: #212529;
+    }
+
+    /* Section headings */
+    .text-info.text-bold {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #007bff !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #007bff;
+        display: inline-block;
+    }
+
+    /* Highlighted rows */
+    .tableInfoTop tr.highlighted-row td {
+        background-color: #e7f3ff;
+        font-weight: 600;
+    }
+
+    /* Border classes */
+    .bord-success {
+        border: 2px solid #28a745;
+        box-shadow: 0 2px 6px rgba(40, 167, 69, 0.1);
+    }
+
+    .bord-primary {
+        border: 1px solid #dee2e6;
+    }
+
+    /* Specific text styling */
+    .text-danger.text-bold {
+        color: #dc3545 !important;
+        font-weight: 600;
+    }
+
+    .text-bold {
+        font-weight: 600;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .col-sm-6 {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .float-left, .float-right {
+            float: none !important;
+        }
+
+        .tableInfoTop td {
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+    }
+</style>
+
+<br />
+<div class="panel">
+	<div class="panel-body">
+		<div class="table-responsive">
+			<div class="row">
+				<div class="clearfix" style="width:100%;">
+					<div class="col-sm-6 float-left">
+						<table class="table tableInfoTop">
+							<tbody>
+								<tr>
+									<td><span class="text-info text-bold">Información General</span></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><span>Valor de Garantía</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.ValorMercadoGarantia)
+									</td>
+								</tr>
+								<tr>
+									<td><span>Prima</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.DownPayment)
+									</td>
+								</tr>
+								<tr>
+									<td><span>Desembolso</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.fnValorAPrestar)
+									</td>
+								</tr>
+								<tr>
+									<td><span>GPS</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.fnCostoGPS)
+									</td>
+								</tr>
+								<tr>
+									<td><span>Gastos de Cierre</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.fnGastosDeCierre)
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td class="text-right"></td>
+								</tr>
+								<tr class="highlighted-row">
+									<td><span><b>Total Financiado</b></span></td>
+									<td class="text-right">
+										<b>@Html.DisplayFor(model => model.fnCapitalOtorgado)</b>
+									</td>
+								</tr>
+								<tr>
+									<td><span></span></td>
+									<td class="text-right"></td>
+								</tr>
+							</tbody>
+						</table>
+						<br />
+						<table class="table tableInfoTop">
+							<tbody>
+								<tr>
+									<td><span>Saldo Actual</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.fnSaldoActual)
+									</td>
+								</tr>
+								<tr>
+									<td><span>Total Cuotas</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.fiTotalCuotas) (Meses)
+									</td>
+								</tr>
+								<tr>
+									<td><span>Cantidad de Pagos</span></td>
+									<td class="text-right">
+										@Html.DisplayFor(model => model.PaymentsQuantity)
+									</td>
+								</tr>
+								<tr>
+									<td><span>@Html.DisplayNameFor(model => model.APR)</span></td>
+									<td class="text-right">
+										@Model.APR.ToString("p02")
+									</td>
+								</tr>
+								<tr>
+									<td><span></span></td>
+									<td class="text-right"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-sm-6 float-right">
+						<table class="table tableInfoTop bord-success">
+							<tbody>
+								<tr>
+									<td><span class="text-info text-bold">Estado Actual</span></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><span>Último Pago Recibido</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fdUltimoAbono)</td>
+								</tr>
+								<tr>
+									<td><span class="text-danger text-bold">Días Atrasados</span></td>
+									<td class="text-right text-danger text-bold">@Model.fiDiasAtraso</td>
+								</tr>
+								<tr>
+									<td><span>Cuotas Atraso</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fiCuotasAtraso)</td>
+								</tr>
+								<tr class="highlighted-row">
+									<td class="text-bold"><span>Cantidad Vencida</span></td>
+									<td class="text-right text-bold">@Html.DisplayFor(model => model.fnSaldoPonerAlDia)</td>
+								</tr>
+								<tr>
+									<td><span>Capital Vencido</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fnCapitalVencido)</td>
+								</tr>
+								<tr>
+									<td><span>Intereses Vencidos</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fnInteresesVencidos)</td>
+								</tr>
+								<tr>
+									<td><span>Otros Atrasos</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fnRecargos)</td>
+								</tr>
+								<tr>
+									<td><span>Total Cuenta</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fnTotalCuenta)</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-sm-6 float-right">
+						<table class="table tableInfoTop">
+							<tbody>
+								<tr>
+									<td><span class="text-info text-bold">Rendimiento del Cliente</span></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><span>Pagos Completados</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.fiCuotasPagadas)</td>
+								</tr>
+								<tr>
+									<td><span>Principal Pagado</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.Amount_Principal)</td>
+								</tr>
+								<tr>
+									<td><span>Intereses Pagados</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.Amount_Interest)</td>
+								</tr>
+								<tr>
+									<td><span>Atrasado Pagados</span></td>
+									<td class="text-right">@Html.DisplayFor(model => model.Amount_LateFees)</td>
+								</tr>
+								<tr>
+									<td><span>Otros Pagados</span></td>
+									@*<td class="text-right">@Html.DisplayFor(model => model.Amount_Others)</td>*@
+								</tr>
+								<tr>
+									<td><span>Seguro Pagado</span></td>
+									@*<td class="text-right">@Html.DisplayFor(model => model.Amount_Insurance)</td>*@
+								</tr>
+								<tr><td style="padding:1px;"></td> <td style="padding:0px;"></td></tr>
+								<tr class="highlighted-row">
+									<td><span class="text-bold">Total Pagado</span></td>
+									@*<td class="text-right text-bold">@Html.DisplayFor(model => model.TotalAmountReceived)</td>*@
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

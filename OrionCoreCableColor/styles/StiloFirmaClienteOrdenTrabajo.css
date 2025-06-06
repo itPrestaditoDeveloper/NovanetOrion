@@ -1,0 +1,49 @@
+﻿.drawCanvas {
+    border: 2px dotted #007bff;
+    border-radius: 5px;
+    cursor: crosshair;
+    background-color: #fff;
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 700px; /* Tamaño máximo */
+    height: auto; /* Ajusta proporcionalmente */
+}
+
+.panel-container {
+    padding: 15px;
+    margin: 0 auto;
+    max-width: 400px; /* Ajuste al tamaño de dispositivos móviles */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+#btnAutorizacionProductoYServicios {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+}
+
+@media (max-width: 576px) {
+    .drawCanvas {
+        max-width: 100%; /* Asegura que ocupe el ancho completo en móviles */
+        height: 200px; /* Ajusta la altura en pantallas pequeñas */
+    }
+
+    .panel-container {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    #btnAutorizacionProductoYServicios {
+        font-size: 1rem;
+    }
+}

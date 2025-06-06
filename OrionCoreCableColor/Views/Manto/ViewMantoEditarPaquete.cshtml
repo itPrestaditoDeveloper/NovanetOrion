@@ -1,0 +1,180 @@
+﻿@model OrionCoreCableColor.Models.Manto.EditPaqueteViewModel
+    
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Paquete</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12" style="margin-bottom: 10px;">
+            <div class="form-group">
+                <label class="control-label">Factura</label>
+                <div class="input-group mar-btm">
+                    <select  class="form-control input-lg" style="width:100%;" id="fiIDPaquete"></select>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TblDetalleInstalacion">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Incluido</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="ActualizarPaquete()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modelGarantia = @Html.Raw(Json.Encode(Model));
+    var data = @Html.Raw(Json.Encode(ViewBag.ListarPaquetes));
+    var idPaquete = @Model.fiIDPaquete;
+    var listProductos = @Html.Raw(Json.Encode(ViewBag.ListarProductos));
+    debugger;
+
+    $("#fiIDPaquete").select2({
+        data: data,
+        dropdownParent: $("#MyModalBig")
+    });
+
+
+    function producto() {
+        return {
+            fbIncluido: false,
+            fcProducto: "Internet 300MB",
+            fiCantidad: 1,
+            fiCantidadEquifaxGarantia: 0,
+            fiIDProducto: 17
+        };
+    }
+
+
+    $("span.select2-selection").on("click", function () {
+        $("li.select2-results__option").on("click", function (e) {
+            var item = data.find(x => x.id == $("#fiIDPaquete").val());
+
+            if (!item.disabled) {
+                ToastrWarning("ADVERTENCIA","PAQUETE " + item.text + " NO PUEDE SER SELECCIONADA, SE ENCUENTRA INACTIVO");
+            }
+
+            $("li.select2-results__option").off("click");
+
+        });
+    });
+
+    var tablaPrincipal = $('#TblDetalleInstalacion').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        language:
+        {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        ajax: {
+            url: '@Url.Action("ListProductosInventario", "Manto")',
+            data: function (d) {
+                d.fiIDSolicitud = @(Model.fiIDSolicitud);
+                d.fiIDPaquete = idPaquete;
+            },
+            method: "Get",
+            dataSrc: function (data)
+            {
+                debugger;
+                for (var item of modelGarantia.Productos) {
+                    
+                }
+                return data;
+            }
+        },
+        columns:
+            [
+                {
+                    data: "fcProducto",
+                   
+                },
+                {
+                    data: "fiCantidad"
+                },
+                {
+                    visible: false,
+                    data: null,
+                    render: function (data) {
+                        return data.fbIncluido == true ? `<i class="fal fa-check text-success"></i>` : `<i class="fal fa-times text-danger"></i>`;
+                    }
+                }
+            ],
+        createdRow: function (row, data, index) {
+            $(row).find(".clsProducto").select2({
+                data: listProductos,
+                width: "100%",
+                dropdownParent: $("#MyModalBig")
+            }).val(data.fiIDProducto).trigger('change');
+            
+            //$(row).find(".clsUbicacion").select2({ data: listUbicaciones, width: "100%" }).val(data.fiIDUbicacion).trigger('change');
+            //$(row).find(".clsTipoMovimiento").select2({ data: listTipoMovimiento, width: "100%" }).val(data.fiIDTipoMovimiento).trigger('change');
+        },
+    });
+
+
+    $("#fiIDPaquete").change(function () {
+        idPaquete = $(this).val();
+        tablaPrincipal.ajax.reload();
+    });
+
+
+    function ActualizarPaquete() {
+        $("#btnGuardarForm").hide();
+        if (modelGarantia.fiIDPaquete == $("#fiIDPaquete").val()) {
+            ToastrWarning("Advertencia", "No se ha cambiado el paquete");
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+
+        $.ajax({
+            url: "@Url.Action("ActualizarPaqueteSolicitud","Manto")",
+            method: "Get",
+            data: { fiIDSolicitud: modelGarantia.fiIDSolicitud, fiIDPaquete: $("#fiIDPaquete").val() },
+            success: function (resp)
+            {
+                if (resp.Estado) {
+                    ToastrSuccess("", resp.Mensaje);
+                    BuscarSolicitud();
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                    return;
+                }
+            }
+        });
+    }
+
+</script>

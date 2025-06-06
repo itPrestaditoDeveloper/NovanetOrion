@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <header>
+   
+  </header>
+
+  <body>
+    <div style="width: 100%; float: left">
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Factura: {txtFactura}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Moneda: {txtMoneda}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Fecha: {txtFecha}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Proveedor: {txtProveedor}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Ubicacion: {txtUbicacion}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Descripcion:</div>
+        <div style="width: 100%; float: right">{txtDescripcion}</div>
+      </div>
+      <br />
+      <br />
+    </div>
+
+    <div style="width: 100%; float: left; padding-top: 10px">
+      <table
+        bgcolor="#fff"
+        style="
+          background-color: #ffffff;
+          border-collapse: collapse;
+          border-spacing: 0;
+          margin: 0 auto;
+          padding: 0;
+          text-align: left;
+          vertical-align: top;
+          width: 100%;
+
+          background-size: 100%;
+          background-position: center;
+          width: 100%;
+          height: 100%;
+          resize: both;
+          border: #b2b2b2 1px solid;
+        "
+      >
+        <thead style="text-align: left">
+          <tr>
+            <th style="text-align: left; border: black 1px solid;">Producto</th>
+            <th style="text-align: right; border: black 1px solid;">Precio L</th>
+            <th style="text-align: right; border: black 1px solid;">Precio $</th>
+            <th style="text-align: center; border: black 1px solid;">Cantidad</th>
+            <th style="text-align: left; border: black 1px solid;">Serie1</th>
+            <th style="text-align: left; border: black 1px solid;">Serie2</th>
+            <th style="text-align: left; border: black 1px solid;">Observacion</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rowsProductos}
+        </tbody>
+      </table>
+      <br />
+      <br />
+    </div>
+    <div style="width: 100%; float: left">
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">
+          Importe Gravado: {txtImporte}
+        </div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Importe Exento: {txtExento}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">
+          Importe Exonerado: {txtExonerado}
+        </div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Sub Total: {txtSubTotal}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">ISV: {txtISV}</div>
+      </div>
+      <div style="width: 100%; float: left">
+        <div style="width: 100%; float: left">Total: {txtTotal}</div>
+      </div>
+    </div>
+    <div style="width: 100%; float: left">
+      <div style="width: 100%; float: left">
+        <div style="width: 35%; float: left">Usuario: {txtUsuario}</div>
+      </div>
+      <br />
+      <br />
+    </div>
+  </body>
+</html>

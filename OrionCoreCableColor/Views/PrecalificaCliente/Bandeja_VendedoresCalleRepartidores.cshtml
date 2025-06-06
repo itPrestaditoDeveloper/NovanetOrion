@@ -1,0 +1,244 @@
+﻿
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Listado de Vendedores  Interno/Externo</h2>
+
+        <div class="panel-toolbar" role="menu">
+            <button onclick="EnviarFormularioVendedor()" class="btn btn-success mr-2">
+                <i class="fal fa-plus fa-fw"></i> Enviar Formulario a Vendedor
+            </button>
+
+            <button onclick="CrearVendedor()" class="btn btn-success">
+                <i class="fal fa-plus fa-fw"></i> Registrar Vendedor
+            </button>
+        </div>
+
+
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaRepartidor">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nombre Vendedor</th>
+                        <th>Telefono</th>
+                        <th>Dirección</th>
+                        <th>correo</th>
+                        <th>Codigo</th>
+                        <th>Identidad</th>
+                        <th>Tipo Vendedor</th>
+                        <th>Ocupación</th>
+                        <th>Fecha creacion</th>
+                        <th>Firma</th>
+                        <th>Firmado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function CrearVendedor()
+        {
+            VerModalConObjetoDeParametro({},"@Url.Action("CrearVendedoresCalle", "PrecalificaCliente")");
+        }
+
+        function EditarVendedor(fiIDVendedorRepartidor) {
+            debugger;
+            VerModalConObjetoDeParametro({ fiIDVendedorRepartidor: fiIDVendedorRepartidor },"@Url.Action("EditarVendedoresCalle", "PrecalificaCliente")");
+        }
+
+        function DetalleVendedor(fiIDVendedorRepartidor) {
+         debugger;
+         VerModalConObjetoDeParametro({ fiIDVendedorRepartidor: fiIDVendedorRepartidor },"@Url.Action("DetalleVendedor", "PrecalificaCliente")");
+     }
+
+
+        function EnviarFormularioVendedor()
+        {
+            VerModalMdConObjetoDeParametro({},"@Url.Action("ViewEnviarFormularioVendedor", "PrecalificaCliente")");
+        }
+
+        var tablaPrincipal = $('#TablaRepartidor').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[9, "DESC"]],
+            ajax: {
+                url: '@Url.Action("CargarListaVendedorRepartidor", "PrecalificaCliente")',
+                method: "Get",
+                dataSrc: function (data) {
+                    console.log('data', data);
+                    return data;
+
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += data.fiIDTipoVendedor == 2 ? `<a onclick="DetalleVendedor('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-file-alt fa-fw"></i>Detalle Vendedor</a>`:"";
+                        opciones += `<a onclick="EditarVendedor('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-edit fa-fw"></i>Editar</a>`;
+                        opciones += data.fiIDTipoVendedor == 2 || data.fiIDEstadoFirma == 0 ? `<a onclick="EnviarCorreoVendedor('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-pen-nib fa-fw"></i>Enviar a firma</a>` : " ";
+                        opciones += data.fiIDFirmado == 1 ? `<a onclick="CrearUsuario('${data.fiIDVendedorRepartidor}')" class="dropdown-item"><i class="fal fa-user"></i>Crear Usuario</a>` : " ";
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: "fcNombreVendedor",
+
+                },
+                {
+                    data: "fcNumeroVendedor",
+                },
+                {
+                    data: "fcDireccionExacta",
+                },
+                {
+                    data: "fcCorreo",
+                },
+
+                {
+                    data: 'fcCodigoVendedor'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        if (data.fiIDTipoVendedor == 1) {
+
+                            return data.fcIdentidadVendedor;
+                        }
+                        if (data.fiIDTipoVendedor == 2 || data.fiIDTipoVendedor == 3) {
+                            return `<a><div class="badge badge-secondary">${data.fcIdentidadVendedor}</div></a>`;
+                        }
+                       
+
+
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDTipoVendedor == 1) {
+                            return '<div class="badge badge-primary">Interno</div>';
+                        }
+                        else if (data.fiIDTipoVendedor == 2) {
+                            return '<div class="badge badge-warning">Externo</div>';
+                        }
+                        else if (data.fiIDTipoVendedor == 3) {
+                            return '<div class="badge badge-warning">Por distribuidor</div>';
+                        }
+
+                    }
+
+                },
+                {
+                    data: 'fcOcupacion'
+                },
+                {
+                    data: "fdFechaCreacion",
+                    render: function (data, type, row) {
+                        if (type === 'sort' || type === 'type') return data;
+                        return moment(data).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDTipoVendedor === 2) {
+                            if (data.fiIDEstadoFirma === 1) {
+                                return '<div class="badge badge-success">Enviado</div>';
+                            } else if (data.fiIDEstadoFirma === 0 || data.fiIDEstadoFirma == null) {
+                                return '<div class="badge badge-warning">No Enviado</div>';
+                            } else {
+                                return '<div class="badge badge-warning"></div>';
+                            }
+                        }
+
+                        return '';
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDTipoVendedor === 2) {
+                            if (data.fiIDFirmado === 1) {
+                                return '<div class="badge badge-success">Si</div>';
+                            } else if (data.fiIDFirmado === 0 || data.fiIDFirmado == null) {
+                                return '<div class="badge badge-danger">No</div>';
+                            } else {
+                                return '<div class="badge badge-warning"></div>';
+                            }
+                        }
+
+                        return '';
+                    }
+                },
+
+
+            ]
+
+        });
+
+
+        function EnviarCorreoVendedor(fiIDVendedorRepartidor) {
+            $.ajax({
+                url: '@Url.Action("EnviarSolicitudFirmaVendedor", "PrecalificaCliente")',
+                type: 'POST',
+                data: { fiIDVendedorRepartidor: fiIDVendedorRepartidor },
+                success: function (data) {
+                    if (data.Estado) {
+                        AlertaAjax(data);
+                        $.fn.DataTable.Api("#TablaRepartidor").ajax.reload().draw(false);
+                    }
+
+                },
+                error: function (data) {
+                    console.log(data);
+                    AlertaError();
+                }
+            });
+        }
+
+           function CrearUsuario(fiIDVendedorRepartidor) {
+                window.location.href = '@Url.Action("CrearUsuarioAgente", "Usuario")' + '?fiIDVendedorRepartidor=' + fiIDVendedorRepartidor;
+           }
+
+
+
+    </script>
+
+}

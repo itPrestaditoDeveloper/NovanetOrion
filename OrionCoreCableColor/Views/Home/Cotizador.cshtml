@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "Cotizador";
+}
+
+<h2>Cuota Mensual: <span id="lblIdSolicitud" style=""></span><span id="lblMensajeEstadoPrestamo"  class="right" >0</span></h2>
+<div class="card h-100">
+    <div class="card-body">
+        <div class="row" id="cotizadortipoproductos">
+            
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        categoriasProductos();
+        const cotpro = [];
+        function categoriasProductos() {
+
+                $.ajax({
+                    url: "@Url.Action("CotizadordeProductos", "Home")",
+                    type: "Post",
+                    //data: { Fecha: fecha},
+                    success: function (data) {
+                        console.log(data)
+                        var opciones = ""
+                        for (const item of data) {
+                            cotpro.push(item[0].fcTipoProducto);
+                            opciones += `<div class="col-xl-4">
+                                            <div id="panel-1" class="panel">
+                                                <div class="panel-hdr">
+                                                    <h2>
+                                                        ${item[0].fcTipoProducto}
+                                                    </h2>
+                                                </div>
+                                                <div class="panel-container show">
+
+
+                                                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="cotizador-${item[0].fcTipoProducto}">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Producto</th>
+                                                            <th>Cuota <br /> Mensual</th>
+                                                            <th></th>`
+                            if (item[0].fiSeleccionMultiple) {
+                                opciones += `<th>Cantidad</th>`
+                            }
+                            opciones += `</tr>
+                                        </thead>
+                                        <tbody>`;
+
+                            for (const ite of item) {
+                                opciones += `
+                                        <tr>
+                                            <td>${ite.fcProducto}</td>
+                                            <td>${ite.fnValorCuotaMensual24Nuevo}</td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input id="${ite.fiIDProducto}" class="custom-control-input" style="margin-left:auto; margin-right:auto;"  type="checkbox" value="${ite.fnValorCuotaMensual24Nuevo}" id="CheckCheckedFalla" name ="CheckCheckedFalla"  > <label></label>
+                                                    <label class="custom-control-label" for="${ite.fiIDProducto}"></label>
+                                                </div>
+                                            </td>
+                                        `;
+                                if (ite.fiSeleccionMultiple) {
+                                    opciones += `<td><input id="producto-${ite.fiIDProducto}" class="form-control" name = "inputscantidad" type="text" id="" /></td>`
+                                }
+                                opciones += `</tr>`;
+                            }
+                            opciones += `</tbody></table></div></div></div>`;
+                        }
+
+                        $(`#cotizadortipoproductos`).append(opciones);
+
+                    }, error: function (resp) {
+                        ToastrError("Error", resp.Mensaje);
+                    }
+                });
+
+
+            
+                
+
+        }
+
+        $(document).on('change', 'input[name="CheckCheckedFalla"]', function () {
+            debugger
+            
+            var suma = 0;
+            
+            // Iterar sobre los checkboxes y sumar los valores de los checkboxes seleccionados
+            $('input[name="CheckCheckedFalla"]:checked').each(function () {
+                var idfer = parseInt($(`#producto-${this.id}`).val());
+                // Inicializar la suma
+                if (isNaN(idfer)) {
+                    idfer = 1;
+                    $(`#producto-${this.id}`).val(1)
+                }
+                suma += parseInt(($(this).val() * idfer));
+            });
+            //console.log(suma);
+            // Actualizar el total en algún elemento HTML, por ejemplo:
+
+            $('#lblMensajeEstadoPrestamo').empty();
+            $('#lblMensajeEstadoPrestamo').text(`$ ${suma}`);
+        });
+
+
+        $(document).on('change', 'input[name^="cantidad_"]', function () {
+            // Llamar a la función para actualizar el total
+            actualizarTotal();
+        });
+
+        $(document).keyup('input[name="inputscantidad"]', function () {
+            debugger
+            var it = this.id;
+            var lo = $(this).val();
+            var tu = document.getElementsByName(this).values();
+            //console.log(`esto se cambio ${loquetrae}`);
+        });
+        
+    </script>
+}

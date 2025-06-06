@@ -1,0 +1,124 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Subir archivo <i class="fal fa-file-excel"></i>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <input class="form-control" type="file" id="archivoExcel" accept=".xls,.xlsx" />
+        </div>
+    </div>
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductosExcel">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Serie 1</th>
+                    <th>Mac / Serie 2</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="AgregarTablaPrincipal()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnAgregarExcel"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var listaDeProductos = @Html.Raw(Json.Encode(ViewBag.listProductos)) ?? [];
+   
+    var tablaPrincipal = $('#TablaProductosExcel').DataTable(
+        {
+            dom: 'Bfrtip',
+            autoWidth: true,
+            responsive: true,
+            pageLength: 5,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            columns: [
+                { data: "fcProducto" },
+                { data: "fnCantidad" },
+                { data: "fcCodigoSerie1" },
+                { data: "fcCodigoSerie2" }
+            ]
+        }
+    );
+
+
+    $("#archivoExcel").change(function (e) {
+        //XLSX.utils.json_to_sheet(data, 'out.xlsx');
+        if (e.target.files[0]) {
+            let fileReader = new FileReader();
+            fileReader.readAsBinaryString(e.target.files[0]);
+            fileReader.onload = (event) => {
+                let data = event.target.result;
+                let workbook = XLSX.read(data, { type: "binary" });
+                console.log(workbook);
+                workbook.SheetNames.forEach(sheet => {
+                    let tabla = $.fn.dataTable.Api("#TablaProductosExcel");
+                    
+                    rowObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheet]);
+                    for (item of rowObject)
+                    {
+                        let producto = listaDeProductos.find(x => x.fcProducto.toUpperCase() == item.Producto.toUpperCase()) ?? 0;
+                        if (producto != 0) {
+                            let linea = NuevaLinea();
+                            linea.fnCantidad = 1;
+                            linea.fiIdProductoPreciosDetalleActual = producto.fiIdProductoPreciosDetalleActual;
+                            linea.fiIDProducto = producto.fiIDProducto;
+                            linea.fcCodigoSerie1 = item.Serie1 ?? "";
+                            linea.fcCodigoSerie2 = item.Serie2 ?? "";
+                            linea.fcProducto = item.Producto;
+                            linea.fbEscaneado = true;
+                            tabla.row.add(linea).draw(false);
+                        } else {
+                            ToastrError("Error", `Producto ${item.Producto} mal escrito`);
+                        }
+                        
+                    }
+                    
+
+                });
+            }
+        }
+    });
+
+
+    function AgregarTablaPrincipal()
+    {
+        let tablaPrincipal = $.fn.dataTable.Api("#TablaProductos");
+        let tablaExcel = $.fn.dataTable.Api("#TablaProductosExcel");
+        var dataExcel = tablaExcel.rows().data().toArray();
+
+        for (var data of dataExcel) {
+            tablaPrincipal.row.add(data).draw(false);
+        }
+        
+        ToastrSuccess("Datos agregados exitosamente", "");
+        CerrarModal();
+    }
+
+</script>

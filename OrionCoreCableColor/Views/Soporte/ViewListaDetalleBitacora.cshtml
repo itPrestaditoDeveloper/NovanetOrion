@@ -1,0 +1,69 @@
+﻿
+@model int
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="tbHistoricoProductos-@Model" style="width:100%;">
+    <thead>
+        <tr>
+            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+            <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+        </tr>
+        <tr>
+            <th>Producto</th>
+            <th>Cant. Sistemas</th>
+            <th>Cant. Fisico</th>
+            <th>Cant. Diferencia</th>
+            <th>Observacion</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+<script>
+    var tablaPrincipal = $('#tbHistoricoProductos-@Model').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        //dom: 'Bfrtip',
+        ajax: {
+            url: '@Url.Action("CargarListaDetalleBitacora", "Soporte")',
+            method: "Get",
+            data: { fiIDInventarioBitacoraMaestro: @Model},
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+
+            { data: "fcProducto" },
+            { data: "fnCantidadEnSistema" },
+            { data: "fnCantidadEnFisico" },
+            { data: "fnDiferencia" },
+            { data: "fcComentario" },
+        ]
+
+    });
+
+
+
+    $("#tbHistoricoProductos-@Model thead th input[type=text]").on('keyup change', function () {
+        var tablaProductos_@Model = new $.fn.dataTable.Api("#tbHistoricoProductos-@Model");
+        tablaProductos_@(Model).column($(this).parent().index() + ':visible').search(this.value).draw();
+
+    });
+</script>

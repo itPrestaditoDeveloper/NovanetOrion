@@ -1,0 +1,151 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Resolucion de Declinacion</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h3>Datos del Cliente</h3>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-file-alt fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcRazonDelcinar, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-sms fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.fcRazonDelcinar, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcRazonDelcinar, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Comentario</label>
+                        <div class="input-group mar-btm">
+
+                            <textarea id="txtComentario" name="w3review" rows="4" cols="50" class="form-control"></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="modal-footer">
+                <div class="clearfix" style="width:100%;">
+                    <button id="btnSeguirSolicitud" class="btn btn-sm bg-success text-white float-left" type="button">Seguir con el Proceso</button>
+                    <button type="button" id="btnDeclinar" class="btn btn-sm bg-danger text-white float-right">Declinar Solicitud</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre").prop("disabled", true);
+    $("#IDSolicitud").prop("disabled", true);
+    $("#fcRazonDelcinar").prop("disabled", true);
+
+
+    $("#btnDeclinar").click(function () {
+        debugger;
+        var IDSolicitud = $("#IDSolicitud").val();
+        var Comentario = $("#txtComentario").val();
+        if (Comentario == "") {
+            ToastrWarning("Campos vacios", "Coloque un Comentario");
+            return false;
+        }
+        $.ajax({
+                url: "@Url.Action("ResolucionFinalDeclinacion", "Solicitudes")",
+                type: "POST",
+            data: { solicitud: IDSolicitud, comentario: Comentario, estado: 2},
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+
+    $("#btnSeguirSolicitud").click(function () {
+        debugger;
+        var IDSolicitud = $("#IDSolicitud").val();
+        var Comentario = $("#txtComentario").val();
+        if (Comentario == "") {
+            ToastrWarning("Campos vacios", "Coloque un Comentario");
+            return false;
+        }
+        $.ajax({
+                url: "@Url.Action("ResolucionFinalDeclinacion", "Solicitudes")",
+                type: "POST",
+            data: { solicitud: IDSolicitud, comentario: Comentario, estado: 1},
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

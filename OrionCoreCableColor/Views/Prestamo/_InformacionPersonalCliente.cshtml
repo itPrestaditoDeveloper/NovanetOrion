@@ -1,0 +1,134 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.InformacionClientePrincipalViewModel
+
+<style>
+	/* Styles for the tables and layout */
+	.table-responsive {
+		overflow-x: auto;
+	}
+
+	.tableInfoTop {
+		width: 100%;
+		border-collapse: collapse;
+		font-family: 'Arial', sans-serif;
+		font-size: 0.95rem;
+		color: #1f2937;
+	}
+
+		.tableInfoTop td {
+			padding: 0.75rem 1rem;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+			vertical-align: middle;
+		}
+
+		.tableInfoTop .text-info {
+			color: #17a2b8;
+			font-weight: 600;
+		}
+
+		.tableInfoTop .text-bold {
+			font-weight: 700;
+		}
+
+		.tableInfoTop .text-main {
+			color: #1f2937;
+			font-weight: 500;
+		}
+
+	.row-spacing {
+		margin-bottom: 2rem;
+	}
+</style>
+
+<div class="row mt-3 mb-0 row-spacing">
+	<!-- Información Personal -->
+	<div class="col-6">
+		<div class="table-responsive">
+			<table class="table tableInfoTop" style="margin-bottom: 0px;">
+				<tbody>
+					<tr>
+						<td><span class="text-info text-bold">Información personal</span></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Teléfono</span></td>
+						<td>@Model.fcTelefonos</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Nombre cónyuge</span></td>
+						<td>N/A</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Identidad</span></td>
+						<td>@Model.fcIdentidad</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Ciudad</span></td>
+						<td>@Model.fcMunicipio</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Colonia</span></td>
+						<td>@Model.fcBarrio</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Dirección</span></td>
+						<td>@Model.fcDireccionDetallada</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Correo cliente</span></td>
+						<td>@Model.fcCorreo</td>
+					</tr>
+					<tr>
+						<td><span class="text-main"></span></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<!-- Información de Trabajo -->
+	<div class="col-6">
+		<div class="table-responsive">
+			<table class="table tableInfoTop" style="margin-bottom: 0px;">
+				<tbody>
+					<tr>
+						<td><span class="text-info text-bold">Información de trabajo</span></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Teléfono de compañía</span></td>
+						<td>N/A</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Nombre empresa</span></td>
+						<td>@Model.fcLugarTrabajo</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Ocupación</span></td>
+						<td>N/A</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Cargo</span></td>
+						<td>N/A</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Colonia</span></td>
+						<td>N/A</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Rango salarial</span></td>
+						<td>@Model.fcDescripcion_RangosSalariales</td>
+					</tr>
+					<tr>
+						<td><span class="text-main">Antigüedad</span></td>
+						<td>@Model.fcDescripcionAntiguedad</td>
+					</tr>
+					<tr>
+						<td><span class="text-main"></span></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

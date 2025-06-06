@@ -1,0 +1,374 @@
+﻿@{
+    ViewBag.Title = "ReportesSolicitudesPorAsesor";
+}
+
+    <style>
+        #BandejaSolicitudesFinalesInstalados tbody td {
+            cursor: default;
+        }
+
+            #BandejaSolicitudesFinalesInstalados tbody td:nth-child(2),
+            #BandejaSolicitudesFinalesInstalados tbody td:nth-child(3),
+            #BandejaSolicitudesFinalesInstalados tbody td:nth-child(4),
+            #BandejaSolicitudesFinalesInstalados tbody td:nth-child(5) {
+                cursor: pointer;
+            }
+
+            #BandejaSolicitudesFinalesInstalados tbody td:active:nth-child(2),
+            #BandejaSolicitudesFinalesInstalados tbody td:active:nth-child(3),
+            #BandejaSolicitudesFinalesInstalados tbody td:active:nth-child(4),
+            #BandejaSolicitudesFinalesInstalados tbody td:active:nth-child(5) {
+                background-color: #e0e0e0;
+                border: 2px solid #007bff;
+                transition: background-color 0.1s ease;
+            }
+    </style>
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"><i class="fal fa-map fa-fw"></i> Bandeja solicitudes por asesor </h2>
+    </div>
+
+    <div class="row mb-1 justify-content-center">
+        <div class="col-lg-2 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Oficial</label>
+            <select id="ddlOficial" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Año</label>
+            <input id="ddlAnioIngreso" class="form-control form-control-sm" type="number" />
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Mes</label>
+            <select id="ddlMesIngreso" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Busqueda por Departamento</label>
+            <select id="ddlDepartamento" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+            </select>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por #Semana</label>
+            <input id="ddlSemanaIngreso" class="form-control form-control-sm" type="number" min="1" max="53" />
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="BandejaSolicitudesFinalesInstalados">
+                <thead>
+                    <tr>
+                        <th>Oficial</th>
+                        <th>Total Ingresadas</th>
+                        <th>Instaladas</th>
+                        <th>Pendientes</th>
+                        <th>En proceso</th>
+                        <th>Instaladas Vs Pendientes (%)</th>
+                        <th>EnProceso Vs Pendientes (%)</th>
+                        <th>Ingresadas solo servicio</th>
+                        <th>Ingresadas con artículo</th>
+                        <th>Ingresadas Solo Servicio Vs Total (%)</th>
+                        <th>Ingresadas Con Articulo Vs Total (%)</th>
+                        <th>ARPU promedio Ingresadas</th>
+                        <th>Departamento</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div id="contenedorDetalleSolicitudes" class="mt-3" style="display:none;">
+                <h5 id="tituloDetalle" class="mb-2 text-primary">Detalle de solicitudes</h5>
+                <table id="tablaDetalleSolicitudes" class="table table-bordered table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>#Solicitud</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Paquete</th>
+                            <th>Fecha Creación</th>
+                            <th>Fecha Instalación</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+    <script>
+
+        $("#ddlOficial").select2({});
+		$("#ddlMesIngreso").select2({});
+		$("#ddlDepartamento").select2({});
+
+        var filtroActual = true;
+        var tablaPrincipal = $('#BandejaSolicitudesFinalesInstalados').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("ListaSolicitudesPorAsesor", "Reportes")',
+                method: "GET",
+                data: function (d) {
+                    d.piAnio = $('#ddlAnioIngreso').val();
+                    d.piMes = $('#ddlMesIngreso').val();
+                    d.piSemana = $('#ddlSemanaIngreso').val();
+                    d.piIDOficial = $('#ddlOficial').val(); // Enviar piIDOficial
+                },
+                dataSrc: function (data) {
+                    if (filtroActual) {
+                        var opt = '<option value="">Seleccionar</option>';
+                        var uniqueOfficials = new Map(data.map(item => [item.IDOficial, item.NombreOficial]));
+                        uniqueOfficials.forEach((nombre, id) => {
+                            if (id && nombre) {
+                                opt += `<option value="${id}">${nombre}</option>`;
+                            }
+                        });
+                        $('#ddlOficial').html(opt);
+                        filtroActual = false;
+                    }
+
+					var optDepto = '';
+					var departamentos = new Set();
+
+					data.forEach(item => {
+                        if (item.DepartamentoVenta) departamentos.add(item.DepartamentoVenta);
+                    });
+
+					departamentos.forEach(item => optDepto += `<option value="${item}">${item}</option>`);
+					$('#ddlDepartamento').append(optDepto);
+
+                    return data;
+                }
+            },
+            columns: [
+                { data: 'NombreOficial' },
+                { data: 'TotalIngresadas' },
+                { data: 'TotalInstaladas' },
+                { data: 'TotalPendientes' },
+                { data: 'TotalEnProceso' },
+                {
+                    data: 'InstaladasVsPendientes',
+                    render: function (data) {
+                        return data ? parseFloat(data).toFixed(2) + '%' : '0.00%';
+                    }
+                },
+                {
+                    data: 'EnProcesoVsPendientes',
+                    render: function (data) {
+                        return data ? parseFloat(data).toFixed(2) + '%' : '0.00%';
+                    }
+                },
+                { data: 'TotalIngresadasSoloServicio' },
+                { data: 'TotalIngresadasConArticulo' },
+                {
+                    data: 'TotalIngresadasSoloServicioVsTotal',
+                    render: function (data) {
+                        return data ? parseFloat(data).toFixed(2) + '%' : '0.00%';
+                    }
+                },
+                {
+                    data: 'TotalIngresadasConArticuloVsTotal',
+                    render: function (data) {
+                        return data ? parseFloat(data).toFixed(2) + '%' : '0.00%';
+                    }
+                },
+                {
+                    data: 'ArpuPromedioTotalIngresadas',
+                    render: function (data) {
+                        return data ? parseFloat(data).toFixed(2) + ' Lps' : '0.00%';
+                    }
+                },
+				{ data: 'DepartamentoVenta', visible: false },
+
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    messageTop: "Solicitud Clientes",
+                    filename: "Clientes",
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }
+                },
+                { extend: 'csvHtml5', text: 'CSV', className: 'btn-outline-primary btn-sm mr-1' },
+                { extend: 'copyHtml5', text: 'Copy', className: 'btn-outline-primary btn-sm mr-1' },
+                { extend: 'print', text: 'Print', className: 'btn-outline-primary btn-sm' }
+            ]
+        });
+
+        // Reload table on filter change
+        $('#ddlAnioIngreso, #ddlMesIngreso, #ddlSemanaIngreso, #ddlOficial').on('change', function () {
+            tablaPrincipal.ajax.reload();
+        });
+
+
+
+   let tablaDetalle = null;
+
+    $('#ddlDepartamento').on('change', function () {
+		var value = $(this).val().trim();
+		tablaPrincipal.columns(12).search(value ? '^' + value + '$' : '', true, false).draw();
+	});
+
+
+
+// Función para limpiar y ocultar la tabla detalle
+function resetTablaDetalle() {
+    if (tablaDetalle) {
+        tablaDetalle.destroy();
+        $('#tablaDetalleSolicitudes tbody').empty();
+        tablaDetalle = null;
+    }
+    $('#contenedorDetalleSolicitudes').hide();
+    $('#tituloDetalle').text('');
+}
+
+// Recargar la tabla principal y limpiar la tabla detalle cuando cambie el filtro
+$('#ddlAnioIngreso, #ddlMesIngreso, #ddlSemanaIngreso, #ddlOficial').on('change', function () {
+    resetTablaDetalle();
+    tablaPrincipal.ajax.reload();
+});
+
+$('#BandejaSolicitudesFinalesInstalados tbody').on('click', 'td', function () {
+    const colIndex = tablaPrincipal.cell(this).index().column;
+    const columnasDetalle = [1, 2, 3, 4];
+
+    if (columnasDetalle.includes(colIndex)) {
+        const rowData = tablaPrincipal.row($(this).closest('tr')).data();
+        let tipo = "";
+
+        switch (colIndex) {
+            case 1: tipo = "ingresadas"; break;
+            case 2: tipo = "instaladas"; break;
+            case 3: tipo = "pendientes"; break;
+            case 4: tipo = "enproceso"; break;
+        }
+
+        $('#tituloDetalle').text(`Detalle de solicitudes ${tipo} - ${rowData.NombreOficial}`);
+        $('#contenedorDetalleSolicitudes').show();
+
+        if (tablaDetalle) {
+            tablaDetalle.destroy();
+            $('#tablaDetalleSolicitudes tbody').empty();
+            tablaDetalle = null;
+        }
+
+        $.ajax({
+            url: '@Url.Action("ObtenerDetalleSolicitudesPorAsesor", "Reportes")',
+            method: 'GET',
+            data: {
+                idOficial: rowData.IDOficial,
+                tipo: tipo,
+                anio: $('#ddlAnioIngreso').val(),
+                mes: $('#ddlMesIngreso').val(),
+                semana: $('#ddlSemanaIngreso').val()
+            },
+            success: function (data) {
+                if (!Array.isArray(data)) {
+                    //console.error('Datos inválidos recibidos:', data);
+                    $('#tablaDetalleSolicitudes tbody').html('<tr><td colspan="7">No se recibieron datos válidos</td></tr>');
+                    return;
+                }
+
+                tablaDetalle = $('#tablaDetalleSolicitudes').DataTable({
+                    data: data,
+                    destroy: true,
+                    autoWidth: false,
+                    responsive: true,
+                    language: {
+                        "emptyTable": "No hay registros para mostrar.",
+                        "lengthMenu": "_MENU_",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_",
+                        "paginate": {
+                            first: "Primero",
+                            previous: "Anterior",
+                            next: "Siguiente",
+                            last: "Último"
+                        }
+                    },
+                    columns: [
+                        { data: 'fiIDSolicitud' },
+                        { data: 'fcNombre' },
+                        { data: 'fcTelefono' },
+                        {
+                            data: null,
+                            render: function (d) {
+                                let moneda = d.fiIDMoneda == 1 ? "L." : "$";
+                                let cuota = d.fnCuotaMensual ? parseFloat(d.fnCuotaMensual).toFixed(2) : "0.00";
+                                let articulos = d.fcArticulosdelContrato ?? "";
+                                return `<span style="color:white" class="badge bg-info">${articulos}</span><br><strong>${moneda} ${cuota}</strong>`;
+                            }
+                        },
+                        {
+                            data: 'fdFechaCreacionSolicitud',
+                            render: function (d) {
+                                return d ? moment(d).format('YYYY-MM-DD') : '';
+                            }
+                        },
+                        {
+                            data: 'fdFechaInstalacionFinal',
+                            render: function (d) {
+                                return d ? moment(d).format('YYYY-MM-DD') : '';
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function (d) {
+                                return `<span style="color:white" class="badge bg-${d.fcClase ?? 'secondary'}">${d.fcDescripcion ?? ''}</span>`;
+                            }
+                        }
+                    ]
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error en AJAX:', status, error);
+                alert("Error al obtener los detalles: " + error);
+            }
+        });
+    }
+});
+
+
+
+    </script>
+}
+

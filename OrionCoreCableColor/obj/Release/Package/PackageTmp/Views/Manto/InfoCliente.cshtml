@@ -1,0 +1,392 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+
+        <text>Editar Informacion Cliente</text>
+
+    </h2>
+
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Nombre</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fcNombreCompleto, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Identidad</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fcIdentidad, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Fecha Nacimiento</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fdFechaNacimiento, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Telefono</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fcTelefono, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Lugar de Trabajo</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fcLugarTrabajo, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Direccion Detallada</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fcDireccionDetallada, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Correo</label>
+                                    <div class="input-group mar-btm">
+                                        @Html.EditorFor(model => model.fcCorreo, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Departamento</label>
+                                    <select id="selectDepartamento" class="form-select form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Municipio</label>
+                                    <select id="selectMunicipio" class="form-select form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Colonia</label>
+                                    <select id="selectColonia" class="form-select form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                            <br />
+                            <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                <div class="form-group">
+                                    <label class="control-label font-12">Comentario</label>
+                                    <input id="txtobservaciones" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class='test col-sm-12'>
+        <br />
+        <div style='float: right;'>
+            <button type="button" id="btnEditarInfoCliente" class="btn btn-success">
+                Editar Informacion
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+
+    var codigodepar = @ViewBag.ficodigodepartamento;
+    var codmunicipio = @ViewBag.fiCodMunicipio;
+    var codcolonia = @ViewBag.fiCodColonia;
+    llenarDatos();
+
+    function llenarDatos() {
+        debugger
+        console.log(codigodepar);
+        $.ajax({
+            url: "@Url.Action("ListaDepartamentos", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+                console.log(respuesta);
+
+                var selectdepartamento = $("#selectDepartamento");
+
+                selectdepartamento.empty();
+                selectdepartamento.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione Departamento'
+                }));
+
+                $.each(respuesta, function(index, item) {
+                    selectdepartamento.append($('<option>', {
+                        value: item.fiCodDepartamento,
+                        text: item.fcDepartamento
+                    }));
+                });
+                $("#selectDepartamento").select2({ dropdownParent: $("#MyModalBig") }).val(codigodepar).trigger("change");
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+    }
+
+
+    $(`#selectDepartamento`).on('change', function () {
+        var dep = $(`#selectDepartamento`).val();
+        //console.log(`loque trae municipio ${codmunicipio}`);
+        if (dep != 0) {
+            $.ajax({
+                url: "@Url.Action("ListaMunicipio", "LlenarCampos")",
+                type: "GET",
+                data: { iddepartamento: dep},
+                success: function (respuesta) {
+
+                    var selectmunicipio = $("#selectMunicipio");
+
+                    selectmunicipio.empty();
+                    selectmunicipio.append($('<option>', {
+                        value: 0,
+                        text: 'Seleccione Un Municipio'
+                    }));
+                    $.each(respuesta, function(index, item) {
+                        selectmunicipio.append($('<option>', {
+                            value: item.fiCodMunicipio,
+                            text: item.fcMunicipio
+                        }));
+                    });
+                    $("#selectMunicipio").select2({ dropdownParent: $("#MyModalBig") }).val(codmunicipio).trigger("change");
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+    })
+
+    $(`#selectMunicipio`).on('change', function () {
+        var muni = $(`#selectMunicipio`).val();
+        var dep = $(`#selectDepartamento`).val();
+        if (muni != 0 && dep != 0) {
+            $.ajax({
+                url: "@Url.Action("ListaColonia", "LlenarCampos")",
+                type: "GET",
+                data: { codDepartamento: dep, codmunicipio: muni},
+                success: function (respuesta) {
+
+                    var selectcolonia = $("#selectColonia");
+
+                    selectcolonia.empty();
+                    selectcolonia.append($('<option>', {
+                        value: 0,
+                        text: 'Seleccione Una Colonia'
+                    }));
+                    $.each(respuesta, function(index, item) {
+                        selectcolonia.append($('<option>', {
+                            value: item.fiCodBarrio,
+                            text: item.fcBarrio
+                        }));
+                    });
+                    $("#selectColonia").select2({ dropdownParent: $("#MyModalBig") }).val(codcolonia).trigger("change");
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+    })
+
+    $(`#btnEditarInfoCliente`).on(`click`, function () {
+        debugger;
+        var idequifax = $(`#txtidclientedbd`).val();//directemente de la vista padre como tal y no de este partial, al igual que el id Solicitud
+        var nombre = $(`#fcNombreCompleto`).val();
+        var identidad = $(`#fcIdentidad`).val();
+        var fechanacimiento = $(`#fdFechaNacimiento`).val();
+        var telefono = $(`#fcTelefono`).val();
+        var correo = $(`#fcCorreo`).val();
+        var lugarTrabajo = $(`#fcLugarTrabajo`).val();
+        var direcciondetallada = $(`#fcDireccionDetallada`).val();
+        var departamento = $(`#selectDepartamento`).val();
+        var municipio = $(`#selectMunicipio`).val();
+        var colonia = $(`#selectColonia`).val();
+
+        var modelo = {};
+        //modelo = ;
+        var obser = $('#txtobservaciones').val();
+        if (obser == "" || obser == null || obser == " ") {
+            ToastrError("Error", "Escriba un comentario");
+            return false;
+        }
+
+        $.ajax({
+            url: "@Url.Action("ActualizarDatosClientes", "Manto")",
+            type: "POST",
+            data: {
+                fiIDEquifax: idequifax,
+                fcNombreCompleto: nombre,
+                fcIdentidad: identidad,
+                fdFechaNacimiento: fechanacimiento,
+                fcTelefono: telefono,
+                fcCorreo: correo,
+                fcLugarTrabajo: lugarTrabajo,
+                fcDireccionDetallada: direcciondetallada,
+                fiDepartamento: departamento,
+                fiCodMunicipio: municipio,
+                fiColonia: colonia,
+                idsolicidut: idsol
+            },
+            success: function (respuesta) {
+                console.log(respuesta);
+                //var resultado = datas[0];
+                if (respuesta.fiMensaje == 1) {
+                    GuardarBitacora(idequifax)
+                } else {
+                    var datasus = { Titulo: "Error", Mensaje: "Error Al querer Cambiar informacion del Cliente", Estado: false }
+                    AlertaAjax(datasus)
+                }
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+
+    });
+
+
+    function GuardarBitacora(idclient,) {
+        var observaciones = $(`#txtobservaciones`).val();
+        $.ajax({
+            url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+            type: "POST",
+            data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: observaciones, Opcion: 'Cambiar Info Cliente'},
+            success: function (respuesta) {
+                console.log(respuesta);
+                CerrarModal();
+                var datasus = { Titulo: "Exito", Mensaje: "Se Modifico la Informacion Del cliente", Estado: true }
+                AlertaAjax(datasus)
+                //AlertaDinamicas(true, 'Exito', 'Se Cambio la Informacion del cliente Correctamente', 1);
+            },
+            error: function (respuesta) {
+                var datasus = { Titulo: "Error", Mensaje: "Error Al querer Cambiar informacion del Cliente", Estado: false}
+                AlertaAjax(datasus)
+            }
+        })
+    }
+
+    
+</script>

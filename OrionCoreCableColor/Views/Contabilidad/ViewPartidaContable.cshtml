@@ -1,0 +1,262 @@
+﻿
+@model OrionCoreCableColor.Models.Contabilidad.ListarPartidaViewModel
+
+
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Ver Partida
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+
+
+<!--Modal body-->
+<div class="modal-body">
+
+
+    
+
+    <div class="row" id="ContentPartidaImprimir">
+        <div class="col-lg-12 text-center">
+            <div style="font-size: 20px; color:black; max-width: 300px!important; padding-right: 13px; padding-left:13px;" class="badge badge-secondary height-2 d-inline-flex align-items-center justify-content-center position-relative m-0  h1">Partida No. @Model.fcPartida</div>
+
+            @if (!string.IsNullOrEmpty(Model.fcPartidaSeguimiento))
+            {
+                <div class="label label-warning label-table text-lg" style="max-width: 300px!important;"> Seguimiento: Partida No. @Model.fcPartidaSeguimiento</div>
+
+            }
+
+            <hr />
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-8" style="float:left;">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <dt style="text-align: left!important;">
+                            @Html.DisplayNameFor(model => model.fdFechaPartida):
+                        </dt>
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(model => model.fdFechaPartida)
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <dt style="text-align: left!important;">
+                            @Html.DisplayNameFor(model => model.Moneda):
+                        </dt>
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(model => model.SimboloMoneda)
+                    </div>
+
+                    <div class="col-sm-4">
+                        <dt style="text-align: left!important;">
+                            @Html.DisplayNameFor(model => model.fcReferencia):
+                        </dt>
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(model => model.fcReferencia)
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <dt style="text-align: left!important;">
+                            @Html.DisplayNameFor(model => model.fcSinopsis):
+                        </dt>
+                    </div>
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(model => model.fcSinopsis)
+                    </div>
+
+                </div>
+            </div>
+
+            <div style="font-size: 15px; color: black;  height:100%;" class="col-sm-3 text-center badge badge-secondary height-2 d-inline-flex align-items-center justify-content-center position-relative m-0  h1" style="float:right;">
+
+
+                <div class="form-group text-lg text-bold bord-all text-center pad-top label-default">
+                    @Html.LabelFor(model => model.fnValorPartida, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm text-center" style="width:100%;">
+                        @Model.SimboloMoneda  @Model.fnValorPartida.ToString("n")
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fnValorPartida, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+        </div>
+        
+        
+            <div class="col-sm-12" style="padding-top:70px;">
+
+
+
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="ViewTablaDetallePartidas">
+                    <thead>
+                        <tr>
+                            <th style="width:10px;">#</th>
+                            <th style="width:40%;">Cuenta Contable</th>
+                            <th style="width:40%;">Descripcion</th>
+                            <th>Doc</th>
+                            <th>Ref</th>
+                            <th>Aux</th>
+
+                            <th style="width:10px;">Prog.</th>
+                            <th style="width:10px;">Fondo</th>
+                            <th style="width:10px;">C.C.</th>
+                            <th style="width:50px;">DEBE</th>
+                            <th style="width:15px;">HABER</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.ListaDetalle)
+                        {
+                            if (item.RevisionRequerida)
+                            {
+                                <tr class="danger">
+                                    <td>@item.fiIDFila</td>
+                                    @if (string.IsNullOrEmpty(item.fcCuentaContable.Trim()))
+                                    {
+                                        <td class="warning">@item.fcCuentaContable</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.fcCuentaContable</td>
+                                    }
+
+                                    <td>@item.DescripcionCuenta</td>
+                                    <td>@item.fcDocumento </td>
+                                    <td>@item.fcReferenciaDetalle </td>
+                                    <td>@item.fcAuxiliarCodigo </td>
+                                    <td>@item.fcPrograma </td>
+                                    <td>@item.fcFondo</td>
+                                    <td>@item.fcCentrodeCosto</td>
+                                    <td class="text-right">@item.fnDebito.ToString("n")</td>
+                                    <td class="text-right">@item.fnCredito.ToString("n")</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>@item.fiIDFila</td>
+                                    <td>@item.fcCuentaContable</td>
+                                    <td>@item.DescripcionCuenta</td>
+                                    <td>@item.fcDocumento </td>
+                                    <td>@item.fcReferenciaDetalle </td>
+                                    <td>@item.fcAuxiliarCodigo </td>
+                                    <td>@item.fcPrograma </td>
+                                    <td>@item.fcFondo</td>
+                                    <td>@item.fcCentrodeCosto</td>
+                                    <td class="text-right">@item.fnDebito.ToString("n")</td>
+                                    <td class="text-right">@item.fnCredito.ToString("n")</td>
+                                </tr>
+                            }
+
+                        }
+
+
+                    </tbody>
+
+                    <tfooter>
+                        <tr class="" id="TotalRow">
+
+                            <td colspan="9" class="text-right">TOTALES</td>
+                            <td class="text-right">@Model.SimboloMoneda @Model.ListaDetalle.Sum(z => z.fnDebito).ToString("n")</td>
+                            <td class="text-right">@Model.SimboloMoneda @Model.ListaDetalle.Sum(z => z.fnCredito).ToString("n")</td>
+                        </tr>
+
+                    </tfooter>
+                </table>
+
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        Creado Por:    @Html.DisplayFor(model => model.fcCreador)
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        Fecha Creacion:    @Html.DisplayFor(model => model.fdFechaCreacion)
+
+                    </div>
+
+                    <div class="col-sm-4">
+                        Status:    @Html.DisplayFor(model => model.fcEstadoPartida)  /  Mayorizado:
+
+                        @if (Model.fiPartidaMayorizada > 0)
+                        {
+                            <span>SI</span>
+                        }
+                        else
+                        {
+                            <span>NO</span>
+                        }
+
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+      
+
+        
+
+
+
+    </div>
+    <div class="row">
+
+        <hr />
+
+        <button data-dismiss="modal" class="btn btn-link btn-lg pull-left  text-danger" type="button"><i class="text-lg ion-close-round"></i> Cerrar</button>
+
+
+
+    </div>
+
+</div>
+
+<script>
+
+    $("#btnAnular").click(function () {
+
+        AnularPartidaPermisoEspecial('@Model.fcPartida');
+    });
+
+    $('#ViewTablaDetallePartidas').DataTable({
+        dom: 'frtip',
+       // autoWidth: true,
+        responsive: true,
+        paging: false,
+         ordering: false,
+         buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'Export EXCEL',
+                    messageTop: "PARTIDA: "+'@Model.fcPartida',
+                 filename: "PARTIDA-"+'@Model.fcPartida',
+                    exportOptions: {
+                        //columns: [4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16]
+                         columns: ':visible'
+                    }
+                },
+
+            ],
+    });
+
+
+
+
+</script>

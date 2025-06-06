@@ -1,0 +1,98 @@
+﻿@model List<OrionCoreCableColor.Models.Prestamo.sp_Prestamo_PlandePago_ConsultarAvancePorPrestamo_ViewModel>
+
+<style>
+	.bord-success {
+		border: 2px solid green;
+	}
+
+	.bord-primary {
+		border: 1px solid lightgrey;
+	}
+</style>
+
+<br />
+<div class="pad-top">
+	<!--<div class="row">
+		<a onclick="ExportHtmlToPdf('#contentPaymentPlan','PaymentPlan')" class="btn btn-link pull-right" href="javascript:void(0)"><i class="fa fa-print fa-fw"></i> Print Report </a>-->
+		@*<a onclick="SendEmailPaymentPlan('#contentPaymentPlan','PaymentPlan')" class="btn btn-link pull-right" href="#"><i class="fa fa-send-o fa-fw"></i> Send Email </a>*@
+	<!--</div>-->
+
+	<div id="contentPaymentPlan">
+		<div class="text-center">
+			<h4>PLAN DE PAGO</h4>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover" style="width:100%;" id="TablaPlanDePago">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Fecha</th>
+						<th>Capital Inicial</th>
+						<th>Capital Pactado</th>
+						<th>Interes Pactado</th>
+						<th>Seguro 1</th>
+						<th>Seguro 2</th>
+						<th>Servicio 1</th>
+						<th>Valor Cuota</th>
+						<th>Saldo Capital</th>
+						<th>Saldo Interes</th>
+						<th>Saldo Seg 1</th>
+						<th>Saldo Seg 2</th>
+						<th>Saldo Serv 1</th>
+						<th>Saldo Cuota</th>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						decimal totSaldoCapital = 0m;
+						decimal totSaldoInteres = 0m;
+						decimal totSaldoSeguro1 = 0m;
+						decimal totSaldoSeguro2 = 0m;
+						decimal totSaldoServicio = 0m;
+					}
+					@if (Model != null)
+					{
+						foreach (var item in Model)
+						{
+							totSaldoCapital += item.fnSaldoCapital;
+							totSaldoInteres += item.fnSaldoInteres;
+							totSaldoSeguro1 += item.fnSaldoSeguro1;
+							totSaldoSeguro2 += item.fnSaldoSeguro2;
+							totSaldoServicio += item.fnSaldoServicio1;
+
+							<tr>
+								<td>@item.ItemNumber</td>
+								<td>@(item.fdFechaCuota == DateTime.MinValue ? "" : item.fdFechaCuota.ToString("yyyy/MM/dd"))</td>
+								<td class="text-right">@item.fnCapitalInicial.ToString("N2")</td>
+								<td class="text-right">@item.fnCapitalPactado.ToString("N2")</td>
+								<td class="text-right">@item.fnInteresPactado.ToString("N2")</td>
+								<td class="text-right">@item.fnSeguro1.ToString("N2")</td>
+								<td class="text-right">@item.fnSeguro2.ToString("N2")</td>
+								<td class="text-right">@item.fnServicio1.ToString("N2")</td>
+								<td class="text-right">@item.fnValorCuota.ToString("N2")</td>
+								<td class="text-right">@item.fnSaldoCapital.ToString("N2")</td>
+								<td class="text-right">@item.fnSaldoInteres.ToString("N2")</td>
+								<td class="text-right">@item.fnSaldoSeguro1.ToString("N2")</td>
+								<td class="text-right">@item.fnSaldoSeguro2.ToString("N2")</td>
+								<td class="text-right">@item.fnSaldoServicio1.ToString("N2")</td>
+								<td class="text-right"><b>@item.fnSaldoCuota.ToString("N2")</b></td>
+							</tr>
+						}
+					}
+				</tbody>
+				<tfoot>
+					<tr class="info">
+						<th colspan="9">SALDOS</th>
+						<th class="text-right">@totSaldoCapital.ToString("N2")</th>
+						<th class="text-right">@totSaldoInteres.ToString("N2")</th>
+						<th class="text-right">@totSaldoSeguro1.ToString("N2")</th>
+						<th class="text-right">@totSaldoSeguro2.ToString("N2")</th>
+						<th class="text-right">@totSaldoServicio.ToString("N2")</th>
+						<th></th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+</div>

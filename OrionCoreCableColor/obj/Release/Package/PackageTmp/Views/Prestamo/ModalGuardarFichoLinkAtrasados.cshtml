@@ -1,0 +1,135 @@
+﻿@model List<OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel>
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Guardar FicoLink Cliente Atrasado</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!-- Modal body -->
+<div class="modal-body" id="">
+    <form id="MyFormModal">
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h3>Datos de los Clientes</h3>
+                </div>
+
+                <div class="col-sm-12" style="max-height: 400px; overflow-y: auto; padding: 10px;">
+                    @foreach (var cliente in Model)
+                    {
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="margin-right: 15px;">
+                                <label class="control-label">Identidad:</label>
+                                <input type="text" value="@cliente.Identidad" class="form-control" style="display: inline-block; width: 150px;" readonly />
+                            </div>
+                            <div style="margin-right: 15px;">
+                                <label class="control-label">Nombre:</label>
+                                <input type="text" value="@cliente.Nombre" class="form-control" style="display: inline-block; width: 250px;" readonly />
+                            </div>
+                            <div style="margin-right: 15px;">
+                                <label class="control-label">Cuota:</label>
+                                <input type="text" value="@cliente.Cuota" class="form-control" style="display: inline-block; width: 100px;" readonly />
+                            </div>
+                            <div style="margin-right: 15px;">
+                                <label class="control-label">Fecha Máxima:</label>
+                                <div style="position: relative; display: inline-block; width: 180px;">
+                                    <input type="date" class="form-control no-native-calendar-icon" id="fdfechaMaximaPago" style="padding-right: 30px; width: 100%;" />
+                                    @*<i class="fal fa-calendar fa-fw" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #999;"></i>*@
+                                </div>
+                            </div>
+ 
+                        </div>
+                    }
+                </div>
+
+                <!-- Mensaje FicoLink -->
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>FicoLink</label>
+                        <div class="input-group mar-btm">
+                            <textarea id="txtMensaje" name="w3review" rows="4" cols="50" class="form-control">Ingrese a: www.novanetgroup.com</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="clearfix" style="width:100%;">
+                    <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                    <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+
+    var model = @Html.Raw(Json.Encode(Model));
+    model.forEach((cliente, index) => {
+
+        cliente.FechaMaxima = $("#fdfechaMaximaPago").val();
+
+    });
+
+    $(".form-control.no-native-calendar-icon").not(":first").prop("readonly", true);
+    $("#fdfechaMaximaPago").on("change", function () {
+        var nuevaFecha = $(this).val();
+        $(".form-control.no-native-calendar-icon").not(":first").each(function () {
+            $(this).val(nuevaFecha);
+        });
+
+        model.forEach((cliente) => {
+            cliente.FechaMaxima = nuevaFecha;
+        });
+    });
+
+
+    $("#btnConfirmarEnvio").click(function () {
+        debugger;
+        var Mensaje = $("#txtMensaje").val().trim();
+        if (Mensaje === "") {
+            ToastrError("Error", "Colocar un FicoLink");
+            return;
+        }
+        var FechaMaxima = $("#fdfechaMaximaPago").val();
+        var formData = {
+            FicoLink: Mensaje,
+        };
+        model.forEach((cliente, index) => {
+            formData[`model[${index}].Nombre`] = cliente.Nombre;
+            formData[`model[${index}].Identidad`] = cliente.Identidad;
+            formData[`model[${index}].Cuota`] = cliente.Cuota;
+            formData[`model[${index}].FechaMaxima`] = FechaMaxima;
+            
+
+
+        });
+
+        debugger;
+        $.ajax({
+            url: "@Url.Action("GuardarFicoLinkAtrasado", "Prestamo")",
+            type: "POST",
+            data: formData,
+            success: function (resp) {
+                if (resp.Estado) {
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 2000);
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function () {
+                ToastrError("Error", "Error de Red");
+            }
+        });
+    });
+
+</script>

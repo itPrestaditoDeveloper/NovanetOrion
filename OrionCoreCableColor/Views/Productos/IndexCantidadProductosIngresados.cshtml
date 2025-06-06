@@ -1,0 +1,155 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-router fa-fw"></i>Productos</h2>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th>Tipo Producto</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td style="font-weight:bolder;">TOTAL</td>
+                        <td style="font-weight:bolder;" id="totalCantidad"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+    <script>
+
+
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            pageLength: -1,
+            dom: `Bfrtip`,
+            order: [[0, "asc"]],
+
+            ajax: {
+                url: '@Url.Action("ListarTotalProductos", "Productos")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                { data: "fcTipoProducto" },
+                { data: "fcProducto" },
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        return `<a href="javascript:void();" name="cantidad" >${ConvertirDecimal(data.fnCantidad)}</a>`;
+                    }
+                }
+            ]
+        });
+
+
+        function Sumatoria()
+        {
+            
+            let tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            let data = tabla.rows({ "filter": "applied" }).data().toArray();
+            let listCantidad = data.map(x => x.fnCantidad);
+            let cantidad = 0;
+
+
+            if (data.length > 0) {
+                cantidad = listCantidad?.reduce((a, b) => (a ?? 0) + (b ?? 0)) ?? 0;
+            }
+
+            $("#totalCantidad").html(`<a href="javascript:void();" onclick="ProductosFiltrados()">${ConvertirDecimal(cantidad)}</a>`);
+        }
+
+
+        tablaPrincipal.on("draw", function () {
+            Sumatoria();
+        });
+
+        $("#TablaPrincipal tbody").on("click", "tr a[name=cantidad]", function () {
+            let tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            let tr = $(this).closest("tr");
+            let data = tabla.row(tr).data();
+            let model = [];
+            model.push({
+                fiIDProducto: data.fiIDProducto,
+                fcProducto: data.fcProducto
+            });
+
+            $.ajax({
+                url: "@Url.Action("ViewProductosEnClientes","Productos")",
+                method: "Post",
+                data: { model: model },
+                success: function (resp) {
+                    ShowModalBigScroll(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+        });
+
+
+        function ProductosFiltrados() {
+            let tabla = $.fn.dataTable.Api("#TablaPrincipal");
+            let data = tabla.rows({ "filter": "applied" }).data().toArray();
+
+            let listModel = data.map(x => {
+                return {
+                    fiIDProducto: x.fiIDProducto,
+                    fcProducto: x.fcProducto
+                }
+            });
+            debugger;
+
+            $.ajax({
+                url: "@Url.Action("ViewProductosEnClientes","Productos")",
+                method: "Post",
+                data: { model: listModel },
+                success: function (resp) {
+                    ShowModalBigScroll(resp);
+                },
+                error: function (resp) {
+                    alert("Error");
+                }
+            });
+
+        }
+
+        
+    </script>
+
+}

@@ -1,0 +1,171 @@
+﻿
+.tableInfoTop > tbody > tr > td {
+    padding: 4px;
+}
+
+
+
+#mainnav .list-header:not(:first-child) {
+    margin-top: 5px;
+}
+td {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+td:hover {
+    overflow: visible;
+    white-space: inherit;
+}
+
+
+
+.label-success {
+    background-color: #508354 !important;
+}
+
+.label-danger {
+    background-color: #872525 !important;
+}
+
+.label-warning {
+    background-color: #E87000 !important;
+}
+
+.label-info {
+    background-color: #247195 !important;
+}
+
+
+.navbar-top-links > li > a > i {
+    font-size: 30px!important;
+}
+
+.menu-title {
+    margin-left: 20px;
+}
+
+.panel-title {
+    font-size: 1.3em;
+    font-weight: 700;
+}
+
+.panel-heading {
+    border-bottom: 1px solid #eee;
+}
+
+
+
+@media(min-width: 768px) {
+    #navbar {
+        background-color: transparent;
+        z-index: 1000;
+    }
+
+
+}
+
+
+#content-container {
+    min-height: 100vh !important;
+}
+
+
+
+.dtp {
+    z-index: 10002;
+}
+
+.swal2-container {
+    z-index: 1000000;
+}
+
+iframe {
+    max-width: 100%;
+    height: 300px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Float button*/
+
+
+.label-container {
+    position: fixed;
+    bottom: 48px;
+    right: 105px;
+    display: table;
+    visibility: hidden;
+}
+
+.label-text {
+    color: #FFF;
+    background: rgba(51,51,51,0.5);
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.label-arrow {
+    display: table-cell;
+    vertical-align: middle;
+    color: #333;
+    opacity: 0.5;
+}
+
+.float {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    bottom: 40px;
+    right: 40px;
+    /*background-color: #ffd600;
+    color: #72631f;*/
+    border-radius: 50px;
+    text-align: center;
+    /*box-shadow: 2px 2px 3px #999;*/
+    z-index:9999999;
+}
+
+.my-float {
+    font-size: 30px;
+}
+
+a.float + div.label-container {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s ease;
+}
+
+a.float:hover + div.label-container {
+    visibility: visible;
+    opacity: 1;
+}
+
+.float.in:active {
+    box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
+    transform: scale(1.05);
+    transition: all 0.15s;
+}
+
+.float.in:hover {
+    opacity: 1;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transform: scale(1.1);
+    transition: all 0.15s;
+}
+
+

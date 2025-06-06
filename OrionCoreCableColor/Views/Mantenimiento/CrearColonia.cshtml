@@ -1,0 +1,258 @@
+﻿@model OrionCoreCableColor.Models.Mantenimiento.ColoniaViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+
+        @if (Model.fbEditar)
+        {
+            <text>Editar Colonia</text>
+        }
+        else
+        {
+            <text>Crear Colonia</text>
+        }
+
+    </h2>
+
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+
+
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                                <br />
+                                <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                    <div class="form-group">
+                                        <label class="control-label font-12">Departamento</label>
+                                        <select id="selectDepartamento" class="form-select form-control">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                                <br />
+                                <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                    <div class="form-group">
+                                        <label class="control-label font-12">Municipio</label>
+                                        <select id="selectMunicipio" class="form-select form-control">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12 col-12 col-sm-12 col-md-12">
+                                <br />
+                                <div class="col-lg-12 col-sm-12 col-md-12 col-xl-12">
+                                    <div class="form-group">
+                                        <label class="control-label font-12">Colonia</label>
+                                        <input type="text" id="nuevaColonia" class="form-control" placeholder="Ingrese nueva colonia" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button id="GuardarRegistro" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        var model = @Html.Raw(Json.Encode(Model));
+        var codigodepar = '@Model.fiCodDepartamento';
+        var codmunicipio = '@Model.fiCodMunicipio';
+        var codcolonia = '@Model.fiCodBarrio';
+
+
+    $(document).ready(function () {
+        llenarDatos();
+
+
+        if (model.fbEditar) {
+          $('#nuevaColonia').val('@Model.fcBarrio');
+          $('#selectDepartamento').val('@Model.fiCodDepartamento');
+          $('#selectMunicipio').val('@Model.fiCodMunicipio');
+       } else {
+            $('#nuevaColonia').val('');
+        }
+
+        // Evento cambio Departamento
+        $('#selectDepartamento').on('change', function () {
+            var dep = $(this).val();
+            $('input[name="fiCodDepartamento"]').val(dep);
+
+            if (dep != 0) {
+                $.ajax({
+                    url: "@Url.Action("ListaMunicipio", "LlenarCampos")",
+                    type: "GET",
+                    data: { iddepartamento: dep },
+                    success: function (respuesta) {
+                        var selectmunicipio = $("#selectMunicipio");
+
+                        selectmunicipio.empty();
+                        selectmunicipio.append($('<option>', {
+                            value: 0,
+                            text: 'Seleccione Un Municipio'
+                        }));
+
+                        $.each(respuesta, function (index, item) {
+                            selectmunicipio.append($('<option>', {
+                                value: item.fiCodMunicipio,
+                                text: item.fcMunicipio
+                            }));
+                        });
+
+                        $("#selectMunicipio")
+                            .select2({ dropdownParent: $("#MyModalBig") })
+                            .val(codmunicipio).trigger("change");
+                    },
+                    error: function (respuesta) {
+                        console.log(respuesta);
+                    }
+                });
+            }
+        });
+
+        // Evento cambio Municipio
+        $('#selectMunicipio').on('change', function () {
+            var muni = $(this).val();
+            var dep = $('#selectDepartamento').val();
+            $('input[name="fiCodMunicipio"]').val(muni);
+
+            if (muni != 0 && dep != 0) {
+                $.ajax({
+                    url: "@Url.Action("ListaColonia", "LlenarCampos")",
+                    type: "GET",
+                    data: { codDepartamento: dep, codmunicipio: muni },
+                    success: function (respuesta) {
+                        var selectcolonia = $("#selectColonia");
+
+                        selectcolonia.empty();
+                        selectcolonia.append($('<option>', {
+                            value: 0,
+                            text: 'Seleccione Una Colonia'
+                        }));
+
+                        $.each(respuesta, function (index, item) {
+                            selectcolonia.append($('<option>', {
+                                value: item.fiCodBarrio,
+                                text: item.fcBarrio
+                            }));
+                        });
+
+                        $("#selectColonia")
+                            .select2({ dropdownParent: $("#MyModalBig") })
+                            .val(codcolonia).trigger("change");
+                    },
+                    error: function (respuesta) {
+                        console.log(respuesta);
+                    }
+                });
+            }
+        });
+
+
+        //guardar
+        $('#GuardarRegistro').click(function () {
+            debugger
+            model.fiCodDepartamento = $('#selectDepartamento').val();
+            model.fiCodMunicipio = $('#selectMunicipio').val();
+            model.fcBarrio = $('#nuevaColonia').val();
+
+            if (model.fiCodDepartamento == 0 || model.fiCodMunicipio == 0 || model.fcBarrio  == "") {
+
+                ToastrWarning("Advertencia", "Debe seleccionar todos los campos antes de guardar");
+                return;
+            }
+
+            if (model.fbEditar) {
+                    var url = "@Url.Action("EditarColonia", "Mantenimiento")";
+             } else {
+                     var url = "@Url.Action("CrearColonia", "Mantenimiento")";
+              }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { model: model },
+                success: function (resp) {
+
+                    if (resp.Estado) {
+                        toastr.success(resp.Mensaje, '');
+                        CerrarModal();
+                        window.location.reload();
+
+                    } else {
+                        toastr.error(resp.Mensaje, 'Error al guardar la información');
+                    }
+
+                },
+                error: function (resp) {
+                    console.log(resp);
+                }
+            });
+
+        });
+    });
+
+    function llenarDatos() {
+        $.ajax({
+            url: "@Url.Action("ListaDepartamentos", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+                var selectdepartamento = $("#selectDepartamento");
+
+                selectdepartamento.empty();
+                selectdepartamento.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione Departamento'
+                }));
+
+                $.each(respuesta, function (index, item) {
+                    selectdepartamento.append($('<option>', {
+                        value: item.fiCodDepartamento,
+                        text: item.fcDepartamento
+                    }));
+                });
+
+                $("#selectDepartamento")
+                    .select2({ dropdownParent: $("#MyModalBig") })
+                    .val(codigodepar).trigger("change");
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+    }
+
+
+
+    </script>
+

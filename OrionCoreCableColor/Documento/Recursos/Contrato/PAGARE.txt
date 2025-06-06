@@ -1,0 +1,5 @@
+PAGARE NO. {fcIDPrestamo}
+A LA VISTA POR USD {fnMontoFinalFinanciar}
+Yo {fcNombre} con numero de identidad {fcIdentidad} actuando en mi condición personal por este presente PAGARE  me comprometo incondicionalmente a pagar a  {fcRazonSocial} a la vista y sin protesto, la suma de {fnMontoFinalFinanciarLetras} más los intereses legales por mora generados por falta de pago. 
+
+En fe de lo cual firmamos en la ciudad de {fcCiudadDomiciliada}, a los {lblNumeroDia_FirmaPagare} días del mes de {lblMes_FirmaPagare} del año {lblAnio_FirmaPagare}.

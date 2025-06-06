@@ -1,0 +1,260 @@
+﻿
+
+@model OrionCoreCableColor.Models.Soporte.TicketsViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Crear Ticket</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+
+<!--Modal body-->
+<div class="modal-body">
+    <div class="row">
+
+        @*<div class="col-lg-12">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="control-label">DOCUMENTO (Suba imagenes,Word,Excel,Pdf para este ticket) </label>
+
+                                <form id="Imagen-dropzone" action="@Url.Action("FormFileResponse","Base")" method="post" enctype="multipart/form-data" class="dropzone needsclick">
+                                    <div class="dz-message needsclick">
+
+                                        <div class="dz-icon">
+                                            <i class="fal fa-cloud-upload text-muted mb-3"></i>
+                                        </div>
+                                        <div>
+                                            <span class="dz-text">Arrastre Imagen</span>
+                                            <p class="text-sm text-muted">O Click para elegirla manualmente</p>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Titulo</label>
+                        <input id="fcTitulo" class="form-control" type="text" placeholder="Definicion del titulo" />
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Descripcion</label>
+                        <input id="fcDescripcion" class="form-control" type="text" placeholder="Definicion del ticket" />
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Quien Tiene Problemas?</label>
+
+                        @Html.HiddenFor(model => model.fiIdTipoSolicitante)
+                        <input id="fiIdTipoSolicitante" class="form-control" type="text" value="Cliente" readonly />
+                        @* Html.DropDownListFor(model => model.fiIdTipoSolicitante, new SelectList(ViewBag.ListadoTipoSolicitante, "Value", "Text"), "Seleccione Una Opcion", new { @class = "form-control select2", @style = "width:100%;" }) *@
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-form-label" id="lcLabelTipoSolicitante">Cliente</label>
+                        @Html.HiddenFor(model => model.fiIdSolicitante)
+                        <input id="fiIdTipoSolicitante" class="form-control" type="text" value="@Model.fcSolicitante" readonly />
+                    </div>
+                </div>
+
+                @*<div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Categoria</label>
+
+                        <select id="fiIdCategoria" name="fiIdCategoria" class="form-control select2" style="width:100%;">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            @foreach (var item in ViewBag.ListaCategorias)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Incidencia</label>
+                        <select id="fiIdTipoIncidencia" class="form-select form-control">
+                        </select>
+                    </div>
+                </div>*@
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Asignar Area</label>
+
+                        <select id="fiIdAreaAsignada" name="fiIdAreaAsignada" class="form-control select2" style="width:100%;">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            @foreach (var item in ViewBag.ListaAreas)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+
+                        @* Html.DropDownListFor(model => model.fiIdAreaAsignada, new SelectList(ViewBag.ListaAreas, "Value", "Text"), "Seleccione Una Opcion", new { @class = "form-control select2", @style = "width:100%;" }) *@
+                    </div>
+
+                </div>
+
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Comentario</label>
+                        <input id="txtcomentario" class="form-control" type="text" placeholder="Escriba un comentario para este Ticket" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <br />
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" onclick="GuardarTicket()" class="btn btn-primary" id="BotonBuardarModal">Guardar</button>
+    </div>
+
+</div>
+
+<script>
+    $('.select2').select2({ dropdownParent: $("#MyModalBig") });
+
+    @*$(`#fiIdCategoria`).on(`change`,function(){
+        cargarSelectDinamico(
+           "@Url.Action("SelectTipoIncidenciaSaris", "Saris")",
+            "fiIdCategoria",
+            "fiIdTipoIncidencia",
+            "fiIdCategoria",
+            "MyModalBig"
+        );
+
+    });*@
+
+    function ValidarCreacionTicket() {
+        let isValid = true;
+
+        var crearValidacion = true;
+
+        // Validaciones de campos de texto
+        if (IsNullOrEmptyOr0($("#fcTitulo").val())) { marcarError("fcTitulo"); crearValidacion = false; } else{ eliminarError(`fcTitulo`) } ;
+        if (IsNullOrEmptyOr0($("#fcDescripcion").val())) {marcarError("fcDescripcion"); crearValidacion = false;}else{ eliminarError(`fcDescripcion`) } ;
+        if (IsNullOrEmptyOr0($("#txtcomentario").val())) {marcarError("txtcomentario"); crearValidacion = false;}else{ eliminarError(`txtcomentario`) };
+
+        // Validación condicional: Si se selecciona una categoría, debe haber una incidencia
+
+        //var categoriaSeleccionada = ;
+        //var incidenciaSeleccionada = ;
+
+        //if (IsNullOrEmptyOr0($("#fiIdCategoria").val())) { marcarError(`fiIdCategoria`); crearValidacion = false; } else { eliminarError(`fiIdCategoria`); }
+        //if (IsNullOrEmptyOr0($("#fiIdTipoIncidencia").val())) { marcarError(`fiIdTipoIncidencia`); crearValidacion = false; } else { eliminarError(`fiIdTipoIncidencia`)}
+
+        //if ( && (IsNullOrEmptyOr0(incidenciaSeleccionada) )) {
+        //    console.log(`Entro`);
+        //    marcarError("fiIdTipoIncidencia");
+        //    crearValidacion = false;
+        //} else {
+        //    console.log(`no Entro`);
+        //    eliminarError("fiIdTipoIncidencia");
+        //}
+
+        if (!crearValidacion) {
+            toastr.warning("Los campos son obligatorios", "Validación");
+            return false;
+        }
+
+        return isValid; // Devuelve true si todas las validaciones pasan
+    }
+
+    function GuardarTicket() {
+        H5_loading.show();
+        if (!ValidarCreacionTicket()) {
+            H5_loading.hide();
+            return; // Si hay errores, no se envía el formulario
+        }
+
+        var ticket = {
+            'fiIdTicket': 0,
+            'fcTitulo': $(`#fcTitulo`).val(),
+            'fcDescripcion': $(`#fcDescripcion`).val(),
+            'fiIdTipoSolicitante': 3,
+            'fiIdSolicitante': $(`#fiIdSolicitante`).val(),
+            'fcComentario': $(`#txtcomentario`).val(),
+
+            'fiIdCategoria': $(`#fiIdCategoria`).val(),
+            'fiIdTipoIncidencia': $(`#fiIdTipoIncidencia`).val(),
+            'fiIdAreaAsignada': $(`#fiIdAreaAsignada`).val()
+
+        };
+
+        $.ajax({
+            url: "@Url.Action("CrearTicket", "Saris")",
+            type: 'POST',
+            contentType: 'application/json',
+                data: JSON.stringify(ticket),
+            success: function (response) {
+                //ShowModalBig(data);
+                H5_loading.hide();
+                console.log(response);
+                if (response.IsSuccessStatusCode && response.StatusCode == 200) {
+                    toastr.success(response.message, 'Crear');
+                    CerrarModal();
+                } else {
+                    toastr.error(response.message, 'Crear');
+                }
+            }, error: function () {
+                ToastrError("Error", "Al querer cargar el formulario de Ticket");
+
+            }
+        });
+
+    }
+
+
+    //var archivosBase64 = [];
+
+    //var myDropzone = new Dropzone("#Imagen-dropzone", {
+    //    autoProcessQueue: false,
+    //    uploadMultiple: true,
+    //    acceptedFiles: "image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.rar,.zip,.7z",
+    //    addRemoveLinks: true,
+    //    dictMaxFilesExceeded: "Límite máximo de archivos alcanzado",
+    //    dictInvalidFileType: "Tipo de archivo no válido",
+    //    maxFiles: 10,
+
+    //    init: function () {
+    //        this.on("addedfile", function (file) {
+    //            const reader = new FileReader();
+    //            reader.onload = function (event) {
+    //                archivosBase64.push(event.target.result); // ← base64 completo con encabezado MIME
+    //            };
+    //            reader.readAsDataURL(file); // ← convierte el archivo a base64
+    //        });
+
+    //        this.on("removedfile", function (file) {
+    //            // Opcional: limpiar archivo si se remueve
+    //            archivosBase64 = archivosBase64.filter(x => !x.includes(file.name));
+    //        });
+    //    }
+    //});
+
+</script>

@@ -1,0 +1,37 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+
+            
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="SolicitudesCliente">
+
+                    <thead>
+                        
+                        <tr>
+                            <th>Fecha Ingreso</th>
+                            <th>No Solicitud</th>
+                            <th>Cuota Paquete</th>
+                            <th>Oficial</th>
+                            <th>Estados</th>
+                            <th>Fecha de Instalacion</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.ListaSolicitudCliente)
+                        {
+                            <tr>
+                                <td>@item.fdFechaCreacionSolicitud</td>
+                                <td>@item.fiIDSolicitud</td>
+                                <td>@item.fnCuotaMensual</td>
+                                <td>@item.NombreOficial</td>
+                                <td>@item.fcDescripcion</td>
+                                <td>@item.fdFechaInstalacionFinal</td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            
+

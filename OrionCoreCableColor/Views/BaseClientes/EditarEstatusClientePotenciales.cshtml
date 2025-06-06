@@ -1,0 +1,70 @@
+﻿@model OrionCoreCableColor.DbConnection.OrionDB.sp_Estatus_Clientes_Potenciales_Listado_ById_Result
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Estatus Cliente Potenciales</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Nombre Estatus</label>
+            @Html.EditorFor(model => model.fcNombreEstatus, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Descripcion</label>
+            @Html.EditorFor(model => model.fcdescripcionEstatus, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Color del Estatus</label>
+            <input class="form-control" id="coloestatus" type="color" name="color" value="@Html.ValueFor(model => model.fcHexadecimal)">
+        </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="btnfuente" onclick="GuardarEstado()"><i class="text-lg ion-checkmark-round"></i> Modificar</button>
+    </div>
+</div>
+
+
+<script>
+    var idEstadocliente = @ViewBag.fiIdEstadoCliente;
+    function GuardarEstado() {
+
+        var modeloEnviar = {
+            fiIdEstatusCliente: idEstadocliente,
+            fcNombreEstatus: $(`#fcNombreEstatus`).val(),
+            fcdescripcionEstatus: $(`#fcdescripcionEstatus`).val(),
+            fcHexadecimal: $(`#coloestatus`).val()
+        }
+
+        $.ajax({
+            url: "@Url.Action("ModificarEstadoClientePotencial", "BaseClientes")",
+            type: "POST",
+            data: { modelo: modeloEnviar },
+            success: function (datas) {
+                if (datas.CodeStatus == 200) {
+                    $("#MyModal").modal("hide");
+                    return ToastrSuccess("Exito", "Estado Modificado con Exito");
+
+                } else {
+                    return ToastrError(`Error`,`Estado No se Pudo MOdificar por Alguna Razon`);
+                }
+            },
+            error: function (datae) {
+                var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Modificar el Estado", Estado: false }
+                AlertaAjax(dataerror)
+            }
+        });
+    }
+
+
+
+</script>

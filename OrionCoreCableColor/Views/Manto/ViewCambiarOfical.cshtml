@@ -1,0 +1,145 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Cambiar Oficial</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6" style="display:none">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdCliente, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.IdCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IdCliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NombreOficial, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.NombreOficial, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.NombreOficial, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fiIDUsuario, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        @Html.DropDownListFor(model => model.fiIDUsuario, new SelectList(ViewBag.ListaOficial, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fiIDUsuario, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <label class="form-control-plaintext font-weight-bold">Observaciones</label>
+            <input id="txtobservaciones" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="reiniciogeo" onclick="GuardarBitacora()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+    </div>
+
+</div>
+<script>
+    $("#NombreOficial").prop("disabled", true);
+    $("#IDSolicitud").prop("disabled", true);
+    $("#Nombre").prop("disabled", true);
+
+    var opcion = 0;
+
+    function GuardarBitacora() {
+            var observaciones = $(`#txtobservaciones`).val();
+            var idsol = $(`#IDSolicitud`).val();
+            var idclient = $(`#IdCliente`).val();
+            var IDUsuarioOficial = $(`#fiIDUsuario :Selected`).val();
+           var DescripcionEstado = $(`#NombreOficia`).val();
+        var DescripcionOficial = $(`#fiIDUsuario :Selected`).text();
+        if ($("#txtobservaciones").val() == "") {
+            ToastrWarning("Campos vacios de observacion", "Escriba un comentario");
+            return false;
+        }
+
+            $.ajax({
+                url: "@Url.Action("ActualizarDatosCambioOficial", "Manto")",
+                type: "POST",
+                data: { IDSolicitud: idsol, IDUsuarioOficial: IDUsuarioOficial},
+                success: function (datas) {
+                    var Opcion = "Se cambio el estado de: " + DescripcionEstado + " a: " + DescripcionOficial
+                    var obs = Opcion + " " + observaciones
+                        $.ajax({
+                            url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                            type: "POST",
+                            data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: obs, Opcion: "Cambiar Oficial"},
+                            success: function (respuesta) {
+
+                                CerrarModal();
+                                AlertaDinamicas(true, 'Exito', 'Actualizar Datos Estado Instalacion', 1);
+
+                            },
+                            error: function (respuesta) {
+                                AlertaDinamicas(false, 'Error', 'error Actualizar Estado Instalacion', 2);
+                            }
+                        })
+
+                },
+                error: function (datae) {
+                    AlertaDinamicas(false, 'Error', 'Error Al querer Actualizar Estado Instalacion', 2);
+                }
+            });
+    }
+
+
+
+</script>

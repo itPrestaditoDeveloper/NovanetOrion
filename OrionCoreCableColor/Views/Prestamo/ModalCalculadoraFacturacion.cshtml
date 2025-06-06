@@ -1,0 +1,102 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        <i class="fal fa-calculator"></i>  Calculadora 
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Total Lempiras</label>
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">L</span>
+                    </div>
+                    <input type="number" data-class="ClaseDecimal" min="0" class="form-control InputDecimal" id="ValorLempiras" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Tasa de Cambio</label>
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">L</span>
+                    </div>
+                    <input value="@ViewBag.TazaDeCambio" type="number" data-class="ClaseDecimal" min="0" class="form-control InputDecimal" id="CambioDolar" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Total Sin Impuesto</label>
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input readonly type="number" data-class="ClaseDecimal" min="0" class="form-control InputDecimal" id="TotalSinImpuesto" />
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Impuesto</label>
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input readonly type="number" data-class="ClaseDecimal" min="0" class="form-control InputDecimal" id="Impuesto" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Total</label>
+                <div class="input-group mar-btm">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input readonly type="number" data-class="ClaseDecimal" min="0" class="form-control InputDecimal" id="Total" />
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $("#ValorLempiras,#CambioDolar").change(function () {
+        debugger;
+        var valorLempiras = parseFloat($("#ValorLempiras").val());
+        var cambioDolar = parseFloat($("#CambioDolar").val());
+
+        var dolares = valorLempiras / cambioDolar;
+        $("#TotalSinImpuesto").val(dolares.toFixed(4));
+        var impuesto = dolares - (dolares / 1.15);
+        $("#Impuesto").val(impuesto.toFixed(4));
+        $("#Total").val((dolares - impuesto).toFixed(4));
+
+
+    });
+</script>

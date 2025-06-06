@@ -1,0 +1,992 @@
+﻿@model OrionCoreCableColor.Models.Productos.GuardarMovimientoInventarioViewModel
+
+<style>
+    .img-container {
+        width: 100%;
+        height: 350px;
+        background-image: repeating-linear-gradient(45deg,#ccc,#ccc 10px, #dbdbdb 10px, #dbdbdb 20px);
+        text-align: center;
+    }
+</style>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-download fa-fw"></i> Ingreso de Inventario</h2>
+        <div class="panel-toolbar " role="menu">
+            <a href="@Url.Action("IndexInventario")" class="btn btn-success"> Lista de Inventario</a>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="panel-content">
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fiIDMoneda, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm">
+
+                                    @Html.DropDownListFor(model => model.fiIDMoneda, new SelectList(ViewBag.ListaMonedas, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fiIDMoneda, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fiIDProveedor, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm" style="width:100%;">
+                                    @Html.DropDownListFor(model => model.fiIDProveedor, new SelectList(ViewBag.ListaProveedores, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fiIDProveedor, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcNumeroFactura, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm" style="width:100%;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                                    </div>
+                                    @Html.EditorFor(model => model.fcNumeroFactura, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fcNumeroFactura, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fdFechaFactura, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm" style="width:100%;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fal fa-calendar-alt fa-fw"></i></span>
+                                    </div>
+                                    <input type="date" class="form-control" value="@Model.fdFechaFactura.ToString("yyyy-MM-dd")" id="fdFechaFactura" />
+                                    @*@Html.EditorFor(model => model.fdFechaFactura, new { htmlAttributes = new { @class = "form-control", @type = "date" } })*@
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fdFechaFactura, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fiIDUbicacion, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm" style="width:100%;">
+                                    @Html.DropDownListFor(model => model.fiIDUbicacion, new SelectList(ViewBag.ListaUbicacionesHeader, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fiIDUbicacion, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.fcDescripcionFactura, htmlAttributes: new { @class = "control-label" })
+                                <div class="input-group mar-btm" style="width:100%;">
+
+                                    @Html.TextAreaFor(model => model.fcDescripcionFactura, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(model => model.fcDescripcionFactura, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            @Html.LabelFor(model => model.fcDocumentoFactura, htmlAttributes: new { @class = "control-label" })
+                            <form id="Imagen-dropzone" action="@Url.Action("FormFileResponse","Base")" method="post" enctype="multipart/form-data" class="dropzone needsclick">
+                                <div class="dz-message needsclick">
+
+                                    <div class="dz-icon">
+                                        <i class="fal fa-cloud-upload text-muted mb-3"></i>
+                                    </div>
+                                    <div>
+                                        <span class="dz-text">Arrastre Imagen</span>
+                                        <p class="text-sm text-muted">O Click para elegirla manualmente</p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-lg-12"  style="padding-top:10px;">
+                            <button id="ObtenerUsuario" class="btn btn-danger" style="float:right;"><i class="fal fa-camera-alt"></i> <i class="fal fa-wifi rotate-90"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <hr />
+                </div>
+            </div>
+            <div id="totalesProductos" class="row" style="width:100%;">
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr />
+                </div>
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductos">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Tipo Movimiento</th>
+                                <th>Serie 1</th>
+                                <th>Mac / Serie 2</th>
+                                <th>Observacion</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td id="totalCantidad" class="text-right">@Model.fcSignoMoneda @Model.TotalCantidad.ToString("0.##")</td>
+                                <td></td>
+                                <td class="text-right" style="font-weight:bold;">Total:</td>
+                                <td id="totalPrecio" class="text-right">@Model.fcSignoMoneda @Model.fnTotalFactura.ToString("0.##")</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="clearfix" style="width:100%;">
+                    <div class="col-lg-4 float-right">
+                        <br />
+                        <table class="table" style="width:100%;">
+                            <tr style="border: 0 solid #000 !important">
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteGravado, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImporteGravado, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                            </tr>
+                            <tr style="border: 0 solid #000">
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteExento, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImporteExento, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnImporteExonerado, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnImporteExonerado, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnSaldo, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnSaldo, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnISV, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnISV, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="vertical-align: middle;" class="text-right">@Html.LabelFor(model => model.fnTotalFactura, htmlAttributes: new { @class = "control-label" }):</td>
+                                <td>@Html.TextBoxFor(model => model.fnTotalFactura, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="clearfix" style="width:100%;">
+                    <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                    <button type="button" onclick="GuardarIngresoInventario()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/Content/js/qr/html5-qrcode.min.js"></script>
+<script src="~/Content/js/excel/xlsx.mini.js"></script>
+@section Scripts {
+    <script>
+
+        $("#fiIDMoneda").select2();
+        var model = @Html.Raw(Json.Encode(Model));
+
+        var listTipoMovimiento = @(Html.Raw(Json.Encode(ViewBag.ListaTipoMovientoTable)));
+        var listUbicaciones = @(Html.Raw(Json.Encode(ViewBag.ListaUbicaciones)));
+        var listProductos = @(Html.Raw(Json.Encode(ViewBag.ListaProductos)));
+        var listPrecios = @(Html.Raw(Json.Encode(ViewBag.ListaPrecios)));
+        var scanner = null;
+
+        var controls;
+        var cameraOptions;
+        var video;
+        var canvas;
+        var screenshotImage;
+        var buttons; //[...controls.querySelectorAll('button')];
+        var streamStarted = false;
+        var myDropzoneCapture;
+
+        var RowSeleccionado;
+        var RowChild = null;
+        var codigoSeleccionado;
+
+
+        var archivoRetornado = null;
+        var archivoExterno = 0;
+
+        var varraints = {
+            video: {
+                width: {
+                    min: 1280,
+                    ideal: 1920,
+                    max: 2560,
+                },
+                height: {
+                    min: 720,
+                    ideal: 1080,
+                    max: 1440
+                },
+                deviceId: 0
+
+            }
+        };
+
+        $("#fnSaldo").prop("readonly", true);
+        $("#fnISV").prop("readonly", true);
+        $("#fnTotalFactura").prop("readonly", true);
+
+
+        $("#fiIDMoneda").select2().val(model.fiIDMoneda).trigger("change");
+        $("#fiIDProveedor").select2().val(model.fiIDProveedor).trigger("change");
+        $("#fiIDUbicacion").select2().val(model.fiIDUbicacion).trigger("change");
+        $("#fcDescripcionFactura").css("resize", "none");
+        $("#fcDescripcionFactura").prop("rows", "4");
+
+
+        function NuevaLinea() {
+            return {
+                fiIDMovimiento: 0,
+                fiIDProducto: 0,
+                fiIDUbicacion: 0,
+                fiTipoMovimiento: 0,
+                fcCodigoSerie1: "",
+                fcCodigoSerie2: "",
+                fcReferenciaMovimiento: "",
+                fbEscaneado: false,
+                fbEditar: false,
+                fcToken: "",
+                fnCantidad: 0,
+                fcProducto: "",
+                fiIdProductoPreciosDetalleActual: 0,
+                fnValorProductoME: 0,
+                fnValorProductoMN: 0
+            };
+        }
+
+        myDropzone = $('#Imagen-dropzone').dropzone({
+            //url: '/file/post',
+            autoProcessQueue: true,
+            uploadMultiple: true,
+            acceptedFiles: "image/*,video/*",
+            maxFiles: 1,
+            addRemoveLinks: true,
+            dictMaxFilesExceeded: "Maximum upload limit reached",
+            dictInvalidFileType: "upload only JPG/PNG",
+            //resizeWidth: 500,
+            //resizeHeight: 300,
+
+            init: function () {
+                myDropzoneCapture = this;
+                var myDropzone = this;
+                myDropzone.on('maxfilesexceeded', function (file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                });
+            },
+
+            removedfile: function (file) {
+
+                archivoExterno = 0;
+                var _ref = file.previewElement;
+
+                return _ref != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+            }
+        });
+
+
+        $("#ObtenerUsuario").click(function () {
+            VerModalSmConObjetoDeParametro({}, "@Url.Action("ObtenerUsuariosParaFoto","Productos")");
+        });
+
+        var tablaPrincipal = $('#TablaProductos').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            buttons: [
+                {
+                    text: `<i class="fal fa-file-excel"></i>`,
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
+                        VerModalScrollConObjetoDeParametro({}, "@Url.Action("SubidoMasivo","Productos")");
+
+                    }
+                },
+                {
+                    text: `<i class="fal fa-camera"></i>`,
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
+                        VerModalScrollConObjetoDeParametro({}, "@Url.Action("FotografiarProducto","Productos")");
+
+                    }
+                },
+                {
+                    text: `<i class="fal fa-scanner"></i>`,
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
+                        VerModalScrollConObjetoDeParametro({}, "@Url.Action("EscanearProducto","Productos")");
+                    }
+                },
+                {
+                    text: `<i class="fal fa-i-cursor"></i>`,
+                    className: 'btn btn-success',
+                    attr: { "id": "codigo" },
+                    action: function (e, dt, node, config) {
+                        VerModalScrollConObjetoDeParametro({}, "@Url.Action("DigitarProducto", "Productos")");
+                    }
+                },
+                {
+                    text: `<i class="fal fa-plus"></i>`,
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
+                        let tabla = $.fn.dataTable.Api("#TablaProductos");
+                        let lineas = parseInt($("#cantidadIngresar").val());
+                        tabla.row.add(NuevaLinea()).draw(false);
+
+                    }
+                }
+            ],
+            data: model.DetalleMovimiento,
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<button type="button" name="eliminar" class="btn btn-danger"><i class="fal fa-trash"></i></button>`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<label style="display:none;">${data.fcProducto}</label><select class="form-control clsProducto" name="fiIDProducto"></select>`;
+                    }
+                },
+                {
+                    data: null,
+                    className: "tdPrecio",
+
+                    render: function (data) {
+                        return `<select class="form-control clsPrecios" name="fiIdProductoPreciosDetalleActual" style="width:50%;"></select>`;
+                        /*return ` <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="input-group mar-btm" style="width:100%;">
+                                                <div class="input-group-prepend">
+                                                    <button class="input-group-text btn" name="btnAgregarPrecio"><i class="fal fa-plus text-success"></i></button>
+                                                </div>
+                                                
+                                                <select class="form-control clsPrecios" name="fiIdProductoPreciosDetalleActual" style="width:50%;"></select> 
+                                                <div class="input-group-append">
+                                                    <button class="input-group-text btn" name="btnEditarPrecio"><i class="fal fa-pencil text-warning"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;*/
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        //return `<select class="form-control clsUbicacion" name="fiIDUbicacion"></select>`;
+                        return `<input type="number" name="fnCantidad"  class="form-control InputDecimal" data_class="ClaseDecimal" value="${data.fnCantidad}" />`;
+                    }
+                },
+
+                {
+                    data: null,
+                    visible: false,
+                    render: function (data) {
+                        return `<select class="form-control clsTipoMovimiento" ></select>`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<label style="display:none;">${data.fcCodigoSerie1}</label>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="input-group mar-btm" style="width:100%;">
+                                                <div class="input-group-prepend">
+                                                    <button class="input-group-text btn" name="btnfcCodigoSerie1"><i class="fal fa-camera" ></i></button>
+                                                </div>
+                                                <input type="text" class="form-control clsSerie1" name="fcCodigoSerie1" value="${data.fcCodigoSerie1}"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<label style="display:none;">${data.fcCodigoSerie1}</label>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="input-group mar-btm" style="width:100%;">
+                                                <div class="input-group-prepend">
+                                                    <button class="input-group-text btn" name="btnfcCodigoSerie2"><i class="fal fa-camera" ></i></button>
+                                                </div>
+                                                <input type="text" class="form-control clsSerie2" name="fcCodigoSerie2"  value="${data.fcCodigoSerie2}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<input type="text" class="form-control clsReferencia" name="fcReferenciaMovimiento"  value="${data.fcReferenciaMovimiento}" />`;
+                    }
+                }
+            ],
+            createdRow: function (row, data, index)
+            {
+                $(row).find(".clsProducto").select2({ data: listProductos, width: "100%" }).val(data.fiIDProducto).trigger('change');
+                //$(row).find(".clsUbicacion").select2({ data: listUbicaciones, width: "100%" }).val(data.fiIDUbicacion).trigger('change');
+                $(row).find(".clsTipoMovimiento").select2({ data: listTipoMovimiento, width: "100%" }).val(data.fiIDTipoMovimiento).trigger('change');
+                if (data.fiIDProducto > 0) {
+                    var dataProductoPrecios = listPrecios.find(x => x.fiIDProducto == data.fiIDProducto).Precios.map(x => {
+                        return {
+                            id: x.Value,
+                            text: x.Text
+                        };
+                    });
+                    $(row).find(".clsPrecios").select2({ data: dataProductoPrecios, width: "50% !important" }).val(data.fiIdProductoPreciosDetalleActual).trigger("change");
+                    
+                    
+                }
+                InformacionTable();
+            },
+            initComplete: function () {
+                InformacionTable();
+            }
+
+        });
+
+
+
+
+
+        $("#TablaProductos tbody").on("click", "tr button[name=eliminar]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+
+                row = $(this).closest("tr").prev()[0];
+            }
+            tblProductos.row(row).remove().draw(false);
+            InformacionTable();
+        });
+
+        $("#TablaProductos tbody").on("change", "tr select[name=fiIDProducto]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+
+            let td = $(this).closest("td");
+            let lbl = $(td).find("label");
+
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fiIDProducto = $(this).val();
+            data2.fcProducto = $("option:selected", this).text();
+            tblProductos.row(row).data(data2).draw(false);
+            $(row).find(".clsProducto").select2({ data: listProductos, width: "100%" }).val(data2.fiIDProducto).trigger('change.select2');
+            //$(lbl).text(data2.fcProducto);
+            ObtenerPreciosProProducto(data2.fiIDProducto, row);
+
+            InformacionTable();
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr select[name=fiIDUbicacion]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fiIDUbicacion = $(this).val();
+
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr select[name=fiIdProductoPreciosDetalleActual]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+                     
+            data2.fiIdProductoPreciosDetalleActual = $(this).val();
+            let itemProducto = listPrecios.find(x => x.fiIDProducto == data2.fiIDProducto); 
+            let itemPrecioProducto = itemProducto.HistoricoPrecios.find(x => x.fiIdProductoPreciosDetalle == $(this).val());
+            data2.fnValorProductoME = itemPrecioProducto.fnValorProductoME;
+            data2.fnValorProductoMN = itemPrecioProducto.fnValorProductoMN;
+            TotalPrecio();
+        });
+
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fnCantidad]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fnCantidad = $(this).val();
+            
+            InformacionTable();
+            TotalPrecio();
+        });
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fcCodigoSerie1]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fcCodigoSerie1 = $(this).val().trim();
+            tblProductos.row(row).data(data2).draw(false);
+            $(row).find(".clsProducto").select2({ data: listProductos, width: "100%" }).val(data2.fiIDProducto).trigger('change');
+            Repetidos("serie1", data2.fcCodigoSerie1.trim());
+        });
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fcCodigoSerie2]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fcCodigoSerie2 = $(this).val().trim();
+            tblProductos.row(row).data(data2).draw(false);
+            $(row).find(".clsProducto").select2({ data: listProductos, width: "100%" }).val(data2.fiIDProducto).trigger('change');
+            Repetidos("serie2", data2.fcCodigoSerie1.trim());
+        });
+
+        $("#TablaProductos tbody").on("change", "tr input[name=fcReferenciaMovimiento]", function () {
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                row = $(this).closest("tr").prev()[0];
+            }
+            let data2 = tblProductos.row(row).data();
+            data2.fcReferenciaMovimiento = $(this).val();
+        });
+
+        $("#TablaProductos tbody").on("click", "tr button[name=btnfcCodigoSerie1]", function () {
+
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                RowChild = $(this).closest("tr");
+                row = $(this).closest("tr").prev()[0];
+            }
+            RowSeleccionado = row;
+            codigoSeleccionado = 1;
+            VerModalScrollConObjetoDeParametro({}, "@Url.Action("ObtenerSerieCamaraWeb", "Productos")");
+        });
+
+        $("#TablaProductos tbody").on("click", "tr button[name=btnfcCodigoSerie2]", function () {
+
+            let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+            let row = $(this).closest("tr");
+            if ($(row).attr('class') == "child") {
+                RowChild = $(this).closest("tr");
+                row = $(this).closest("tr").prev()[0];
+            }
+
+
+            RowSeleccionado = row;
+            codigoSeleccionado = 2;
+            VerModalScrollConObjetoDeParametro({}, "@Url.Action("ObtenerSerieCamaraWeb", "Productos")");
+        });
+
+        function GuardarIngresoInventario()
+        {
+            
+            $("#btnGuardarForm").hide();
+            if ($("#fcNumeroFactura").val() == "")
+            {
+                ToastrError("Error", "Ingrese numero de factura");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fdFechaFactura").val() == "") {
+                ToastrError("Error", "Ingrese la fecha de la factura");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fcReferenciaFactura").val() == "") {
+                ToastrError("Error", "Ingrese referencia de la factura");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fcDescripcionFactura").val() == "") {
+                ToastrError("Error", "Ingrese una descripcion");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+
+            if ($("#fnImporteExonerado").val() == 0 || $("#fnImporteExonerado").val() == null || $("#fnImporteExonerado").val() == "" )
+            {
+                if ($("#fnImporteGravado").val() == "" || $("#fnImporteGravado").val() == 0) {
+                    ToastrError("Error", "Importe no puede ser 0");
+                    $("#btnGuardarForm").show();
+                    return;
+                }
+            }
+
+
+
+            if ($("#fnSaldo").val() == "" || $("#fnSaldo").val() == 0) {
+                ToastrError("Error", "Total sin ISV no puede ser 0");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fnTotalFactura").val() == "" || $("#fnTotalFactura").val() == 0) {
+                ToastrError("Error", "Total de la factura no puede ser 0");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+            if ($("#fiIDUbicacion").val() == ("" || null)) {
+                ToastrError("Error", "Seleccione la Bodega");
+                $("#btnGuardarForm").show();
+                return;
+            }
+
+
+
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var dataTabla = tabla.rows().data().toArray();
+
+            var form_data = new FormData();
+            form_data.append("fiIDMovimientoMaestro", model.fiIDMovimientoMaestro);
+            form_data.append("fiIDMoneda", $("#fiIDMoneda").val());
+            form_data.append("fcNumeroFactura", $("#fcNumeroFactura").val());
+            form_data.append("fcReferenciaFactura", $("#fcReferenciaFactura").val());
+            form_data.append("fcDescripcionFactura", $("#fcDescripcionFactura").val());
+            form_data.append("fcCAI", "_");
+            form_data.append("fdFechaFactura", $("#fdFechaFactura").val())
+            form_data.append("fiIDTipoMovimiento", 1);
+            //form_data.append("fiTipoAfectacion", model.fiTipoAfectacion);
+            form_data.append("fnImporteGravado", $("#fnImporteGravado").val());
+            form_data.append("fnImporteExento", $("#fnImporteExento").val());
+            form_data.append("fnImporteExonerado", $("#fnImporteExonerado").val());
+            form_data.append("fnSaldo", $("#fnSaldo").val());
+            form_data.append("fnISV", $("#fnISV").val());
+            form_data.append("fnTotalFactura", $("#fnTotalFactura").val());
+            //form_data.append("DocumentoFactura", archivoExterno == 0 ? myDropzone[0].dropzone.files[0] : archivoRetornado);
+           
+            form_data.append("DocumentoFactura",myDropzone[0].dropzone.files[0]);
+            //form_data.append("fnValorCuotaMensual", $("#fnValorCuotaMensual").val());
+            form_data.append("fbEditar", model.fbEditar);
+            form_data.append("fiIDProveedor", $("#fiIDProveedor").val());
+            form_data.append("fiIDUbicacion", $("#fiIDUbicacion").val());
+
+            for (let x = 0; x < dataTabla.length; x++)
+            {
+
+                if (Repetidos("serie1", dataTabla[x].fcCodigoSerie1?.trim() ?? ""))
+                {
+                    $("#btnGuardarForm").show();
+                    return;
+                }
+
+                if (Repetidos("serie2", dataTabla[x].fcCodigoSerie2?.trim() ?? "")) {
+                    $("#btnGuardarForm").show();
+                    return;
+                }
+
+
+                form_data.append(`DetalleMovimiento[${x}].fiIDMovimiento`, dataTabla[x].fiIDMovimiento);
+                form_data.append(`DetalleMovimiento[${x}].fiIDMovimientoMaestro`, dataTabla[x].fiIDMovimientoMaestro);
+                form_data.append(`DetalleMovimiento[${x}].fiIDProducto`, dataTabla[x].fiIDProducto);
+                form_data.append(`DetalleMovimiento[${x}].fiIDUbicacion`, $("#fiIDUbicacion").val());
+                form_data.append(`DetalleMovimiento[${x}].fcCodigoSerie1`, dataTabla[x].fcCodigoSerie1);
+                form_data.append(`DetalleMovimiento[${x}].fcCodigoSerie2`, dataTabla[x].fcCodigoSerie2);
+                form_data.append(`DetalleMovimiento[${x}].fcReferenciaMovimiento`, dataTabla[x].fcReferenciaMovimiento);
+                form_data.append(`DetalleMovimiento[${x}].fcToken`, dataTabla[x].fcToken);
+                form_data.append(`DetalleMovimiento[${x}].fbEditar`, dataTabla[x].fbEditar);
+                form_data.append(`DetalleMovimiento[${x}].fbEscaneado`, dataTabla[x].fbEscaneado);
+                form_data.append(`DetalleMovimiento[${x}].fnCantidad`, dataTabla[x].fnCantidad);
+                form_data.append(`DetalleMovimiento[${x}].fiIdProductoPreciosDetalleActual`, dataTabla[x].fiIdProductoPreciosDetalleActual);
+            }
+
+            var url = "@Url.Action("CrearIngresoInventario","Productos")";
+            if (model.fbEditar) {
+                url = "@Url.Action("EditarIngresoInventario","Productos")";
+            }
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (data) {
+
+                    if (data.Estado) {
+                        ToastrSuccess("Aprobada", data.Mensaje);
+                        location.href = "@Url.Action("IndexInventario","Productos")";
+                    } else {
+                        ToastrError("Error", data.Mensaje);
+                        $("#btnGuardarForm").show();
+                    }
+
+                }, error: function (resp) {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            });
+
+        }
+
+        function ObtenerPreciosProProducto(fiIDProducto, row) {
+            $.ajax({
+                url: "@Url.Action("GetPreciosPorProducto", "Productos")",
+                type: "Get",
+                data: { fiIDProducto: fiIDProducto },
+                success: function (resp)
+                {
+                    
+                    if (resp.Estado !== undefined) {
+                        $(row).find(".clsPrecios").empty();
+                        ToastrError("Error", resp.Mensaje);
+                    } else {
+                        let tblProductos = $.fn.dataTable.Api("#TablaProductos");
+
+                        if ($(row).attr('class') == "child") {
+                            row = $(this).closest("tr").prev()[0];
+                        }
+                        let data2 = tblProductos.row(row).data();
+                        if (!resp.listPrecios.some(x => x.id == data2.fiIdProductoPreciosDetalleActual))
+                        {
+                            data2.fiIdProductoPreciosDetalleActual = resp.fiIdProductoPreciosDetalle;
+                        }
+
+                        $(row).find(".clsPrecios").empty().select2({ data: resp.listPrecios }).val(data2.fiIdProductoPreciosDetalleActual).trigger('change');
+                        //debugger;
+                        //$(row).find(".tdPrecio span.select2-container")[0].style.setProperty("width", "50%", "important");
+                    }
+                }
+            });
+        }
+
+
+        $("#fnImporteGravado").keyup(function ()
+        {
+            CalcularFactura();
+
+        });
+
+
+        $("#fnImporteExento").keyup(function () {
+            CalcularFactura();
+
+        });
+
+        $("#fnImporteExonerado").keyup(function () {
+            CalcularFactura();
+        });
+        function CalcularFactura()
+        {
+            var importeGravado = $("#fnImporteGravado").val() == "" ? 0 : parseFloat($("#fnImporteGravado").val());
+            var importeExento = $("#fnImporteExento").val() == "" ? 0 : parseFloat($("#fnImporteExento").val());
+            var exonerado = $("#fnImporteExonerado").val() == "" ? 0 : parseFloat($("#fnImporteExonerado").val());
+            if (importeGravado > 0 || importeExento > 0)
+            {
+                $("#fnImporteExonerado").prop("readonly", true);
+                $("#fnImporteExonerado").val(0);
+                $("#fnImporteGravado").prop("readonly", false);
+                $("#fnImporteExento").prop("readonly", false);
+                $("#fnSaldo").val((importeGravado + importeExento).toFixed(2));
+                var isv = importeGravado * 0.15;
+                $("#fnISV").val(parseFloat(isv).toFixed(2));
+                $("#fnTotalFactura").val((importeGravado + importeExento + isv).toFixed(2));
+            }
+
+            if (exonerado > 0)
+            {
+                $("#fnImporteExonerado").prop("readonly", false);
+                $("#fnImporteGravado").val(0);
+                $("#fnImporteExento").val(0);
+                $("#fnImporteGravado").prop("readonly", true);
+                $("#fnImporteExento").prop("readonly", true);
+                $("#fnSaldo").val((exonerado).toFixed(2));
+                $("#fnISV").val((0).toFixed(2));
+                $("#fnTotalFactura").val(exonerado.toFixed(2));
+            }
+
+            if (importeGravado == 0 && importeExento == 0 && exonerado == 0)
+            {
+                $("#fnImporteExonerado").prop("readonly", false);
+                $("#fnImporteGravado").prop("readonly", false);
+                $("#fnImporteExento").prop("readonly", false);
+                $("#fnSaldo").val((0).toFixed(2));
+                $("#fnISV").val((0).toFixed(2));
+                $("#fnTotalFactura").val(0);
+            }
+
+        }
+
+
+        function InformacionTable() {
+
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var data = tabla.rows().data().toArray();
+
+
+            var productos = data.map(x => {
+                return {
+                    fiIdProducto: x.fiIDProducto,
+                    fcProducto: x.fcProducto,
+                    fnCantidad: x.fnCantidad
+                };
+
+
+            });
+
+            var totalesProductos = Object.groupBy(productos, ({ fiIdProducto }) => fiIdProducto);
+
+            $("#totalesProductos").empty();
+            var alingText = ["text-left", "text-center", "text-right"];
+            var i = 0;
+            var cantidadTotal = 0;
+            for (let item in totalesProductos)
+            {
+                
+                var fcProducto = totalesProductos[item][0].fcProducto;
+                var fnTotal = totalesProductos[item].map(x => parseInt(x.fnCantidad)).reduce((a, b) => a + b);
+                cantidadTotal += fnTotal;
+                if (fcProducto != "")
+                {
+                    var resultado = $(`<div class="col-lg-2"><i class="fal fa-circle text-success" style="background-color: orange; border-radius:50%;"></i> ${fcProducto}: ${fnTotal}</div>`);
+                    $("#totalesProductos").append(resultado);
+                }
+            }
+
+
+            $("#totalCantidad").text(cantidadTotal);
+        }
+
+        function Repetidos(columna, codigo) {
+            codigo = codigo.trim();
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var data = tabla.rows().data().toArray();
+
+            if (columna == "serie1")
+            {
+                var dataSerie1 = data.map(x => x.fcCodigoSerie1?.trim() ?? "").filter(x => x != "");
+                var encontrados = dataSerie1.filter(x => x == codigo);
+                if (encontrados.length > 1) {
+                    ToastrError("Error", `El Codigo de serie1 ${codigo} ya ha sido ingresado`);
+                    return true;
+                }
+
+            }
+
+            if (columna == "serie2")
+            {
+                var dataSerie2 = data.map(x => x.fcCodigoSerie2?.trim() ?? "").filter(x => x != "");
+                var encontrados = dataSerie2.filter(x => x == codigo);
+                if (encontrados.length > 1) {
+                    ToastrError("Error", `El Codigo de serie2/mac ${codigo} ya ha sido ingresado`);
+                    return true;
+                }
+
+
+            }
+
+            return false;
+
+        }
+
+        $("#fiIDMoneda").change(function ()
+        {
+            TotalPrecio();
+        });
+
+
+        function TotalPrecio() {
+            var tabla = $.fn.dataTable.Api("#TablaProductos");
+            var data = tabla.rows().data().toArray();
+            var arrayM = [];
+            var signo = "";
+            var arrayTotal = 0;
+
+            if ($("#fiIDMoneda").val() == 1)
+            {
+                signo = "L";
+                arrayM = data.map(a => a.fnCantidad * a.fnValorProductoMN);
+
+            }
+
+
+            if ($("#fiIDMoneda").val() == 2)
+            {
+                signo = "$";
+                arrayM = data.map(a => a.fnCantidad * a.fnValorProductoME);
+            }
+
+            if (arrayM.length > 0) {
+                arrayTotal = arrayM?.reduce((a, b) => a + b) ?? 0;
+            }
+            
+
+            $("#totalPrecio").text(`${signo} ${ConvertirDecimal(arrayTotal)}`);
+        }
+
+    </script>
+
+}

@@ -1,0 +1,97 @@
+﻿@model  OrionCoreCableColor.Models.Mensajeria.ListServiciosSmsViewModel
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Enviar Mensaje por @Model.fcNombreServicio
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label">Destinatario:</label>
+                <div class="input-group mar-btm">
+
+                    @Html.DropDownList("fcTelefono", new SelectList(ViewBag.ListaTelefonos, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;", @multiple = "multiple" })
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label">Mensaje:</label>
+                <div class="input-group mar-btm">
+
+                    @Html.TextArea("fcMensaje", new { @class = "form-control", @rows = "4" })
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;height:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="EnviarMensaje" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    debugger;
+    
+    $("#fcTelefono").select2({ width: "100%", dropdownParent: $("#MyModal") });
+ 
+   
+
+
+    $("#EnviarMensaje").click(function () {
+        var destinatarios = $("#fcTelefono").val();
+        if (destinatarios.length == 0) {
+            ToastrWarning("Advertencia", "Seleccione destinatarios");
+            return;
+        }
+        var mensaje = $("#fcMensaje").val() ?? "";
+        var text = mensaje.trim();
+        if (text.length === 0) {
+            ToastrWarning("Advertencia", "Ingrese un mensaje");
+            return;
+        }
+
+        var model = {
+            fcCodigo: '@Model.fcCodigo',
+            fcTelefono: $("#fcTelefono").val(),
+            fcMensaje: $("#fcMensaje").val()
+        }
+
+        $.ajax({
+            url: '@Url.Action("EnviarMensajeSms", "Mensajeria")',
+            type: 'POST',
+            data: { model: model },
+            success: function (data) {
+                CerrarModal();
+                return data;
+
+            }, error: function () {
+                // ToastrError("Error", resp.Mensaje);
+                $("#btnGuardarForm").show();
+            }
+        });
+
+
+    });
+
+
+    
+
+
+</script>

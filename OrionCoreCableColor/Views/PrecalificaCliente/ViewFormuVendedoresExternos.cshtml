@@ -1,0 +1,760 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+@{
+    Layout = null;
+}
+<style>
+    #videoContainer,
+    #previewImage {
+        display: none;
+        margin-top: 10px;
+        max-width: 100%;
+        height: auto;
+    }
+
+
+    .input-validation-error {
+        border: 2px solid red !important;
+        box-shadow: none;
+    }
+
+    .field-validation-error {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 5px;
+        display: block;
+    }
+
+    #videoContainer {
+        display: none;
+        width: 100%;
+        max-width: 400px;
+        height: 400px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 10px;
+        background-color: black;
+    }
+
+    #video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    input[type="date"] {
+        appearance: none;
+        -webkit-appearance: none;
+        background-color: white;
+        border: 1px solid #ced4da;
+        padding: 0.375rem 0.75rem;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .input-alto {
+        height: 38px;
+        font-size: 1.1rem;
+    }
+</style>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <link href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet" />
+    <title>Registro Agentes Externos</title>
+    <link href="~/styles/FormularioClienteStilos.css" rel="stylesheet" />
+</head>
+<body id="contenido2">
+    <div class="form-container">
+        <h2>VENDEDORES EXTERNOS</h2>
+        <h3>Llene el siguiente Formulario</h3>
+        <div class="form-wrapper">
+            <form asp-action="Create" enctype="multipart/form-data" method="post" id="formVendedor">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcPrimerNombre, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcPrimerNombre, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcPrimerNombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcSegundoNombre, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcSegundoNombre, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcSegundoNombre, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcPrimerApellido, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcPrimerApellido, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcPrimerApellido, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcSegundoApellido, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcSegundoApellido, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcSegundoApellido, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcIdentidad, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-id-card fa-fw"></i></span>
+                                </div>
+                                @Html.EditorFor(model => model.fcIdentidad, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcIdentidad, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="fdFechaNacimiento">Fecha de Nacimiento</label>
+                        @Html.EditorFor(model => model.fdFechaNacimiento, new { htmlAttributes = new { @class = "form-control input-alto fecha-nacimiento", @placeholder = "Seleccione la fecha" } })
+                        @Html.ValidationMessageFor(model => model.fdFechaNacimiento, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="col-sm-6">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.fiIDOcupacion, htmlAttributes: new { @class = "form-label", @for = "ocupacion" })
+                                    @Html.DropDownListFor(model => model.fiIDOcupacion, new SelectList(ViewBag.ListaOcupaciones, "Value", "Text"), "", new { @class = "form-control select2", @style = "width:100%;" })
+                                    @Html.ValidationMessageFor(model => model.fiIDOcupacion, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcCorreo, htmlAttributes: new { @class = "form-label", @for = "correo" })
+                        @Html.EditorFor(model => model.fcCorreo, new { htmlAttributes = new { @class = "form-control", @type = "email", @placeholder = "Ingrese su correo electrónico" } })
+                        @Html.ValidationMessageFor(model => model.fcCorreo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcTelefono, htmlAttributes: new { @class = "form-label", @for = "correo" })
+                        @Html.EditorFor(model => model.fcTelefono, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese su número teléfonico." } })
+                        @Html.ValidationMessageFor(model => model.fcTelefono, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fiDepartamento, htmlAttributes: new { @class = "form-label", @for = "departamento" })
+                            @Html.DropDownListFor(model => model.fiDepartamento, new SelectList(ViewBag.ListaDepartamentos, "Value", "Text"), "", new { @class = "form-control select2", @style = "width:100%;", @onchange = "ListaMunicipio()" })
+                            @Html.ValidationMessageFor(model => model.fiDepartamento, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fiMunicipio, htmlAttributes: new { @class = "form-label", @for = "municipio" })
+                            @Html.DropDownListFor(model => model.fiMunicipio, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Seleccione --", new { @class = "form-control select2", id = "fiMunicipio", onchange = "ListaColonia()" })
+                            @Html.ValidationMessageFor(model => model.fiMunicipio, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fiColonia, htmlAttributes: new { @class = "form-label", @for = "barrio_colonia" })
+                            @Html.DropDownListFor(model => model.fiColonia, new SelectList(Enumerable.Empty<SelectListItem>()), "-- Seleccione --", new { @class = "form-control select2", id = "fiColonia" })
+                            @Html.ValidationMessageFor(model => model.fiColonia, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fcDireccion, htmlAttributes: new { @class = "control-label" })
+                            <div class="input-group mar-btm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fal fa-home fa-fw"></i></span>
+                                </div>
+                                @Html.TextAreaFor(model => model.fcDireccion, new { @class = "form-control" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.fcDireccion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <!-- Contenedor para los botones -->
+                        <p><strong><em>Scanear su cédula del lado frontal</em></strong></p>
+                        <div class="button-container">
+                            <button type="button" id="tomarFotoCedula" class="btn btn-orange">scanear su cédula</button>
+                            <button type="button" id="captureButton" class="btn btn-orange" style="display: none;">Capturar</button>
+                        </div>
+                        <!-- Contenedor para la cámara -->
+                        <div id="videoContainer">
+                            <video id="video" autoplay playsinline></video>
+                        </div>
+                        <!-- Previsualización de la foto capturada -->
+                        <img id="previewImage" src="" alt="Vista previa de la cédula" />
+                        <!-- Input oculto para almacenar la imagen capturada -->
+                        <input type="hidden" id="fotoCedulaData" name="fotoCedulaData" />
+                    </div>
+                </div>
+
+                <!--mapa-->
+                <p><strong><em>Puntee su ubicación manualmente en el mapa solo si se encuentra fuera de casa.</em></strong></p>
+                <div class="leaflet-wrapper">
+                    <div id="singleMap" style="width: 100%; height: 70%; min-height: 200px;"></div>
+                </div>
+
+                <div id="ubicacionError" style="display:none; text-align:center; margin-top:15px;">
+                    <p style="color: red;"><strong>La ubicación está desactivada.</strong></p>
+
+                </div>
+
+                <br /><br />
+
+                <div class="form-group">
+                    <button id="GuardarRegistro" type="submit">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @Scripts.Render("~/scripts/external-plugins")
+
+
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Content/js/loading/loading.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <script>
+
+
+            let Coords = { lat: null, lng: null };
+            let currentMarker = null;
+            let map;
+
+            let descDepartamento = '';
+            let descMunicipio = '';
+            let descColonia = '';
+            let stream = null;
+
+
+        $(document).ready(function () {
+            $(".select2").select2({
+                placeholder: "Seleccione una opción",
+                allowClear: true
+            });
+
+            $("#formVendedor :input").prop("disabled", true);
+            $("#GuardarRegistro").prop("disabled", false);
+            solicitarUbicacion();
+
+
+            const video = document.getElementById('video');
+            const captureButton = document.getElementById('captureButton');
+            const previewImage = document.getElementById('previewImage');
+            const videoContainer = document.getElementById('videoContainer');
+            const tomarFotoCedula = document.getElementById('tomarFotoCedula');
+            const canvas = document.createElement('canvas');
+
+            // Función para detener el stream de la cámara
+            function stopStream() {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                    stream = null;
+                }
+            }
+
+            // Abrir la cámara al hacer clic en "Tomar foto de la cédula"
+            tomarFotoCedula.addEventListener('click', async function () {
+                try {
+                    // Detener cualquier stream previo
+                    stopStream();
+
+                    // Verificar si el navegador soporta getUserMedia
+                    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                        throw new Error("El navegador no soporta acceso a la cámara.");
+                    }
+
+                    // Solicitar acceso a la cámara
+                    stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' }
+                    });
+
+                    // Asignar el stream al video
+                    video.srcObject = stream;
+                    videoContainer.style.display = 'block';
+                    previewImage.style.display = 'none';
+                    captureButton.style.display = 'inline-block';
+                } catch (error) {
+                    ToastrError("Error", "No se pudo acceder a la cámara: " + error.message);
+                }
+            });
+
+            // Capturar la foto
+            captureButton.addEventListener('click', function () {
+                try {
+                    if (!video.srcObject) {
+                        throw new Error("La cámara no está activa.");
+                    }
+
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    // Convertir la imagen a base64
+                    const imageData = canvas.toDataURL('image/jpeg');
+                    previewImage.src = imageData;
+                    previewImage.style.display = 'block';
+                    document.getElementById('fotoCedulaData').value = imageData;
+
+                    // Detener la cámara
+                    stopStream();
+                    videoContainer.style.display = 'none';
+                    captureButton.style.display = 'none';
+                } catch (error) {
+                    ToastrError("Error", "No se pudo capturar la foto: " + error.message);
+                }
+            });
+
+            // Detener la cámara al cerrar la página
+            window.addEventListener('beforeunload', stopStream);
+
+
+
+            ///geolocalizacion
+            map = L.map("singleMap").setView([40.7427837, -73.11445617675781], 12);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+
+                attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+            }).addTo(map);
+
+
+
+            const geocoder = L.Control.geocoder({
+                position: "topright",
+                placeholder: "Buscar...",
+                defaultMarkGeocode: false,
+            })
+                .on("markgeocode", function (e) {
+                    const latlng = e.geocode.center;
+                    updateMarker(latlng);
+                    map.setView(latlng, 12);
+                })
+                .addTo(map);
+
+
+           function solicitarUbicacion() {
+            if (navigator.geolocation) {
+                console.log("Solicitando ubicación...");
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        console.log("Ubicación obtenida:", position.coords);
+                        const userLatLng = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        updateMarker(userLatLng);
+                        map.setView(userLatLng, 16);
+                        Coords.lat = userLatLng.lat;
+                        Coords.lng = userLatLng.lng;
+                        $("#ubicacionError").hide();
+                        // Habilitar formulario
+                        $("#formVendedor :input").prop("disabled", false);
+                        $("#GuardarRegistro").prop("disabled", false);
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: 'Ubicación detectada',
+                        //     text: 'Se ha obtenido tu ubicación correctamente.',
+                        //     timer: 1500,
+                        //     showConfirmButton: false
+                        // });
+                    },
+                    function (error) {
+                        console.error("Error de geolocalización:", error.message, "Código:", error.code);
+                        $("#ubicacionError").show();
+                        let errorMessage = '';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage = "No se ha otorgado permiso para acceder a la ubicación. Por favor, permite el acceso en la ventana emergente del navegador.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage = "No se pudo obtener la ubicación. Asegúrate de que el GPS esté activo y haya señal.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage = "La solicitud de ubicación tardó demasiado. Intenta de nuevo.";
+                                break;
+                            default:
+                                errorMessage = "Error desconocido al obtener la ubicación.";
+                                break;
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'No se detectó la ubicación',
+                            html: `
+                                <p style="text-align:left;">${errorMessage}</p>
+                                <p style="text-align:left;">Verifica lo siguiente:</p>
+                                <ul style="text-align:left;">
+                                    <li><b>Ubicación activada:</b> Asegúrate de que la ubicación está activada en tu celular (Ajustes > Ubicación).</li>
+                                    <li><b>Permiso del navegador:</b> Haz clic en "Permitir" en la ventana emergente del navegador.</li>
+                                    <li><b>Señal GPS:</b> Intenta moverte a un lugar con mejor señal.</li>
+                                </ul>
+                                <p>Presiona <strong>'Intentar de nuevo'</strong> después de corregir el problema.</p>
+                            `,
+                            showCancelButton: false,
+                            confirmButtonText: 'Intentar de nuevo',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                solicitarUbicacion();
+                            }
+                        });
+
+                        $("#formVendedor :input").prop("disabled", true);
+                        $("#GuardarRegistro").prop("disabled", true);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Geolocalización no soportada',
+                    text: 'Tu navegador no soporta geolocalización. Usa un navegador compatible como Chrome o Safari.',
+                    confirmButtonText: 'Ok',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+                $("#ubicacionError").show();
+                $("#formVendedor :input").prop("disabled", true);
+                $("#GuardarRegistro").prop("disabled", true);
+            }
+        }
+
+
+
+
+
+
+            map.on("click", function (e) {
+                updateMarker(e.latlng);
+            });
+
+
+            $("#fiDepartamento, #fiMunicipio, #fiColonia").on("change", function () {
+                updateMapWithAddress();
+            });
+
+            /**Función para actualizar el marcador en el mapa */
+            function updateMarker(latlng) {
+                if (currentMarker) {
+                    map.removeLayer(currentMarker);
+                }
+                currentMarker = L.marker(latlng)
+                    .addTo(map)
+                    .bindPopup(`Latitude: ${latlng.lat}, Longitude: ${latlng.lng}`)
+                    .openPopup();
+
+                Coords.lat = latlng.lat;
+                Coords.lng = latlng.lng;
+            }
+
+
+            /** Función que construye la dirección a partir de los selects */
+            function getAddressFromSelectors() {
+
+                const departamento = $("#fiDepartamento option:selected").text().trim() !== "Seleccionar Departamento"
+                    ? $("#fiDepartamento option:selected").text()
+                    : "";
+                const municipio = $("#fiMunicipio option:selected").text().trim() !== "Seleccionar Municipio"
+                    ? $("#fiMunicipio option:selected").text()
+                    : "";
+                const colonia = $("#fiColonia option:selected").text().trim() !== "Seleccionar colonia"
+                    ? $("#fiColonia option:selected").text()
+                    : "";
+
+                return [departamento, municipio, colonia].filter(Boolean).join(", ");
+            }
+
+            /** Función para actualizar el mapa según la dirección seleccionada */
+            function updateMapWithAddress() {
+                const address = getAddressFromSelectors();
+                if (!address) {
+                    ///alert("Por favor, selecciona una dirección válida.");
+                    return;
+                }
+
+                // Dispara el geocodificador interno de Leaflet-Control-Geocoder
+                $(".leaflet-control-geocoder-form input").val(address).trigger("change");
+
+                // Uso de la función geocoder de Nominatim
+                L.Control.Geocoder.nominatim().geocode(address, function (results) {
+                    if (results && results.length > 0) {
+                        const latlng = results[0].center;
+                        updateMarker(latlng);
+                        map.setView(latlng, 12);
+                    } else {
+                        ///alert("No se encontró la dirección especificada. Verifica los datos ingresados.");
+                    }
+                });
+            }
+
+
+            $('#fiDepartamento').on('change', function () {
+                descDepartamento = $(this).find('option:selected').text();
+                ListaMunicipio();
+            });
+
+            $('#fiMunicipio').on('change', function () {
+                descMunicipio = $(this).find('option:selected').text();
+                ListaColonia();
+            });
+
+            $('#fiColonia').on('change', function () {
+                descColonia = $(this).find('option:selected').text();
+            });
+        });
+
+
+        var departamento1 = 0, municipio1 = 0, poblado1 = 0, colonia1 = 0;
+        function ListaMunicipio() {
+            $('#fiMunicipio').empty();
+            municipio1 = 0;
+
+            if (departamento1 != $("#fiDepartamento").val()) {
+                $('#fiPoblado').empty();
+                poblado1 = 0;
+                $('#fiColonia').empty();
+                colonia1 = 0;
+            }
+
+            if (!$('#fiDepartamento').val()) return;
+
+            let url = '@Url.Action("ListaMunicipiosByDepartamento", "DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ CodDepartamento: Number($("#fiDepartamento").val()) }),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error en el servidor');
+                return response.json();
+            })
+            .then(data => {
+                let listParaSelect = data.map(registry => ({
+                    id: registry.fiCodMunicipio,
+                    text: registry.fcMunicipio
+                }));
+
+                $("#fiMunicipio").select2({ data: listParaSelect });
+
+                if (municipio1 == 0) {
+                    $("#fiMunicipio").val(null).trigger("change");
+                    departamento1 = $("#fiDepartamento").val();
+                } else {
+                    $("#fiMunicipio").val(municipio).trigger("change");
+                    municipio1 = 0;
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+        }
+
+
+        function ListaColonia() {
+            $('#fiColonia').empty();
+
+            let url = '@Url.Action("ListaColoniasByPoblado", "DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({
+                    CodDepartamento: Number($("#fiDepartamento").val()),
+                    CodMunicipio: Number($("#fiMunicipio").val())
+                }),
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error en el servidor');
+                return response.json();
+            })
+            .then(data => {
+                let listParaSelect = data.map(registry => ({
+                    id: registry.fiCodBarrio,
+                    text: registry.fcBarrio
+                }));
+
+                $("#fiColonia").select2({ data: listParaSelect });
+
+                if (colonia1 == 0) {
+                    $("#fiColonia").val(null).trigger("change");
+                    municipio1 = $("#fiMunicipio").val();
+                } else {
+                    $("#fiColonia").val(colonia1).trigger("change");
+                    colonia1 = 0;
+                }
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+            }
+
+
+            function obtenerParametroUrl(fiIDEnvioFormulario) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                   return urlParams.get(fiIDEnvioFormulario);
+             }
+
+
+         
+
+            //guardar
+            $("#GuardarRegistro").click(function (e) {
+                e.preventDefault();
+
+                if (!$("#formVendedor").valid()) {
+                    ToastrWarning("Advertencia", "Por favor complete todos los campos.");
+                    return;
+                }
+
+                if (!Coords.lat || !Coords.lng) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ubicación requerida',
+                        text: 'Debe activar la ubicación en su dispositivo para guardar los datos.',
+                        confirmButtonText: 'Ok'
+                    }).then(() => {
+                        solicitarUbicacion();
+                    });
+                    return;
+                }
+
+
+                const fcCiudad = descColonia + "," + descMunicipio + "," + descDepartamento;
+                const base64Image = $("#fotoCedulaData").val();
+                let fiIDEnvioFormulario = obtenerParametroUrl("tipo");
+                if (!base64Image) {
+                    ToastrWarning("Advertencia", "Debe capturar la foto de la cédula.");
+                    return;
+                }
+
+                const data = {
+                    fiIDVendedorRepartidor: @Html.Raw(Json.Encode(Model.fiIDVendedorRepartidor)),
+                    fcNombreCompleto: $("#fcPrimerNombre").val() + " " + $("#fcSegundoNombre").val() + " " + $("#fcPrimerApellido").val() + " " + $("#fcSegundoApellido").val(),
+                    fcPrimerNombre: $("#fcPrimerNombre").val(),
+                    fcSegundoNombre: $("#fcSegundoNombre").val(),
+                    fcPrimerApellido: $("#fcPrimerApellido").val(),
+                    fcSegundoApellido: $("#fcSegundoApellido").val(),
+                    fcIdentidad: $("#fcIdentidad").val(),
+                    fcEdad: $("#fcEdad").val(),
+                    fiIDOcupacion: $("#fiIDOcupacion").val(),
+                    fcCiudad: fcCiudad,
+                    fcDireccion: $("#fcDireccion").val(),
+                    fcLongitud: Coords.lng,
+                    fcLatitud: Coords.lat,
+                    fdFechaNacimiento: $("#fdFechaNacimiento").val(),
+                    fcCorreo: $("#fcCorreo").val(),
+                    fcTelefono: $("#fcTelefono").val(),
+                    fbEditar: @Html.Raw(Json.Encode(Model.fbEditar)),
+                    fiIDEnvioFormulario: fiIDEnvioFormulario,
+                    fotosbase: [
+                        {
+                            base64string: base64Image,
+                            nombrearchivo: "cedula.jpg",
+                            numimagen: 1
+                        }
+                    ]
+                };
+
+                const url = @Html.Raw(Json.Encode(Model.fbEditar))
+                    ? "@Url.Action("EditarVendedoresCalle", "PrecalificaCliente")"
+                    : "@Url.Action("CrearVendedorExterno", "PrecalificaCliente")";
+
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data.Estado) {
+                            ToastrSuccess("Operación exitosa", data.Mensaje);
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 3000);
+                        } else {
+                            ToastrError("Error", data.Mensaje);
+                        }
+                    },
+                    error: function (resp) {
+                        ToastrError("Error", resp.responseJSON?.Mensaje || "Ocurrió un error al procesar la solicitud.");
+                    }
+                });
+            });
+
+    </script>
+
+
+</body>
+</html>
+
+

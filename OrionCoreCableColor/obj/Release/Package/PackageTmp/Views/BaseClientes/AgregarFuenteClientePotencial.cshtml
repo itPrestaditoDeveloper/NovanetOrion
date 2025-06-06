@@ -1,0 +1,64 @@
+﻿
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Agregar Fuente Cliente Potenciales</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Nombre Fuente</label>
+            <input id="txtfuente" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+        </div>
+
+        <div class="col-sm-12">
+            <label class="form-control-plaintext font-weight-bold">Descripcion</label>
+            <input id="txtdescripcion" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="btnfuente" onclick="GuardarFuente()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+    </div>
+    
+</div>
+
+
+
+<script>
+    function GuardarFuente() {
+
+        var modeloEnviar = {
+            fcNombrefuenteOrigen: $(`#txtfuente`).val(),
+            fcDescripcionFuenteOrigen: $(`#txtdescripcion`).val(),
+
+        }
+
+        $.ajax({
+            url: "@Url.Action("GuardarFuenteClientePotencial", "BaseClientes")",
+            type: "POST",
+            data: { modelo: modeloEnviar },
+            success: function (datas) {
+                if (datas.CodeStatus == 200) {
+                    $("#MyModal").modal("hide");
+                    return ToastrSuccess("Exito", "Fuente Ingresado con Exito");
+
+
+                } else {
+                    return ToastrError(`Error`,`Fuente No se Pudo Ingresar por Alguna Razon`);
+                }
+
+
+            },
+            error: function (datae) {
+                var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Ingresar una nueva Fuente", Estado: false }
+                AlertaAjax(dataerror)
+            }
+        });
+    }
+</script>

@@ -1,0 +1,115 @@
+﻿
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+
+        <text>Cambiar Contratista</text>
+
+    </h2>
+
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Asignar Agencia</label>
+                        <select id="selectAgencia" class="form-select form-control">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-form-label">Comentario</label>
+                        <input id="txtcomentario" class="form-control" type="text" placeholder="Comentario del por que se cambia" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class='test col-sm-12'>
+        <br />
+        <div style='float: right;'>
+            <button type="button" id="btnGuardarContratista" class="btn btn-success">
+                Guardar Cambios
+            </button>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+    var fiIdsolicitudContratista = @ViewBag.fiSolicitudContratista;
+
+    LlenarSelect();
+    function LlenarSelect() {
+        $.ajax({
+            url: "@Url.Action("ListadoAgenciasContratista", "LlenarCampos")",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+
+                var selectAgencia = $("#selectAgencia");
+
+                selectAgencia.empty();
+                selectAgencia.append($('<option>', {
+                    value: 0,
+                    text: 'Defina un Contratista'
+                }));
+
+                $.each(data, function (index, item) {
+                    selectAgencia.append($('<option>', {
+                        value: item.fiIDContratista,
+                        text: item.fcNombreContratista
+                    }));
+                });
+
+                $("#selectAgencia").select2({ dropdownParent: $("#MyModal") }).val(null).trigger("change");
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+
+    $(`#btnGuardarContratista`).on("click", function () {
+
+        var fiidAgencia = $(`#selectAgencia`).val();
+        var comentario = $(`#txtcomentario`).val();
+
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CambiarContratistaSolicitud", "Contratista")",
+            data: { fiIdSolicitud: fiIdsolicitudContratista, fiIdcontratista: fiidAgencia, fccomentario: comentario},
+            error: function (xhr, ajaxOptions, thrownError) {
+                
+            },
+            success: function (data) {
+
+                if (data.CodeStatus == 200) {
+                    CerrarModal();
+                    return ToastrSuccess("Exito", "Contratista Cambiado Correctamente");
+                } else {
+                    ToastrError("Error",`Algo Ocurrio Mal, Favor de Notificar a Sistemas`);
+                }
+
+            }
+        });
+
+
+    })
+
+</script>

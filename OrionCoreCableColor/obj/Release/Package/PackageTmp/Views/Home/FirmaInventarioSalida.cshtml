@@ -1,0 +1,139 @@
+﻿@model OrionCoreCableColor.Models.Productos.CrearSalidaInventarioViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Entrega de Inventario
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Entrega de inventario al usuario @Model.fcDestinatario desde la bodega @Model.fcUbicacion </h2>
+        </div>
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductos">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Producto</th>
+                        <th>Serie</th>
+                        <th>Mac / Serie 2</th>
+                        <th class="text-right">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListaInventarioDetalle)
+                    {
+                        <tr>
+                            <td>@item.index</td>
+                            <td>@item.fcProducto</td>
+                            <td>@item.fcCodigoSerie1</td>
+                            <td>@item.fcCodigoSerie2</td>
+                            <td class="text-right">@item.fnCantidad.ToString("0.##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="firma1" style="width:100%;">
+
+    </div>
+
+
+    @*<a download id="btnAutorizacionProductoYServicios" class="btn btn-sm bg-success text-white" style="position: relative; margin-top: 3px; margin-left: 5px; ">
+            Enviar y Finalizar
+        </a>*@
+
+
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="GuardarFirma" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="~/Template/js/Personalized/Firma.js"></script>
+<script>
+    var modelSR = @Html.Raw(Json.Encode(Model));
+
+
+    $('#MyModalBig').on('shown.bs.modal', function (event) {
+
+        DrawCanvasFirma("#firma1", "drawCanvas", $("#firma1").width(), 500);
+
+    });
+
+
+
+
+    $("#GuardarFirma").click(function () {
+        debugger;
+        $("#GuardarFirma").hide();
+        if (estadoFirma == 0) {
+            ToastrError("", "Favor firmar el documento");
+            $("#GuardarFirma").show();
+            return;
+        }
+        var firma = dataURLtoFile(document.getElementById("drawCanvas").toDataURL('image/png'), `FirmaSalidaInventario-${modelSR.fiIDInventarioMovimientoMaestro}.png`);
+        var form_data = new FormData();
+        form_data.append("fiIDInventarioMovimientoMaestro", modelSR.fiIDInventarioMovimientoMaestro);
+        form_data.append("Firma", firma);
+        form_data.append("UsuarioPeticion", modelSR.UsuarioPeticion);
+        $.ajax({
+            url: "@Url.Action("ConfirmarSalidaInventario","Productos")",
+            method: "Post",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp) {
+                if (resp.Estado) {
+                    window.open("@Url.Action("DownloadPdf", "Base")", "_blank");
+                    $(idInventarioSeleccionado).css("display", "none");
+                    CerrarModal();
+                } else {
+                    ToastrError("", resp.Mensaje);
+                    $("#GuardarFirma").show();
+                }
+            }
+        });
+    });
+
+
+
+    $('#MyModalBig').on('hidden.bs.modal', function (e) {
+        $("#MyModalBig").off("shown.bs.modal");
+    });
+
+
+
+
+    function dataURLtoFile(dataurl, filename)
+    {
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[arr.length - 1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+</script>

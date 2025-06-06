@@ -1,0 +1,47 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.DocumentoExternoViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        <i class="fal fa-file-alt"></i> <span id="nombre">Documento</span>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="custom-file">
+            <input type="file" class="custom-file-input" id="FileExterno">
+            <label class="custom-file-label" for="customFile">Buscar Archivo</label>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#capturarFotoFactura").click();
+    });
+
+    $("#FileExterno").change(function () {
+        var file = this.files[0];
+        var form_data = new FormData();
+        form_data.append("usuarioPeticion", "@Model.UsuarioPeticion");
+        form_data.append("documento", file);
+        form_data.append("type", file.type);
+        $.ajax({
+            url: '@Url.Action("RetornarDocumento","Prestamo")',
+            type: "Post",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function () {
+                CerrarModalSignalR();
+            }
+        });
+    });
+
+
+</script>

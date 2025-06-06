@@ -1,0 +1,820 @@
+﻿
+@{
+    ViewBag.Title = "Solicitudes_Bandeja";
+}
+<style>
+
+    .animacion {
+        /*position: absolute;*/
+        animation-name: parpadeo;
+        animation-duration: 1s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        -webkit-animation-name: parpadeo;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-iteration-count: infinite;
+    }
+
+    @@-moz-keyframes parpadeo {
+        0% {
+            opacity: 1.0;
+        }
+
+        50% {
+            opacity: 0.0;
+        }
+
+        100% {
+            opacity: 1.0;
+        }
+    }
+
+    @@-webkit-keyframes parpadeo {
+        0% {
+            opacity: 1.0;
+        }
+
+        50% {
+            opacity: 0.0;
+        }
+
+        100% {
+            opacity: 1.0;
+        }
+    }
+
+    @@keyframes parpadeo {
+        0% {
+            opacity: 1.0;
+        }
+
+        50% {
+            opacity: 0.0;
+        }
+
+        100% {
+            opacity: 1.0;
+        }
+    }
+
+    .imgCircle {
+        border-radius: 50%;
+        box-shadow: 0px 0px 0px 0px #06f611;
+        animation: glow 1.5s linear(0 0%, 0.02 15.85%) infinite alternate;
+    }
+
+    @@keyframes glow {
+        to {
+            box-shadow: 0px 0px 30px 20px #06f611;
+        }
+    }
+
+
+
+</style>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Solicitudes Bandeja</h2>
+    </div>
+
+    <div class="table-responsive p-0 mb-1">
+        <div class="btn-group btn-group-toggle col-lg-12 p-0" data-toggle="buttons">
+            <label class="btn btn-secondary active cursor-pointer">
+                <input id="general" type="radio" name="filtros" value="0" />
+                General
+            </label>
+            <label class="btn btn-secondary cursor-pointer">
+                <input id="recepcion" type="radio" name="filtros" value="5" />
+                Enviado
+            </label>
+            <label class="btn btn-secondary cursor-pointer">
+                <input id="analisis" type="radio" name="filtros" value="4" />
+                Pendiente
+            </label>
+            <label class="btn btn-warning cursor-pointer">
+                <input id="campo" type="radio" name="filtros" value="2" />
+                Pendiente Instalacion
+            </label>
+            <label class="btn btn-success cursor-pointer">
+                <input id="pendientes" type="radio" name="filtros" value="6" />
+
+                Aprobado
+            </label>
+            <label class="btn btn-success cursor-pointer">
+                <input id="aprobadas" type="radio" name="filtros" value="7" />
+                Instalado
+            </label>
+
+        </div>
+    </div>
+
+
+    <div class="row mb-1  justify-content-center">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Estado Solicitud</label>
+            <select id="ddlEstado" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Aprobado">Aprobado</option>
+                <option value="Rechazado">Rechazado</option>
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Estado de la Instalacion</label>
+            <select id="ddlEstadoIsntalacion" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Asignado">Asignado</option>
+                <option value="Proceso">Proceso</option>
+                <option value="Instalado">Instalado</option>
+                <option value="Cancelado">Cancelado</option>
+                <option value="Validacion">Validacion</option>
+                <option value="Validado por soporte tecnico">Validado por soporte tecnico</option>
+
+            </select>
+        </div>
+        <div class=" col-lg-2 col-md-2 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Oficial</label>
+            <select id="ddlOficial" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Mes</label>
+            <select id="ddlMesIngreso" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6" style="display: none">
+            <label class="col-form-label">Búsqueda por Fecha</label>
+            <div class="input-daterange input-group" id="date-range">
+                <input type="text" class="form-control form-control-sm" name="fecha-minima" id="fecha-minima" />
+                <input type="text" class="form-control form-control-sm" name="fecha-maxima" id="fecha-maxima" />
+            </div>
+        </div>
+        <div class=" col-lg-2 col-md-2 col-sm-6 col-6 align-self-end" style="display: none">
+            <label class="col-form-label">Búsqueda por Año</label>
+            <input id="ddlAnioIngreso" class="form-control form-control-sm" type="text" />
+        </div>
+    </div>
+
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudes">
+                <thead>
+                    <tr>
+                        <th>Accciones</th>
+                        <th>Solicitud</th>
+                        <th>Cliente</th>
+                        <th>Telefono</th>
+                        <th>Fecha de Ingreso</th>
+                        <th>Cuota / Paquete</th>
+                        <th>Oficial</th>
+                        <th>Geolocalizacion</th>
+                        <th>Firma</th>
+                        <th>Identidad</th>
+                        <th>Pago Inicial</th>
+                        <th>Estado</th>
+                        <th>Campo</th>
+                        <th>Fecha Instalacion</th>
+                        <th>Estado Instalacion</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+    <script>
+
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        let FiltroAnio = '';
+        let filtroMes = '';
+        $('#ddlMesIngreso').on('change', function () {
+            debugger;
+            filtroMes = this.value != '' ? this.value : '';
+            MesAnio();
+        });
+
+        function ImprimirContrato(fiIDSolicitud) {
+            $.ajax({
+                url: "@Url.Action("GenerarContratoSolicitud", "Reportes")",
+                method: "Get",
+                data: { idSolicitud: fiIDSolicitud },
+
+                success: function () {
+                    window.open("@Url.Action("GetPdf", "Base")", "_blank");
+                }
+            });
+        }
+
+
+        function ImprimirPagare(fiIDSolicitud) {
+            $.ajax({
+                url: "@Url.Action("GenerarPagareSolicitud", "Reportes")",
+                method: "Get",
+                data: { idSolicitud: fiIDSolicitud },
+
+                success: function () {
+                    window.open("@Url.Action("GetPdf", "Base")", "_blank");
+                }
+            });
+        }
+
+
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+        function ShowGarantiaCliente(Nombre, Identidad,id,IDCliente) {
+            debugger;
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Identidad: Identidad, id: id, IDCliente: IDCliente }, "@Url.Action("ShowGarantiaCliente", "Solicitudes")");
+        }
+
+
+        var tablaPrincipal = $('#BandejaSolicitudes').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("LsitaSolicitudes", "Solicitudes")',
+                method: "Get",
+                dataSrc: function (data) {
+                    var opt = ''
+                    var unico = new Set();
+                    for (const item of data) {
+                        unico.add(item.NombreOficial);
+                    }
+                    for (const item of unico) {
+                        if (item == null) {
+
+                        } else {
+                            opt += `<option value="${item}">${item}</option>`
+                        }
+                    }
+                    $(`#ddlOficial`).append(opt);
+                    return data;
+                }
+            },
+            columns: [
+
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += data.fiIDEstado == 0 && data.fiIDTipoCliente != 0 ? '<a href="javascript:void(0)" onclick="ModalConfirmacion(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDFirma + ',' + data.fiIDCliente + ',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Enviar Solicitud de Firma</a>' : '';
+                        opciones += '<a href="javascript:void(0)" onclick="ModalEnvioSMS(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',\'' + data.fiIDCliente + '\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Enviar SMS</a>';
+                        opciones += '<a href="javascript:void(0)" onclick="ModalEnvioCorreo(\'' + data.fcNombre + '\',\'' + data.fcCorreo + '\',\'' + data.fiIDCliente + '\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Enviar Correo</a>';
+                        opciones += data.fiIDEstado == 0 && data.fiIDTipoCliente == 0 ? '<a href="javascript:void(0)" onclick="ShowAgregarDatosCliente(\'' + data.fcNombre + '\',\'' + data.fcIdentidad + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ',' + data.fiPlazoSeleccionado + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Agregar Datos</a>' : '';
+                        //opciones += '<a href="javascript:void(0)" onclick="ShowAgregarDatosCliente(\'' + data.fcNombre + '\',\'' + data.fcIdentidad + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ',' + data.fiPlazoSeleccionado +')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Agregar Datos</a>';
+                        opciones += data.fiIDPagoInicial == 0 && data.fiIDEstado == 2 ? '<a href="javascript:void(0)" onclick="ModalEnviarLinkPago(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',\'' + data.fcCorreo + '\',' + data.fiIDFirma + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Enviar Link Pago</a>' : '';
+                        //opciones += '<a href="javascript:void(0)" onclick="ModalEnviarLinkPago(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',\'' + data.fcCorreo + '\',' + data.fiIDFirma + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Enviar Link Pago</a>';
+                        opciones += '<a href="javascript:void(0)" onclick="ModalDetalleCliente(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Detalle de la Solicitud</a>';
+                        opciones += data.fiIDPagoInicial == 1 && data.fiIDContratista == 0 ? '<a href="javascript:void(0)" onclick="ModalGenerarOrdenCompra(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar contratista</a>' : '';
+                        opciones += data.fiIDPagoInicial == 1 ? '<a href="javascript:void(0)" onclick="ModalSolicitarOrdenCepheus(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Solicitar Orden Cepheus</a>' : '';
+                        //opciones += '<a href="javascript:void(0)" onclick="ModalGenerarOrdenCompra(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar contratista</a>';
+                        //opciones += data.fiIDPagoInicial == 1 && data.fiIDContratista == 0 && data.fiEstadoDeCampo == 1 ? '<a href="javascript:void(0)" onclick="ModalGenerarOrdenCompra(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar contratista</a>' : '';
+                        opciones += data.fiIDPagoInicial == 0 && data.fiIDEstado == 2 ? '<a href="javascript:void(0)" onclick="ModalConfirmacionPrimerPago(\'' + data.fcNombre + '\',\'' + data.fcIdentidad + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ',' + data.fnCuotaMensualMonedaNacional + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Actualizar estado Pago</a>' : '';
+                        //opciones +='<a href="javascript:void(0)" onclick="ModalConfirmacionPrimerPago(\'' + data.fcNombre + '\',\'' + data.fcIdentidad + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Actualizar estado Pago</a>';
+                        if (@Json.Encode(User.IsInRole("Orion_AccesoSolicitudesBandeja_EditarPaquete"))) {
+                            opciones += data.fiIDEstado != 2 ? '<a href="javascript:void(0)" onclick="ShowGarantiaCliente(\'' + data.fcNombre + '\',\'' + data.fcIdentidad + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Editar Paquete</a>' : '';
+                        }
+
+                        opciones += @Json.Encode(User.IsInRole("Orion_Accesso_GenerarContrato")) ? '<a href="javascript:void(0)" onclick="ImprimirContrato(\'' + data.fiIDSolicitud + '\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Generar Contrato</a>' : '';
+                        opciones += @Json.Encode(User.IsInRole("Orion_Accesso_GenerarContrato")) ? '<a href="javascript:void(0)" onclick="ImprimirPagare(\'' + data.fiIDSolicitud + '\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Generar Pagare</a>' : '';
+                        opciones += data.fiEstadoSolicitud != 2 ? '<a href="javascript:void(0)" onclick="ModalDeclinar(' + data.fiIDSolicitud + ',\'' + data.fcNombre + '\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Declinar Solicitud</a>' : '';
+                        opciones += data.fiIDEstadoInstalacion == 4 ? '<a href="javascript:void(0)" onclick="ModalGenerarSolicitudNuevoServicio(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ',' + data.fiIDCliente + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Nueva Solicitud Servicio</a>' : '';
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        //fiIDSolicitud
+                        return  `${data.fiIDSolicitud}`;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcIdentidad + ' | ' + data.fcNombre;
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcTelefono;
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacionSolicitud).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        var Moneda = '';
+
+                        if (data.fiIDMoneda == 1) {
+                            Moneda = " L. "
+
+                        } else {
+                            Moneda = " $. "
+                        }
+                        return data.fnCuotaMensual + Moneda + '<br/>' + data.fcArticulosdelContrato;
+                    }
+
+                },
+                {
+                    data: 'NombreOficial'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiUbicacionGuardada == 0) {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        else {
+                            return IrAMaps(data.fcGeolocalizacion);
+                        }
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDEstado == 0) {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        else if (data.fiIDEstado == 1) {
+                            return '<div class="badge badge-warning">Enviado</div>';
+                        }
+                        else if (data.fiIDEstado == 2) {
+                            return '<div class="badge badge-success">Aprobado</div>';
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDIdentidadSubida == 0) {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        if (data.fiIDIdentidadSubida == 1) {
+                            return '<div class="badge badge-success">Subido</div>';
+                        }
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        if (data.fiIDPagoInicial == 0) {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        else {
+                            return '<div class="badge badge-success">Aprobado</div>';
+                        }
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiEstadoSolicitud == 1) {
+                            return '<a href="javascript:void(0)" onclick="ModalEstadosSolicitud(' + data.fiIDSolicitud + ',\'' + data.fcNombre + '\')" ><div class="badge badge-secondary">Pendiente</div></a> ';
+                        }
+                        else if (data.fiEstadoSolicitud == 2) {
+                            return '<a href="javascript:void(0)" onclick="ModalEstadosSolicitud(' + data.fiIDSolicitud + ',\'' + data.fcNombre + '\')" ><div class="badge badge-success">Aprobado</div></a>';
+                        }
+                        else if (data.fiEstadoSolicitud == 3) {
+                            return '<div class="badge badge-danger">Rechazado</div>';
+                        }
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        if (data.fiEstadoDeCampo == 0) {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        else if (data.fiEstadoDeCampo == 1) {
+                            return '<div class="badge badge-success">Aprobado</div>';
+                        }
+                        else if (data.fiEstadoDeCampo == 2) {
+                            return '<div class="badge badge-warning">Rechazada</div>';
+                        }
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        var fecha = moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY");
+                        if (fecha == "01/01/1900") {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        } else {
+                            return moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY");
+                        }
+
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDEstadoInstalacion == 4 || data.fiIDEstadoInstalacion == 7) {
+                            return `<a class="cursor-zoom-in " href="@(Url.Action("ViewRevisarDetalleInstalacion","Tenico"))?idSolicitudInstalacion=${data.fiIDContratistaSolicitud}"  ><div class="badge badge-${data.fcClase}">${data.fcDescripcion}</div></a>`;
+                        }
+                        if (data.fiIDContratistaSolicitud != 0 || data.fiIDEstadoInstalacion == 4 || data.fiIDEstadoInstalacion == 7) {
+                            //return `<div class="animacion badge badge-${data.fcClase}">${data.fcDescripcion}</div>`;
+                            return `<div class="animacion badge badge-${data.fcClase}">${data.fcDescripcion} </br> Dia: ${data.fiDiasTranscurridos}</div>`;
+                        }
+                        else {
+                            return `<div class=" badge badge-${data.fcClase}">${data.fcDescripcion}</div>`;
+                        }
+
+                    }
+
+                }
+
+
+
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    messageTop: "Solicitud Clientes",
+                    filename: "Clientes",
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 5, 6, 13, 14]
+                        // columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    titleAttr: 'Generate CSV',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copy',
+                    titleAttr: 'Copy to clipboard',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    titleAttr: 'Print Table',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ],
+            initComplete: function () {
+                //chat.on("actualizarONU", function (model) {
+                //    var id = "#" + model.fiIDOrionSolicitud;
+                //    //var icon = $(id);
+                //    var table = $.fn.dataTable.Api('#BandejaSolicitudes');
+                //    var data = table.rows().data().toArray();
+                //    var onuSeleccionada = data.find(x => x.fiIDSolicitud == model.fiIDOrionSolicitud);
+                    
+                //    if (onuSeleccionada == null || typeof onuSeleccionada == "undefined") {
+                //        return;
+                //    }
+
+                //    var nodes = nodes = table.rows().nodes().toArray();
+                //    var node = nodes.find(x => table.row(x).data().fiIDSolicitud == model.fiIDOrionSolicitud);
+                //    var icon = $(node).find(`td i[id=${model.fiIDOrionSolicitud}]`);
+                //    if (model.fbConectado) {
+                //        $(icon).removeClass("text-warning");
+                //        $(icon).removeClass("text-danger");
+                //        $(icon).addClass("text-success");
+                //        $(icon).addClass("imgCircle");
+                //        $(icon).css("background-color", "#1dc9b7");
+
+                //    } else {
+                //        $(icon).removeClass("text-warning");
+                //        $(icon).addClass("text-danger");
+                //        $(icon).removeClass("text-success");
+                //        $(icon).removeClass("imgCircle");
+                //        $(icon).css("background-color", "#fd3995");
+                //    }
+                //});
+            }
+        });
+
+        $("input[type=radio][name=filtros]").change(function () {
+
+            let filtro = this.value;
+            tablaPrincipal.columns([5,6 , 7, 8,9,10,11,12,13,14]).search("").draw();
+
+            switch (filtro) {
+
+                case "0":
+                    tablaPrincipal.columns([5, 6, 7, 8,9,10,11,12,13,14]).search("").draw();
+                    break;
+                case "5": // Enviado
+                    tablaPrincipal.columns(8).search("Enviado").draw();
+                    break;
+                case "4": //Pendiente
+                    tablaPrincipal.columns(11).search("Pendiente").draw();
+                    break;
+                case "2": // Pendiente instalacion
+                    tablaPrincipal.columns(14).search("Pendiente").draw();
+                    break;
+                case "6": //  Aprobado
+                    tablaPrincipal.columns(11).search("Aprobado").draw();
+                    break;
+                case "7": //  instalacion
+                    tablaPrincipal.columns(14).search("Instalado").draw();
+                    break;
+                default:
+                    tablaPrincipal.columns([5, 6, 7, 8,9,10,11,12,13,14]).search("").draw();
+            }
+        });
+
+        function ModalConfirmacion(Nombre, Telefono, IDFirma, IDCliente, idSolicitud) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma, IDCliente: IDCliente, IdSolicitudes: idSolicitud}, "@Url.Action("ConfrimacionNumero", "Solicitudes")");
+
+            @*$.ajax({
+                url: "@Url.Action("ConfrimacionNumero", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma},
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });*@
+
+        }
+
+        function ModalDeclinar(IDSol, Nombre) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Solicitud: IDSol}, "@Url.Action("ModalDeclinarSolicitd", "Solicitudes")");
+
+        }
+        function ModalEstadosSolicitud(IDSol, Nombre) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Solicitud: IDSol}, "@Url.Action("ModalEstadosSolicitud", "Solicitudes")");
+
+        }
+
+
+        function ModalEnvioSMS(Nombre, Telefono,IDCliente) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDCliente: IDCliente}, "@Url.Action("ModalEnvioSMS", "Solicitudes")");
+
+            @*$.ajax({
+                url: "@Url.Action("ConfrimacionNumero", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma},
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });*@
+
+        }
+
+        function ModalEnvioCorreo(Nombre, Correo, IDCliente) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Correo: Correo, IDCliente: IDCliente }, "@Url.Action("ModalEnvioCorreo", "Solicitudes")");
+
+            @*$.ajax({
+                url: "@Url.Action("ConfrimacionNumero", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma},
+                success: function (resp) {
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });*@
+
+        }
+
+        function ModalConfirmacionCrearPrestamo(IdCliente, Identidad, IDSolicitud) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("ConfirmacionPrestamo", "Solicitudes")",
+                method: "get",
+                data: { IdCliente: IdCliente, Identidad: Identidad, IDSolicitud: IDSolicitud},
+                success: function (resp) {
+                    //ShowModalBig(resp);
+                    ShowModalSmall(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function ModalDetalleCliente(Nombre, Telefono, IDSolicitud) {
+
+            $.ajax({
+                url: "@Url.Action("ModalDetalleCliente", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud },
+                success: function (resp) {
+
+                    ShowModalBigScroll(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function ModalEnviarLinkPago(Nombre, Telefono, Correo, IDFirma) {
+            debugger;
+            // VerModalSmConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma }, "@Url.Action("ConfrimacionNumero", "Solicitudes")");
+            $.ajax({
+                url: "@Url.Action("ModalEnviarLinkPago", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma, Correo : Correo },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function ModalGenerarOrdenCompra(Nombre, Telefono, IDSolicitud, idCliente) {
+            debugger;
+            // VerModalSmConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDFirma: IDFirma }, "@Url.Action("ConfrimacionNumero", "Solicitudes")");
+            $.ajax({
+                url: "@Url.Action("ModalGenerarSolicitudContratista", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud, idCliente: idCliente   },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function ModalSolicitarOrdenCepheus(Nombre, Telefono, IDSolicitud, idCliente) {
+          
+          //  VerModalSmConObjetoDeParametro({ Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud, idCliente: idCliente }, "@Url.Action("ModalGenerarSolicitudCepheus", "Solicitudes")");
+            $.ajax({
+                url: "@Url.Action("ModalGenerarSolicitudCepheus", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud, idCliente: idCliente   },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+        function ModalGenerarSolicitudNuevoServicio(Nombre, Telefono, IDSolicitud, idCliente) {
+            $.ajax({
+                url: "@Url.Action("ModalGenerarSolicitudNuevoServicio", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud, idCliente: idCliente   },
+                success: function (resp) {
+                    //ShowModalSmall(resp)
+                    ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        function ModalConfirmacionPrimerPago(Nombre, Identidad, IDSolicitud, idCliente, ValorMonedaNacional ) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Identidad: Identidad, IDSolicitud: IDSolicitud, idCliente: idCliente, ValorMonedaNacional: ValorMonedaNacional }, "@Url.Action("ModalEnviarComprobantePago", "Solicitudes")");
+        }
+        function ShowAgregarDatosCliente(Nombre, Identidad, IDSolicitud, idCliente, fiPlazoSeleccionado) {
+
+            VerModalConObjetoDeParametro({ Nombre: Nombre, Identidad: Identidad, IDSolicitud: IDSolicitud, idCliente: idCliente, fiPlazoSeleccionado }, "@Url.Action("ModalAgregarDatosCliente", "Solicitudes")");
+        }
+        function ShowDocumentoInstalacion(id) {
+            debugger;
+            alert("Prueba");
+        }
+
+
+        function IrAMaps(Localizacion) {
+            let Latitud = Localizacion.split(',')[0];
+            let Longitud = Localizacion.split(',')[1];
+            let link = `https://www.google.com/maps?z=12&t=k&q=${Latitud},${Longitud}`;
+            let a = `<a class="btn btn-sm bg-success text-white" href="${link}" target="_blank"><i class="fal fa-map-marker-alt"></i>Google Maps</a>`;
+            //<i class="fa fa-google fa-fw"></i>
+            return a;
+        }
+        function MesAnio() {
+            tablaPrincipal.columns(13).search(FiltroAnio + '/' + filtroMes + '/').draw();
+        }
+        /* busqueda por Estado*/
+        $('#ddlEstado').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(10).search(this.value).draw();
+        });
+        $('#ddlEstadoIsntalacion').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(14).search(this.value).draw();
+        });
+
+        $('#ddlOficial').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(6).search(this.value).draw();
+        });
+
+        chat.client.actualizarBandeja = function (solicitud) {
+            debugger;
+            var tabla = $.fn.dataTable.Api("#BandejaSolicitudes");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIDSolicitud == solicitud.fiIDSolicitud);
+            tabla.row(node).data(solicitud).draw(false);
+        }
+
+        function ConvertirADecimal(nStr) {
+
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        }
+
+    </script>
+}
+

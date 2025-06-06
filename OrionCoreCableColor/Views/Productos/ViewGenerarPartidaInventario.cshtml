@@ -1,0 +1,216 @@
+﻿@model OrionCoreCableColor.Models.Contabilidad.CrearPartidaViewModel
+
+<style>
+
+    .bot-border {
+        border-bottom: 1px #f8f8f8 solid;
+        margin: 5px 0 5px 0
+    }
+</style>
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Generar Partida Contable de Inventario
+    </h2>
+    <button type="button" class="close" data-dismiss="modal" id="cerrarmodal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+<div class="modal-body">
+
+    <div class="row" id="ContentPartidaImprimir">
+        <div class="col-md-4">
+            <div class="form-group">
+
+                @Html.LabelFor(model => model.fdFechaPartida, htmlAttributes: new { @class = "control-label " })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fdFechaPartida, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fdFechaPartida, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcReferencia, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcReferencia, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcReferencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fcSinopsis, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm" style="width:100%;">
+                            @Html.TextAreaFor(model => model.fcSinopsis, new { @class = "form-control", @rows = "4" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fcSinopsis, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+
+            <dl class="dl-horizontal">
+
+
+
+
+                @*<dt style="text-align: left!important;">
+                        @Html.DisplayNameFor(model => model.fcReferencia):
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.fcReferencia)
+                    </dd>
+
+
+
+                    <dt style="text-align: left!important;">
+                        @Html.DisplayNameFor(model => model.fcSinopsis):
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.fcSinopsis)
+                    </dd>*@
+
+                <dt style="text-align: left!important;">
+                    @Html.DisplayNameFor(model => model.fnValorPartida):
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.fnValorPartida)
+                </dd>
+
+
+            </dl>
+
+
+        </div>
+
+        @*<div class="col-sm-4">
+
+
+                <div class="form-group text-lg text-bold">
+                    @Html.LabelFor(model => model.fnValorPartida, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm" style="width:100%;">
+                        @Model.SimboloMoneda  @Model.fnValorPartida.ToString("n")
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fnValorPartida, "", new { @class = "text-danger" })
+                </div>
+
+            </div>*@
+
+        <div class="col-sm-12">
+
+
+
+            <table class="table table-responsive table-bordered table-hover" style="width:100%;" id="ViewTablaDetallePartidas">
+                <thead>
+                    <tr>
+                        <th style="width:10px;">#</th>
+                        <th>Cuenta Contable</th>
+                        <th style="width:15%;">Descripcion</th>
+                        @*<th>Doc</th>*@
+                        <th>Ref</th>
+                        <th>Aux</th>
+
+                        <th style="width:10px;">Prog.</th>
+                        <th style="width:10px;">Fondo</th>
+                        <th style="width:10px;">C.C.</th>
+                        <th style="width:50px;">DEBE</th>
+                        <th style="width:15px;">HABER</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.ListaDetalle)
+                    {
+                        if (item.RevisionRequerida)
+                        {
+                            <tr class="danger">
+                                <td>@item.fiIDFila</td>
+                                @if (string.IsNullOrEmpty(item.fcCuentaContable.Trim()))
+                                {
+                                    <td class="warning">@item.fcCuentaContable</td>
+                                }
+                                else
+                                {
+                                    <td>@item.fcCuentaContable</td>
+                                }
+
+                                <td>@item.DescripcionCuenta</td>
+                                @*<td>@item.fcDocumento </td>*@
+                                <td>@item.fcReferenciaDetalle </td>
+                                <td>@item.fcAuxiliarCodigo </td>
+                                <td>@item.fcPrograma </td>
+                                <td>@item.fcFondo</td>
+                                <td>@item.fcCentrodeCosto</td>
+                                <td class="text-right">@item.fnDebito.ToString("n")</td>
+                                <td class="text-right">@item.fnCredito.ToString("n")</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@item.fiIDFila</td>
+                                <td>@item.fcCuentaContable</td>
+                                <td>@item.DescripcionCuenta</td>
+                                @*<td>@item.fcDocumento </td>*@
+                                <td>@item.fcReferenciaDetalle </td>
+                                <td>@item.fcAuxiliarCodigo </td>
+                                <td>@item.fcPrograma </td>
+                                <td>@item.fcFondo</td>
+                                <td>@item.fcCentrodeCosto</td>
+                                <td class="text-right">@item.fnDebito.ToString("n")</td>
+                                <td class="text-right">@item.fnCredito.ToString("n")</td>
+                            </tr>
+                        }
+
+                    }
+
+
+                </tbody>
+
+                <tfooter>
+                    <tr class="" id="TotalRow">
+
+                        <td colspan="8" class="text-right">TOTALES</td>
+                        <td class="text-right">@Model.SimboloMoneda @Model.ListaDetalle.Sum(z => z.fnDebito).ToString("n")</td>
+                        <td class="text-right">@Model.SimboloMoneda @Model.ListaDetalle.Sum(z => z.fnCredito).ToString("n")</td>
+                    </tr>
+
+                </tfooter>
+            </table>
+
+            
+
+            <div class="modal-footer">
+
+                <button data-dismiss="modal" class="btn btn-link btn-lg pull-left text-danger" type="button"><i class="text-lg ion-close-round"></i> Cancelar</button>
+
+               
+                    <button type="button" class="btn btn-link btn-lg text-success" onclick="AutorizarPlanilla()"><i class="text-lg ion-checkmark-round"></i> Confirmar y enviar a contabilidad</button>
+                
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+</div>

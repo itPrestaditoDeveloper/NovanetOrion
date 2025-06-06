@@ -1,0 +1,113 @@
+﻿@model OrionCoreCableColor.Models.Productos.CrearSalidaInventarioViewModel
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Entrega de Inventario
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Entrega de inventario al usuario @Model.fcDestinatario desde la bodega @Model.fcUbicacion </h2>
+        </div>
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaProductos">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Producto</th>
+                        <th>Serie</th>
+                        <th>Mac / Serie 2</th>
+                        <th class="text-right">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListaInventarioDetalle)
+                    {
+                        <tr>
+                            <td>@item.index</td>
+                            <td>@item.fcProducto</td>
+                            <td>@item.fcCodigoSerie1</td>
+                            <td>@item.fcCodigoSerie2</td>
+                            <td class="text-right">@item.fnCantidad.ToString("0.##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row" id="BtnEnviar">
+        <div class="col-sm-4">
+            <select class="form-control" id="selectUsuarios">
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-success" id="enviarFormulario">Enviar</button>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="Guardar" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    debugger;
+    var model = @Html.Raw(Json.Encode(Model));
+    var usuariosConectados = [];
+    $("#selectUsuarios").select2({ dropdownParent: $("#MyModalBig") });
+
+
+    chat.on('insertarUsuarios', function (resp, userPeticion) {
+        if ("@User.Identity.Name" == userPeticion) {
+            if (!usuariosConectados.some(x => x.UserName == resp.UserName)) {
+                usuariosConectados.push(resp);
+                let newOption = new Option(resp.UserName, resp.UserName, false, false);
+                $("#selectUsuarios").append(newOption).trigger("change");
+            }
+        }
+        
+    });
+
+
+
+    $.ajax({
+        url: "@Url.Action("GetUsuariosConectados","Base")",
+        method: "Get",
+        success: function (resp) {
+
+            //$("#BtnEnviar").append();
+        }
+    });
+
+
+
+
+    $(document).on("hidden.bs.modal", "#MyModalBig", function () {
+        chat.off("insertarUsuarios");
+    });
+
+    $("#enviarFormulario").click(function () {
+        var usuarioSeleccionado = usuariosConectados.find(x => x.UserName == $("#selectUsuarios").val());
+        $.ajax({
+            url: "@Url.Action("EnviarModalFirmaSalidaInventario", "Productos")",
+            type: "Post",
+            data: { fiIDInventarioMovimientoMaestro: model.fiIDInventarioMovimientoMaestro, usuario: usuarioSeleccionado, usuarioPeticion: "@User.Identity.Name" },
+            success: function (resp) {
+                CerrarModal();
+            }
+        });
+        
+    });
+</script>

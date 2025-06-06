@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "ViewReiniciarGeoReferencia";
+}
+
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Reiniciar Geo Referencia</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    @*<form >*@
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+
+                    <div class="btn-group btn-group-toggle col-lg-12 p-0 nav nav-pills" data-toggle="buttons">
+                        <label class="btn nav-link cursor-pointer">
+                            <input id="aprobadas" type="radio" name="reiniciogeo" value="1" />
+                            Reiniciar
+                        </label>
+                        <label class="btn nav-link cursor-pointer">
+                            <input id="general" type="radio" name="reiniciogeo" value="2" />
+                            Reiniciado Manual
+                        </label>
+                    </div>
+
+                    <div class="" id="divgeolocaclizacion" style="display:none">
+
+                        <input id="txtidsolicitud" class="form-control mascara-enteros text-left" value="@ViewBag.IdSolicitud" type="tel" style="text-align: right; display:none">
+                        <input id="txtidcliente" class="form-control mascara-enteros text-left" value="@ViewBag.IdCliente" type="tel" style="text-align: right; display:none">
+                        <label class="form-control-plaintext font-weight-bold">Geo Lozalizacion</label>
+                        <input id="txtgeolocalizacion" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+                    </div>
+                </div>
+                <label class="form-control-plaintext font-weight-bold">Observaciones</label>
+                <input id="txtobservaciones" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+            <button class="btn btn-success" id="reiniciogeo" onclick="GuardarBitacora()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+        </div>
+    @*</form>*@
+</div>
+
+<script>
+    var opcion = 0;
+
+    $("input[type=radio][name=reiniciogeo]").change(function () {
+        opcion = this.value;
+
+        if (opcion == 2) {
+            $('#divgeolocaclizacion').show();
+        } else {
+            $('#divgeolocaclizacion').hide();
+        }
+
+    });
+
+    function GuardarBitacora() {
+        if (opcion == 0) {
+            ToastrError("Error", "Seleccione una Opcion");
+        } else {
+            var observaciones = $(`#txtobservaciones`).val();
+            var geoloca = $(`#txtgeolocalizacion`).val();
+            var idsol = $(`#txtidsolicitud`).val();
+            var idclient = $(`#txtidcliente`).val();
+            //GuardarVitacorahistorial
+            $.ajax({
+                url: "@Url.Action("CambiarGeoReferencia", "Manto")",
+                type: "POST",
+                data: { IdCliente: idsol, GeoReinicio: opcion, locaclizar: geoloca},
+                success: function (datas) {
+                    console.log(datas);
+                    var resultado = datas[0];
+                    if (resultado.fiMensaje == 1) {
+                        
+                        $.ajax({
+                            url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                            type: "POST",
+                            data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: observaciones, Opcion: 'Reiniciar Geo Localizacion'},
+                            success: function (respuesta) {
+                                console.log(respuesta);
+                                CerrarModal();
+                                AlertaDinamicas(true, 'Exito', 'Se Reinicio la Geolocalizacion Correctamente', 1)
+                                
+                            },
+                            error: function (respuesta) {
+                                AlertaDinamicas(false, 'Error', 'Error Al querer Reiniciar Geo Referencia', 2);
+                            }
+                        })
+                    }
+                    if (resultado.fiMensaje == 0) {
+                        AlertaDinamicas(false, 'Error', 'Error Al querer Reiniciar Geo Referencia', 2);
+                    }
+                    
+                    //console.log(`Entro en la funcion que furuncia`);
+                },
+                error: function (datae) {
+                    AlertaDinamicas(false, 'Error', 'Error Al querer Reiniciar Geo Referencia', 2);
+                }
+            });
+        }
+    }
+
+    function AlertaDinamicas(estadoalerta,tituloalerta, mensajealerta,tipoAlerta) {
+        if (tipoAlerta == 1) {
+            var dataParaAlert = { Estado: estadoalerta, Titulo: tituloalerta, Mensaje: mensajealerta };
+            AlertaAjax(dataParaAlert);
+
+        }
+        if (tipoAlerta == 2) {
+            var dataerror = { Titulo: tituloalerta, Mensaje: mensajealerta, Estado: estadoalerta }
+            AlertaAjax(dataerror)
+        }
+    }
+
+</script>

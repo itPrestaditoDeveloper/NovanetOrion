@@ -1,0 +1,76 @@
+﻿@model OrionCoreCableColor.Models.Contratista.contratistaAsignacionViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Asignar Tecnico a Instalación @Model.fiIDSolicitudInstalacion</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="control-label">Seleccione Tecnico</label>
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            @*<span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>*@
+                        </div>
+                        @Html.DropDownListFor(model => model.fiIDTecnico, new SelectList(ViewBag.ListadoTecnico, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fiIDTecnico, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    
+    $("#btnConfirmarEnvio").click(function () {
+        debugger;
+        let fiIDSolicitudInstalacion = '@Model.fiIDSolicitudInstalacion';
+        let fiIDTecnico=$("#fiIDTecnico").val()
+       // var token = generarRandom(7);
+        $.ajax({
+                url: "@Url.Action("AsignarSolicitudContratistaSinQR", "Contratista")",
+            type: "POST",
+            data: { fiIDSolicitudInstalacion: fiIDSolicitudInstalacion, fiIDTecnico: fiIDTecnico, cliente: '@Model.cliente', ubicacion: '@Model.ubicacion' },
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+</script>

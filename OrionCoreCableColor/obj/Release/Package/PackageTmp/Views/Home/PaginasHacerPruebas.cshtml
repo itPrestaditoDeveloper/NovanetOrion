@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cámara con Cuadros Transparentes</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            position: relative;
+            width: 640px;
+            height: 480px;
+        }
+
+        /* Estilo para el video */
+        #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Estilo para el canvas */
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Video de la cámara -->
+        <video id="video" autoplay muted></video>
+
+        <!-- Canvas que contiene la imagen y los cuadros transparentes -->
+        <canvas id="overlay"></canvas>
+    </div>
+
+    <button id="startButton">Iniciar Cámara Trasera</button>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('overlay');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+        const container = document.querySelector('.container');
+
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+
+        const fondo = new Image();
+        fondo.src = '../Imagenes/Identidad Vacia.jpeg'; // Ruta de la imagen subida
+
+        // Dibujar la imagen de fondo con cuadros transparentes
+        fondo.onload = () => {
+            ctx.drawImage(fondo, 0, 0, canvas.width, canvas.height);
+
+            // Crear cuadros transparentes
+            crearCuadrosTransparentes();
+        };
+
+        // Dibujar cuadros transparentes
+        function crearCuadrosTransparentes() {
+            // Cuadro 1
+            ctx.clearRect(215, 130, 300, 30);  // NOMBRE
+
+            // Cuadro 2
+            ctx.clearRect(215, 185, 300, 30); // APELLIDO
+
+            // Cuadro 3
+            ctx.clearRect(215, 240, 180, 30); // NACIMIENTO
+
+            // Cuadro 4
+            ctx.clearRect(415, 240, 210, 30); // IDENTIDAD
+
+            // Cuadro 3
+            ctx.clearRect(215, 295, 180, 30); // NACIONALIDAD
+
+            // Cuadro 4
+            ctx.clearRect(425, 295, 180, 30); // FECHA EXPIRACION
+
+            // Cuadro 4
+            ctx.clearRect(215, 350, 180, 30); // LUGAR NACIMINETO
+        }
+
+        // Función para acceder a la cámara
+        startButton.addEventListener('click', function() {
+            navigator.mediaDevices.getUserMedia({
+                video: { facingMode: { exact: "environment" } } // Cámara trasera
+            })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.log("Error al acceder a la cámara: " + err);
+            });
+        });
+    </script>
+</body>
+</html>

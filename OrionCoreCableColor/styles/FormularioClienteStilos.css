@@ -1,0 +1,162 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+    /* Asegurarse de que los círculos no causen scroll */
+}
+
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    /*min-width:200px;*/
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    /* Asegurar que el formulario esté por encima de los círculos */
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    /* Ajustar la altura para permitir scroll */
+    overflow: hidden;
+    /* Ocultar el contenido que se desplaza fuera del contenedor */
+}
+
+    .form-container h1 {
+        font-size: 18px;
+        margin-bottom: 20px;
+        position: relative;
+        /* Asegurar que el título esté en el flujo del documento */
+        z-index: 20;
+        /* Asegurar que el título esté por encima del formulario */
+        background-color: white;
+        /* Fondo blanco para el título */
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+.form-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    /* Permitir scroll dentro del contenedor del formulario */
+    padding: 0 20px;
+    /* Añadir padding para que los campos no estén pegados a los bordes */
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+    button:hover {
+        background-color: #e65c00;
+    }
+
+.back-button {
+    background-color: #ccc;
+    color: black;
+}
+
+    .back-button:hover {
+        background-color: #999;
+    }
+
+body::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: #ff6600;
+    border-radius: 50%;
+    z-index: -1;
+    /* Colocar el círculo anaranjado detrás del contenido */
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: #6633cc;
+    border-radius: 50%;
+    z-index: -1;
+    /* Colocar el círculo morado detrás del contenido */
+}
+
+.form-content {
+    width: 100%;
+    transition: transform 0.5s ease-in-out;
+    padding: 20px;
+    /* Añadir padding para que los campos no estén pegados a los bordes */
+    box-sizing: border-box;
+}
+
+    .form-content:not(.active) {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        /* Cambiar a -100% para que aparezca desde la izquierda */
+    }
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .form-container {
+        padding: 15px;
+    }
+
+        .form-container h1 {
+            font-size: 16px;
+        }
+
+    button {
+        width: calc(50% - 5px);
+        margin-bottom: 10px;
+    }
+
+    .back-button {
+        width: calc(50% - 5px);
+    }
+}

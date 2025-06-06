@@ -1,0 +1,588 @@
+﻿<div class="row">
+    <div class="col-xl-12">
+        <div class="row">
+
+            <div class="col-xl-6" style="display:block">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Grafica <span class="fw-300"><i>De las Gestiones</i></span>
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content" id="idgestion">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6" style="display:block">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Filtro Por<span class="fw-300"><i>Usuarios</i></span>
+                        </h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <label class="form-check-label">Agente</label>
+                            <select id="selectUsuarios" class="form-select form-control">
+                            </select>
+                        </div>
+                        <div class="panel-content">
+                            <label class="form-label">Date Format Alt</label>
+                            <input id="idtiempo" type="text" placeholder="" data-inputmask="'mask': '99/99/9999'" class="form-control">
+                            <span class="help-block">dd-mm-yyyy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6" style="display:block">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Llamadas <span class="fw-300"><i>Por Hora</i></span>
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div id="tipogestionCallCenter">
+                                <canvas style="width:100%; height:300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-xl-6" style="display:block">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            Gestion <span class="fw-300"><i>Tipo Gestion</i></span>
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content" id="idtipogestion">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script src="~/Content/js/statistics/ApexchartEchoaMano.js"></script>
+    <script src="~/Content/js/formplugins/inputmask/inputmask.bundle.js"></script>
+
+    <script>
+        var datosparaUso = [];
+
+        $('#selectUsuarios').change(function () {
+            //debugger;
+
+            var data = $(this).text();
+            var selectElement = document.getElementById("selectUsuarios");
+            var selectedText = selectElement.options[selectElement.selectedIndex].text;
+
+            console.log(selectedText);
+            const groupedDataObj = groupByAndSumFilt(datosparaUso, `fcGestion`, `fiCantidadGestiones`, 'fcNombreCorto', selectedText);
+            const groupedData = Object.values(groupedDataObj);
+            //FiltroAgente(data);
+            console.log(`esto es el filtro que se hacer`);
+            //console.log(groupedData);
+            grafica(groupedData)
+
+            graficosTiempo();
+
+        });
+
+        
+        function LlenarCampos() {
+            $.ajax({
+                url: "@Url.Action("LlenarDatosBaseCallCenter", "BaseClientes")",
+                type: "GET",
+                success: function (respuesta) {
+                    //console.log(respuesta);
+                    datosparaUso = respuesta;
+
+                    const groupedDataObj = groupByAndSum(respuesta, `fcGestion`, `fiCantidadGestiones`);
+                    //console.log(groupedDataObj);
+                    const groupedData = Object.values(groupedDataObj);
+
+
+                    //console.log(groupedData);
+                    grafica(groupedData);
+
+                    var opt = ''
+                    var unico = new Set();
+                    for (const item of respuesta) {
+                        unico.add(`${item.fiIDUsuario}-${item.fcNombreCorto}`);
+                    }
+                    //console.log(unico);
+                    for (const item of unico) {
+                        if (item == null) {
+
+                        } else {
+                            var idagente = item.split('-');
+                            opt += `<option value="${idagente[0]}">${idagente[1]}</option>`
+                        }
+                    }
+                    $(`#selectUsuarios`).append(opt);
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+        function FiltroAgente(IDAgente)
+        {
+            //debugger;
+            $('#TablaClientesPagoHoy').DataTable({
+                autoWidth: true,
+                responsive: true,
+                destroy: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+                dom: 'Bfrtip',
+            order: [[6, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListaBaseClientePorAgente", "BaseClientes")',
+                  method: "Get",
+                  data: { IDUsuario: IDAgente },
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+                columns: [
+
+                    {
+                        data: null,
+                        render: function (data) {
+
+                            var opciones = `<div class='dropdown d-inline-block dropleft'>
+                                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>\n\t\t\t\t\t\t\t\t<i class=\"fal fa-ellipsis-v\"></i>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t
+                                    <div class='dropdown-menu'>`
+
+                            //opciones += `<a onclick="agregarBitacora(${data.fiIDCliente},'${data.fcTelefonoContacto}','${data.fcTelefonosAdicionales}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Agregar Bitacora</a>`;
+                            opciones += `<a onclick="VerDetalleCliente(${data.fiIDCliente})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Detalle Cliente</a>`;
+
+                            opciones += '</div></div>';
+                            return opciones;
+                        }
+                    },
+
+                    {
+                        data: "fcIdentidad",
+                    },
+                    {
+                        data: "fcNombreCliente",
+
+                    },
+                    {
+                        data: 'fcCiudad'
+                    },
+                    {
+                        data: "fcTelefonoContacto",
+
+                    },
+                    {
+                        data: "fcTelefonosAdicionales",
+
+                    },
+                    {
+                        data: null,
+                        render: function (data) {
+                            var opt = "";
+                            if (data.fdFechaUltimaGestion == null || data.fdFechaUltimaGestion == "") {
+
+                            } else {
+                                opt = moment(data.fdFechaUltimaGestion).locale('es').format('YYYY/MM/DD hh:mm a');
+                            }
+                            return opt;
+                        }
+
+                    },
+                    {
+                        data: "fcComentarioGestion",
+
+                    },
+                    {
+                        data: null,
+                        render: function (data) {
+
+                            return data.fcGestion;
+                        }
+                    },
+                ],
+                buttons: [
+
+                    //{
+                    //    extend: 'pdfHtml5',
+                    //    text: 'PDF',
+                    //    titleAttr: 'Generate PDF',
+                    //    className: 'btn-outline-danger btn-sm mr-1'
+                    //},
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        titleAttr: 'Generate Excel',
+                        className: 'btn-outline-success btn-sm mr-1',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8,9]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'CSV',
+                        titleAttr: 'Generate CSV',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copy',
+                        titleAttr: 'Copy to clipboard',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        titleAttr: 'Print Table',
+                        className: 'btn-outline-primary btn-sm'
+                    }
+                ]
+
+            });
+        }
+
+
+
+        function VerDetalleCliente(idcliente) {
+            $.ajax({
+                url: "@Url.Action("DetalleCliente", "BaseClientes")",
+                data: { ID: idcliente},
+                type: "GET",
+                success: function (respuesta) {
+                    ShowModalBig(respuesta)
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+        function grafica(datos) {
+            //debugger;
+            //Grafica para Incidentes por area Conteo
+            $(`#idgestion`).empty();
+            $(`#idgestion`).append(`<div id="chartAvanceGlobal" style="width: 100%; height: 1px;">
+                            </div>`);
+
+
+            var labels = [];
+            for (var i = 0; i < datos.length; i++) {
+                labels.push(datos[i].fcGestion)
+            }
+
+            var valores = [];
+            for (var i = 0; i < datos.length; i++) {
+                valores.push(datos[i].fiCantidadGestiones)
+            }
+
+            //debugger;
+            var optionsTicketArea = {
+                labels: labels,
+                series: valores,
+                chart: {
+                    type: 'pie',
+                },
+                stroke: {
+                    colors: ['#fff']
+                },
+                fill: {
+                    opacity: 0.8
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chartTicketArea = new ApexCharts(document.querySelector("#chartAvanceGlobal"), optionsTicketArea);
+            chartTicketArea.render();
+            //fin
+        }
+
+        
+        function groupBy(array, key) {
+            return array.reduce((accumulator, item) => {
+                const groupKey = item[key];
+                if (!accumulator[groupKey]) {
+                    accumulator[groupKey] = [];
+                }
+                accumulator[groupKey].push(item);
+                return accumulator;
+            }, {});
+        }
+
+        function groupByAndSum(array, groupKey, sumKey) {
+            return array.reduce((accumulator, item) => {
+                const key = item[groupKey];
+                if (!accumulator[key]) {
+                    // Si la clave no existe, se inicializa con un objeto que incluye el groupKey y el sumKey inicializado en 0
+                    accumulator[key] = {
+                        [groupKey]: key,
+                        [sumKey]: 0
+                    };
+                }
+                // Sumar el campo 'sumKey' al total del grupo
+                accumulator[key][sumKey] += item[sumKey];
+                return accumulator;
+            }, {});
+        }
+
+
+        function groupByAndSumFilt(array, groupKey, sumKey, filterKey, filterValue) {
+            return array
+                .filter(item => item[filterKey] === filterValue) // Filtrar por usuario
+                .reduce((accumulator, item) => {
+                    const key = item[groupKey];
+                    if (!accumulator[key]) {
+                        // Si la clave no existe, se inicializa con un objeto que incluye el groupKey y el sumKey inicializado en 0
+                        accumulator[key] = {
+                            [groupKey]: key,
+                            [sumKey]: 0
+                        };
+                    }
+                    // Sumar el campo 'sumKey' al total del grupo
+                    accumulator[key][sumKey] += item[sumKey];
+                    return accumulator;
+                }, {});
+        }
+
+        
+        //$(`#idtiempo`).on(`keyup`, function () {
+        //    graficosTiempo();
+        //})
+
+        function graficosTiempo() {
+            debugger
+            var fecha = $(`#idtiempo`).val();
+            var agente = $(`#selectUsuarios`).val();
+            //console.log(fecha);
+
+            let parts = document.getElementById("idtiempo").value.split('/');
+            let day = parseInt(parts[0], 10);
+            let month = parseInt(parts[1], 10);
+            let year = parseInt(parts[2], 10);
+
+            var fecha = `${year}/${month}/${day}`;
+
+            if ((fecha == null || fecha == "") || (agente == null || agente == "" || agente == 0)) {
+
+                //console.log("Entro aqui");
+                //console.log(fecha);
+                //console.log(agente);
+                return "";
+            }
+            //console.log(fecha);
+            $.ajax({
+                url: "@Url.Action("GraficaDeTiempoAgentes", "BaseClientes")",
+                data: { fechavisualizar: fecha, idagente: agente},
+                type: "GET",
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    tipogestionCallCenter(respuesta.GestionDiaCallCenter);
+                    GraficoTipoGestion(respuesta.GestionDetalleCallCenter);
+                    //ShowModalBig(respuesta)
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $(":input").inputmask(); // mascara de entrada
+            LlenarCampos();
+
+            // Obtener la fecha actual
+            var today = new Date();
+
+            // Formatear la fecha como dd-mm-yyyy
+            var day = String(today.getDate()).padStart(2, '0');
+            var month = String(today.getMonth() + 1).padStart(2, '0'); // Enero es 0, así que se suma 1
+            var year = today.getFullYear();
+
+            // Combinar la fecha en el formato deseado
+            var formattedDate = day + '/' + month + '/' + year;
+
+            // Establecer la fecha en el input
+            document.getElementById('idtiempo').value = formattedDate;
+
+            graficosTiempo();
+        });
+
+        //grafica de la gestion de tiempo de los clientes
+        // Variable global para almacenar la instancia del gráfico
+        var chartInstance;
+
+        var tipogestionCallCenter = function (dataTiempoDiaCallcenter) {
+            var labelsTiempoCallcenter = dataTiempoDiaCallcenter.map(item => item.fcRangodeFecha);
+            var seriesTiempoCallcenter = dataTiempoDiaCallcenter.map(item => item.fiLlamadasRealizadas);
+
+            var tipogestionCallCenterData = {
+                labels: labelsTiempoCallcenter,
+                datasets: [
+                    {
+                        label: "Llamadas Realizadas",
+                        backgroundColor: '#6e96d7', //color.primary._300,
+                        borderColor: '#4679cc', //color.primary._500,
+                        borderWidth: 1,
+                        data: seriesTiempoCallcenter
+                    },
+                ]
+            };
+
+            var config = {
+                type: 'bar', // Gráfica vertical
+                data: tipogestionCallCenterData,
+                options: {
+                    legend: {
+                        display: false,
+                        labels: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        yAxes: [
+                            {
+                                stacked: true,
+                                gridLines: {
+                                    display: true,
+                                    color: "#f2f2f2"
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                    fontSize: 11
+                                }
+                            }],
+                        xAxes: [
+                            {
+                                stacked: true,
+                                gridLines: {
+                                    display: true,
+                                    color: "#f2f2f2"
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                    fontSize: 11
+                                }
+                            }]
+                    }
+                }
+            };
+
+            // Destruir la instancia del gráfico si ya existe
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Crear nueva instancia de la gráfica
+            var ctx = $("#tipogestionCallCenter > canvas").get(0).getContext("2d");
+            chartInstance = new Chart(ctx, config);
+        };
+        /* bar horizontal stacked -- end */
+
+        /**/
+        function GraficoTipoGestion(datos) {
+            $(`#idtipogestion`).empty();
+            $(`#idtipogestion`).append(`<div id="charttipoGestion" style="width: 100%; height: 1px;">
+                            </div>`);
+
+
+            var labels = [];
+            for (var i = 0; i < datos.length; i++) {
+                labels.push(datos[i].fcGestion)
+            }
+
+            var valores = [];
+            for (var i = 0; i < datos.length; i++) {
+                valores.push(datos[i].fiTotalBitacoras)
+            }
+
+            debugger;
+            var optionsTicketArea = {
+                labels: labels,
+                series: valores,
+                chart: {
+                    type: 'pie',
+                },
+                stroke: {
+                    colors: ['#fff']
+                },
+                fill: {
+                    opacity: 0.8
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chartTipoGestion = new ApexCharts(document.querySelector("#charttipoGestion"), optionsTicketArea);
+            chartTipoGestion.render();
+            //fin
+        }
+        /**/
+
+
+    </script>
+
+}

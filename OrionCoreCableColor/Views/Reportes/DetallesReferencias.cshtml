@@ -1,0 +1,808 @@
+﻿@model int
+
+
+<link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Referencias</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal2">
+                    <thead>
+                        <tr>
+                            <th style="width:100px;">Nombre</th>
+                            <th style="width:100px;">Telefono</th>
+                            <th style="width:100px;">Praentesco</th>
+                            <th style="width:100px;">Acepto ser Referencia</th>
+                            <th style="width:100px;">Aciertos</th>
+                            <th style="width:100px;">Aprobado</th>
+                            <th style="width:100px;"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-success waves-effect waves-themed float-left" type="button" id="btnAprobarProducto" style="display:none">Aprobar</button>
+                <button data-dismiss="modal" class="btn btn-danger waves-effect waves-themed float-left" type="button" id="btnDenegarProducto" style="display:none">Denegar</button>
+                <button data-dismiss="modal" class="btn btn-secondary waves-effect waves-themed float-right" type="button"><i class="text-lg ion-close-round"></i></button>
+
+            </div>
+
+        </div>
+
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Content/js/loading/loading.js"></script>
+<script>
+    var Verificar = 0;
+    var tiposol = 0;
+    var listaParentesco = @Html.Raw(Json.Encode(ViewBag.ListaParentesco));
+    $("#MyFormModal").submit(function (event) {
+        event.preventDefault();
+        if (!$("#MyFormModal").valid()) {
+            return false;
+        }
+
+
+    });
+
+
+
+    var tablaPrincipal2 = $('#TablaPrincipal2').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " MENU ",
+            "info": "Mostrando registros del START al END de TOTAL registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        order: [[1, "desc"]],
+        ajax: {
+            url: '@Url.Action("ListarReferencias", "Reportes")',
+            method: "Get",
+            data: { id: @Model },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        buttons: [
+            {
+                text: 'Agregar',
+                className: 'btn btn-success btnAgregarRef',
+                action: function (e, dt, node, config) {
+                    debugger;
+                    var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+                    var data = tabla.rows().data().toArray();
+                    if (data.length == 0) {
+                        //$('.btnAgregarRef').prop("disabled", true);
+
+                        ToastrWarning("Advertencia", "No existen Registros");
+                        return;
+                    }
+
+                    if (data.filter(x => x.fbAceptoSerReferencia == 0).length > 0) {
+                        ToastrInfo("Info", "Hacen falta que contesten referencias");
+                        if (tiposol == 1) {
+                            $('#btnAprobarProducto').css('display', fbEstadoAprobado);
+                        }
+                        //$('.btnAgregarRef').prop("disabled", true);
+                        return;
+                    }
+
+                    if (tiposol == 1) {
+                        debugger;
+                        if (data.filter(x => x.fiRespuestasAcertadas < 2).length >= 2) {
+                            Verificar = 2;
+                            var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                            //$('.btnAgregarRef').prop("disabled", true);
+
+                            $('#btnDenegarProducto').css('display', fbEstadoDenegado);
+                            ToastrWarning("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas < 2).length + " referencias denegadas");
+                            return;
+                        }
+
+                        if (data.filter(x => x.fiRespuestasAcertadas >= 2).length == 1) {
+                            var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                            //Verificar = 1;
+                            //$('.btnAgregarRef').prop("disabled", false);
+                            var NewRow = [{
+                                fiIDReferencia: 0,
+                                fiIDEquifax: @Model,
+                                fcNombreCompletoReferencia: '',
+                                fcTelefonoReferencia: '',
+                                fcDescripcionParentesco: '',
+                                fbNuevo: true,
+                                fbEviado: false,
+                                fiIDParentesco: 0,
+                                NombreClienteEquifax: "",
+                                fiRespuestasAcertadas: 0
+                            }];
+
+                            tabla.rows.add(NewRow).draw(false);
+
+                            ToastrSuccess("Info", "Puede agregar una referencia");
+                            //$('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                            return;
+                        }
+
+                        if (data.filter(x => x.fiRespuestasAcertadas >= 2).length >= 2) {
+                            var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                            Verificar = 1;
+                            //$('.btnAgregarRef').prop("disabled", true);
+
+                            ToastrSuccess("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas >= 2).length + " referencias Aprobadas");
+                            $('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                            return;
+                        }
+
+                    }
+                    else {
+                        if (data.filter(x => x.fiRespuestasAcertadas < 2).length >= 1) {
+                            Verificar = 2;
+                            var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                            //$('.btnAgregarRef').prop("disabled", true);
+
+                            $('#btnDenegarProducto').css('display', fbEstadoDenegado);
+                            ToastrWarning("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas < 2).length + " referencias denegadas");
+                            return;
+                        }
+
+                        if (data.filter(x => x.fiRespuestasAcertadas < 2).length == 1) {
+                            var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                            //Verificar = 1;
+                            //$('.btnAgregarRef').prop("disabled", false);
+                            var NewRow = [{
+                                fiIDReferencia: 0,
+                                fiIDEquifax: @Model,
+                                fcNombreCompletoReferencia: '',
+                                fcTelefonoReferencia: '',
+                                fcDescripcionParentesco: '',
+                                fbNuevo: true,
+                                fbEviado: false,
+                                fiIDParentesco: 0,
+                                NombreClienteEquifax: "",
+                                fiRespuestasAcertadas: 0
+                            }];
+
+                            tabla.rows.add(NewRow).draw(false);
+
+                            ToastrSuccess("Info", "Puede agregar una referencia");
+                            //$('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                            return;
+                        }
+
+                        if (data.filter(x => x.fiRespuestasAcertadas >= 2).length >= 1) {
+                            var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                            Verificar = 1;
+                            //$('.btnAgregarRef').prop("disabled", true);
+
+                            ToastrSuccess("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas >= 2).length + " referencias Aprobadas");
+                            $('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                            return;
+                        }
+                    }
+
+
+
+
+
+                }
+            }
+
+        ],
+        columns: [
+
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbNuevo) {
+                        return '<input type="text" class="form-control NombreCompleto" name="NombreCompleto"/>'
+                    }
+                    else {
+                        tiposol = data.fiIDTipoSolicitud;
+                        return `<input type="text" style="display:none;" class="form-control NombreCompleto" name="NombreCompleto" value="${data.fcNombreCompletoReferencia}"/><span name="spanNombre"> ${data.fcNombreCompletoReferencia} </span>`;
+                    }
+                    return '';
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbNuevo) {
+                        return '<input type="text" class="form-control Telefono" name="Telefono"/>'
+                    }
+                    else
+                    {
+                        return `<input style="display:none;" type="text" class="form-control Telefono" name="Telefono" value="${data.fcTelefonoReferencia}"/><span name="spanTel"> ${data.fcTelefonoReferencia} </span>`;
+                    }
+                    return '';
+                }
+
+            },
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbNuevo) {
+                        return '<select type="text" class="form-control parentesco" name="parentesco"></select>'
+                    }
+                    else {
+                        return `<select style="display:none;" type="text" class="form-control parentesco" name="parentesco"></select><span name="SpanParentesco">${data.fcDescripcionParentesco}</span>`;
+                    }
+                    return '';
+                }
+
+            },
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbNuevo) {
+
+                        return '<span class="btn btn-sm btn-secondary">Pendiente</span>';
+                    }
+                    else {
+                        if (data.fbAceptoSerReferencia == 1) {
+                            return '<div class="badge badge-success">SI</div>';
+                        } else if (data.fbAceptoSerReferencia == 2) {
+                            return '<div class="badge badge-danger">NO</div>';
+                        } else if (data.fbAceptoSerReferencia == 0) {
+                            return '<span class="btn btn-sm btn-secondary">Pendiente</span>';
+                        }
+
+                    }
+                    return '';
+                }
+
+            },
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbNuevo) {
+                        return '<span class="btn btn-sm btn-secondary">0/3</span>'
+                    }
+                    else {
+                        return '<span class="btn btn-sm btn-secondary">' + data.fiRespuestasAcertadas + '/3</span>'
+                    }
+                    return '';
+                }
+
+            },
+            {
+                data: null,
+                render: function (data) {
+                    if (data.fbNuevo) {
+                        return '<span class="btn btn-sm btn-secondary">Pendiente</span>';
+                    }
+                    else {
+                        if (data.fbAceptoSerReferencia == 0) {
+                            return '<span class="btn btn-sm btn-secondary">Pendiente</span>';
+                        } else {
+                            if (data.fbAceptoSerReferencia && data.fiRespuestasAcertadas >= 2) {
+                                return '<div class="badge badge-success">Aprobado</div>';
+                            } else {
+                                return '<div class="badge badge-danger">Denegado</div>';
+                            }
+                        }
+                    }
+                    return '';
+                }
+
+            },
+            {
+                data: null,
+                render: function (data) {
+                    console.log(data);
+                    if (data.fbNuevo) {
+                        return `
+                            <div class="row">
+                            <div class="col-lg-6">
+                                ${data.fbEviado == false ? '<button class="btn  btn-success" tabindex="0" aria-controls="TablaPrincipal2" type="button"  title = "Guardar y Enviar Mensaje" name="GuardarEnviar"><i class="fal fa-inbox-out" ></i></button>' : ''}
+                            </div>
+                            <div class="col-lg-6">
+                                ${data.fbNuevo ? '<button class="btn btn-danger" tabindex="0" aria-controls="TablaPrincipal2" type="button"  title="Eliminar" name="eliminar" ><i class="fal fa-trash" tittle="Eliminar"></i></button>' : ''}
+                            </div>
+                            </div>
+                        `;
+                    } else {
+                        if (data.fbAceptoSerReferencia == 0) {
+                            return `
+                            <div class="row">
+                                <div class="col-lg-6 text-center">
+                                     <button class="btn  btn-success" tabindex="0" aria-controls="TablaPrincipal2" type="button"  title = "Reenviar Mensaje" data-estado="0" name="ReenviarMensaje"><i class="fal fa-inbox-out" ></i></button>
+                                </div>
+                                <div class="col-lg-6 text-center">
+                                     <button class="btn  btn-warning" tabindex="0" aria-controls="TablaPrincipal2" type="button"  title = "Editar" data-estado="0" name="EditarNumero"><i class="fal fa-edit" ></i></button>
+                                </div>
+
+                            </div>`;
+                        } else {
+                                if (data.fiIDConteoReinicio < 2) {
+                                    return `
+                                   <div class="row">
+                                       <div class="col-lg-6 text-center">
+                                           <a href="javascript:void(0)" class="btn  btn-secondary" onclick="ReiniciarReferencia(${data.fiIDReferencia})" tabindex="0" aria-controls="TablaPrincipal2" title = "Reiniciar" data-estado="0" name="ReiniciarReferencia" ><i class="fal fa-history"></i></a>
+                                       </div>
+                                  </div>`
+                            
+                                } 
+                                
+                           
+                        }
+
+
+
+                        return "";
+                    }
+
+                }
+            },
+
+        ],
+        createdRow: function (row, data, index) {
+            $(row).find(".parentesco").select2({ data: listaParentesco, width: "100%", dropdownParent: $("#MyModalBig") }).val(data.fiIDParentesco).trigger('change');
+            if (!data.fbNuevo)
+            {
+                $(row).find(".parentesco").next(".select2-container").hide();
+            }
+
+        },
+        initComplete: function () {
+            var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+            var data = tabla.rows().data().toArray();
+            debugger;
+            if (data.length == 0) {
+                //$('.btnAgregarRef').prop("disabled", true);
+
+                ToastrWarning("Advertencia", "No existen Registros");
+                return;
+            }
+
+            if (data.filter(x => x.fbAceptoSerReferencia == 0).length > 0) {
+                ToastrInfo("Info", "Hacen falta que contesten referencias");
+                //$('.btnAgregarRef').prop("disabled", true);
+                if (tiposol != 1) {
+                    $('#btnAprobarProducto').css('display', fbEstadoAprobado);
+                    Verificar = 1;
+                }
+                return;
+            }
+
+
+            if (tiposol == 1) {
+
+                if (data.filter(x => x.fiRespuestasAcertadas < 2).length >= 2) {
+                    Verificar = 2;
+                    var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                    //$('.btnAgregarRef').prop("disabled", true);
+
+                    $('#btnDenegarProducto').css('display', fbEstadoDenegado);
+                    ToastrWarning("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas < 2).length + " referencias denegadas");
+                    return;
+                }
+
+                if (data.filter(x => x.fiRespuestasAcertadas >= 2).length == 1) {
+                    var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                    //Verificar = 1;
+                    //$('.btnAgregarRef').prop("disabled", false);
+
+                    ToastrSuccess("Info", "Puede agregar una referencia");
+                    //$('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                    return;
+                }
+
+                if (data.filter(x => x.fiRespuestasAcertadas >= 2).length == 2) {
+                    var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                    Verificar = 1;
+                    //$('.btnAgregarRef').prop("disabled", true);
+
+                    ToastrSuccess("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas >= 2).length + " referencias Aprobadas");
+                    $('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                    return;
+                }
+            }
+            else {
+                if (data.filter(x => x.fiRespuestasAcertadas < 2).length >= 2) {
+                    Verificar = 2;
+                    var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                    //$('.btnAgregarRef').prop("disabled", true);
+
+                    $('#btnDenegarProducto').css('display', 'block');
+                    ToastrWarning("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas < 2).length + " referencias denegadas");
+                    return;
+                }
+
+                if (data.filter(x => x.fiRespuestasAcertadas < 2).length == 1) {
+                    var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                    //Verificar = 1;
+                    $('.btnAgregarRef').prop("disabled", false);
+
+                    ToastrSuccess("Info", "Puede agregar una referencia");
+                    //$('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                    return;
+                }
+
+
+                if (data.filter(x => x.fiRespuestasAcertadas >= 2).length == 1) {
+                    var cantidad = data.filter(x => x.fiRespuestasAcertadas < 2).length;
+                    Verificar = 1;
+                    //$('.btnAgregarRef').prop("disabled", true);
+
+                    ToastrSuccess("Info", "Tiene " + data.filter(x => x.fiRespuestasAcertadas >= 2).length + " referencias Aprobadas");
+                    $('#btnAprobarProducto').css('display', fbEstadoAprobado);
+
+                    return;
+                }
+            }
+        }
+
+    }
+
+    );
+
+
+    function ReiniciarReferencia(fiIdReferenecia) {
+        console.log(fiIdReferenecia);
+        bootbox.confirm({
+            title: `<i class="fa-times-circle text-danger mr-2"></i> ¿Está Seguro que Desea Reiniciar esta Referencia? <span class='fw-500'></span>`,
+            message: "<span><strong>Advertencia!:</strong> Esta Acción no se puede Reversar</span>",
+            centerVertical: true,
+            swapButtonOrder: true,
+            buttons: {
+                confirm: {
+                    label: 'Sí',
+                    className: 'btn-danger shadow-0'
+                },
+                cancel: {
+                    label: 'No',
+                    className: 'btn-default'
+                }
+            },
+            className: "modal-alert",
+            closeButton: false,
+            callback: function (result) {
+                if (result == true) {
+                    H5_loading.show();
+
+
+                    $.ajax({
+                        url: "@Url.Action("ReiniciarReferencia", "Reportes")",
+                        method: "get",
+                        data: { fiIdReferencia: fiIdReferenecia },
+                        success: function (resp) {
+                            debugger;
+                           // console.log(resp);
+                            H5_loading.hide();
+                            if (resp.fiCodeStatus === 200) {
+                                toastr.success(resp.fcMessageStatus, 'Reinicio');
+                                CerrarModal();
+                               
+                            } else if (resp.fiCodeStatus == 500) {
+                                toastr.error(resp.fcMessageStatus, 'Eliminación');
+                            }
+
+                         
+                        },
+                        error: function (resp) {
+                            toastr.error(resp.result.message, 'Error');
+                        }
+                    });
+
+                    @*$.ajax({
+                        url: "@Url.Action("ReiniciarReferencia", "Reporte")",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        data: {fiIdReferencia:fiIdReferenecia},
+                        success: function (datas) {
+                            H5_loading.hide();
+                            if (datas.result.success) {
+                                toastr.success(datas.result.message, 'Eliminación');
+                            } else if (datas.CodeStatus == 500) {
+                                toastr.error(datas.result.message, 'Eliminación');
+                            }
+                        },
+                        error: function (datae) {
+                            toastr.error(datae.result.message, 'Error');
+                        }
+                    });*@
+                }
+            }
+        });
+    }
+
+
+    $('#TablaPrincipal2 tbody').on('change', 'tr input[name=NombreCompleto]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+
+        data.fcNombreCompletoReferencia = $(this).val();
+    });
+
+    $('#TablaPrincipal2 tbody').on('change', 'tr input[name=Telefono]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+
+        data.fcTelefonoReferencia = $(this).val();
+    });
+
+    $('#TablaPrincipal2 tbody').on('change', 'tr select[name=parentesco]', function () {
+        debugger;
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+
+        data.fiIDParentesco = $(this).val();
+        data.fcDescripcionParentesco = $("option:selected", this).text();
+    });
+
+
+    $('#TablaPrincipal2 tbody').on('click', 'tr button[name=eliminar]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        tabla.row(row).remove().draw(false);
+    });
+
+    $('#TablaPrincipal2 tbody').on('click', 'tr button[name=ReenviarMensaje]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+        var inputNombre = $(row).find("input[name=NombreCompleto]");
+        var spanNombre = $(row).find("span[name=spanNombre]");
+        var inputTelefono = $(row).find("input[name=Telefono]");
+        var spanTelefono = $(row).find("span[name=spanTel]");
+        var buttonEviar = $(row).find("button[name=ReenviarMensaje]");
+        var buttonEditar = $(row).find("button[name=EditarNumero]");
+        var iconoEditar = $(buttonEditar).find("i");
+        var iconoEnviar = $(buttonEviar).find("i");
+        var selectParentesco = $(row).find(".parentesco");
+        var spanParentesco = $(row).find("span[name=SpanParentesco]");
+        debugger;
+        if ($(this).data("estado") == 0) {
+            $(row).css("background-color", "");
+            $.ajax({
+                url: "@Url.Action("ReenviarMensaje","Reportes")",
+                type: "Post",
+                data: { model: data },
+                success: function (resp) {
+                    if (resp.Estado) {
+
+                        ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                    }
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            })
+        }
+        else
+        {
+
+            $.ajax({
+                url: "@Url.Action("EditarTelRef", "Reportes")",
+                type: "Post",
+                data: { model: data },
+                success: function (resp) {
+                    if (resp.Estado) {
+                        $(selectParentesco).next(".select2-container").hide();
+                        $(spanParentesco).css('display', 'block');
+                        $(spanParentesco).text($(selectParentesco).find("option:selected").text());
+                        $(inputNombre).css('display', 'none');
+                        $(spanNombre).css('display', 'block');
+                        $(spanTelefono).css('display', 'block');
+                        $(inputTelefono).css('display', 'none');
+                        $(buttonEditar).removeClass("btn-danger").addClass("btn-warning");
+                        $(iconoEditar).removeClass("fa-times").addClass("fa-edit");
+                        $(iconoEnviar).removeClass("fa-save").addClass("fa-inbox-out");
+                        $(buttonEditar).data("estado", 0);
+                        $(buttonEviar).data("estado", 0);
+                        $(buttonEviar).prop("title", "Enviar Mensaje");
+                        $(buttonEditar).prop("title", "Editar");
+                        ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                    }
+                },
+                error: function (data) {
+                    ToastrError("Error", "Error de Red");
+                },
+            })
+        }
+
+        //data.NombreClienteEquifax = tabla.rows().data().toArray()[0].NombreClienteEquifax;
+
+
+    });
+
+    $('#TablaPrincipal2 tbody').on('click', 'tr button[name=EditarNumero]', function () {
+        debugger;
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+        var inputNombre = $(row).find("input[name=NombreCompleto]");
+        var spanNombre = $(row).find("span[name=spanNombre]");
+        var inputTelefono = $(row).find("input[name=Telefono]");
+        var spanTelefono = $(row).find("span[name=spanTel]");
+        var buttonEviar = $(row).find("button[name=ReenviarMensaje]");
+        var iconoEditar = $(this).find("i");
+        var iconoEnviar = $(buttonEviar).find("i");
+        var selectParentesco = $(row).find(".parentesco");
+        var spanParentesco = $(row).find("span[name=SpanParentesco]");
+
+        if ($(this).data("estado") == 0) {
+            $(inputNombre).css('display', 'block');
+            $(spanNombre).css('display', 'none');
+            $(selectParentesco).next(".select2-container").show();
+
+            $(spanParentesco).css('display', 'none');
+            $(spanTelefono).css('display', 'none');
+            $(inputTelefono).css('display', 'block');
+            $(this).removeClass("btn-warning").addClass("btn-danger");
+            $(iconoEditar).removeClass("fa-edit").addClass("fa-times");
+            $(iconoEnviar).removeClass("fa-inbox-out").addClass("fa-save");
+            $(this).data("estado", 1);
+            $(buttonEviar).data("estado", 1);
+            $(buttonEviar).prop("title", "Guardar");
+            $(this).prop("title", "Cancelar");
+        }
+        else
+        {
+            $(inputNombre).css('display', 'none');
+            $(spanNombre).css('display', 'block');
+            $(spanTelefono).css('display', 'block');
+            $(inputTelefono).css('display', 'none');
+            $(this).removeClass("btn-danger").addClass("btn-warning");
+            $(iconoEditar).removeClass("fa-times").addClass("fa-edit");
+            $(iconoEnviar).removeClass("fa-save").addClass("fa-inbox-out");
+            $(this).data("estado", 0);
+            $(buttonEviar).data("estado", 0);
+            $(buttonEviar).prop("title", "Enviar Mensaje");
+            $(this).prop("title", "Editar");
+            $(selectParentesco).next(".select2-container").hide();
+            $(spanParentesco).css('display', 'block');
+        }
+
+
+
+
+    });
+
+    $('#TablaPrincipal2 tbody').on('click', 'tr button[name=GuardarEnviar]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        var data = tabla.row(row).data();
+
+
+        if (data.fcNombreCompletoReferencia == "" || data.fcNombreCompletoReferencia == null) {
+            $(row).css("background-color", "rgb(241 146 142 / 27%)");
+            $(row).find("input[name=NombreCompleto]").focus();
+            ToastrError("Error", "Digite el Nombre");
+
+            return;
+        }
+
+
+
+        if (data.fcTelefonoReferencia == "" || data.fcTelefonoReferencia == null) {
+            $(row).css("background-color", "rgb(241 146 142 / 27%)");
+            $(row).find("input[name=Telefono]").focus();
+            ToastrError("Error", "Digite un numero de telefono");
+
+            return;
+        }
+
+        if (data.fiIDParentesco == 0) {
+            $(row).css("background-color", "rgb(241 146 142 / 27%)");
+            ToastrError("Error", "Seleccione el parentesco");
+
+            return;
+        }
+
+        //data.NombreClienteEquifax = tabla.rows().data().toArray()[0].NombreClienteEquifax;
+
+        var telefonos = tabla.rows().data().toArray().filter(x => x.fbNuevo == false).map(x => x.fcTelefonoReferencia);
+        if (telefonos.some(x => x == data.fcTelefonoReferencia))
+        {
+            ToastrError("Error", "El telefono ya fue registrado para este cliente");
+            return;
+        }
+
+        $(row).css("background-color", "");
+        $.ajax({
+            url: "@Url.Action("GuardaryEnviarMensaje","Reportes")",
+            type: "Post",
+            data: { model: data },
+            success: function (resp) {
+                if (resp.Estado) {
+                    data.fbNuevo = false;
+                    data.fbEviado = true;
+
+                    tabla.row(row).data(data).draw(false);
+
+                    ToastrSuccess(data.Titulo, data.Mensaje);
+                } else {
+                    ToastrError("Error",data.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        })
+    });
+
+    $('#btnAprobarProducto').click(function () {
+
+        Procesar();
+    });
+
+    $('#btnDenegarProducto').click(function () {
+
+        Procesar();
+    });
+    $('#TablaPrincipal2 tbody').on('click', 'tr button[name=eliminar]', function () {
+
+        var tabla = $.fn.dataTable.Api('#TablaPrincipal2');
+        var row = $(this).closest("tr");
+        tabla.row(row).remove().draw(false);
+    });
+
+    function Procesar() {
+
+            $.ajax({
+                url: "@Url.Action("ProcesarSolicitud","Reportes")",
+                method: "Post",
+                data: { id: @Model, Estatus: Verificar },
+                success: function (resp) {
+                    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaT.ajax.reload();
+                    ToastrSuccess("Aprobada", resp.Mensaje);
+                },
+                error: function (resp) {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            });
+        }
+</script>

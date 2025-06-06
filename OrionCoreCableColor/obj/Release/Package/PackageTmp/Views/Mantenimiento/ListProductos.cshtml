@@ -1,0 +1,103 @@
+﻿<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TblProductos">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Productos</th>
+                        
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="AgregarProductos" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    var ProductosSeleccionados = $.fn.dataTable.Api("#TblProductosSeleccionados");
+    var seleccinados = ProductosSeleccionados.rows().data().toArray();
+    var tablaPrincipal = $('#TblProductos').DataTable({
+        dom: "<'row'<'col-sm-12 col-md-12 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-12 d-flex align-items-center justify-content-end'>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        "pagingType": "simple",
+        pageLength: 5,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "<",
+                next: ">",
+                last: "Ultimo",
+                
+            },
+            "lengthMenu": " _MENU_ ",
+           // "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        ajax: {
+            url: '@Url.Action("CargarListaProductos", "Mantenimiento")',
+            method: "post",
+            data: { productos: seleccinados },
+            dataSrc: function (data) {
+                return data;
+            }
+        },
+        columns: [
+            {
+                data: null,
+                render: function (data) {
+                    return `<div class="custom-control custom-checkbox">
+                          <input ${data.fbSeleccionado ? 'checked' : ''}  id="${data.fiIDProducto}" class="custom-control-input" style="margin-left:auto; margin-right:auto;"  type="checkbox" value="" id="CheckCheckedFalla" name = "CheckCheckedFalla"  > <label></label>
+                               <label class="custom-control-label" for="${data.fiIDProducto}"></label>                          
+                           </div>`;
+                }
+            },
+            {
+                data: "fcProducto"
+            }
+        ],
+        initComplete: function ()
+        {
+            var search = $("#TblProductos_filter").find("input[type=search]");
+            $("#TblProductos_filter").css("padding-left", "19px");
+            search.removeClass("width-lg");
+        }
+
+    });
+
+
+    $("#TblProductos").on("click", "input[name=CheckCheckedFalla]", function () {
+        let tablaproductos = $.fn.dataTable.Api("#TblProductos");
+        let row = $(this).closest("tr");
+        let data = tablaproductos.row(row).data();
+        data.fbSeleccionado = $(this).prop("checked");
+    });
+
+    $("#AgregarProductos").click(function () {
+        let tablaProductosSeleccionados = $.fn.dataTable.Api("#TblProductosSeleccionados");
+        tablaProductosSeleccionados.clear().draw(false);
+        let tablaproductos = $.fn.dataTable.Api("#TblProductos");
+        var data = tablaproductos.rows().data().toArray();
+        var seleccionados = data.filter(x => x.fbSeleccionado);
+        tablaProductosSeleccionados.rows.add(seleccionados).draw(false);
+        $("#MyModalSm").modal("hide");
+    });
+
+    
+</script>

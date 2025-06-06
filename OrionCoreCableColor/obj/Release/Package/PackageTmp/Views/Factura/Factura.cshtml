@@ -1,0 +1,48 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-download fa-fw"></i> Factura</h2>
+
+    </div>
+
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="panel-content">
+
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label">#Transaccion:</label>
+                        <div class="input-group mar-btm">
+
+                            <input type="number" class="form-control" id="idTransaccion" />
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">#Transaccion:</label>
+                        <div class="input-group mar-btm">
+
+                            <button type="button" class="btn btn-success"  id="GenerarFactura">Factura</button>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $("#GenerarFactura").click(function () {
+            debugger;
+            var fiIDTransaccion = $("#idTransaccion").val();
+            VerModalScrollConObjetoDeParametro({ fiIDTransaccion: fiIDTransaccion },"@Url.Action("RptFactura","Factura")");
+        });
+    </script>
+    
+    }

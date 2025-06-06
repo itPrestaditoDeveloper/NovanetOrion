@@ -1,0 +1,265 @@
+﻿
+
+<link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Detalle Documentos</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="tabledocumento">
+                    <thead>
+                        <tr>
+                            <th>Nombre </th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
+        <label>Comentario</label>
+        <textarea class="form-control" rows="2" id="txtComentario"></textarea>
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="submit" class="btn btn-link btn-lg text-success" id="btnGuardar" style="text-decoration:none"><i class="text-lg ion-checkmark-round"></i>Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/loading/loading.js"></script>
+<script>
+    var listadoFotos = [];
+    var tablaPrincipalDocumentos = $('#tabledocumento').DataTable({
+       //"destroy": true,
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: 'frti',
+        order: [[1, "desc"]],
+          ajax: {
+
+              url: '@Url.Action("DocumentosPorCondicion", "PrecalificaCliente")',
+              data: { InfoPrecalificado: @ViewBag.fiIDinfoPrecalificado},
+              method: "Get",
+              dataSrc: function (data) {
+                  debugger;
+                  return data;
+              }
+        },
+        columns: [
+            {
+                data: 'fcCatalogoCondicion',
+            },
+            {
+                data: null,
+                render: function (data) {
+                    debugger;
+                    let boton = '';
+                    llenardrop(data.fiTipoCondicion)
+                    boton += `<div class="form-group">
+
+                        <form id="Imagen-dropzone-${data.fiTipoCondicion}" action="@Url.Action("FormFileResponse","Base")" method="post" enctype="multipart/form-data" class="dropzone needsclick" data-fcnombrefoto="${data.fcCatalogoCondicion}">
+                            <div class="dz-message needsclick">
+
+                                <div class="dz-icon">
+                                    <i class="fal fa-cloud-upload text-muted mb-3"></i>
+                                </div>
+                                <div>
+                                    <span class="dz-text">Arrastre Imagen</span>
+                                    <p class="text-sm text-muted">O Click para elegirla manualmente</p>
+
+
+                                </div>
+                            </div>
+                        </form>
+                        <canvas src="#" style="display: none" alt="Mi identidad" id="fotopreviacanva-${data.fiTipoCondicion}" class="img-thumbail"></canvas>
+                    </div>
+                    `;
+                    return boton;
+                }
+            },
+        ]
+});
+
+ 
+
+    function llenardrop(iddocumento) {
+        debugger;
+        let name = iddocumento + 1;
+        window['myDropzone' + name] = $('#Imagen-dropzone-' + iddocumento).dropzone({
+            addRemoveLinks: true,
+            acceptedFiles: 'image/*',
+            maxFiles: 1,
+            init: function () {
+                var myDropzone = this;
+                myDropzone.on('maxfilesexceeded', function (file) {
+                    AlertaMensaje("Remueva una imagen para colocar uno nuevo");
+                    var _ref = file.previewElement;
+                    if (_ref != null) {
+                        _ref.parentNode.removeChild(file.previewElement);
+                    }
+                    return;
+                });
+                myDropzone.on('thumbnail', function (file, dataURL) {
+
+                    RedimencionarImagen(`fotopreviacanva-${iddocumento}`, file, "fotoprevia2", file.name, iddocumento);
+                });
+            },
+            removedfile: function (file) {
+
+                var _ref = file.previewElement;
+                if (_ref != null) {
+                    var divImagenes = $("#imagenesPrevias").children().toArray();
+                    $(divImagenes.find(x => x.id == file.name)).remove();
+                    this.files = this.files.filter(x => x != file);
+                }
+                return _ref != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+            }
+        });
+    }
+
+    document.getElementById('btnGuardar').addEventListener('click', function (event) {
+        debugger;
+        event.preventDefault();
+        guardarTodasImagenes();
+    });
+
+    function guardarTodasImagenes() {
+        debugger;
+
+        Dropzone.instances.forEach((dropzoneInstance) => {
+            const dropzoneElement = dropzoneInstance.element;
+            const idDocumento = dropzoneElement.id.split('-')[2];
+            const fcNombreFoto = $(dropzoneElement).data('fcnombrefoto');
+            if (dropzoneInstance.files.length > 0) {
+                guardarimagen(idDocumento, fcNombreFoto, dropzoneInstance);
+            } else {
+                console.warn(`No hay imagen cargada para el documento ${idDocumento}`);
+            }
+        });
+    }
+
+
+    function guardarimagen(iddocumento, fcNombreFoto, dropzoneInstance) {
+        debugger;
+        H5_loading.show();
+        const originalFile = dropzoneInstance.files[0];
+        if (!originalFile) return;
+        let fileName = originalFile.name.split('.').slice(0, -1).join('.');
+        let fileExtension = '.' + originalFile.name.split('.').pop();
+        let fileUrl = fileName + fileExtension;
+
+        var form_data = new FormData();
+        form_data.append("IDInfoPrecalificado", @ViewBag.fiIDinfoPrecalificado);
+        form_data.append("IDCondicion", iddocumento);
+        
+        // Agregar fotos redimensionadas si existen
+        for (var i = 0; i < fotosredimencionadas.length; i++) {
+            form_data.append(`fotosbase[${i}].base64string`, fotosredimencionadas[i].basesesentaycuatro);
+            form_data.append(`fotosbase[${i}].nombrearchivo`, fotosredimencionadas[i].nombreArchivo);
+            form_data.append(`fotosbase[${i}].numimagen`, fotosredimencionadas[i].numimagen);
+        }
+
+        debugger;
+           $.ajax({
+               success: function (data) {
+                   let urlGuardarImagen = "@Url.Action("GuardarFoto", "PrecalificaCliente")";
+                   $.ajax({
+                       url: urlGuardarImagen,
+                       type: 'POST',
+                       data: form_data,
+                       cache: false,
+                       contentType: false,
+                       processData: false,
+                       enctype: "multipart/form-data",
+                       success: function (datas) {
+                           H5_loading.hide();
+                           window.location.reload()
+                       },
+                       error: function () {
+                           var errorMsg = { Titulo: "Error", Mensaje: "Error al guardar la imagen", Estado: false };
+                           ToastrSuccess(errorMsg.Titulo, errorMsg.Mensaje);
+                       }
+                   });
+               },
+               error: function (error) {
+                   var errorMsg = { Titulo: "Error", Mensaje: "Ocurrió un problema al guardar el documento.", Estado: false };
+                   ToastrSuccess(errorMsg.Titulo, errorMsg.Mensaje);
+                   H5_loading.hide();
+               }
+           });
+}
+
+    
+    $('#modalWaitingTime').on('hidden.bs.modal', function () {
+        $(this).find(':focus').blur();
+    });
+
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[arr.length - 1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    var fotosredimencionadas = [];
+    function RedimencionarImagen(idcanva, eimagencaptada, idimg, NombreArchivo, numeroimagen) {
+        debugger;
+        var ctx = document.getElementById(idcanva).getContext('2d'); // capturamos el id del camva para ponerlo la imagen oculta ahi y asi poder tomar esa imagen y no la que se esta mostrando
+        var img = new Image;
+        img.src = URL.createObjectURL(eimagencaptada); // insertamos la imagen que el cliente subio para posteriormente hacer la reduccion
+        img.onload = function () {
+            var canvas = document.getElementById(idcanva);
+            var maxAncho = 900; //aqui le ponemos unas medidas estandar que pueden cambiar en un futuro,
+            var maxAlto = 1500;
+
+            var proporcion = Math.min(maxAncho / img.width, maxAlto / img.height); // aqui hacemos una proporcion de las imagenes con respecto al tamaño de la imagen original y al estandar que tenemos nosotros aqui adentro
+            var propdos = img.width / img.height;
+            var ancho = img.width * proporcion;
+            var alto = img.height * proporcion;
+
+            canvas.width = (img.width / propdos); // ponemos el tamaño en el canva oculto
+            canvas.height = (img.height / propdos);
+
+            ctx.drawImage(img, 0, 0, (img.width / propdos), (img.height / propdos));
+            //console.log(canvas.toDataURL('image/jpeg', 0.7)); // tira el base 64
+            fotosredimencionadas.push({ canva: idcanva, basesesentaycuatro: canvas.toDataURL('image/jpeg', 0.7), nombreArchivo: NombreArchivo, numimagen: numeroimagen });
+            //var urlbase64 = getBase64Image(img); // tira el base 64
+
+            document.getElementById(idimg).src = canvas.toDataURL('image/jpeg', 0.7); // el 07 es la calidad de la imagen si no estoy mal eso decia en la documentacion
+            //document.getElementById(idcanva).style.display = "block"; //mostrar la imagen que esta oculta
+        }
+
+    }
+</script>

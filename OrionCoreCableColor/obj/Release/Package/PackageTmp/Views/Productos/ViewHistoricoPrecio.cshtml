@@ -1,0 +1,53 @@
+﻿@model IEnumerable <OrionCoreCableColor.DbConnection.OrionDB.sp_Producto_Precios_Detalle_ObtenerPorProducto_Result>
+@{
+    ViewBag.Title = "ViewHistoricoPrecio";
+}
+
+<table class="table table-bordered" style="width:100%;">
+    <tr>
+        <th style="width:2%; text-align:middle; vertical-align:middle; color:#a90329;" class="text-center shown"></th>
+        <th class="no-padding">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" id="tbHistoricoProductos-@Model.FirstOrDefault().fiIDProducto" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Precios</th>
+                        <th>Moneda Extrangera</th>
+                        <th>Ultima Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.fnValorProductoMN</td>
+                            <td>@item.fnValorProductoME</td>
+                            <td>@item.fdFechaUltimaModificacion</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </th>
+    </tr>
+</table>
+
+<script>
+    var tablaPrincipal = $('#tbHistoricoProductos-@Model.FirstOrDefault().fiIDProducto').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            //dom: 'Bfrtip',
+            order: [[1, "desc"]],
+        });
+</script>

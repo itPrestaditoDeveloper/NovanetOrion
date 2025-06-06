@@ -1,0 +1,559 @@
+﻿
+@{
+    ViewBag.Title = "ReportesClientesFinalesInstalados";
+}
+<div class="row">
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="clienteactivoscant"></label>
+                    <small class="m-0 l-h-n">Clientes Activos</small>
+                </h3>
+            </div>
+            <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-danger-200 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="clientecortados"></label>
+                    <small class="m-0 l-h-n">Clientes Cortados</small>
+                </h3>
+            </div>
+            <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="clienteReconectados"></label>
+                    <small class="m-0 l-h-n">Clientes Reconectados</small>
+                </h3>
+            </div>
+            <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n5 mr-n6" style="font-size: 8rem;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-warning-700 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="clientesenatraso"></label>
+                    <small class="m-0 l-h-n">Clientes Atrasados</small>
+                </h3>
+            </div>
+            <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="clientenuevo"></label>
+                    <small class="m-0 l-h-n">Clientes Nuevos</small>
+                </h3>
+            </div>
+            <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-info-700 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="ingresosmensuales"></label>
+                    <small class="m-0 l-h-n">Ingresos Mensuales</small>
+                </h3>
+            </div>
+            <i class="fal fa-dollar-sign position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-info-700 rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="ingresosGlobalesmensuales"></label>
+                    <small class="m-0 l-h-n">Ingresos Globales Mensuales</small>
+                </h3>
+            </div>
+            <i class="fal fa-globe position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="p-3 bg-brand-gradient rounded overflow-hidden position-relative text-white mb-g">
+            <div class="">
+                <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+                    <label id="clientesprecalificados"></label>
+                    <small class="m-0 l-h-n">Clientes Precalificados</small>
+                </h3>
+            </div>
+            <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
+        </div>
+    </div>
+</div>
+<div class="panel">
+
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Bandeja Clientes Servicio </h2>
+
+    </div>
+
+
+    <div class="row mb-1  justify-content-center">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end" style="display: none">
+            <label class="col-form-label">Búsqueda por Estado Solicitud</label>
+            <select id="ddlEstado" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Estado por Servicio</label>
+            <select id="ddlServicioCliente" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+            </select>
+        </div>
+        <div class=" col-lg-2 col-md-2 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Oficial</label>
+            <select id="ddlOficial" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 align-self-end">
+            <label class="col-form-label">Búsqueda por Mes</label>
+            <select id="ddlMesIngreso" class="form-control form-control-sm">
+                <option value="">Seleccionar</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+            </select>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6">
+            <label class="col-form-label">Búsqueda por Fecha</label>
+            <div class="input-daterange input-group" id="date-range">
+                <input type="text" class="form-control form-control-sm" name="fecha-minima" id="fecha-minima" onchange="maxandmin_change()"/>
+                <input type="text" class="form-control form-control-sm" name="fecha-maxima" id="fecha-maxima" onchange="maxandmin_change()"/>
+            </div>
+        </div>
+        <div class=" col-lg-2 col-md-2 col-sm-6 col-6 align-self-end" style="display: none">
+            <label class="col-form-label">Búsqueda por Año</label>
+            <input id="ddlAnioIngreso" class="form-control form-control-sm" type="text" />
+        </div>
+    </div>
+
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudesFinalesInstalados">
+                <thead>
+                    <tr>
+                        <th>Accciones</th>
+                        <th>Solicitud</th>
+                        <th>Cliente</th>
+                        <th>Telefono</th>
+                        <th>Fecha de Ingreso</th>
+                        <th>Cuota</th>
+                        <th>Cuota en Lps</th>
+                        <th>Internet</th>
+                        <th>Equipo</th>
+                        <th>Aparatos</th>
+                        <th>Tipo de Servicio</th>
+                        <th>Oficial</th>
+                        <th>Fecha Instalacion</th>
+                        <th>Estado Instalacion</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+
+    <script>
+
+        var fbEstadoAprobado;
+        var fbEstadoDenegado;
+        let FiltroAnio = '';
+        let filtroMes = '';
+        var filtroActual = "";
+        $('#ddlMesIngreso').on('change', function () {
+            debugger;
+            filtroMes = this.value != '' ? this.value : '';
+            MesAnio();
+        });
+
+
+        function GenerarListaPartidasFiltradas() {
+
+            tablaPrincipal.ajax.reload(null, false)
+        }
+
+        var tablaPrincipal = $('#BandejaSolicitudesFinalesInstalados').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[14, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListaSolicitudesInstaladas", "Reportes")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      var opt = ''
+                      var unico = new Set();
+                      for (const item of data) {
+                          unico.add(item.NombreOficial);
+                      }
+                      for (const item of unico) {
+                          if (item == null) {
+
+                          } else {
+                              opt += `<option value="${item}">${item}</option>`
+                          }
+                      }
+                      $(`#ddlOficial`).append(opt);
+
+                      var optS = ''
+                      var unicoS = new Set();
+
+                      for (const item of data) {
+                          var Servicio = "";
+                          if (item.fiTipoInstalacion == true) {
+                              Servicio = "Servicio con Articulo";
+                          } else {
+                              Servicio = "Servicio solo Internet";
+                          }
+                          unicoS.add(Servicio);
+                      }
+                      for (const item of unicoS) {
+                          if (item == null) {
+
+                          } else {
+                              optS += `<option value="${item}">${item}</option>`
+                          }
+                      }
+                      $(`#ddlServicioCliente`).append(optS);
+
+                      return data;
+                  }
+            },
+            columns: [
+
+                {
+                data: null,
+                render: function (data) {
+                    //console.log(data);
+                   var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                       opciones += '<div class="dropdown-menu">';
+                       opciones += '<a href="javascript:void(0)" onclick="ModalDetalleCliente(\'' + data.fcNombre + '\',\'' + data.fcTelefono + '\',' + data.fiIDSolicitud + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Detalle de la Solicitud</a>';
+                       opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return `${data.fiIDSolicitud}`
+                            + "<br>" + data.fcOperacionTipoSolicitud;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcIdentidad + ' | ' + data.fcNombre;
+                    }
+
+                },
+                {
+                    data: 'fcTelefono'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacionSolicitud).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDMoneda == 2) {
+                            //return data.fnCuotaMensual + ' ' + data.fcMoneda;
+                            return data.fnCuotaMensual;
+                        } else {
+                            return '';
+                        }
+
+                        
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiIDMoneda == 1) {
+                           // return data.fnCuotaMensualMonedaNacional + ' ' + data.fcMoneda;
+                            return data.fnCuotaMensualMonedaNacional;
+                        } else {
+                            return '';
+                        }
+                    
+                    }
+
+                },
+                {
+                    data: 'fcInternet'
+                },
+                {
+                    data: 'fcProductosDeContratistas'
+                },
+                {
+                    data: 'fcProductosDeTecnicoNovanet'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fiTipoInstalacion == true) {
+                            return '<div class="badge badge-info">Servicio con Articulo</div>';
+                        }
+                        else {
+                            return '<div class="badge badge-warning">Servicio solo Internet</div>';
+                        }
+
+                    }
+
+                },
+                {
+                    data: 'NombreOficial'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        var fecha = moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY");
+                        if (fecha == "01/01/1900") {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        } else {
+                            return moment(data.fdFechaInstalacionFinal).format("DD/MM/YYYY");
+                        }
+
+                    }
+
+                },
+                 {
+                    data: null,
+                     render: function (data) {
+                         if (data.fiIDContratistaSolicitud !=0) {
+                             return `<a class="cursor-zoom-in" href="@(Url.Action("ViewRevisarDetalleInstalacion","Tenico"))?idSolicitudInstalacion=${data.fiIDContratistaSolicitud}"  ><div class="badge badge-${data.fcClase}">${data.fcDescripcion}</div></a>`;
+                         }
+                         return `<div class="badge badge-${data.fcClase}">${data.fcDescripcion}</div>`;
+
+
+
+                    }
+
+                },
+                {
+                    data: null,
+                    visible: false,
+                    render: function (data) {
+                        return `${data.fiIDSolicitud}`
+
+                    }
+                },
+
+
+
+            ],
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: 'EXCEL',
+                    messageTop: "Solicitud Clientes",
+                    filename: "Clientes",
+                    className: 'btn-outline-success btn-sm mr-1',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 5, 6, 7, 8, 9,10, 11, 12, 13]
+                        // columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: 'CSV',
+                    titleAttr: 'Generate CSV',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'copyHtml5',
+                    text: 'Copy',
+                    titleAttr: 'Copy to clipboard',
+                    className: 'btn-outline-primary btn-sm mr-1'
+                },
+                {
+                    extend: 'print',
+                    text: 'Print',
+                    titleAttr: 'Print Table',
+                    className: 'btn-outline-primary btn-sm'
+                }
+            ],
+
+        });
+        $("#fecha-minima").datepicker({
+            onSelect: function () {
+                filtroActual = 'rangoFechas';
+            },
+            changeMonth: !0,
+            changeYear: !0,
+        });
+
+        $("#fecha-maxima").datepicker({
+            onSelect: function () {
+                filtroActual = 'rangoFechas';
+            },
+            changeMonth: !0,
+            changeYear: !0,
+        });
+
+        //$("#fecha-minima, #fecha-maxima").change(function () {
+            
+        //});
+
+        $.fn.dataTable.ext.search.push(function (e, a, i) {
+            debugger;
+            if (filtroActual == 'rangoFechas') {
+
+                let Desde = $("#fecha-minima")?.datepicker("getDate") ?? new Date(),
+                    Hasta = $("#fecha-maxima")?.datepicker("getDate") ?? new Date(),
+                    FechaIngreso = new Date(moment(a[12],"DD/MM/YYYY").format("YYYY-MM-DD"));
+                return ("Invalid Date" == Desde && "Invalid Date" == Hasta) || ("Invalid Date" == Desde && FechaIngreso <= Hasta) || ("Invalid Date" == Hasta && FechaIngreso >= Desde) || (FechaIngreso <= Hasta && FechaIngreso >= Desde);
+            }
+            else return true;
+        });
+
+
+        function maxandmin_change() {
+            try {
+            debugger;
+                filtroActual = 'rangoFechas';
+                var tabla = $.fn.dataTable.Api("#BandejaSolicitudesFinalesInstalados");
+
+                tabla.draw();
+
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        function ModalDetalleCliente(Nombre, Telefono, IDSolicitud) {
+
+            $.ajax({
+                url: "@Url.Action("ModalDetalleCliente", "Solicitudes")",
+                method: "get",
+                data: { Nombre: Nombre, Telefono: Telefono, IDSolicitud: IDSolicitud },
+                success: function (resp) {
+
+                    ShowModalBigScroll(resp);
+                    //ShowModalBig(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+        function MesAnio() {
+            tablaPrincipal.columns(12).search(FiltroAnio + '/' + filtroMes + '/').draw();
+        }
+        /* busqueda por Estado*/
+        $('#ddlEstado').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(7).search(this.value).draw();
+        });
+        $('#ddlServicioCliente').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(10).search(this.value).draw();
+        });
+
+        $('#ddlOficial').on('change', function () {
+            debugger;
+            tablaPrincipal.columns(11).search(this.value).draw();
+        });
+
+
+
+        bulletactualizacion()
+        function bulletactualizacion() {
+            $.ajax({
+                url: "@Url.Action("DashBoardInformativoEncabezado", "Reportes")",
+                type: "POST",
+                //data: { IdSolicitud: idsol, IdCliente: idclien, Observaciones: " ", Opcion: 'Reiniciar Contrato' },
+                success: function (respuesta) {
+                    //console.log(respuesta)
+                    /*
+
+                            fiClientesNetos,
+		                    *fiClientesActivos,
+		                    *fiClientesCortados,
+		                    *fiClientesReconectados,
+		                    *fiClientesEnAtraso,
+		                    *fiClientesNuevosMes,
+		                    *fiClientesPrecalificados,
+		                    *fnIngresosdelMes,
+		                    *fnIngresosdelGlobales
+
+                     */
+                    $(`#clienteactivoscant`).text(respuesta[0].fiClientesActivos)
+                    $(`#clientecortados`).text(respuesta[0].fiClientesCortados)
+                    $(`#clienteReconectados`).text(respuesta[0].fiClientesReconectados)
+                    $(`#clientesenatraso`).text(respuesta[0].fiClientesEnAtraso)
+                    $(`#clientenuevo`).text(respuesta[0].fiClientesNuevosMes)
+                    $(`#ingresosmensuales`).text(respuesta[0].fnIngresosdelMes)
+                    $(`#ingresosGlobalesmensuales`).text(respuesta[0].fnIngresosdelGlobales)
+                    $(`#clientesprecalificados`).text(respuesta[0].fiClientesPrecalificadosDelMes)
+                    //$(`#`).val(respuesta[0].)
+
+
+                },
+                error: function (respuesta) {
+                    //console.log(respuesta)
+                }
+            });
+        }
+
+
+    </script>
+}
+
+
+

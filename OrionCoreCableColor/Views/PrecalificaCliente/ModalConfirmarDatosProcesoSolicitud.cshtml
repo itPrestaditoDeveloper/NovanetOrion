@@ -1,0 +1,113 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white col-12 text-center">Paquete Seleccionado</h2>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+
+                <div class="h4 text-center col-12">
+                    <strong class="text-center" style="margin:auto">@ViewBag.fcPaquete</strong>
+                </div>
+                <div class="col-12 mt-3">
+                    <p>
+                        <strong>Plazo a Contratar:</strong> <span class="text-primary">@ViewBag.fcPlazo</span>
+                    </p>
+                    <p>
+                        <strong>Valor del Paquete:</strong> @ViewBag.ValorPlazo.ToString("N2")
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mt-3 text-center">
+                    <h5><strong>Condiciones Adicionales</strong></h5>
+                </div>
+                <div class="col-12 mt-3">
+                    <p>
+                        → Cliente deberá pagar <strong>@ViewBag.condicionMes Cuotas</strong> adelantadas cuyo valor total de pago inicial es de
+                        <strong class="text-dark">L.@ViewBag.ValorCondicion.ToString("N2")</strong>
+                    </p>
+                </div>
+            </div>
+
+            @{
+                if (Model.fcDepartamento != null && Model.fcMunicipio != null && Model.fcPoblado != null && @Model.fcDireccionDetallada != null)
+                {
+                    <div class="row">
+                        <div class="col-12 mt-3 text-center">
+                            <h5><strong>Datos de Dirección</strong></h5>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <p>
+                                <strong>Departamento:</strong>@Model.fcDepartamento
+                            </p>
+                            <p>
+                                <strong>Municipio:</strong> @Model.fcMunicipio
+                            </p>
+                            <p>
+                                <strong>Barrio/Colonia:</strong> @Model.fcPoblado
+                            </p>
+                            <p>
+                                <strong>Dirección Detallada:</strong> @Model.fcDireccionDetallada
+                            </p>
+                        </div>
+                    </div>
+                }
+
+            }
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button">
+                    <i class="text-lg ion-close-round"></i> Cancelar
+                </button>
+                <button type="button" id="btnGuardarProcesosSolicitud" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success">
+                    <i class="text-lg ion-checkmark-round"></i> Confirmar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var model = @Html.Raw(Json.Encode(Model));
+
+    $("#fiIDUsuario").select2({
+        dropdownParent: $("#MyModalBig")
+    });
+
+    $("#btnGuardarProcesosSolicitud").click(function () {
+        var idseleccion = $("#selectdireccionescli").val();
+        debugger;
+        var CondicionMes = @Html.Raw(Json.Encode(ViewBag.condicionMes));
+        var plazo =  '@ViewBag.fcPlazo';
+        var valorPlazo = @ViewBag.ValorPlazo;
+        var url = "@Url.Action("EnviarLinkCliente", "PrecalificaCliente")";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: { model: model, condicionMes: CondicionMes, fcPlazo: plazo, ValorPlazo: valorPlazo,fiIDSolicitudDireccion: @ViewBag.fiIDSolicitudDireccion  , fbClienteExiste: fbClienteExiste, opcionselectdireccion: idseleccion,  },
+            //data: { model: model},
+            success: function (data) {
+                if (data.Estado) {
+                    AlertaAjax(data);
+                    location.reload();
+                }
+
+            }, error: function () {
+                AlertaError();
+            }
+        });
+
+
+    });
+</script>

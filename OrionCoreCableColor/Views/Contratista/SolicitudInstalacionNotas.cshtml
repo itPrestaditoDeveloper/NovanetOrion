@@ -1,0 +1,287 @@
+﻿@model OrionCoreCableColor.Models.Contratista.ContratistaSolicitudInstalacionNota
+
+<style>
+	.textarea-comment {
+		resize: vertical;
+		min-height: 100px;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+		padding: 0.75rem;
+		font-size: 1rem;
+	}
+
+	.table-notas {
+		width: 100%;
+		margin-bottom: 1rem;
+		color: #212529;
+		border-collapse: separate;
+		border-spacing: 0;
+	}
+
+		.table-notas th,
+		.table-notas td {
+			padding: 0.75rem;
+			vertical-align: middle;
+			border-top: 1px solid #dee2e6;
+			text-align: left;
+		}
+
+		.table-notas thead th {
+			background-color: #f8f9fa;
+			vertical-align: bottom;
+			border-bottom: 2px solid #dee2e6;
+			font-weight: 600;
+			color: #495057;
+		}
+
+		.table-notas tbody tr:hover {
+			background-color: #e9ecef;
+			transition: background-color 0.2s ease;
+		}
+
+		.table-notas tbody tr:nth-child(even) {
+			background-color: #ffffff;
+		}
+
+		.table-notas tbody tr:nth-child(odd) {
+			background-color: #f8f9fa;
+		}
+
+	.dropdown-menu {
+		min-width: 10rem;
+	}
+
+	.modal-body {
+		padding: 1.5rem;
+	}
+
+	.form-group {
+		margin-bottom: 1.5rem;
+	}
+
+	.input-group .textarea-comment:focus {
+		border-color: #80bdff;
+		box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+		outline: none;
+	}
+</style>
+
+<form id="notaForm" method="post" enctype="multipart/form-data">
+	<div class="modal-header bg-primary-600 bg-primary-gradient">
+		<h2 class="modal-title text-white">
+			<i class="fal fa-sticky-note mr-2"></i> Gestión de Notas
+		</h2>
+		<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+			<i class="fal fa-times-circle fa-fw fa-lg"></i>
+		</button>
+	</div>
+
+	<div class="modal-body">
+		<div class="row">
+
+			<!-- Formulario para Agregar/Editar Nota -->
+			<div class="col-12">
+	
+						<!-- Tabla de Notas -->
+						@if (ViewBag.Notas != null && ViewBag.Notas.Count > 0)
+						{
+							<div class="col-12 mb-4">
+								<div class="table-responsive">
+									<table id="TablaNotas" class="table table-notas table-striped table-hover w-100">
+										<thead>
+											<tr>
+												@*<th class="text-center" style="width: 80px;">Opciones</th>
+												<th>ID Nota</th>*@
+												<th>Comentario</th>
+												<th>Usuario Creación</th>
+												<th>Fecha Creación</th>
+												<th>Usuario Modificación</th>
+												<th>Fecha Modificación</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var nota in ViewBag.Notas)
+											{
+												<tr>
+													@*<td class="text-center">
+														<div class="dropdown d-inline-block">
+															<button class="btn btn-sm btn-outline-primary rounded-circle shadow-0" data-toggle="dropdown" aria-expanded="false">
+																<i class="fal fa-ellipsis-v"></i>
+															</button>
+															<div class="dropdown-menu">
+																<a onclick="ModalEditarNota(@nota.FiIDSolicitudInstalacionNota)" class="dropdown-item">
+																	<i class="fal fa-edit fa-fw text-primary mr-2"></i> Editar Nota
+																</a>
+															</div>
+														</div>
+													</td>
+													<td class="font-weight-bold">@nota.FiIDSolicitudInstalacionNota</td>*@
+													<td>@Html.Raw(nota.FcComentarioNota?.Replace(Environment.NewLine, "<br />"))</td>
+													<td>@nota.FcNombreCortoCreacion</td>
+													<td>
+														@if (nota.FdFechaCreacion != DateTime.MinValue)
+														{
+															@nota.FdFechaCreacion.ToString("dd/MM/yyyy hh:mm tt")
+														}
+														else
+														{
+															<span class="text-muted">Sin registro</span>
+														}
+													</td>
+													<td>@nota.FcNombreCortoUltimaEdicion</td>
+													<td>
+														@if (nota.FdUltimaFechaModificacion != DateTime.MinValue)
+														{
+															@nota.FdUltimaFechaModificacion.ToString("dd/MM/yyyy hh:mm tt")
+														}
+														else
+														{
+															<span class="text-muted">Sin registro</span>
+														}
+													</td>
+												</tr>
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						}
+						else
+						{
+							<div class="col-12 mb-4 text-center">
+								<p class="text-muted">No se encontraron notas.</p>
+							</div>
+						}
+						<div class="form-group">
+							@Html.LabelFor(model => model.FcComentarioNota, new { @class = "form-label fw-bold" })
+							<div class="input-group">
+								@Html.TextAreaFor(model => model.FcComentarioNota, new { @class = "form-control textarea-comment", @id = "fcComentarioNota", @rows = "4", @placeholder = "Escribe tu nota aquí..." })
+							</div>
+							@Html.ValidationMessageFor(model => model.FcComentarioNota, "", new { @class = "text-danger" })
+						</div>
+						@if (!Model.fbEditar)
+						{
+							<div class="form-group" style="display:none;">
+								@Html.HiddenFor(model => model.FiIDContratistaSolicitud, new { @value = ViewBag.fiIDContratistaSolicitud })
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+	<div class="modal-footer bg-light">
+		<div class="d-flex justify-content-between w-100">
+			<button type="button" class="btn btn-outline-danger btn" data-dismiss="modal">
+				<i class="fal fa-times-circle mr-2"></i> Cancelar
+			</button>
+			<button type="button" onclick="GuardarNota()" class="btn btn-outline-success btn" id="btnGuardarForm">
+				<i class="fal fa-check-circle mr-2"></i> Guardar
+			</button>
+		</div>
+	</div>
+	</form>
+	@Scripts.Render("~/bundles/jqueryval")
+	<script>
+    $(document).ready(function () {
+        // Inicializar DataTable para la tabla de notas
+        $('#TablaNotas').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                "paginate": {
+                    first: "Primero",
+                    previous: '<i class="fal fa-angle-left"></i>',
+                    next: '<i class="fal fa-angle-right"></i>',
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: `<"row"<"col-sm-12"fBl>>rtip`,
+            order: [[4, "desc"]], // Ordenar por Fecha Creación (columna 4) de forma descendente
+            columnDefs: [
+                { targets: 0, orderable: false } // Deshabilitar ordenamiento en la columna de opciones
+            ]
+        });
+    });
+
+    function GuardarNota() {
+        var model = @Html.Raw(Json.Encode(Model));
+        $("#btnGuardarForm").hide();
+
+        // Validar que el comentario no esté vacío
+        if (IsNullOrEmptyOr0($("#fcComentarioNota").val())) {
+            ToastrWarning("", "Ingrese un comentario");
+            $("#fcComentarioNota").focus();
+            $("#btnGuardarForm").show();
+            return;
+        }
+
+        // Construir el objeto que representa el modelo
+        var notaModel = {
+            FiIDContratistaSolicitud: !model.fbEditar ? (@Model.FiIDContratistaSolicitud || 0) : 0,
+            FcComentarioNota: $("#fcComentarioNota").val(),
+            fiIDSolicitudInstalacionNota: model.fiIDSolicitudInstalacionNota || 0,
+            fbEditar: model.fbEditar
+        };
+
+        // Preparar FormData para enviar al controlador
+        var formData = new FormData();
+        formData.append("notaModel", JSON.stringify(notaModel)); // Serializar el objeto como JSON
+
+        var url = "@Url.Action("CrearNota", "Contratista")";
+        if (model.fbEditar) {
+            url = "@Url.Action("EditarNota", "Contratista")";
+        }
+
+        // Enviar los datos mediante AJAX
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.Estado) {
+                    ToastrSuccess("Aprobada", data.Mensaje);
+                    CerrarModal();
+                    var tablaT = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaT.ajax.reload();
+                } else {
+                    ToastrError("Error", data.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            },
+            error: function (resp) {
+                ToastrError("Error", resp.Mensaje || "Ocurrió un error al guardar la nota");
+                $("#btnGuardarForm").show();
+            }
+        });
+    }
+
+    function IsNullOrEmptyOr0(valor) {
+        if (typeof valor == "string") {
+            valor = valor.trim();
+        }
+        return (valor == "" || valor == null || valor == 0 || valor == "0");
+    }
+
+    function ModalEditarNota(idNota) {
+        // Función para abrir el modal en modo edición con el ID de la nota
+        $.ajax({
+            url: '@Url.Action("SolicitudInstalacionNotas", "Contratista")',
+            type: 'GET',
+            data: { fiIDContratistaSolicitud: @Model.FiIDContratistaSolicitud, fbEditar: true },
+            success: function (data) {
+                $('#modalContent').html(data);
+                $('#modalNotas').modal('show');
+                // Aquí podrías precargar los datos de la nota específica usando el idNota si es necesario
+            },
+            error: function () {
+                ToastrError("Error", "No se pudo cargar el modal de edición.");
+            }
+        });
+    }
+	</script>

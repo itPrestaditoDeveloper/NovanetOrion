@@ -1,0 +1,292 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Clientes Potenciales</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Nombre Cliente</label>
+                        <input id="fcNombrecliente" class="form-control" type="text" placeholder="Escriba el Nombre del Cliente" />
+                        <span class="text-danger" id="fcNombreAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Telefono</label>
+                        <input id="fcTelefono" class="form-control" type="text" placeholder="Escriba el telefono del cliente" />
+                        <span class="text-danger" id="fcTelefonoAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Dirreccion</label>
+                        <input id="fcDireccion" class="form-control" type="text" placeholder="Escriba La Direccion" />
+                        <span class="text-danger" id="fcDireccionAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">El Cliente Escribio Por: </label>
+                        <input id="fcRazon" class="form-control" type="text" placeholder="Escriba La razon por la que el cliente Nos Contacto" />
+                        <span class="text-danger" id="fcDireccionAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                            Fuente: 
+                            <a class="btn btn-link btn-xs view-control details-productos" onclick="AgregarFuenteClientePotencial()" href="javascript:void(0)">
+                                <i class="fal fa-plus fa-fw text-success"></i>
+                            </a>
+                        </label>
+                        <select id="fcfuente" class="form-select form-control"></select>
+                        <span class="text-danger" id="fcfuenteAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label">Perfil del Cliente: </label>
+                        <input id="fcPerfilCliente" class="form-control" type="text" placeholder="Aqui ponga la Url del perfil de la persona en caso que se contacto mediante una red Social" />
+                        <span class="text-danger" id="fcPerfilAlerta"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display: flex; justify-content: space-between; align-items: center;">
+                            Estatus:
+                            <a class="btn btn-link btn-xs view-control details-productos" onclick="AgregarEstatusClientePotencial()" href="javascript:void(0)">
+                                <i class="fal fa-plus fa-fw text-success"></i>
+                            </a>
+                        </label>
+                        <select id="fcEstatusCliente" class="form-select form-control"></select>
+                        <span class="text-danger" id="fcEstatusAlerta"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class='test col-sm-12'>
+        <br />
+        <div style='float: right;'>
+            <button type="button" id="btnGuardarCliente" class="btn btn-success">
+                Guardar Cliente
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/js/loading/loading.js"></script>
+<script>
+
+
+    LlenarSelectDinamicamente();
+
+
+
+
+    $(document).ready(function(){
+        LlenarSelectDinamicamente()
+    });
+
+    $(`#btnGuardarCliente`).on(`click`, function () {
+        H5_loading.show();
+        console.log(`Dio Click en el boton`);
+
+        Validaciones();
+        var nombrecliente = $(`#fcNombrecliente`).val();
+        var telefono = $(`#fcTelefono`).val();
+        var direccion = $(`#fcDireccion`).val();
+        var razon = $(`#fcRazon`).val();
+        var urlperfil = $(`#fcPerfilCliente`).val();
+        var fuentecliente = $(`#fcfuente`).val();
+        var estatuscliente = $(`#fcEstatusCliente`).val();
+
+        var ModeloaEnviar = {
+            fcNombreCliente: nombrecliente,
+            fcNumeroTelefono: telefono,
+            fcDireccionCliente: direccion,
+            fcRazonEscribir: razon,
+            fiIdFuenteCliente: fuentecliente,
+            fcUrlEnlace: urlperfil,
+            fiEstatus: estatuscliente
+
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GuardarClientePotencial", "BaseClientes")",
+            data: { modelo: ModeloaEnviar},
+            error: function (xhr, ajaxOptions, thrownError) {
+                H5_loading.hide();
+                var dataerror = { Titulo: "Error", Mensaje: "No se Guardo El Cliente Potencial :(", Estado: false }
+                AlertaAjax(dataerror)
+            },
+            success: function (data) {
+                console.log(data);
+                if (data.CodeStatus == 200) {
+                    H5_loading.hide();
+                    CerrarModal();
+                    return ToastrSuccess("Exito", "Cliente Ingresado con Exito");
+                }
+            }
+        });
+    });
+
+
+
+    function LlenarSelectDinamicamente() {
+
+
+        $.ajax({
+            url: "@Url.Action("ListaEstatusClientesPotenciales", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+
+                var selectEstatus = $("#fcEstatusCliente");
+
+                selectEstatus.empty();
+                selectEstatus.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione el Estado de Este Cliente '
+                }));
+                $("#fcEstatusCliente").select2({ dropdownParent: $("#MyModalBig") }).val(0).trigger("change");
+                $.each(respuesta, function(index, item) {
+                    selectEstatus.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+
+
+
+        $.ajax({
+            url: "@Url.Action("ListaFuentesClientesPotenciales", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+
+                var selectFuente = $("#fcfuente");
+                selectFuente.empty();
+                selectFuente.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione De Donde Nos Conocio el Cliente'
+                }));
+                $("#fcfuente").select2({ dropdownParent: $("#MyModalBig") }).val(0).trigger("change");
+                $.each(respuesta, function(index, item) {
+                    selectFuente.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+
+
+
+    }
+
+
+    function Validaciones() {
+        var nombrecliente = $(`#fcNombrecliente`).val();
+
+        var fuentecliente = $(`#fcfuente`).val();
+        var estatuscliente = $(`#fcEstatusCliente`).val();
+
+        if (!nombrecliente.trim()) {
+            $(`#fcNombreAlerta`).text(`Escriba el Nombre del clientes`);
+        } else {  $(`#fcNombreAlerta`).text(``);}
+        if (!fuentecliente || fuentecliente == 0) {
+            $(`#fcfuenteAlerta`).text(`Seleccione de donde el cliente nos Conocio`);
+        } else { $(`#fcfuenteAlerta`).text(``);}
+        if (!estatuscliente || estatuscliente == 0) {
+            $(`#fcEstatusAlerta`).text(`Selecciones el estado del cliente`);
+        } else { $(`#fcEstatusAlerta`).text(``);}
+    }
+
+
+
+    //Signal R de los dropdow para que funcione bien
+    chat.on('AgregarDropEstatusClientesPotenciales', function (modelo) {
+
+        $.ajax({
+            url: "@Url.Action("ListaEstatusClientesPotenciales", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+
+                var selectEstatus = $("#fcEstatusCliente");
+
+                selectEstatus.empty();
+                selectEstatus.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione el Estado de Este Cliente '
+                }));
+                $.each(respuesta, function(index, item) {
+                    selectEstatus.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+
+                $("#fcEstatusCliente").select2({ dropdownParent: $("#MyModalBig") }).val(modelo.fiIdEstatusCliente).trigger("change");
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+
+    })
+    //
+    chat.on('AgregarDropFuenteClientesPotenciales', function (modelo) {
+        console.log(modelo);
+        $.ajax({
+            url: "@Url.Action("ListaFuentesClientesPotenciales", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+
+                var selectFuente = $("#fcfuente");
+                selectFuente.empty();
+                selectFuente.append($('<option>', {
+                    value: 0,
+                    text: 'Seleccione De Donde Nos Conocio el Cliente'
+                }));
+                $.each(respuesta, function(index, item) {
+                    selectFuente.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+                $("#fcfuente").select2({ dropdownParent: $("#MyModalBig") }).val(modelo.fiIdFuenteCliente).trigger("change");
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+    })
+
+
+</script>
+

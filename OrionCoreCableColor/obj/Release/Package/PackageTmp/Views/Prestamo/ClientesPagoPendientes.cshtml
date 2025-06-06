@@ -1,0 +1,406 @@
+﻿
+@{
+    ViewBag.Title = "ClientesPagoPendientes";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Clientes pagos Pendientes</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row col-lg-12">
+            <div class="col-lg-2">
+                <input type="date" id="txtFecha" class="form-control" readonly />
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary" id="btnEnviar">Enviar FicoLink</button>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary" onclick="AgregarLinkPagoAtrasado()" id="ficoLink">Agregar FicoLink</button>
+            </div>
+        </div>
+        <br />
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaClientesPagoAtrasado">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll" style="transform: scale(1.5);"></th>
+                        <th>Acciones</th>
+                        <th>Identidad</th>
+                        <th>Nombre</th>
+                        <th>Tipo Solocitud</th>
+                        <th>Articulos</th>
+                        <th>Numero de Cuota</th>
+                        <th>Telefono</th>
+                        <th>Cuota($)</th>
+                        <th>Cuota(Lps)</th>
+                        <th>Fecha Cuota</th>
+                        <th>Saldo($)</th>
+                        <th>Saldo(Lps)</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+        var seleccionados = [];
+        $(document).ready(function () {
+
+            debugger;
+            var fecha = new Date(),
+                month = '' + (fecha.getMonth() + 1),
+                day = '' + fecha.getDate(),
+                year = fecha.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+            var date = [year, month, day].join('-');
+           document.getElementById("txtFecha").value = fecha.toJSON().slice(0, 10);
+
+            PagosHoyListado(date);
+        });
+
+        //$('input[type=date]').change(function () {
+        //    debugger;
+
+        //    var data = $(this).val();
+
+
+        //    PagosHoyListado(data);
+
+        //});
+
+        function PagosHoyListado(fecha)
+        {
+            debugger;
+            $('#TablaClientesPagoAtrasado').DataTable({
+            autoWidth: true,
+            responsive: true,
+            destroy:true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+              dom: 'Bfrtip',
+
+              ajax: {
+                url: '@Url.Action("ConsultarClientesPagoAtrasado", "Prestamo")',
+                  method: "Get",
+                  data: { Fecha: fecha },
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return '<input type="checkbox" style="transform: scale(1.5); background-color:#1dc9b7 !important; color: white;" class="select-checkbox data-id="' + data.fcIdentidad + '">';
+                    },
+                    orderable: false
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                        opciones += '<div class="dropdown-menu">';
+
+                      //  opciones += '<a href="javascript:void(0)" onclick="AgregarLinkPagoAtrasado(\'' + data.fcIdentidad + '\',\'' + data.fcNombreSAF + '\',' + data.fiCuota + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Guardar FicoLink</a>';
+                        if (data.fcEstadoLinkdePago == "Link registrado") {
+                            opciones += '<a href="javascript:void(0)" onclick="EliminarLinkPago(\'' + data.fcIdentidad + '\',\'' + data.fcNombreSAF + '\',' + data.fiCuota + ')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Eliminar FicoLink</a>';
+                        }
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+
+                {
+                    data: 'fcIdentidad'
+                },
+
+                {
+                    data: 'fcNombreSAF'
+                },
+                {
+                    data: 'fcTipoSolicitud'
+                },
+                {
+                    data: 'fcArticulosdelContrato'
+                },
+                {
+                    data: 'fiCuota'
+                },
+
+                {
+                    data: 'fcTelefonos'
+                },
+
+                {
+                    data: 'fnValorCuotaDolares'
+                },
+                {
+                    data: 'fnValorCuotaLempiras'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechadeCuota).format("DD/MM/YYYY");
+                    }
+
+                },
+                {
+                    data: 'fnSaldoCuotaDolares'
+                },
+                {
+                    data: 'fnSaldoCuotaLempiras'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        if (data.fcEstadoLinkdePago == "Pendiente") {
+                            return '<div class="badge badge-secondary">Pendiente</div>';
+                        }
+                        if (data.fcEstadoLinkdePago == "Link registrado") {
+                            return '<div class="badge badge-success">Registrado</div>';
+                        }
+
+                    }
+
+                },
+                ],
+            buttons: [
+
+                    //{
+                    //    extend: 'pdfHtml5',
+                    //    text: 'PDF',
+                    //    titleAttr: 'Generate PDF',
+                    //    className: 'btn-outline-danger btn-sm mr-1'
+                    //},
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Excel',
+                        titleAttr: 'Generate Excel',
+                        className: 'btn-outline-success btn-sm mr-1',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9,10]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: 'CSV',
+                        titleAttr: 'Generate CSV',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: 'Copy',
+                        titleAttr: 'Copy to clipboard',
+                        className: 'btn-outline-primary btn-sm mr-1'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        titleAttr: 'Print Table',
+                        className: 'btn-outline-primary btn-sm'
+                    }
+                ]
+            });
+
+            $("#selectAll").on("change", function () {
+                var isChecked = $(this).is(":checked");
+                var table = $('#TablaClientesPagoAtrasado').DataTable();
+
+                table.rows({ search: 'applied' }).nodes().each(function (row, index) {
+                    $('input.select-checkbox', row).prop("checked", isChecked);
+
+                    const rowData = table.row(row).data();
+                    const clienteData = {
+                        Identidad: rowData.fcIdentidad,
+                        Nombre: rowData.fcNombreSAF,
+                        Cuota: rowData.fiCuota
+                    };
+
+                    if (isChecked) {
+                        if (!seleccionados.some(cliente => cliente.Identidad === clienteData.Identidad)) {
+                            seleccionados.push(clienteData);
+                        }
+                    } else {
+                        seleccionados = seleccionados.filter(cliente => cliente.Identidad !== clienteData.Identidad);
+                    }
+                });
+            });
+
+
+
+        }
+
+        @*function AgregarLinkPagoAtrasado(fcIdentidad, fcNombreSAF, fiCuota)
+        {
+
+            VerModalConObjetoDeParametro({ Identidad: fcIdentidad, Nombre: fcNombreSAF, Cuota: fiCuota}, "@Url.Action("ModalGuardarFichoLinkAtrasados", "Prestamo")");
+        }*@
+
+
+        function EliminarLinkPago(fcIdentidad, fcNombreSAF, fiCuota)
+        {
+           debugger;
+            var fecha = $("#txtFecha").val();
+
+            bootbox.confirm({
+                title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro de eliminar el Ficolink<span class='fw-500'></span>`,
+                message: "<span><strong>Advertencia!:</strong><br/>Eliminara el link del cliente: <br/>Nombre: " + fcNombreSAF + "<br/>Identidad: " + fcIdentidad + "<br/>Numero Cuota: " + fiCuota+"</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+
+                    if (result == true) {
+                        debugger;
+                        $.ajax({
+                            url: "@Url.Action("EliminarFicoLinkAtrasado", "Prestamo")",
+                            type: "Post",
+                            data: { Identidad: fcIdentidad, Cuota: fiCuota, fdfechaMaximaPago: fecha},
+                            success: function (data) {
+                                ToastrSuccess("Link", "Se elimino el Link");
+
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 2000);
+
+
+                            }, error: function () {
+                                ToastrError("Error", resp.Mensaje);
+                            }
+                        });
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+        }
+
+
+        $("#btnEnviar").click(function () {
+            debugger;
+            var fecha = $("#txtFecha").val();
+
+            bootbox.confirm({
+                title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro de mandar de forma masiva el FicoLink a estos Clientes Atrasados <span class='fw-500'></span>`,
+                message: "<span><strong>Advertencia!:</strong> Se enviara el mensaje a todos los clientes de la tabla </span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+
+                    if (result == true) {
+                        debugger;
+                        $.ajax({
+                            url: "@Url.Action("EnvioFicoLinkAtrazado", "Prestamo")",
+                            type: "Get",
+                            data: { Fecha: fecha},
+                            success: function (data) {
+                                ToastrSuccess("Mensajes", "Se mandaron los mensajes");
+
+                                setTimeout(() => {
+                                    window.location.reload()
+                                }, 2000);
+
+
+                            }, error: function () {
+                                ToastrError("Error", resp.Mensaje);
+                            }
+                        });
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+
+
+        });
+
+        $('#TablaClientesPagoAtrasado').on('change', '.select-checkbox', function () {
+            const rowData = $('#TablaClientesPagoAtrasado').DataTable().row($(this).parents('tr')).data();
+            const clienteData = {
+                Identidad: rowData.fcIdentidad,
+                Nombre: rowData.fcNombreSAF,
+                Cuota: rowData.fiCuota
+            };
+
+            if ($(this).is(':checked')) {
+                if (!seleccionados.some(cliente => cliente.Identidad === clienteData.Identidad)) {
+                    seleccionados.push(clienteData);
+                }
+            } else {
+                seleccionados = seleccionados.filter(cliente => cliente.Identidad !== clienteData.Identidad);
+            }
+        });
+
+
+
+
+    function AgregarLinkPagoAtrasado() {
+        debugger;
+          $.ajax({
+            url: "@Url.Action("ModalGuardarFichoLinkAtrasados", "Prestamo")",
+            method: "POST",
+            data: JSON.stringify({ clientes: JSON.stringify(seleccionados) }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (resp) {
+                ShowModalBig(resp);
+            },
+            error: function (xhr, status, error) {
+
+                alert("Error al enviar la notificación. Intente de nuevo.");
+            }
+        });
+
+    }
+
+    </script>
+
+}

@@ -1,0 +1,198 @@
+﻿@model OrionCoreCableColor.Models.Prestamo.FacturacionDocumentoViewModel
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Registrar Pago
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcCuentaContableBanco, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm">
+
+                    @Html.DropDownListFor(model => model.fcCuentaContableBanco, new SelectList(ViewBag.LitaCuentasBancos, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fcCuentaContableBanco, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fnValorPago, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">L.</span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fnValorPago, new { @class = "form-control InputDecimal", @type = "number", @data_class = "ClaseDecimal" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fnValorPago, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcReferencia, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-comment fa-fw"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.fcReferencia, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcReferencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fdFechaDePago, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fal fa-calendar-alt fa-fw"></i></span>
+                    </div>
+                    <input type="date" class="form-control" value="@Model.fdFechaDePago.ToString("yyyy-MM-dd")" id="fdFechaDePago" />
+                </div>
+                @Html.ValidationMessageFor(model => model.fdFechaDePago, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcConceptoPago, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.TextAreaFor(model => model.fcConceptoPago, new { @class = "form-control" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcConceptoPago, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <br />
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-sm-4" id="documento" style="height:500px;">
+            
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-sm-4" id="viewDocument">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-11">
+            <div class="form-group mb-0">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">Buscar Archivo</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1 text-center">
+            <button id="ObtenerUsuario" class="btn btn-primary"><i class="fal fa-share"></i> <i class="fal fa-file-alt"></i></button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;height:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="ContabilizarComprobanteDePago" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modeloComprobantePago = @Html.Raw(Json.Encode(Model));
+    var comprobanteDePago = null;
+
+
+    $("#fcCuentaContableBanco").select2({ dropdownParent: $("#MyModalBig") });
+
+    $("#customFile").change(function (e) {
+        var file = e.target.files[0];
+        mostrarArchivo(file);
+    });
+
+    $("#ObtenerUsuario").click(function () {
+        VerModalSmConObjetoDeParametro({}, "@Url.Action("ObtenerUsuariosParaDocumento","Prestamo")");
+    });
+
+    function mostrarArchivo(file)
+    {
+        var nombre = file.name.split('.');
+        var type = file.type;
+        var blob = file.slice(0, file.size, file.type);
+        newFile = new File([blob], `ComprobanteDePago_${modeloComprobantePago.fiIDFacturacionMaestro}.${nombre[1]}`, { type: type });
+
+        comprobanteDePago = newFile;
+        
+        debugger;
+        var url = window.URL.createObjectURL(newFile);
+
+        
+        var embed = $(`<embed type="${file.type}"  src="${url}"  class="img-responsive img-thumbnail" style="width:100%;height:500px;overflow: hidden;"  cursor:pointer;"></embed>`);
+        $("#documento").empty().append(embed);
+
+        var view = $(`<button type="button" class="form-control btn btn-link text-center" onclick="${(file.type == "application/pdf" ? "ShowBigPdfSrc('" + url + "')" : "ShowBigImageSrc('" + url + "')")}">Visualizar Documento</button>`);
+        $("#viewDocument").empty().append(view);
+    }
+
+
+    $("#ContabilizarComprobanteDePago").click(function ()
+    {
+        $("#ContabilizarComprobanteDePago").hide();
+
+        if ($("#fcCuentaContableBanco").val() == "" || $("#fcCuentaContableBanco").val() == null)
+        {
+            ToastrError("SELECCIONE LA CUENTA DE BANCO", "");
+            $("#ContabilizarComprobanteDePago").show();
+            return;
+        }
+
+        if (comprobanteDePago == null)
+        {
+            $("#ContabilizarComprobanteDePago").show();
+            ToastrError("Seleccione un archivo o pidaselo a alguien mas", "");
+            return;
+        }
+
+        if ($("#fnValorPago").val() == 0 || $("#fnValorPago").val() == "")
+        {
+            $("#ContabilizarComprobanteDePago").show();
+            ToastrError("Ingrese un valor valido", "");
+            return;
+        }
+
+        var form_data = new FormData();
+        form_data.append("fiIDFacturacionMaestro", modeloComprobantePago.fiIDFacturacionMaestro);
+        form_data.append("documento", comprobanteDePago);
+        form_data.append("fcExtension", comprobanteDePago.type);
+        form_data.append("fcCuentaContableBanco", $("#fcCuentaContableBanco").val());
+        form_data.append("fnValorPago", $("#fnValorPago").val());
+        form_data.append("fcReferencia", $("#fcReferencia").val());
+        form_data.append("fdFechaDePago", $("#fdFechaDePago").val());
+        form_data.append("fcConceptoPago", $("#fcConceptoPago").val());
+        $.ajax({
+            url: '@Url.Action("ContabilizarPago","Prestamo")',
+            type: "Post",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            enctype: "multipart/form-data",
+            success: function (resp)
+            {
+                if (resp.Estado)
+                {
+                    var tablaP = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaP.ajax.reload();
+                    ToastrSuccess("", resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    $("#ContabilizarComprobanteDePago").show();
+                    ToastrError("Error", resp.Mensaje);
+                }
+            }
+        });
+
+    });
+</script>

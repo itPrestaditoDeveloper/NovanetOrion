@@ -1,0 +1,288 @@
+﻿
+@{
+    ViewBag.Title = "BandejaClientesPotenciales";
+}
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Clientes Potenciales</h2>
+
+    </div>
+
+    <div id="panelprincipal" class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaClientesPotenciales">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th> <input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Nombre Cliente</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>Razon </th>
+                        <th>Fuente </th>
+                        <th>Url Perfil</th>
+                        <th>Usuario Gestion</th>
+                        <th>Fecha Gestion</th>
+                        <th>Estatus</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    
+    
+    <script>
+        var tablaPrincipal = $('#BandejaClientesPotenciales').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListadoClientesPotenciales")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            buttons: [
+                {
+                    text: 'Agregar',
+                    className: 'btn btn-success btnAgregarRef',
+                    action: function (datas) {
+                        $.ajax({
+                            url: "@Url.Action("ClientePotencialFormulario", "BaseClientes")",
+                            method: "get",
+                            success: function (resp) {
+
+                                ShowModalBig(resp);
+                            },
+                            error: function (resp) {
+                                AlertaError();
+                            }
+                        });
+                    }
+                }
+            ],
+            rowCallback: function (row, data, index) {
+
+            },
+            columns: [
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opt = '';
+                        if (data.fbPuedeEliminarlo) {
+                            opt += `<a href='javascript:void(0);' onclick="EliminarclientePotencial(${data.fiIdClientesPotenciales})" class='btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1' title='Eliminar Cliente'><i class=\"fal fa-times\"></i></a>`;
+                        }
+
+                        opt += `
+                                    <div class='dropdown d-inline-block dropleft'>
+                                        <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='Mas Opciones'><i class=\"fal fa-ellipsis-v\"></i></a>
+                                        <div class='dropdown-menu'>
+                                            <a class='dropdown-item' href='javascript:void(0);' onclick="ModalSeguimiento('${data.fiIdClientesPotenciales}','${data.fiEstatus}')" >Dar Seguimiento</a>`;
+
+
+                        opt += `</div>
+                                </div>`;
+                        return opt;
+                    }
+                },
+
+                {
+                    data: 'fcNombreCliente'
+                },
+
+                {
+                    data: 'fcNumeroTelefono'
+                },
+                {
+                    data: 'fcDireccionCliente'
+                },
+                {
+                    data: 'fcRazonEscribir'
+                },
+                {
+                    data: 'fcNombrefuenteOrigen'
+
+                },
+                {
+                    data: 'fcUrlEnlace'
+                },
+                {
+                    data: 'fcUsuarioGestion'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaCreacion).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        //return `<span class="btn-sm btn-block badge badge-${data.fcClase} text-white">${data.fcNombreEstatus}</span>`
+                        return `<span class="btn-sm btn-block badge text-white" style="background-color: ${data.fcHexadecimal};">${data.fcNombreEstatus}</span>`
+                    }
+                }
+            ]
+        });
+
+
+        function ModalSeguimiento(id,estatus) {
+            $.ajax({
+                url: "@Url.Action("BitacoraClientePotencial", "BaseClientes")",
+                data: { idClientePotencial: id, fiidestatus: estatus},
+                method: "get",
+                success: function (resp) {
+                    ShowModalBigScroll(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+        chat.client.AgregarClientePotencial = function (modelo) {
+            var tabla = $.fn.dataTable.Api(`#BandejaClientesPotenciales`);
+            tabla.row.add(modelo).draw(false);
+        }
+
+        chat.client.ActualizarBandejaClientesPotenciales = function (modelo) {
+            var tabla = $.fn.dataTable.Api("#BandejaClientesPotenciales");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIdClientes_Potenciales == modelo.fiIdClientes_Potenciales);
+            tabla.row(node).data(modelo).draw(false);
+        }
+
+        chat.client.EliminarRowClientesPotenciales = function (idclientepotencial) {
+            var tabla = $.fn.dataTable.Api("#BandejaClientesPotenciales");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(a => tabla.row(a).data().fiIdClientes_Potenciales == idclientepotencial);
+
+            tabla.row(node).remove().draw(false);
+        }
+
+        function EliminarclientePotencial(idcliente) {
+                bootbox.confirm({
+                title: `<i class="" fa-times-circle text-danger mr-2'></i> Esta Seguro que Desea Eliminar Este Cliente <span class='fw-500'></span>`,
+                message: "<span><strong>Advertencia!:</strong> Esta Accion no se puede Reversar</span>",
+                centerVertical: true,
+                swapButtonOrder: true,
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-danger shadow-0'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-default'
+                    }
+                },
+                className: "modal-alert",
+                closeButton: false,
+                callback: function (result) {
+                    //console.log(result)
+                    if (result == true) {
+
+                    $.ajax({
+                        url: "@Url.Action("EliminarClientePotencial", "BaseClientes")",
+                        type: "POST",
+                        data: { fiIdClientePotencial: idcliente },
+                        success: function (datas) {
+
+                            console.log(datas);
+                            if (datas.CodeStatus == 200) {
+                                return ToastrSuccess("Exito", "Cliente Eliminado con Exito");
+                            } else if (datas.CodeStatus == 500) {
+
+                                var dataerror = { Titulo: "Advertencia!", Mensaje: "No se pudo Eliminar el Cliente", Estado: false }
+                                AlertaAjax(dataerror)
+                                CerrarSuitAlert();
+                            }
+                        },
+                        error: function (datae) {
+                            var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Eliminar al cliente", Estado: false }
+                            AlertaAjax(dataerror)
+                        }
+                    })
+                    }
+                    if (result == false) {
+
+                    }
+                }
+            });
+        }
+
+        function AgregarEstatusClientePotencial() {
+
+            $.ajax({
+                url: "@Url.Action("AgregarEstadoClientePotencial", "BaseClientes")",
+                method: "get",
+                success: function (resp) {
+                    ShowModal(resp);
+                    $("#MyModal").hide("");
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+
+        }
+
+        function AgregarFuenteClientePotencial() {
+            $.ajax({
+                url: "@Url.Action("AgregarFuenteClientePotencial", "BaseClientes")",
+                data: { fiLiugarDondeCrea: 1},
+                method: "get",
+                success: function (resp) {
+                    ShowModal(resp);
+                    $("#MyModal").hide("");
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+    </script>
+    
+
+}

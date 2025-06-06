@@ -1,0 +1,190 @@
+﻿<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        Escanear Codigo Barra <i class="fal fa-camera"></i>
+    </h2>
+    <button type="button" class="close" data-dismiss="modal" id="cerrarmodal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <label style="display:none;" id="escaneoProducto"></label>
+        </div>
+    </div>
+    <main>
+        <div id="reader"></div>
+        <div id="result"></div>
+    </main>
+    <div class="row" id="BtnEnviar" style="padding-top: 10px;">
+        <div class="col-sm-4">
+            <select class="form-control" id="selectUsuarios">
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-success" id="enviarFormulario">Enviar</button>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+
+    var usuariosConectados = [];
+    pantallaPrincipal = 1;
+    $("#selectUsuarios").select2({ dropdownParent: $("#MyModalBig") });
+        debugger;
+
+
+    scanner = new Html5QrcodeScanner('reader', {
+
+        qrbox: {
+            width: $("#MyModalBig").width() / 2,
+            height: $("#MyModalBig").height() / 12,
+        },
+        fps: 20,
+    });
+
+
+
+    scanner.render(success, error);
+
+    function success(result) {
+        debugger;
+        $.ajax({
+            url: "@Url.Action("GetInformacionInventario","Productos")",
+            type: "Get",
+            data: { fcCodigoSerie: result },
+            success: function (resp) {
+                if (resp.Estado) {
+                    if (resp.listaInventarioDetalle.length > 0) {
+
+                        var tabla = $.fn.DataTable.Api("#TablaProductos");
+                        var data = tabla.rows().data().toArray();
+                        var repetidos = tabla.rows().data().toArray();
+                        for (var item of resp.listaInventarioDetalle) {
+                            repetidos.push(item);
+
+                        }
+
+                        var uniqs = repetidos.filter(function (item, index, array) {
+                            return array.indexOf(item) === index;
+                        });
+
+                        uniqs = uniqs.filter(x => !data.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+
+                        tabla.rows.add(uniqs).draw(false);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Productos", "No se encontro productos con esta serie");
+                    }
+                } else {
+
+                    ToastrError("Productos", "No se encontro productos con esta serie");
+                }
+                buffer = "";
+            }
+        });
+
+
+
+
+
+
+    }
+
+
+    function error(err) { }
+
+
+
+    $(document).on("hidden.bs.modal", "#MyModalBig", function () {
+        pantallaPrincipal = 0;
+        scanner.clear();
+        $(document).empty();
+        chat.off("retornarResultado");
+    });
+
+
+    chat.on('insertarUsuarios', function (resp, userPeticion) {
+        if ("@User.Identity.Name" == userPeticion) {
+            if (!usuariosConectados.some(x => x.UserName == resp.UserName)) {
+                usuariosConectados.push(resp);
+                let newOption = new Option(resp.UserName, resp.UserName, false, false);
+                $("#selectUsuarios").append(newOption).trigger("change");
+            }
+        }
+
+    });
+
+
+     $.ajax({
+        url: "@Url.Action("GetUsuariosConectados","Base")",
+        method: "Get",
+        success: function (resp) {
+
+            //$("#BtnEnviar").append();
+        }
+    });
+
+    $("#enviarFormulario").click(function () {
+        var usuarioSeleccionado = usuariosConectados.find(x => x.UserName == $("#selectUsuarios").val());
+        $.ajax({
+            url: "@Url.Action("EnviarModalCamaraExterna", "Productos")",
+            type: "Post",
+            data: { usuario: usuarioSeleccionado ,titulo : "Escanear Serie de Producto", usuarioPeticion: "@User.Identity.Name" },
+            success: function (resp) {
+
+            }
+        });
+
+    });
+
+
+
+    chat.on("retornarResultado", function (model) {
+        if ("@User.Identity.Name" == model.UsuarioPeticion)
+        {
+            debugger;
+            $.ajax({
+            url: "@Url.Action("GetInformacionInventario","Productos")",
+            type: "Get",
+            data: { fcCodigoSerie: model.Codigo },
+            success: function (resp) {
+                if (resp.Estado) {
+                    if (resp.listaInventarioDetalle.length > 0) {
+
+                        var tabla = $.fn.DataTable.Api("#TablaProductos");
+                        var data = tabla.rows().data().toArray();
+                        var repetidos = tabla.rows().data().toArray();
+                        for (var item of resp.listaInventarioDetalle) {
+                            repetidos.push(item);
+
+                        }
+
+                        var uniqs = repetidos.filter(function (item, index, array) {
+                            return array.indexOf(item) === index;
+                        });
+
+                        uniqs = uniqs.filter(x => !data.some(y => y.fiIDMovimiento == x.fiIDMovimiento));
+
+                        tabla.rows.add(uniqs).draw(false);
+                        CerrarModal();
+                    } else {
+                        ToastrError("Productos", "No se encontro productos con esta serie");
+                    }
+                } else {
+
+                    ToastrError("Productos", "No se encontro productos con esta serie");
+                }
+                buffer = "";
+            }
+        });
+        }
+    });
+
+
+
+</script>

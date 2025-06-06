@@ -1,0 +1,721 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificacion de Documentos del Usuario</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
+    <script>
+        window.tailwind.config = {
+            darkMode: ['class'],
+            theme: {
+                extend: {
+                    colors: {
+                        border: 'hsl(var(--border))',
+                        input: 'hsl(var(--input))',
+                        ring: 'hsl(var(--ring))',
+                        background: 'hsl(var(--background))',
+                        foreground: 'hsl(var(--foreground))',
+                        primary: {
+                            DEFAULT: 'hsl(var(--primary))',
+                            foreground: 'hsl(var(--primary-foreground))'
+                        },
+                        secondary: {
+                            DEFAULT: 'hsl(var(--secondary))',
+                            foreground: 'hsl(var(--secondary-foreground))'
+                        },
+                        destructive: {
+                            DEFAULT: 'hsl(var(--destructive))',
+                            foreground: 'hsl(var(--destructive-foreground))'
+                        },
+                        muted: {
+                            DEFAULT: 'hsl(var(--muted))',
+                            foreground: 'hsl(var(--muted-foreground))'
+                        },
+                        accent: {
+                            DEFAULT: 'hsl(var(--accent))',
+                            foreground: 'hsl(var(--accent-foreground))'
+                        },
+                        popover: {
+                            DEFAULT: 'hsl(var(--popover))',
+                            foreground: 'hsl(var(--popover-foreground))'
+                        },
+                        card: {
+                            DEFAULT: 'hsl(var(--card))',
+                            foreground: 'hsl(var(--card-foreground))'
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="~/styles/CapturadeIdentidadySelfieEstilos.css" rel="stylesheet" />
+    <style type="text/tailwindcss">
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <div id="screen1" class="flex flex-col items-center justify-center h-screen p-4">
+        <h1 class="text-4xl font-extrabold mb-8 text-primary transition-transform transform hover:scale-105">Elija un documento e inicie la verificación</h1>
+        <div class="grid grid-cols-1 gap-6 w-full max-w-md">
+            @*<button class="flex items-center justify-between bg-gradient-to-r from-blue-500 to-blue-700 text-white p-4 rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-800 transition transform hover:scale-105">
+                <span class="font-semibold text-lg">Pasaporte</span>
+                <img aria-hidden="true" alt="passport-icon" src="https://openui.fly.dev/openui/24x24.svg?text=🌍" class="w-8 h-8" />
+            </button>*@
+            <button onclick="showScreen(2)" class="flex items-center justify-between bg-gradient-to-r from-green-500 to-green-700 text-white p-4 rounded-lg shadow-lg hover:from-green-600 hover:to-green-800 transition transform hover:scale-105">
+                <span class="font-semibold text-lg">Identidad</span>
+                <img aria-hidden="true" alt="identity-card-icon" src="https://openui.fly.dev/openui/24x24.svg?text=🆔" class="w-8 h-8" />
+            </button>
+            @*<button class="flex items-center justify-between bg-gradient-to-r from-yellow-500 to-yellow-700 text-white p-4 rounded-lg shadow-lg hover:from-yellow-600 hover:to-yellow-800 transition transform hover:scale-105">
+                <span class="font-semibold text-lg">Licencia</span>
+                <img aria-hidden="true" alt="driver-license-icon" src="https://openui.fly.dev/openui/24x24.svg?text=🚗" class="w-8 h-8" />
+            </button>*@
+        </div>
+    </div>
+
+    <div id="screen2" class="hidden flex flex-col items-center justify-center h-screen bg-background text-foreground p-4 space-y-6">
+        <h1 class="text-3xl font-bold text-primary text-center">Frente del documento de identidad</h1>
+
+        <p class="text-lg text-center max-w-md">
+            Por favor muestre el Frente de su documento de identidad en el área marcada y presione el botón "Tomar".
+        </p>
+
+        <div class="w-full max-w-md bg-card p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Evite Estos Errores:</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/dni Desemfoque .png" class="w-20 h-20 mb-2" />
+                    <p class="text-sm text-center">Borroso o reflejos</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/dni demasiado pequeña.png" class="w-20 h-20 mb-2" />
+                    <p class="text-sm text-center">Demasiado pequeña/Alejado</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/dni oscurecida.png" class="w-20 h-20 mb-2" />
+                    <p class="text-sm text-center">Demasiado oscuro</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="showScreen(3)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+            <span>Iniciar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+
+        @*<a href="#" onclick="showScreen(1)" class="text-blue-500 hover:text-blue-700 underline">
+            ¿Quiere seleccionar un documento diferente? haga clic aquí
+        </a>*@
+    </div>
+
+    <div id="screen3" class="hidden flex flex-col items-center justify-center h-screen p-4">
+        <h2 class="text-3xl font-bold mb-6">Capturar el frente DNI</h2>
+        <div class="relative w-full max-w-md aspect-video rounded-lg overflow-hidden mb-4">
+            <video id="video3" class="w-full h-full object-cover" autoplay playsinline></video>
+            <canvas id="canvas3" class="absolute inset-0 w-full h-full" style="display: none;"></canvas>
+        </div>
+        <button onclick="captureImage('3')" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition">Tomar</button>
+    </div>
+
+    <div id="screen4" class="hidden flex flex-col items-center justify-center h-screen p-4">
+        <h2 class="text-3xl font-bold mb-6">Verificación de la calidad de la imagen capturada</h2>
+        <div id="preview-container" class="bg-gray-200 w-full max-w-md aspect-video rounded-lg flex items-center justify-center mb-4">
+            <img id="preview-image-4" class="w-full h-full object-cover" />
+        </div>
+        <p id="quality-message" class="mb-4 text-center"></p>
+        <div id="action-buttons" class="flex space-x-4">
+            <button id="continue-button-4" onclick="showScreen(5)" class="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition hidden">Continuar</button>
+            <button id="retake-button-4" onclick="showScreen(3)" class="bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition">Volver a Tomar</button>
+        </div>
+    </div>
+
+    <div id="screen5" class="hidden flex flex-col items-center justify-center h-screen bg-background text-foreground p-4 space-y-6">
+        <h1 class="text-3xl font-bold text-primary text-center">Reverso del documento de identidad.</h1>
+
+        <p class="text-lg text-center max-w-md">
+            Muestre el reverso de su tarjeta de identificación en el área marcada y presione el botón "Tomar".
+        </p>
+
+        <div class="w-full max-w-md bg-card p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Evite Estos Errores:</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/dni atras desemfoque.png" alt="Dni Borroso" class="w-20 h-20 mb-2" />
+                    @*<img src="https://openui.fly.dev/openui/80x80.svg?text=📷" alt="Blurry example" class="w-20 h-20 mb-2">*@
+                    <p class="text-sm text-center">Borroso o reflejos</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/Atras DNI demasiado pequeña.png" alt="Dni Pequeño" class="w-20 h-20 mb-2" />
+                    @*<img src="https://openui.fly.dev/openui/80x80.svg?text=🔍" alt="Too small example" class="w-20 h-20 mb-2">*@
+                    <p class="text-sm text-center">Demasiado pequeña/Alejado</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/Atras DNI Oscuro .png" alt="DNI Oscuro" class="w-20 h-20 mb-2" />
+                    @*<img src="https://openui.fly.dev/openui/80x80.svg?text=🌑" alt="Too dark example" class="w-20 h-20 mb-2">*@
+                    <p class="text-sm text-center">Demasiado oscuro</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="showScreen(6)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+            <span>Iniciar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+
+        @*<a href="#" onclick="showScreen(1)" class="text-blue-500 hover:text-blue-700 underline">
+            ¿Quiere seleccionar un documento diferente? haga clic aquí
+        </a>*@
+    </div>
+
+    <div id="screen6" class="hidden flex flex-col items-center justify-center h-screen p-4">
+        <h2 class="text-3xl font-bold mb-6">Capture el reverso del DNI</h2>
+        <div class="relative w-full max-w-md aspect-video rounded-lg overflow-hidden mb-4">
+            <video id="video6" class="w-full h-full object-cover" autoplay playsinline></video>
+            <canvas id="canvas6" class="absolute inset-0 w-full h-full" style="display: none;"></canvas>
+        </div>
+        <button onclick="captureImage('6')" class="bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition">Tomar</button>
+    </div>
+
+    <div id="screen7" class="hidden flex flex-col items-center justify-center h-screen p-4">
+        <h2 class="text-3xl font-bold mb-6">Verificación de la calidad de la imagen capturada</h2>
+        <div id="preview-container-7" class="bg-gray-200 w-full max-w-md aspect-video rounded-lg flex items-center justify-center mb-4">
+            <img id="preview-image-7" class="w-full h-full object-cover" />
+        </div>
+        <p id="quality-message-7" class="mb-4 text-center"></p>
+        <div id="action-buttons-7" class="flex space-x-4">
+            <button id="continue-button-7" onclick="showScreen(8)" class="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition hidden">Continuar</button>
+            <button id="retake-button-7" onclick="showScreen(6)" class="bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition">Volver a Tomar</button>
+        </div>
+    </div>
+
+    <div id="screen8" class="hidden flex flex-col items-center justify-center h-screen bg-background text-foreground p-4 space-y-6">
+        <h1 class="text-3xl font-bold text-primary text-center">Tomate una selfie</h1>
+
+        <p class="text-lg text-center max-w-md">
+            Coloca tu cara en el medio del marco y sigue las instrucciones. la foto no debe estar borrosa y estar uniformemente iluminada
+        </p>
+
+        <div class="w-full max-w-md bg-card p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold mb-4">Evite Estos Errores:</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/Selfie Borrosa .png" alt="Selfie Borroso" class="w-20 h-20 mb-2" />
+                    @*<img src="https://openui.fly.dev/openui/80x80.svg?text=📷" alt="Blurry example" >*@
+                    <p class="text-sm text-center">Borroso o reflejos</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/Selfie Oscura.png" alt="Selfie Mala Iluminacion" class="w-20 h-20 mb-2" />
+                    @*<img src="https://openui.fly.dev/openui/80x80.svg?text=🔍" alt="Too small example" class="w-20 h-20 mb-2">*@
+                    <p class="text-sm text-center">Mala iluminación</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="~/Content/img/Selfie no poner cara neutral.jpg" alt="Selfie sin Cara Neutro" class="w-20 h-20 mb-2" />
+                    @*<img src="https://openui.fly.dev/openui/80x80.svg?text=🌑" alt="Too dark example" class="w-20 h-20 mb-2">*@
+                    <p class="text-sm text-center">No tener una cara Neutral</p>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="showScreen(9)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full flex items-center space-x-2 transition duration-300 ease-in-out transform hover:scale-105">
+            <span>Iniciar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </button>
+
+        @*<a href="#" onclick="showScreen(1)" class="text-blue-500 hover:text-blue-700 underline">
+            ¿Quiere seleccionar un documento diferente? haga clic aquí
+        </a>*@
+    </div>
+
+    <div id="screen9" class="hidden flex flex-col items-center justify-center min-h-screen p-4 bg-gray-900">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full relative">
+            <button onclick="showScreen(8)" class="absolute top-2 right-2 text-gray-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h2 class="text-xl font-bold mb-4 text-center bg-gray-700 text-white py-2 rounded">Enmarca tu rostro en el óvalo</h2>
+            <div class="bg-gray-200 w-full aspect-[3/4] rounded-lg flex items-center justify-center mb-4 relative">
+                <div class="absolute w-3/4 h-4/5 border-4 border-gray-400 rounded-full"></div>
+                <video id="video9" class="absolute inset-0 w-full h-full object-cover" autoplay playsinline></video>
+                <canvas id="canvas9" class="absolute inset-0 w-full h-full object-cover" style="display: none;"></canvas>
+            </div>
+            <button onclick="captureImage('9')" class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition">Tomar</button>
+        </div>
+    </div>
+
+    <div id="screen10" class="hidden flex flex-col items-center justify-center h-screen p-4">
+        <h2 class="text-3xl font-bold mb-6">Verificación de la calidad de la selfie</h2>
+        <div id="preview-container-10" class="bg-gray-200 w-full max-w-md aspect-[3/4] rounded-lg flex items-center justify-center mb-4">
+            <img id="preview-image-10" class="w-full h-full object-cover" />
+        </div>
+        <p id="quality-message-10" class="mb-4 text-center"></p>
+        <div id="action-buttons-10" class="flex space-x-4">
+            <button id="continue-button-10" onclick="finishProcess()" class="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition hidden">Finalizar</button>
+            <button id="retake-button-10" onclick="showScreen(9)" class="bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition">Volver a Tomar</button>
+        </div>
+    </div>
+
+
+
+    @Scripts.Render("~/scripts/external-plugins")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Content/js/wizard/function.js"></script>
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.bundle.js"></script>
+    <script src="~/Scripts/mascarasDeEntrada/js/jquery.inputmask.js"></script>
+    <script src="~/Content/js/loading/loading.js"></script>
+
+    <script src="~/Content/js/leaflet/leaflet.js"></script>
+    <script src="~/Content/js/vue/vue.js"></script>
+    <script src="~/Content/js/vue/vue.min.js"></script>
+    <script>
+
+       //var myDropzone = $('#Imagen-dropzone').dropzone({
+       //     //url: '/file/post',
+       //     autoProcessQueue: true,
+       //     uploadMultiple: true,
+       //     acceptedFiles: "image/*,video/*",
+       //     maxFiles: 1,
+       //     addRemoveLinks: true,
+       //     dictMaxFilesExceeded: "Maximum upload limit reached",
+       //     dictInvalidFileType: "upload only JPG/PNG",
+       //     //resizeWidth: 500,
+       //     //resizeHeight: 300,
+
+       //     init: function () {
+       //         debugger;
+       //         var myDropzone = this;
+       //         myDropzone.on('maxfilesexceeded', function (file) {
+       //             this.removeAllFiles();
+       //             this.addFile(file);
+       //         });
+       //     }
+       // });
+
+        var fotosredimencionadas = [];
+        let capturedImage = null;
+        let currentStream = null;
+
+
+        function showScreen(screenNumber) { // esto si se usa, para pasar de un div al otro sin perder el estilo
+            //console.log(screenNumber);
+
+            // Obtiene todas las pantallas que comienzan con "screen"
+            const screens = document.querySelectorAll('[id^="screen"]');
+
+            // Oculta todas las pantallas
+            screens.forEach(screen => {
+                screen.classList.add('hidden');
+            });
+
+            // Muestra la pantalla seleccionada
+            document.getElementById(`screen${screenNumber}`).classList.remove('hidden');
+
+
+            if (screenNumber === 3 || screenNumber === 6 || screenNumber === 9) {
+                startCamera(screenNumber);
+            } else {
+                stopCamera();
+            }
+
+        }
+
+        async function startCamera(idscreen) { // esta funcion sirve par poder encender la camara como tal
+            try {
+                if (currentStream) {
+                    stopCamera();
+                }
+                const constraints = {
+                    video: idscreen === 9 ? true : { facingMode: { exact: "environment" } }
+                };
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                const video = document.getElementById(`video${idscreen}`);
+                video.srcObject = currentStream;
+                await video.play();
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                try {
+                    currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    const video = document.getElementById(`video${idscreen}`);
+                    video.srcObject = currentStream;
+                    await video.play();
+                } catch (frontErr) {
+                    console.error("Error accessing front camera:", frontErr);
+                    alert("No se pudo acceder a la cámara. Por favor, verifique los permisos.");
+                }
+            }
+        }
+
+        function stopCamera() { // aqui se detiene la camara cuando se pasa de una pantalla a otra
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        }
+
+        function captureImage(screenNumber) { // funcion para capturar imagenes y mostrarla en las pantallas siguientes correspondientes
+            //console.log(screenNumber);
+            const video = document.getElementById(`video${screenNumber}`);
+            const canvas = document.getElementById(`canvas${screenNumber}`);
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            capturedImage = canvas.toDataURL('image/jpeg'); //aqui se cual es el base64
+            
+            var nextScreen = (parseInt(screenNumber) + 1);
+            //console.log(capturedImage);
+            //console.log(idscreem);
+            showScreen(nextScreen);
+            if (screenNumber === 9) {
+                validateSelfie(capturedImage, nextScreen);
+            } else {
+                displayCapturedImage(nextScreen);
+            }
+
+            //displayCapturedImage(idscreem);
+        }
+
+        function getImageExtension(base64String) {
+            // Extrae la parte que indica el tipo de imagen, por ejemplo "image/jpeg"
+            const mimeType = base64String.split(';')[0].split(':')[1];
+
+            // Obtén la extensión basándote en el mimeType
+            let extension = '';
+            switch (mimeType) {
+                case 'image/jpeg':
+                    extension = 'jpeg';
+                    break;
+                case 'image/png':
+                    extension = 'png';
+                    break;
+                case 'image/gif':
+                    extension = 'gif';
+                    break;
+                case 'image/bmp':
+                    extension = 'bmp';
+                    break;
+                case 'image/webp':
+                    extension = 'webp';
+                    break;
+                // Puedes añadir más casos según los tipos de imágenes que manejes
+                default:
+                    extension = 'unknown'; // Si no se reconoce el tipo, devuelve 'unknown'
+            }
+
+            return extension;
+        }
+
+
+
+
+
+        async function validateSelfie(imageData, screenNumber) { // funcion para validar la selfie que se tomara el usuario
+            // Here we'll add placeholder logic for selfie validation
+            // In a real-world scenario, you'd likely use an API or more sophisticated image processing
+
+            const previewImage = document.getElementById(`preview-image-${screenNumber}`);
+            previewImage.src = imageData;
+
+            const qualityMessage = document.getElementById(`quality-message-${screenNumber}`);
+            const continueButton = document.getElementById(`continue-button-${screenNumber}`);
+            const retakeButton = document.getElementById(`retake-button-${screenNumber}`);
+
+            // Placeholder checks - replace with actual image processing logic
+            const isBlurry = Math.random() < 0.3;
+            const isDark = Math.random() < 0.3;
+            const hasFace = Math.random() < 0.8;
+
+            if (isBlurry || isDark || !hasFace) {
+                let message = "La imagen no cumple con los requisitos:";
+                if (isBlurry) message += " La imagen está borrosa.";
+                if (isDark) message += " La imagen está muy oscura.";
+                if (!hasFace) message += " No se detectó un rostro en la imagen.";
+
+                qualityMessage.textContent = message;
+                continueButton.classList.add('hidden');
+                retakeButton.classList.remove('hidden');
+            } else {
+                qualityMessage.textContent = "La imagen cumple con los requisitos de calidad.";
+                continueButton.classList.remove('hidden');
+                retakeButton.classList.add('hidden');
+
+                // Obtén la extensión de la imagen (será 'jpeg' en este caso)
+                const imageExtension = getImageExtension(imageData);
+                fotosredimencionadas.push({ basesesentaycuatro: imageData, nombreArchivo: "Selfie_Cliente." + imageExtension, numimagen: 6 });
+            }
+        }
+
+        function displayCapturedImage(idscreem) {
+            const previewImage = document.getElementById(`preview-image-${idscreem}`);
+            previewImage.src = capturedImage;
+
+            // Aquí puedes agregar lógica para validar la calidad de la imagen
+            const qualityMessage = document.getElementById('quality-message');
+            const continueButton = document.getElementById(`continue-button-${idscreem}`);
+            const retakeButton = document.getElementById(`retake-button-${idscreem}`);
+
+            var nombre = ``;
+            var numima;
+            if (idscreem === 4) { //no me gusta hacerlo de esta forma, pero no tuve mucho tiempo para hacerlo de una forma mas dinamico, por que tambien se deberia de hacer dinamico los documentos que se solicita
+                nombre = 'Identidad_Frente';
+                numima = 5;
+            } else if (idscreem === 7) {
+                nombre = 'Identidad_Atras';
+                numima = 11;
+            } else if (idscreem === 10) {
+                nombre = 'Selfie_Cliente';
+                numima = 6;
+            }
+
+            // Simulación de validación de calidad (reemplazar con lógica real)
+            const qualityScore = Math.random();
+            //console.log(qualityScore);
+            //if (qualityScore < 0.7) {//como estaba antes
+            if (qualityScore < 0) {
+                qualityMessage.textContent = "La imagen no cumple con los requisitos de calidad. Por favor, vuelva a intentarlo.";
+                continueButton.classList.add('hidden');
+                retakeButton.classList.remove('hidden');
+            } else {
+                qualityMessage.textContent = "La imagen cumple con los requisitos de calidad.";
+                continueButton.classList.remove('hidden');
+                retakeButton.classList.add('hidden');
+                // Obtén la extensión de la imagen (será 'jpeg' en este caso)
+                const imageExtension = getImageExtension(capturedImage);
+                fotosredimencionadas.push({ basesesentaycuatro: capturedImage, nombreArchivo: nombre + '.'+imageExtension, numimagen: numima })
+                console.log(fotosredimencionadas);
+            }
+        }
+
+        // Inicializar la primera pantalla
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen(1);
+        });
+
+        var infoCliente = new Vue({
+            el: '#AppHeader',
+            data: {
+                idCliente:0,
+                nombreCliente: ""
+            }
+        });
+
+
+           Validar()
+        function Validar() {
+            H5_loading.show();
+            var urlActual = window.location.href;
+
+            // Utiliza expresiones regulares para extraer el valor después de la última barra
+            var valorEnURL = urlActual.match(/\/(\d+)$/);
+              var idCliente;
+            // Si se encuentra el valor, accede a él
+            if (valorEnURL && valorEnURL.length > 1) {
+                idCliente = Number(valorEnURL[1]);
+                infoCliente.idCliente = idCliente;
+            } else {
+                idCliente = 0;
+            }
+              $.ajax({
+                    url: '@Url.Action("ValidarDocumentos", "DatosCliente")',
+                    type: 'POST',
+                    data: { idSolicitud: idCliente},
+                  success: function (resp) {
+                      console.log(resp)
+                        //if (resp) {
+                            //document.getElementById('selfievalidacion').style.display = "none";
+                            //document.getElementById('cedulavalidacion').style.display = "none";
+                        //}
+                        //console.log(resp);
+
+                    }, error: function () {
+                        ToastrError("Error", resp.Mensaje);
+
+                        // $("#btnGuardarForm").show();
+                    }
+              });
+
+              let url = '@Url.Action("ObtenerNombreCliente", "DatosCliente")'
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ fiIDEquifax: idCliente}),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data)
+                    infoCliente.nombreCliente=data
+
+                })
+                .catch(error => {
+                    //console.error('Fetch error:', error);
+                    //AlertaError();
+                });
+
+            H5_loading.hide();
+        }
+
+        //document.getElementById("getFile1").addEventListener("change", function (e) {
+        //    document.getElementById("fotoprevia").style.display = 'block';
+
+
+        //    const [file] = this.files
+        //    RedimencionarImagen(`fotopreviacanva1`, e.target.files[0], "fotoprevia",file.name,5);
+        //    if (file) {
+        //        document.getElementById("fotoprevia").src = URL.createObjectURL(file)
+        //    }
+        //})
+
+        function RedimencionarImagen(idcanva, eimagencaptada, idimg, NombreArchivo, numeroimagen) {
+
+            var ctx = document.getElementById(idcanva).getContext('2d'); // capturamos el id del camva para ponerlo la imagen oculta ahi y asi poder tomar esa imagen y no la que se esta mostrando
+            var img = new Image;
+            img.src = URL.createObjectURL(eimagencaptada); // insertamos la imagen que el cliente subio para posteriormente hacer la reduccion
+            img.onload = function () {
+                var canvas = document.getElementById(idcanva);
+                var maxAncho = 900; //aqui le ponemos unas medidas estandar que pueden cambiar en un futuro,
+                var maxAlto = 1500;
+
+                var proporcion = Math.min(maxAncho / img.width, maxAlto / img.height); // aqui hacemos una proporcion de las imagenes con respecto al tamaño de la imagen original y al estandar que tenemos nosotros aqui adentro
+                var propdos = img.width / img.height;
+                var ancho = img.width * proporcion;
+                var alto = img.height * proporcion;
+
+                canvas.width = (img.width / propdos); // ponemos el tamaño en el canva oculto
+                canvas.height = (img.height / propdos);
+
+                ctx.drawImage(img, 0, 0, (img.width / propdos), (img.height / propdos));
+                //console.log(canvas.toDataURL('image/jpeg', 0.7)); // tira el base 64
+
+                var urlbase64 = getBase64Image(img); // tira el base 64
+                fotosredimencionadas.push({ canva: idcanva, basesesentaycuatro: canvas.toDataURL('image/jpeg', 0.7), nombreArchivo: NombreArchivo, numimagen: numeroimagen });
+                if (fotosredimencionadas.length > 1) {
+                    document.getElementById("subirFotografia").style.display = "block";
+                }
+                document.getElementById(idimg).src = canvas.toDataURL('image/jpeg', 0.7); // el 07 es la calidad de la imagen si no estoy mal eso decia en la documentacion
+                //document.getElementById(idcanva).style.display = "block"; //mostrar la imagen que esta oculta
+            }
+        }
+
+        //document.getElementById("getFile2").addEventListener("change", function (e) {
+        //    debugger
+
+        //    const [file] = this.files
+        //    RedimencionarImagen(`fotopreviacanva2`, e.target.files[0], "fotoprevia2", file.name,6);
+        //    if (file) {
+        //        document.getElementById("fotoprevia2").style.display = "block";
+        //        document.getElementById("fotoprevia2").src = URL.createObjectURL(file)
+        //    }
+        //})
+
+
+
+
+        document.getElementById("continue-button-10").addEventListener("click", function () {
+            const continueButton = document.getElementById(`continue-button-10`);
+            continueButton.classList.add('hidden');
+            EnviarFotografiasAServidor();
+        })
+
+        function EnviarFotografiasAServidor() {
+            H5_loading.show();
+            debugger;
+            //var url = "@Url.Action("EditarInstalacion", "Tenico")";
+            var form_data = new FormData();
+            form_data.append("fiIDSolicitud", infoCliente.idCliente);
+
+
+            for (var i = 0; i < fotosredimencionadas.length; i++) {
+                form_data.append(`fotosbase[${i}].base64string`, fotosredimencionadas[i].basesesentaycuatro)
+                form_data.append(`fotosbase[${i}].nombrearchivo`, fotosredimencionadas[i].nombreArchivo)
+                form_data.append(`fotosbase[${i}].numimagen`, fotosredimencionadas[i].numimagen)
+            }
+
+            let url = '@Url.Action("GuardarFotos", "DatosCliente")';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (data) {
+                    ToastrSuccess("Listo!", "Subido correctamente");
+                    H5_loading.hide();
+
+                    location.href = '@Url.Action("VistadeLlenadoFormulario", "DatosCliente")';
+
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 3000);
+
+
+                }, error: function () {
+                    ToastrError("Error", resp.Mensaje);
+
+                   // $("#btnGuardarForm").show();
+                }
+            });
+        }
+
+        //function ValidarDocumentos() {
+
+        //}
+
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            var dataURL = canvas.toDataURL();
+            return dataURL;
+        }
+
+        //function dataURLtoFile(dataurl, filename) {
+        //    var arr = dataurl.split(','),
+        //        mime = arr[0].match(/:(.*?);/)[1],
+        //        bstr = atob(arr[arr.length - 1]),
+        //        n = bstr.length,
+        //        u8arr = new Uint8Array(n);
+        //    while (n--) {
+        //        u8arr[n] = bstr.charCodeAt(n);
+        //    }
+        //    return new File([u8arr], filename, { type: mime });
+        //}
+
+    </script>
+</body>
+</html>

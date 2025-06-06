@@ -1,0 +1,130 @@
+﻿
+
+
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-user fa-fw"></i>Gasto Publicidad</h2>
+        <div class="panel-toolbar " role="menu">
+            <button onclick="CrearIngreso()" class="btn btn-success"><i class="fal fa-plus fa-fw"></i> Registrar Gasto(Publicidad)</button>
+        </div>
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaIngresoGastosPublicidad">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Fecha Ingreso</th>
+                        <th>Valor del Gasto</th>
+                        <th>Mes Registro de pago</th>
+                        <th>Usuario Ingreso</th>
+                        <th>Comentario</th>
+                        <th>Fecha Modificacion</th>
+                        <th>Usuario Modifico</th>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function CrearIngreso()
+        {
+            VerModalConObjetoDeParametro({},"@Url.Action("CrearGastoPublicidad", "Reportes")");
+        }
+
+        function EditarValorGasto(fiIdGastosPublicidad) {
+            debugger;
+            VerModalConObjetoDeParametro({ fiIdGastosPublicidad: fiIdGastosPublicidad },"@Url.Action("EditarGastosDePublicidad", "Reportes")");
+        }
+
+
+
+
+        var tablaPrincipal = $('#TablaIngresoGastosPublicidad').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+            ajax: {
+                url: '@Url.Action("CargarListaGastoPorPublicidad", "Reportes")',
+                method: "Get",
+                dataSrc: function (data) {
+                    return data;
+                }
+            },
+
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle waves-effect waves-themed" data-toggle="dropdown" aria-expanded="false"> Acciones  </button>';
+                        opciones += '<div class="dropdown-menu">';
+                        opciones += `<a onclick="EditarValorGasto('${data.fiIdGastosPublicidad }')" class="dropdown-item"><i class="fal fa-edit fa-fw"></i>Editar</a>`;
+
+                        opciones += '</div></div>';
+                        return opciones;
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaIngreso).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: "fnValorMonto",
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcMes + ' del ' + data.fiAnio;
+                    }
+
+                },
+                {
+                    data: 'fcNombreCorto'
+                },
+                {
+                    data: 'fcComentario'
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaModificacion).format("DD/MM/YYYY");
+                    }
+                },
+                {
+                    data: 'UsuarioModificacion'
+                },
+
+
+            ]
+
+        });
+    </script>
+
+}

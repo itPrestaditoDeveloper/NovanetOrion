@@ -1,0 +1,840 @@
+﻿@model OrionCoreCableColor.Models.Contabilidad.CrearPartidaViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+
+    @if (Model.EsClonacion)
+    {
+        <h2 class="modal-title text-white">Clonar Partida</h2>
+    }
+    else if (Model.EsEditar)
+    {
+        <h2 class="modal-title text-white">Editar Partida</h2>
+    }
+    else if (Model.EsReclasificacion)
+    {
+        <h2 class="modal-title text-white">Reclasificar Partida</h2>
+    }
+    else
+    {
+        <h2 class="modal-title text-white">Crear Partida</h2>
+    }
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+
+        <div class="col-md-8 contentPartida">
+            <div class="form-group">
+                <label class="control-label">Operacion Contable:</label>
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.DropDownListFor(model => model.fiIDOperacionesContablesInventario, new SelectList(ViewBag.ListOperacionesContablesInventario, "Value", "Text"), new { @class = "form-control", @style = "width:100%;" })
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4 contentPartida">
+            <div class="form-group">
+                <label class="control-label">Moneda:</label>
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.DropDownListFor(model => model.fiMoneda, new SelectList(ViewBag.ListaMonedas, "Value", "Text"), new { @class = "form-control", @style = "width:100%;" })
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="col-md-4 contentPartida">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcTipoPartida, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.DropDownListFor(model => model.fcTipoPartida, new SelectList(ViewBag.ListTipoPartida, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcTipoPartida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-4 contentPartida">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcPartida, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcPartida, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcPartida, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model.EsReclasificacion)
+        {
+            <div class="col-md-4">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.fcPartidaSeguimiento, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm" style="width:100%;">
+                        @Html.EditorFor(model => model.fcPartidaSeguimiento, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fcPartidaSeguimiento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+
+
+        <div class="col-md-4">
+            <div class="form-group">
+
+                @Html.LabelFor(model => model.fdFechaPartida, htmlAttributes: new { @class = "control-label " })
+                <div class="input-group mar-btm" style="width:100%;">
+                    <input type="date" id="fdFechaPartida" name="fdFechaPartida" class="form-control" value="@Model.fdFechaPartida.ToString("yyyy-MM-dd")" />
+                </div>
+                @Html.ValidationMessageFor(model => model.fdFechaPartida, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcReferencia, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.EditorFor(model => model.fcReferencia, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcReferencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                @Html.LabelFor(model => model.fcSinopsis, htmlAttributes: new { @class = "control-label" })
+                <div class="input-group mar-btm" style="width:100%;">
+                    @Html.TextAreaFor(model => model.fcSinopsis, new { @class = "form-control", @rows = "3" })
+                </div>
+                @Html.ValidationMessageFor(model => model.fcSinopsis, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12" style="margin-top:10px;">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaDetallePartidas">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th style="width:250px!important;">Cuenta</th>
+                        <th>REF</th>
+                        <th>Programa/Fondo</th>
+                        <th>Centro C.</th>
+                        <th>DEBE</th>
+                        <th>HABER</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfooter>
+                    <tr class="" id="TotalRow">
+
+                        <td colspan="6" class="text-right">TOTALES</td>
+
+                        <td class="text-right" id="TotalDebe">0.00</td>
+                        <td class="text-right" id="TotalHaber">0.00</td>
+
+                    </tr>
+                    <tr class="" id="TotalRow">
+
+                        <td colspan="7" class="text-right">DIFERENCIA</td>
+                        <td class="text-right" id="TotalDiferencia">0.00</td>
+
+                    </tr>
+                </tfooter>
+            </table>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 float-left">
+            <br />
+
+        </div>
+
+        <div class="col-lg-4 float-left">
+            <div class="custom-control custom-checkbox">
+                <input @(Model.fbTrasladoPrestadito ? "checked" : "") id="fbTrasladoPrestadito" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla"> <label></label>
+                <label class="custom-control-label" for="fbTrasladoPrestadito">Traslado a prestadito</label>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="row" id="trasladoPrestadito" style="display:none;">
+        <div class="col-md-12" style="margin-top:10px;">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaTrasladoPrestadito">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>#</th>
+                        <th style="width:250px!important;">Cuenta</th>
+                        <th>REF</th>
+                        <th>Programa/Fondo</th>
+                        <th>Centro C.</th>
+                        <th>DEBE</th>
+                        <th>HABER</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfooter>
+                    <tr class="" id="TotalRowTraslado">
+                        <td colspan="6" class="text-right">TOTALES</td>
+                        <td class="text-right" id="TotalDebeTraslado">0.00</td>
+                        <td class="text-right" id="TotalHaberTraslado">0.00</td>
+                    </tr>
+                    <tr class="" id="TotalRowTraslado">
+                        <td colspan="7" class="text-right">DIFERENCIA</td>
+                        <td class="text-right" id="TotalDiferenciaTraslado">0.00</td>
+                    </tr>
+                </tfooter>
+            </table>
+        </div>
+
+    </div>
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button type="button" onclick="GuardarPartida()" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success" id="btnGuardarForm"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+</div>
+<script>
+    var tablaDetalle = "";
+    var model = @Html.Raw(Json.Encode(Model));
+    if (str2bool('@Model.EsClonacion')) {
+
+         $.ajax({
+             url: '@Url.Action("ObtenerCorrelativoTipoPartida", "Contabilidad")' , //"/DiarioContable/ObtenerCorrelativoTipoPartida",
+             method: "get",
+             data: { tipoPartida: '@Model.fcTipoPartida' },
+             success: function (resp) {
+                 $("#fcPartida").val(resp.Correlativo);
+             },
+             error: function (resp) {
+                 ToastrError("Error","");
+             }
+         });
+      }
+
+
+   // ValidarTotalesDEBEHABER();
+    var modelPartida = @Html.Raw(Json.Encode(Model)); 
+
+
+    var modelPartidaTraslado = {
+        fnValorPartida: '@Model.fnValorPartida',
+        fcPartidaSeguimiento: '@Model.fcPartidaSeguimiento',
+        fiIDEmpresa : '@Model.fiIDEmpresa',
+        TotalDebe: 0,
+        TotalHaber:0,
+    }
+
+    var partidaParaDetalle = '@Model.fcPartida';
+
+
+    $("#TotalDebe").html(ConvertirDecimal('@Model.fnValorPartida'));
+    $("#TotalHaber").html(ConvertirDecimal('@Model.fnValorPartida'));
+
+    if (str2bool('@Model.EsReclasificacion')) {
+        partidaParaDetalle = '@Model.fcPartidaSeguimiento';
+        $(".contentPartida").hide();
+    }
+
+    function ValidarTotalesDEBEHABER() {
+
+        let totalDebe = 0;
+        let totalHaber = 0;
+        tablaDetallePartida = $.fn.dataTable.Api("#TablaDetallePartidas");
+        tablaDetallePartida.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            var row = this.data();
+            totalDebe = totalDebe + row.fnDebito;
+            totalHaber = totalHaber + row.fnCredito;
+        });
+
+        modelPartida.TotalDebe = totalDebe.toFixed(2);
+        modelPartida.TotalHaber = totalHaber.toFixed(2);
+
+        $("#TotalDebe").html(ConvertirDecimal(totalDebe));
+        $("#TotalHaber").html(ConvertirDecimal(totalHaber));
+        $("#TotalDiferencia").html(ConvertirDecimal(totalDebe - totalHaber));
+
+        if (modelPartida.TotalDebe != modelPartida.TotalHaber) {
+            $("#TotalRow").removeClass("success").addClass("danger");
+        } else {
+            $("#TotalRow").removeClass("danger").addClass("success");
+        }
+
+
+    }
+
+
+
+    function ValidarTotalesDEBEHABERTRASLADO() {
+
+        let totalDebe = 0;
+        let totalHaber = 0;
+        tablaDetallePartidaTraslado = $.fn.dataTable.Api("#TablaTrasladoPrestadito");
+        tablaDetallePartidaTraslado.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            var row = this.data();
+            totalDebe = totalDebe + row.fnDebito;
+            totalHaber = totalHaber + row.fnCredito;
+        });
+
+        modelPartidaTraslado.TotalDebe = totalDebe.toFixed(2);
+        modelPartidaTraslado.TotalHaber = totalHaber.toFixed(2);
+
+        $("#TotalDebeTraslado").html(ConvertirDecimal(totalDebe));
+        $("#TotalHaberTraslado").html(ConvertirDecimal(totalHaber));
+        $("#TotalDiferenciaTraslado").html(ConvertirDecimal(totalDebe - totalHaber));
+
+        if (modelPartidaTraslado.TotalDebe != modelPartidaTraslado.TotalHaber) {
+            $("#TotalRowTraslado").removeClass("success").addClass("danger");
+        } else {
+            $("#TotalRowTraslado").removeClass("danger").addClass("success");
+        }
+
+
+    }
+
+    $("#fcPartida").prop("readonly", true);
+    $("#fcPartidaSeguimiento").prop("readonly", true);
+
+    $('#fcTipoPartida').on('select2:select', function (e) {
+        var data = e.params.data;
+
+         $.ajax({
+            url: '@Url.Action("ObtenerCorrelativoTipoPartida", "Contabilidad")' ,
+            method: "get",
+            data: { tipoPartida : data.id },
+            success: function (resp) {
+                $("#fcPartida").val(resp.Correlativo);
+            },
+            error: function (resp) {
+                alert("Error");
+            }
+        });
+
+    });
+
+    function CrearDetallePartida() {
+
+        ActualRow = null;
+
+        $.ajax({
+            url: '@Url.Action("ViewCrearDetallePartidaContable", "Contabilidad")' ,
+            method: "get",
+            data: { idMoneda: $("#fiMoneda").val(), fdFechaPartida: $("#fdFechaPartida").val() },
+            success: function (resp) {
+                ShowModal(resp);
+
+               // $("#ContentCrearDetalle").html(resp);
+            },
+            error: function (resp) {
+                ToastrError("Error", "Error de red");
+            }
+        });
+
+    }
+
+    function ShowEdit(model) {
+
+
+        model.IdMoneda = $("#fiMoneda").val();
+
+        $.ajax({
+            url: '@Url.Action("ViewEditarDetallePartidaContable", "Contabilidad")' ,
+            method: "post",
+            data: {  model: model  },
+            success: function (resp) {
+                ShowModal(resp);
+
+
+            },
+            error: function (resp) {
+                ToastrError("Error","");
+            }
+        });
+
+    }
+
+    $("#fcTipoPartida").select2({
+        dropdownParent: $("#MyModalBig"),
+    });
+
+    $("#fiIDOperacionesContablesInventario").select2({
+        dropdownParent: $("#MyModalBig")
+    }).val(model.fiIDOperacionesContablesInventario).trigger("change");
+
+    $("#fiMoneda").select2({
+        dropdownParent: $("#MyModalBig"),
+    });
+
+    var urlDataTable = '@Url.Action("LoadDetallePartida", "Contabilidad")';
+
+
+
+    var tablaDetallePartida = $('#TablaDetallePartidas').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        paging: false,
+        ordering: false,
+        order: [[1, "asc"]],
+        buttons: [
+            {
+                text: `Registrar Detalle`,
+                className: 'btn btn-success',
+                attr: { "id": "registrarDetalle" },
+                action: function (e, dt, node, config) {
+                    CrearDetallePartida();
+                }
+            },
+
+        ],
+        ajax: {
+            url: urlDataTable,
+            method: "Get",
+            data: { fcpartida: partidaParaDetalle },
+            dataSrc: function (data) {
+                var esReclasificacion = @Html.Raw(Json.Encode(Model.EsReclasificacion));
+
+                for (var item of data) {
+                    if (esReclasificacion) {
+
+                        if (item.fnDebito > 0) {
+                            item.fnCredito = item.fnDebito;
+                            item.fnDebito = 0;
+                        } else {
+                            item.fnDebito = item.fnCredito;
+                            item.fnCredito = 0;
+                        }
+
+
+
+                    }
+                }
+
+                return data;
+            }
+        },
+        drawCallback: function (settings) {
+        },
+
+        columns: [
+            {
+                data: null,
+                className:"text-center",
+                render: function (data) {
+
+                    var opciones = `<div class='toggle d-inline-block dropdown'>
+                                        <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>\n\t\t\t\t\t\t\t\t<i class=\"fal fa-ellipsis-v\"></i>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t
+                                    <div class='dropdown-menu'>`;
+
+                    opciones += `<a href="javascript:void(0)"  class="dropdown-item editar-detalle">Editar</a>`;
+                    opciones += `<a href="javascript:void(0)"  class="dropdown-item eliminar-detalle">Eliminar</a>`;
+                    opciones += '</div></div>';
+                    return opciones;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return data.fiIDFila;
+                }
+            },
+
+            {
+                data: null,
+                render: function (data) {
+                    return data.DescripcionCuenta;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `${data.fcReferenciaDetalle}`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `Programa: ${data.fcPrograma} <br/>
+                                Fondo: ${data.fcFondo}`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `${data.fcCentrodeCosto}`;
+                }
+            },
+
+
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+                    return ConvertirDecimal(data.fnDebito);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+                    return ConvertirDecimal(data.fnCredito);
+                }
+            },
+        ]
+
+    });
+
+
+
+
+
+
+
+    var ActualRow = null;
+    $('#TablaDetallePartidas tbody').on('click', 'tr a.editar-detalle', function () {
+        tablaDetallePartida = $.fn.dataTable.Api("#TablaDetallePartidas");
+        var tr = $(this).closest('tr');
+        ActualRow = tablaDetallePartida.row(tr);
+        ShowEdit(ActualRow.data());
+        tablaDetalle = "#TablaDetallePartidas";
+    });
+
+    $('#TablaDetallePartidas tbody').on('click', 'tr a.eliminar-detalle', function () {
+        tablaDetallePartida = $.fn.dataTable.Api("#TablaDetallePartidas");
+        tablaDetallePartida.row($(this).closest('tr')).remove().draw();
+        ValidarTotalesDEBEHABER();
+    });
+
+
+    if (model.fiIDOperacionesContablesInventario == 5) {
+        CargarData();
+    }
+
+    function CargarData()
+    {
+        var fiMoneda = parseInt($("#fiMoneda").val());
+        model.fiMoneda = fiMoneda;
+        model.fiIDOperacionesContablesInventario = $("#fiIDOperacionesContablesInventario").val();
+        var tablaContabilidad = $.fn.dataTable.Api("#TablaDetallePartidas");
+        debugger;
+        if ($("#fiIDOperacionesContablesInventario").val() != 0 && $("#fiIDOperacionesContablesInventario").val() != null) {
+            $.ajax({
+                url: "@Url.Action("GetPartidaOperacion","Contabilidad")",
+                method: "Get",
+                data: {
+                    fiIDOperacionesContablesInventario: $("#fiIDOperacionesContablesInventario").val(),
+                    fiIDInventarioMovimientoMaestro: model.fiIDMovimientoMaestro,
+                    fiMoneda: fiMoneda
+                },
+                success: function (resp) {
+                    $("#fcTipoPartida").val(resp.fcTipoPartida).trigger("change");
+                    $("#fcPartida").val(resp.fcPartida);
+                    $("#fcReferencia").val(resp.fcReferencia);
+                    $("#fcSinopsis").val(resp.fcSinopsis);
+
+
+                    tablaContabilidad.rows().remove().draw(false);
+                    tablaContabilidad.rows.add(resp.ListaDetalle).draw(false);
+                    debugger;
+
+                    ValidarTotalesDEBEHABER();
+                    $("#fbTrasladoPrestadito").prop("checked", resp.fbTrasladoPrestadito);
+                    if (resp.fbTrasladoPrestadito) {
+                        $("#fbTrasladoPrestadito").change();
+                    } else {
+                        var trasladoPrestadito = $.fn.dataTable.Api("#TablaTrasladoPrestadito");
+                        trasladoPrestadito.rows().remove().draw(false);
+                        $("#fbTrasladoPrestadito").change();
+                    }
+                }
+            });
+        } else {
+            tablaContabilidad.rows().remove().draw(false);
+            ToastrWarning("Advertencia", "Se elimino el detalle por cambio de moneda");
+        }
+    }
+
+
+    $("#fiIDOperacionesContablesInventario, #fiMoneda").on("select2:select", function () {
+    //$("#fiIDOperacionesContablesInventario, #fiMoneda").on("change", function () {
+
+        var fiMoneda = parseInt($("#fiMoneda").val());
+        model.fiMoneda = fiMoneda;
+        model.fiIDOperacionesContablesInventario = $("#fiIDOperacionesContablesInventario").val();
+        var tablaContabilidad = $.fn.dataTable.Api("#TablaDetallePartidas");
+
+        if ($("#fiIDOperacionesContablesInventario").val() != 0 && $("#fiIDOperacionesContablesInventario").val() != null) {
+            $.ajax({
+                url: "@Url.Action("GetPartidaOperacion","Contabilidad")",
+                method: "Get",
+                data: {
+                    fiIDOperacionesContablesInventario: $("#fiIDOperacionesContablesInventario").val(),
+                    fiIDInventarioMovimientoMaestro: model.fiIDMovimientoMaestro,
+                    fiMoneda: fiMoneda
+                },
+                success: function (resp) {
+                    $("#fcTipoPartida").val(resp.fcTipoPartida).trigger("change");
+                    $("#fcPartida").val(resp.fcPartida);
+                    $("#fcReferencia").val(resp.fcReferencia);
+                    $("#fcSinopsis").val(resp.fcSinopsis);
+
+
+                    tablaContabilidad.rows().remove().draw(false);
+                    tablaContabilidad.rows.add(resp.ListaDetalle).draw(false);
+                    debugger;
+
+                    ValidarTotalesDEBEHABER();
+                    $("#fbTrasladoPrestadito").prop("checked", resp.fbTrasladoPrestadito);
+                    if (resp.fbTrasladoPrestadito) {
+                        $("#fbTrasladoPrestadito").change();
+                    } else {
+                        var trasladoPrestadito = $.fn.dataTable.Api("#TablaTrasladoPrestadito");
+                        trasladoPrestadito.rows().remove().draw(false);
+                        $("#fbTrasladoPrestadito").change();
+                    }
+                }
+            });
+        } else {
+            tablaContabilidad.rows().remove().draw(false);
+            ToastrWarning("Advertencia", "Se elimino el detalle por cambio de moneda");
+        }
+
+
+    });
+
+
+    function GuardarPartida() {
+
+        ValidarTotalesDEBEHABER();
+        tablaDetallePartida = $.fn.dataTable.Api("#TablaDetallePartidas");
+
+        if (modelPartida.TotalDebe != modelPartida.TotalHaber) {
+            ToastrError("Error","El Debe y Haber no presentan el mismo valor, error al cuadrar.");
+            return;
+        }
+
+        if (modelPartida.TotalDebe <= 0 || modelPartida.TotalHaber <= 0) {
+            ToastrError("Error","El Total de la partida debe ser mayor a 0.");
+            return;
+        }
+
+
+
+        modelPartida.fiMoneda = $("#fiMoneda").val();
+        modelPartida.fcTipoPartida = $("#fcTipoPartida").val();
+        modelPartida.fcPartida = $("#fcPartida").val();
+        modelPartida.fdFechaPartida = $("#fdFechaPartida").val();
+        modelPartida.fcReferencia = $("#fcReferencia").val();
+        modelPartida.fcSinopsis = $("#fcSinopsis").val();
+        modelPartida.fnValorPartida = modelPartida.TotalDebe;
+        modelPartida.ListaDetalle = tablaDetallePartida.rows().data().toArray();
+        modelPartida.fiIDMovimientoMaestro = model.fiIDMovimientoMaestro;
+        modelPartida.fiIDOperacionesContablesInventario = $("#fiIDOperacionesContablesInventario").val();
+        modelPartida.fbTrasladoPrestadito = $("#fbTrasladoPrestadito").prop("checked");
+        $("#btnGuardarForm").hide();
+
+
+        var url = '@Url.Action("CrearPartidaContable", "Contabilidad")'; // '/DiarioContable/';
+        if (str2bool('@Model.EsEditar')) {
+            url = '@Url.Action("EditarPartidaContable", "Contabilidad")'; //'/DiarioContable/';
+        }
+
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify({ model: modelPartida }),
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                AlertaAjax(data);
+                if (!data.Estado) {
+                    $("#btnGuardarForm").show();
+                } else {
+
+                    var tablaSalidaInventario = $.fn.dataTable.Api("#TablaPrincipal");
+                    tablaSalidaInventario.ajax.reload(null, false);
+                    CerrarModal();
+
+                    try {
+                        //if (data.Correlativo == "" || data.Correlativo == null) {
+                        //    data.Correlativo = $("#fcPartida").val();
+                        //}
+                        //ImprimirPartida(data.Correlativo);
+                    }
+                    catch (error) {
+
+                    }
+                }
+
+            },
+            error: function (data) {
+                console.log(data);
+                AlertaError();
+                $("#btnGuardarForm").show();
+            }
+        });
+    }
+
+
+    $("#fbTrasladoPrestadito").change(function () {
+
+        if ($("#fbTrasladoPrestadito").prop("checked")) {
+            $("#trasladoPrestadito").css("display", "block");
+            agregarLineaTraslado();
+        } else {
+            $("#trasladoPrestadito").css("display", "none");
+            var trasladoPrestadito = $.fn.dataTable.Api("#TablaTrasladoPrestadito");
+            trasladoPrestadito.rows().remove().draw(false);
+        }
+
+    });
+
+
+    $('#TablaTrasladoPrestadito').DataTable({
+        dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+        autoWidth: true,
+        responsive: true,
+        paging: false,
+        ordering: false,
+        order: [[1, "asc"]],
+        buttons: [
+            {
+                text: `Actualizar Partida`,
+                className: 'btn btn-success',
+                attr: { "id": "registrarDetalle" },
+                action: function (e, dt, node, config) {
+                    ActualizarPartidaTraslado();
+                }
+            },
+        ],
+        drawCallback: function (settings) {
+
+        },
+
+        columns: [
+            {
+                data: null,
+                className: "text-center",
+
+                render: function (data) {
+                    var opciones = "";
+                    //var opciones = `<div class='toggle d-inline-block dropdown'>
+                    //                    <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='More options'>\n\t\t\t\t\t\t\t\t<i class=\"fal fa-ellipsis-v\"></i>\n\t\t\t\t\t\t\t</a>\n\t\t\t\t\t\t\t
+                    //                <div class='dropdown-menu'>`;
+
+                    //opciones += `<a href="javascript:void(0)"  class="dropdown-item editar-detalle">Editar</a>`;
+                    //opciones += `<a href="javascript:void(0)"  class="dropdown-item eliminar-detalle">Eliminar</a>`;
+                    //opciones += '</div></div>';
+                    return opciones;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return data.fiIDFila;
+                }
+            },
+
+            {
+                data: null,
+                render: function (data) {
+                    return data.DescripcionCuenta;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `${data.fcReferenciaDetalle}`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `Programa: ${data.fcPrograma} <br/>
+                                Fondo: ${data.fcFondo}`;
+                }
+            },
+            {
+                data: null,
+                render: function (data) {
+                    return `${data.fcCentrodeCosto}`;
+                }
+            },
+
+
+
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+                    return ConvertirDecimal(data.fnDebito);
+                }
+            },
+            {
+                data: null,
+                className: "text-right",
+                render: function (data) {
+                    return ConvertirDecimal(data.fnCredito);
+                }
+            },
+        ]
+
+    });
+
+
+    function agregarLineaTraslado() {
+        var tablaPartida = $.fn.dataTable.Api("#TablaDetallePartidas");
+        var data = tablaPartida.rows().data().toArray();
+        var trasladoPrestadito = $.fn.dataTable.Api("#TablaTrasladoPrestadito");
+        trasladoPrestadito.rows().remove().draw(false);
+        for (var item of data)
+        {
+            $.ajax({
+                url: "@Url.Action("GetRowTrasladoPrestadito","Contabilidad")",
+                method: "Post",
+                data: { detalle: item, fiMoneda: $("#fiMoneda").val() },
+                success: function (resp) {
+
+                    trasladoPrestadito.row.add(resp).draw(false);
+                }
+            });
+        }
+
+        ValidarTotalesDEBEHABERTRASLADO();
+
+    }
+
+
+</script>

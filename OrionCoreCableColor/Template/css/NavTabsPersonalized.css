@@ -1,0 +1,36 @@
+﻿
+
+.nav-tabs.nav-justified > li {
+    display: table-cell;
+    width: 1%;
+}
+
+.nav-tabs.nav-justified {
+    margin-bottom: -5px;
+}
+
+
+
+.nav-tabs .active a:before {
+    background: #ffd600;
+}
+
+.nav-tabs .active a:before {
+    left: 0;
+    right: 0;
+    transition: left 0.15s,right 0.15s;
+}
+
+
+
+.nav-tabs li > a:before {
+    content: '';
+    display: block;
+    background: white;
+    height: 2px;
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    right: 50%;
+    transition: left 0.05s,right 0.05s;
+}

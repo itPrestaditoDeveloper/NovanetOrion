@@ -1,0 +1,352 @@
+﻿@model OrionCoreCableColor.Models.Factura.RptFacturaCuentaPorCobrarViewModel
+
+<style>
+    #tablaPartida {
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+        #tablaPartida td {
+            border: 1px solid black;
+        }
+
+        #tablaPartida th {
+            border: 1px solid black;
+        }
+</style>
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+        FACTURA
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="clearfix" style="width:100%;">
+                <div style="text-align:left">
+                    <a href="#" onclick="ImprimirForm()" class="btn btn-success float-right"><i class="fal fa-print fa-fw" style="text-align:left"></i> Imprimir Documento</a>
+                </div>
+                <div style="text-align:left">
+                    <a href="#" onclick="pdfConvert()" class="btn btn-success float-right"><i class="fal fa-print fa-fw" style="text-align:left"></i> PDF </a>
+                </div>
+            </div>
+            
+        </div>
+
+            <div id="imprimir">
+                <form id="formulario" style="margin: 0 auto; width: 95%; height: 100%; text-align:left; font-size:12px">
+                    <br />
+                    <div style="width:30%; float:left;">
+                        <img src="@Model.Logo" style="width:100%;" />
+                        @*<img src="~/img/logo_prestadito.png" />*@
+                    </div>
+                    <div style="width:60%; font-weight:bold; float:right; text-align:left; font-size:12px; margin-top:10px; margin-left:10px;">
+                        @if (Model.EsAnulado)
+                        {
+                            <b style="font-size:18px;"> ***DOCUMENTO ANULADO*** </b> <br /> <br />
+                        }
+                        <p style="margin:0;">@Model.Empresa.ToUpper()</p>
+                        <p style="margin:0;">@Model.Direccion.ToUpper()</p>
+                        <p style="margin:0;">@Model.Ciudad.ToUpper()</p>
+                        <p style="margin:0;">Tel.(+504)@Model.Telefono.ToUpper()</p>
+
+                        <p style="margin:0; margin-bottom:0; text-decoration:underline;">contabilidad@miprestadito.com</p>
+                        <p style="margin:0; margin-top:0;">Domicilio Fiscal: San Pedro Sula</p>
+                    </div>
+                    <br />
+
+
+
+
+                    <table style="font-weight:bold; border-collapse: separate;border-spacing: 10px 5px; width: 100%; font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td>RTN. @Model.RTNEmpresa</td>
+                            </tr>
+                            <tr>
+                                <td>FACTURA: #@Model.Factura</td>
+                            </tr>
+                            <tr>
+                                <td>CAI: @Model.CAI</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <table style=" border-collapse: separate;border-spacing: 10px 5px; width: 100%; font-size:12px">
+                        <tbody>
+
+                            <tr>
+                                <td style="width:25%; font-weight:bold;">Cliente: </td>
+                                <td style="width:45%;"> @Model.Cliente</td>
+                                <td style="font-weight:bold;">Fecha: </td>
+                                <td>@Model.Fecha.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                            <tr>
+                                <td style="width:20%; font-weight:bold;">RTN: </td>
+                                <td style="width:50%; ">@Model.RTNCliente</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%; font-weight: bold;"> Direccion: </td>
+                                <td style="width:50%;">@Model.Domicilio</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%; font-weight: bold;"> Fecha Limite de Emisión: </td>
+                                <td style="width:50%;"> @Model.FechaLimiteEmision.ToString("dd/MM/yyyy")</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%; font-weight: bold;"> Rango de Autorización: </td>
+                                <td style="width:50%;">@Model.RangoAutorizacion </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%; font-weight: bold;"> No. Declaracion: </td>
+                                <td style="width:50%;">@Model.NoDeclaracion</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <br />
+
+
+
+
+                    <table id="tablaPartida" style="width: 100%; border: 0.2px solid black; font-size:12px; border-collapse: collapse;">
+                        <thead style="border:1px solid black;">
+                            <tr>
+                                <th style="padding: 4px; text-align: left; width: 10%; border: 1px solid black;">CANT.</th>
+                                <th style="padding: 4px; text-align: left; width: 60%; border: 1px solid black;">DESCRIPCIÓN </th>
+                                <th style="padding: 4px; text-align: left; width: 15%; text-align: right; border: 1px solid black;">VALOR</th>
+                                <th style="padding: 4px; text-align: left; width: 15%; text-align: right; border: 1px solid black;">TOTAL</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; border: 1px solid black; text-align:center;">1</td>
+                                <td style="padding: 4px; border: 1px solid black;">@Model.fcProductoDescripcion</td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.Total.ToString("n")</td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.Total.ToString("n")</td>
+                            </tr>
+                            @*@foreach (var item in Model.ListaDetalle)
+                        {
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; border: 1px solid black; text-align:center;">@(item.Cantidad == 0 ? "" : item.Cantidad.ToString())</td>
+                                <td style="padding: 4px; border: 1px solid black;">@item.Descripcion</td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;">@item.Valor.ToString("n")</td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;">@item.Total.ToString("n")</td>
+                            </tr>
+                        }*@
+                        </tbody>
+                        <tfooter>
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black; "></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Sub Total</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.SubTotal.ToString("n")</td>
+                            </tr>
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left;border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Descuento</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.Descuento.ToString("n")</td>
+                            </tr>
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Exento</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.Exento.ToString("n")</td>
+                            </tr>
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Exonerado</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.Exonerado.ToString("n")</td>
+                            </tr>
+                            <tr style="border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Gravado 15%</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.Gravado.ToString("n")</td>
+                            </tr>
+                            <tr style="border: 1px solid black; border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">ISV 15%</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> @Model.ISV.ToString("n")</td>
+                            </tr>
+                            <tr style="border: 1px solid black; border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Total Dolares</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; border: 1px solid black; "><p style="text-align:left; float:left; padding:0; margin:0;">@Model.fcSimboloMoneda </p> <p style="text-align: right; padding: 0; float:right; margin:0;">@Model.Total.ToString("n")</p></td>
+                            </tr>
+                            <tr style="border: 1px solid black; border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Tasa de Cambio</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">L. </p> @Model.fnTasaDeCambio.ToString("#.0000")</td>
+                            </tr>
+                            <tr style="border: 1px solid black; border: 1px solid black;">
+                                <td style="padding: 4px; text-align: left; border: 1px solid black;"></td>
+                                <td style="padding: 4px; font-weight: bold; text-align: right; border: 1px solid black;">Total Lempiras</td>
+                                <td style="padding: 4px; border: 1px solid black;"></td>
+                                <td style="padding: 4px; text-align: right; border: 1px solid black;"><p style="text-align:left; float:left; padding:0; margin:0;">L. </p> @Model.fnTotalLempiras.ToString("n")</td>
+                            </tr>
+                        </tfooter>
+                    </table>
+                    <table style=" border-collapse: separate;border-spacing: 10px 5px; width: 100%">
+                        <tbody>
+                            <tr>
+                                <td style="text-align:left; font-size:10px; width:33%; font-weight:bold;">MONTO EN LETRAS: @Model.TotalLetras CTVS. EXACTOS</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br /><br />
+
+                    <div style="float: left; text-align: left; font-weight: bold;">
+                        No. Orden Exenta:
+                    </div>
+                    <div style="float:left; width:16%; border-bottom: 1px solid;">
+                        <br />
+                    </div>
+                    <div style="float: left; width: 20%; text-align: right; font-weight: bold;">
+                        Constancia Exonerada:
+                    </div>
+                    <div style="float: left; width: 16%; border-bottom: 1px solid;">
+                        <br />
+                    </div>
+                    <div style="float: left; width: 16%; text-align: right; font-weight: bold;">
+                        No. Registro SAG:
+                    </div>
+                    <div style="float:left; width:16%; border-bottom: 1px solid;">
+                        <br />
+                    </div>
+
+                    <div style="float: left; width: 100%; font-weight: bold;">
+                        Original: Cliente
+                    </div>
+                    <div style="float: left; width: 100%; font-weight: bold;">
+                        Copia: Obligado Tributario
+                    </div>
+
+
+
+                    <br /><br /><br /><br /><br />
+                    <table style=" border-collapse: separate;border-spacing: 10px 5px; width:100%; font-size:12px">
+                        <tbody>
+                            <tr>
+                                <td style="text-align:center; font-size:12px; width:30%;">
+                                </td>
+                                <td style="text-align: center; font-size: 12px; width: 40%;">
+
+                                    <hr>
+                                    <p style="text-align:center">Firma y Sello</p>
+                                </td>
+                                <td style="text-align: center; font-size: 12px; width: 30%;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center; font-size:10px; width:30%;">
+                                </td>
+                                <td style="text-align: center; font-size: 10px; width: 40%;">
+                                    <p style="text-align:center; font-size:10px">LA FACTURA ES BENEFICIO DE TODOS, EXIJALA</p>
+                                </td>
+                                <td style="text-align: center; font-size: 10px; width: 30%;">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </form>
+            </div>
+
+
+        </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="Guardar" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="~/Template/plugins/html2pdf/html2pdf.bundle.js"></script>
+<script>
+
+
+
+
+    function ImprimirForm() {
+        var divContents = document.getElementById("imprimir").innerHTML;
+        var a = window.open('', 'height=500, width=700');
+        a.document.write(divContents);
+        a.document.close();
+        a.print();
+
+    }
+
+
+    function pdfConvert() {
+        var opt = {
+            margin: [0.1, 0.1, 0.1, 0.1], //top, left, buttom, right,
+            filename: "factura" + "@Model.Factura" + ".pdf",
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                dpi: 192,
+                scale: 4,
+                letterRendering: true,
+                useCORS: false
+            },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+            pagebreak: { after: '.page-break', always: 'img' }
+            //pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            //pagebreak: { avoid: ['tr', 'td'] },
+        };
+
+
+
+
+        html2pdf().from(document.getElementById("imprimir")).toPdf().set(opt).save().output('datauristring').then(function (pdfAsString) {
+            // The PDF has been converted to a Data URI string and passed to this function.
+            // Use pdfAsString however you like (send as email, etc)! For instance:
+
+            var myFile = dataURLtoFile(pdfAsString, "factura" + "@Model.Factura" + ".pdf");
+            //subir(myFile);
+            //SubirAServido(myFile)
+        });
+    }
+
+
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[arr.length - 1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+</script>

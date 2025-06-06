@@ -1,0 +1,40 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+@using OrionCoreCableColor.App_Helper
+
+<style>
+</style>
+<div class="tab-content">
+    <form id="MiFormulario">
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>Documentos</h4>
+                </div>
+                @foreach (var item in Model.DatosDocumentoListado)
+                {
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <div class="input-group mar-btm">
+                                @if (item.fcTipoDocumento == "pdf")
+                                {
+
+                                    <a href="javascript:ShowBigPdf('@item.fcNombreArchivo','@item.fcRuta')" class="text-info"> <i class="fal fa-2x fa-file-pdf"> </i> @item.fcDescripcion</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0)" data-Description="@item.fcDescripcion" class="text-info" onclick="ShowBigImage(this)" src="@(MemoryLoadManager.Helper)?type=img&carpeta=@(item.fcRuta)&documento=@(item.fcNombreArchivo)"> <i class="fal fa-2x fa-file-image"> </i>  @item.fcDescripcion</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                @*<a href="no-script.html" target="_blank" download id="btnAutorizacionProductoYServicios" class="FormatoBotonesIconoCuadrado40 " style="position: relative; margin-top: 3px; margin-left: 5px; ">
+                        Autorizacion Servicio
+                    </a>*@
+            </div>
+        </div>
+
+    </form>
+</div>

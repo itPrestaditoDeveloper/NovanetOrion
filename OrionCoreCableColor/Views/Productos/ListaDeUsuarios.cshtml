@@ -1,0 +1,67 @@
+﻿@model IEnumerable<OrionCoreCableColor.Models.Usuario.ListaDeUsuariosViewModel>
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+      Usuarios
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+<div class="modal-body">
+
+
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <button class="btn btn-success" onclick="enviarModal('denis.saavedra','Firefox 122')" data-navegador="Firefox 122">denis.saavedra / Firefox 122</button>
+            <hr>
+        </div>
+
+        @foreach (var usuario in Model)
+        {
+            foreach (var dispositivo in usuario.InfoUsuario)
+            {
+                <div class="col-sm-12">
+                    <button class="btn btn-success" onclick="enviarModal('@dispositivo.UserName','@dispositivo.Navegador')" data-navegador="@dispositivo.Navegador">@dispositivo.UserName / @dispositivo.Navegador</button>
+                    <hr />
+                </div>
+            }
+        }
+
+
+
+
+
+    </div>
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="Guardar" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function enviarModal(usuario, navegador) {
+        debugger;
+        $.ajax({
+            url: "@Url.Action("EnviarModal","Productos")",
+            method: "Post",
+            data: {
+                UserName: usuario,
+                Navegador: navegador
+            },
+            success: function (resp) {
+                debugger;
+            }
+        });
+    }
+</script>

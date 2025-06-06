@@ -1,0 +1,370 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+@{
+    ViewBag.Title = "ModalGenerarSolicitudNuevoServicio";
+}
+
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Generar Solicitud Extra Servicio</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-phone fa-fw"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fiDepartamento, htmlAttributes: new { @class = "form-label" })
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-city"></i></span>
+                            </div>
+                            @Html.DropDownListFor(model => model.DatosCLientes.fiDepartamento, new SelectList(ViewBag.ListaDepartamentos, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;", @onchange = "ListaMunicipio()" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fiDepartamento, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fiMunicipio, htmlAttributes: new { @class = "form-label" })
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-city"></i></span>
+                            </div>
+                            <select id="fiMunicipio" disabled class="form-control select2" onchange="ListaColonia()"></select>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fiMunicipio, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fiColonia, htmlAttributes: new { @class = "form-label" })
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-city"></i></span>
+                            </div>
+                            <select id="fiColonia" disabled class="form-control select2"></select>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fiColonia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DatosCLientes.fcDireccionDetallada, htmlAttributes: new { @class = "form-label" })
+                        <div class="input-group flex-nowrap">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fal fa-house"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.DatosCLientes.fcDireccionDetallada, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.DatosCLientes.fcDireccionDetallada, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Comentario: </label>
+                        <div class="input-group mar-btm">
+                            @Html.TextArea("ComentarioAgencia", new { @class = "form-control" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+
+                    @*<div class="form-group" id="DivAgregarPaquete">*@
+                    <div class="form-group" id="DivAgregarPaquete">
+                        <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                        <br />
+                        <button type="button" id="btnAgregarPaquete" onclick="AgregarPaquete()" class="btn-success btn btn-sm js-btn-next">Escoger Paquete</button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    @*<div class="form-group" id="DivAgregarProducto">*@
+                    <div class="form-group" id="DivAgregarProducto">
+                        <label class="form-label text-muted" for="simpleinput-disabled"></label>
+                        <br />
+                        <button type="button" id="btnAgregarProducto" onclick="AgregarSolicitud()" class="btn-success btn btn-sm js-btn-next">Agregar Producto</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipalServicio">
+                        <thead>
+                            <tr>
+                                <th>numero Producto</th>
+                                <th>Producto</th>
+                                <th>tipo Producto</th>
+                                <th>Valor</th>
+                                @*<th></th>*@
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnCrearSolicitudExtraServicio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+
+        </div>
+
+    </form>
+
+@Scripts.Render("~/bundles/jqueryval")
+
+<script>
+    var dataPrincipalServicio = [];
+    var model = @Html.Raw(Json.Encode(Model));
+    $("#Nombre").prop("disabled", true);
+    $("#Telefono").prop("disabled", true);
+    $("#DatosCLientes_fiDepartamento").select2({
+        dropdownParent: $("#MyModalBig")
+    });
+    $("#fiMunicipio").select2({
+        dropdownParent: $("#MyModalBig")
+    });
+    $("#fiColonia").select2({
+         dropdownParent: $("#MyModalBig")
+    });
+     function AgregarSolicitud(){
+       VerModalScroll2ConObjetoDeParametro({},"@Url.Action("ViewDataProductoParaServicio", "Solicitudes")");
+     }
+     function AgregarPaquete(){
+       VerModalScroll2ConObjetoDeParametro({},"@Url.Action("ViewDataPaqueteParaServicio", "Solicitudes")");
+     }
+    $("#btnCrearSolicitudExtraServicio").click(function () {
+        
+        if ($("#DatosCLientes_fiDepartamento :selected :selected").val() == "" || $("#DatosCLientes_fiDepartamento  :selected").val() == 0) {
+            ToastrWarning("Campos vacios", "Seleccione el departamento");
+            return false;
+        }
+
+        if ($("#fiMunicipio  :selected").val() == "" || $("#fiMunicipio  :selected").val() == 0) {
+            ToastrWarning("Campos vacios", "Seleccione el municipio");
+            return false;
+        }
+        if ($("#fiColonia :selected").val() == "" || $("#fiColonia  :selected").val() == 0) {
+            ToastrWarning("Campos vacios", "Seleccion una colonia");
+            return false;
+        }
+
+        if ($("#DatosCLientes_fcDireccionDetallada").val() == "") {
+            ToastrWarning("Campos vacios", "Escriba la direccion detallada");
+            return false;
+        }
+
+
+        var Comentario = $("#ComentarioAgencia").val();
+        var idDepartamento = $("#DatosCLientes_fiDepartamento :selected").val();
+        var idMunicipio = $("#fiMunicipio :selected").val();
+        var idColonia = $("#fiColonia :selected").val();
+        var fcDireccionDetallada = $("#DatosCLientes_fcDireccionDetallada").val();
+
+        var DatosClientes = {
+            IdCliente: @Model.IdCliente,
+            DatosProductos: dataPrincipalServicio,
+        }
+        var DatosClientesDetalle = {
+            fiDepartamento: idDepartamento,
+            fiMunicipio: idMunicipio,
+            fiColonia: idColonia,
+            fcDireccionDetallada: fcDireccionDetallada,
+        }
+
+        $.ajax({
+                url: "@Url.Action("CrearSolicitudExtraCliente", "Solicitudes")",
+                type: "POST",
+            data: { model: DatosClientes, DatosClientesDetalle: DatosClientesDetalle },
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                    location.reload();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+    });
+
+
+    var departamento1 = 0, municipio1 = 0, poblado1 = 0, colonia1 = 0;
+    function ListaMunicipio() {
+
+        $('#fiMunicipio').empty();
+        if ($('#DatosCLientes_fiDepartamento').val() == 0) {
+            $('#fiMunicipio').prop('disabled', true);
+            return;
+
+        }
+        $('#fiMunicipio').prop('disabled', false);
+
+        $('#fiMunicipio').append("<option value='0' > Seleccione un Municipio</option>");
+
+        if (departamento1 != $("#DatosCLientes_fiDepartamento").val())
+                {
+                    $('#DatosCLientes_fiColonia').empty();
+                    colonia1 = 0;
+                }
+        if (!$('#DatosCLientes_fiDepartamento').val()) {
+                    return;
+         }
+            let url = '@Url.Action("ListaMunicipiosByDepartamento", "DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ CodDepartamento: Number(document.getElementById("DatosCLientes_fiDepartamento").value) }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    
+                    var listaMunicipios = data;
+                    for (var municipio of listaMunicipios) {
+                        $('#fiMunicipio').append("<option value='" + municipio.fiCodMunicipio + "'>" + municipio.fcMunicipio + "</option>");
+                    }
+
+                  
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+
+                });
+    }
+
+
+        function ListaColonia() {
+            
+            $('#fiColonia').empty();
+            if ($('#fiMunicipio').val() == 0) {
+                $('#fiColonia').prop('disabled', true);
+                return;
+
+            }
+            $('#fiColonia').prop('disabled', false);
+
+            $('#fiColonia').append("<option value='0' > Seleccione un Barrio/Colonia</option>");
+
+            let url = '@Url.Action("ListaColoniasByPoblado", "DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ CodDepartamento: Number(document.getElementById("DatosCLientes_fiDepartamento").value), CodMunicipio: Number(document.getElementById("fiMunicipio").value) }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en el servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                   
+
+
+                    var listaColonia = data;
+                    for (var fiColonia of listaColonia) {
+                        $('#fiColonia').append("<option value='" + fiColonia.fiCodBarrio + "'>" + fiColonia.fcBarrio + "</option>");
+                    }
+                    if (colonia1 == 0) {
+                        $("#fiColonia'").val(null).trigger("change");
+
+                        municipio1 = $("#fiMunicipio").val();
+                    } else {
+                        $("#fiMunicipio").val(colonia1).trigger("change");
+                        colonia1 = 0;
+                    }
+
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+
+                });
+            }
+
+    var LlenarSelect = ((data, idselect) => {
+        document.getElementById(idselect).innerHTML = "";
+        let selects = '<option id="codMuni0" value="0">Seleccione</option>';
+        data.forEach((item) => {
+            selects += `<option id="${item.fiCodMunicipio}" value="${item.fiCodMunicipio}">${item.fcMunicipio}</option>`;
+        })
+        document.getElementById(idselect).innerHTML += selects;
+      //  document.getElementById("fiPoblado").innerHTML = "";
+        document.getElementById("DatosCLientes_fiColonia").innerHTML = "";
+
+    })
+    var LlenarSelectColonias = ((data, idselect) => {
+        document.getElementById(idselect).innerHTML = ""
+        let selects = '<option id="codBarrio0" value="0">Seleccione</option>';
+        data.forEach((item) => {
+            selects += `<option id="${item.fiCodBarrio}" value="${item.fiCodBarrio}">${item.fcBarrio}</option>`;
+        })
+        document.getElementById(idselect).innerHTML += selects;
+
+    })
+</script>

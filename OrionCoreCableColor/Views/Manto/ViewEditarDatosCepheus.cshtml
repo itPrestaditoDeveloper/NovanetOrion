@@ -1,0 +1,168 @@
+﻿@model OrionCoreCableColor.Models.Solicitudes.SolicitudesViewModel
+@{
+    ViewBag.Title = "ViewEditarDatosCepheus";
+}
+<!--Modal header-->
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Editar Datos de clientes Cepheus</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDSolicitud, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.IDSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IDSolicitud, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6" style="display:none">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdCliente, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.IdCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.IdCliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CodigoCliente, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.CodigoCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.CodigoCliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumeroOrdenCepheus, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.NumeroOrdenCepheus, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.NumeroOrdenCepheus, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumeroOrdenTrabajoCepheus, htmlAttributes: new { @class = "control-label" })
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>
+                        </div>
+                        @Html.EditorFor(model => model.NumeroOrdenTrabajoCepheus, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.NumeroOrdenTrabajoCepheus, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <label class="form-control-plaintext font-weight-bold">Observaciones</label>
+            <input id="txtobservaciones" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="reiniciogeo" onclick="GuardarBitacora()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+    </div>
+
+</div>
+<script>
+    $("#Nombre").prop("disabled", true);
+    $("#IDSolicitud").prop("disabled", true);
+    var opcion = 0;
+
+    function GuardarBitacora() {
+            var observaciones = $(`#txtobservaciones`).val();           
+            var idsol = $(`#IDSolicitud`).val();
+            var idclient = $(`#IdCliente`).val();
+            var Codigocliente = $(`#CodigoCliente`).val();
+            var NumeroCepheus = $(`#NumeroOrdenCepheus`).val();
+            var NumeroTrabajoCepheus = $(`#NumeroOrdenTrabajoCepheus`).val();
+
+            if ($("#txtobservaciones").val() == "") {
+                ToastrWarning("Campos vacios de observacion", "Escriba un comentario");
+                return false;
+            }
+
+            $.ajax({
+                url: "@Url.Action("ActualizarDatosInstalacionCepheus", "Manto")",
+                type: "POST",
+                data: { IDSolicitud: idsol, NumeroCepheus: NumeroCepheus, CodigoCliente: Codigocliente, NumeroTrabajoCepheus: NumeroTrabajoCepheus},
+                success: function (datas) {
+                    
+                    //var resultado = datas[0];                    
+                    //if (resultado.fiMensaje == 1) {
+                        $.ajax({
+                            url: "@Url.Action("GuardarBitacorahistorial", "Manto")",
+                            type: "POST",
+                            data: { IdSolicitud: idsol, IdCliente: idclient, Observaciones: observaciones, Opcion: 'Actualizar Datos Cepheus'},
+                            success: function (respuesta) {
+                                
+                                CerrarModal();
+                                AlertaDinamicas(true, 'Exito', 'Actualizar Datos Cepheus', 1);
+
+                            },
+                            error: function (respuesta) {
+                                AlertaDinamicas(false, 'Error', 'error Actualizar Datos Cepheus', 2);
+                            }
+                        })
+                   // }
+                    //if (resultado.fiMensaje == 0) {
+                    //    AlertaDinamicas(false, 'Error', 'Error Actualizar Datos Cepheus', 2);
+                    //}                   
+                },
+                error: function (datae) {
+                    AlertaDinamicas(false, 'Error', 'Error Al querer Actualizar Datos Cepheus', 2);
+                }
+            });        
+    }
+
+
+
+</script>

@@ -1,0 +1,125 @@
+﻿
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Asignar Usuario a Contratista</h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    @*<form >*@
+
+    <div class="row">
+        <div class="col-sm-12">
+            
+            <div class="form-group">
+
+                <div class="" id="divgeolocaclizacion">
+
+                    <label class="form-control-plaintext font-weight-bold">Usuario Contratista</label>
+                    <select id="SelectContratista" class="form-select form-control">
+                    </select>
+                    
+                    <label class="form-control-plaintext font-weight-bold">Usuario Tecnico</label>
+                    <select id="selectusuario" class="form-select form-control">
+                    </select>
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-default pull-left"><i class="text-lg ion-close-round"></i> Cancelar</a>
+        <button class="btn btn-success" id="reiniciogeo" onclick="Guardar()"><i class="text-lg ion-checkmark-round"></i> Guardar</button>
+    </div>
+
+</div>
+
+<script>
+
+    select();
+        function select() {
+
+        $.ajax({
+            url: "@Url.Action("SelectUsuarios", "LlenarCampos")",
+            type: "GET",
+            success: function (respuesta) {
+
+                var selectUsuario = $("#SelectContratista");
+
+                selectUsuario.empty();
+                selectUsuario.append($('<option>', {
+                    value: 0,
+                    text: 'Selecciones un Usuario'
+                }));
+                $("#SelectContratista").select2({ dropdownParent: $("#MyModalContent") }).val(null).trigger("change");
+                $.each(respuesta, function(index, item) {
+                    selectUsuario.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+
+    }
+
+    $(`#SelectContratista`).on(`change`, function () {
+        var valo = $(this).val()
+
+        $.ajax({
+            url: "@Url.Action("SelectUsuarioTecnicosPorEmpresa", "LlenarCampos")",
+            type: "GET",
+            data: { idContratista: valo, idrol: 0},
+           success: function (respuesta) {
+
+               var selectUsuario = $("#selectusuario");
+
+                selectUsuario.empty();
+                selectUsuario.append($('<option>', {
+                    value: 0,
+                    text: 'Selecciones un Usuario'
+                }));
+               $("#selectusuario").select2({ dropdownParent: $("#MyModalContent") }).val(null).trigger("change");
+                $.each(respuesta, function(index, item) {
+                    selectUsuario.append($('<option>', {
+                        value: item.Value,
+                        text: item.Text
+                    }));
+                });
+            },
+            error: function (respuesta) {
+                console.log(respuesta);
+            }
+        });
+    });
+
+    function Guardar() {
+
+        var contra = $(`#SelectContratista`).val();
+        var tecnico = $(`#selectusuario`).val();
+
+        $.ajax({
+           url: "@Url.Action("GuardarTecnicoaContratista", "Contratista")",
+           type: "GET",
+           data: { idcontratista: contra, idtecnico: tecnico},
+           success: function (respuesta) {
+
+               if(respuesta) {
+                   CerrarModal();
+                   $.fn.dataTable.Api("#BandejaSolicitudes").ajax.reload().draw(false);
+               }
+           },
+           error: function (respuesta) {
+             console.log(respuesta);
+           }
+        });
+    }
+
+</script>

@@ -1,0 +1,175 @@
+﻿/* Primary tabs styling */
+.tab-section-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.tab-content-section {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.breadcrumb-context {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+.custom-secondary-tabs {
+    background-color: #f1f1f1;
+}
+
+.tab-content-section .tab-content {
+    background-color: #fff;
+}
+
+
+
+
+.nav-tabs#loanTabs {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 5px;
+}
+
+    .nav-tabs#loanTabs .nav-item .nav-link {
+        color: #495057;
+        border: none;
+        padding: 10px 15px;
+        font-size: 1rem;
+        border-radius: 5px;
+    }
+
+        .nav-tabs#loanTabs .nav-item .nav-link.active {
+            background-color: #007bff;
+            color: #fff;
+            border-bottom: none;
+        }
+
+/* Secondary tabs styling (button-like design) */
+.custom-secondary-tabs {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+    .custom-secondary-tabs .nav-item {
+        margin: 0 5px 5px 0;
+    }
+
+        .custom-secondary-tabs .nav-item .nav-link {
+            background-color: #6f42c1; /* Purple background */
+            color: #fff; /* White text */
+            border: none;
+            padding: 8px 15px;
+            font-size: 0.95rem;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for button effect */
+            transition: all 0.3s ease; /* Smooth hover effect */
+        }
+
+            .custom-secondary-tabs .nav-item .nav-link:hover {
+                background-color: #5a2e9c; /* Darker purple on hover */
+                color: #fff;
+            }
+
+            .custom-secondary-tabs .nav-item .nav-link.active {
+                background-color: #6f42c1; /* Keep active same as inactive for consistency */
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .custom-secondary-tabs .nav-item .nav-link i {
+                color: #fff; /* White icons */
+                margin-right: 5px;
+            }
+
+/* Credit options styling (sub-options in Info. de crédito tab) */
+.credit-option {
+    background-color: #6f42c1; /* Purple background */
+    color: #fff; /* White text */
+    border: none;
+    padding: 8px 15px;
+    font-size: 0.95rem;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+    .credit-option:hover {
+        background-color: #5a2e9c;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .credit-option i {
+        color: #fff;
+        margin-right: 5px;
+    }
+
+/* Ensure justified layout and responsive stacking */
+.nav-justified .nav-item {
+    flex: 1 1 auto;
+}
+
+@media (max-width: 576px) {
+    .nav-tabs#loanTabs .nav-link,
+    .custom-secondary-tabs .nav-link,
+    .credit-option {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+
+    .custom-secondary-tabs {
+        flex-direction: column;
+    }
+
+        .custom-secondary-tabs .nav-item {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+    .credit-option {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .fa-2x {
+        font-size: 1.5em;
+    }
+
+    .h4 {
+        font-size: 1.2rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+}
+
+/* Custom purple button */
+.btn-purple {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    color: #fff;
+}
+
+    .btn-purple:hover {
+        background-color: #563d7c;
+        border-color: #563d7c;
+    }
+
+/* Card styling */
+.card {
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

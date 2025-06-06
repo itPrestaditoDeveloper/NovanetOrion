@@ -1,0 +1,239 @@
+﻿<div class="panel">
+    <div class="panel-heading">
+        <div class="panel-control">
+            @*<a class="btn btn-danger" href="@Url.Action("IndexEmailTemplate")"> Go to List</a>*@
+            @*<a class="btn btn-default" onclick="VerVistaPreviaArticulo()"><i class="fa fa-eye fa-fw"></i> Vista Previa</a>*@
+            <button type="button" class="btn btn-success" onclick="GuardarPlantilla()">  Save Email template</button>
+        </div>
+
+        <h3 class="panel-title"> <i class="far fa-newspaper fa-fw"></i> Create Email Template</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <form role="form" class="form-horizontal" id="myform" enctype="multipart/form-data">
+            <div class="fixed-fluid">
+
+                <div class="fluid">
+                    <!-- COMPOSE EMAIL -->
+                    <!--===================================================-->
+                    <div class="pad-all">
+                        <div class="form-group">
+                            <label class="col-lg-1 control-label text-left text-main text-bold text-uppercase">SUBJECT</label>
+                            <div class="col-lg-11">
+                                @*@Html.TextBoxFor(model => model.fcEmailSubject, new { @class = "form-control", @autofocus = true, @placeholder = "Email Subject", })
+                                @Html.ValidationMessageFor(model => model.fcEmailSubject, "", new { @class = "text-danger" })*@
+                            </div>
+
+
+                        </div>
+
+
+                        <!--Attact file button-->
+                        <!--                    <div class="media pad-btm">
+                            <div class="media-left">
+                                <span class="btn btn-default btn-file">
+                                Attachment <input type="file">
+                            </span>
+                            </div>
+                            <div id="demo-attach-file" class="media-body"></div>
+                        </div>-->
+                        <!--Wysiwyg editor : Summernote placeholder-->
+                        <div class="form-group textarea-noresize">
+                            <textarea id="fcEmailBody" class="form-control" rows="21" style="resize:none;"></textarea>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+
+                    <!--===================================================-->
+                    <!-- END COMPOSE EMAIL -->
+                </div>
+            </div>
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <!--===================================================-->
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+
+<script>
+
+        @*function GuardarPlantilla() {
+            if (!$("#myform").valid()) {
+                $("#myform").focusInvalid();
+                return;
+            }
+
+            var form_data = new FormData();
+            form_data.append("fiIDEmailTemplate", '@Model.fiIDEmailTemplate');
+            form_data.append("fcDescriptionEmailTemplate", $("#fcDescriptionEmailTemplate").val());
+            form_data.append("fcEmailSubject", $("#fcEmailSubject").val());
+            //form_data.append("Publicado", $("#Publicado").is(":checked"));
+            form_data.append("fcEmailBody", $("#fcEmailBody").val());
+            form_data.append("fcEmailTitle", $("#fcEmailTitle").val());
+            form_data.append("fcEmailFooter", $("#fcEmailFooter").val());
+            form_data.append("fiIDIdioma", $("#fiIDIdioma").val());
+
+
+            var url = "@Url.Action("CreateEmailTemplate", "EmailManager")";
+            if (str2bool('@Model.EsEditar')) { url = "@Url.Action("EditEmailTemplate", "EmailManager")"}
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: form_data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                enctype: "multipart/form-data",
+                success: function (data) {
+                    AlertaCrear(data, '@Url.Action("IndexEmailTemplate", "EmailManager")');
+                }, error: function () {
+                    AlertaError();
+                }
+            });
+
+
+        }*@
+
+        //$("#myform").validate({
+        //    ignore: [],
+        //    rules: {
+        //        fcDescriptionEmailTemplate: {
+        //            required: true
+        //        },
+        //        fcEmailSubject: {
+        //            required: true
+        //        },
+        //        fcEmailBody: {
+        //            required: true
+        //        },
+        //        //Fk_IdSeccion: {
+        //        //    required: true
+        //        //},
+
+        //    },
+        //    //messages: {
+        //    //    fcDescripcionPlantilla: 'Descripcion es requerido.',
+        //    //    fcAsuntoCorreo: 'El asunto es requerido',
+        //    //    fcContenidoCorreo: 'El contenido es requerido',
+
+        //    //},
+        //    highlight: function (element) {
+        //        $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+        //    },
+        //    unhighlight: function (element) {
+        //        $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+        //    },
+        //    errorElement: 'span',
+        //    errorClass: 'help-block',
+        //    errorPlacement: function (error, element) {
+        //        console.log(element);
+        //        $(element).closest('.form-group').find(".field-validation-valid").html(error);
+        //    }
+        //});
+
+
+
+        $(document).on('nifty.ready', function () {
+            debugger;
+            //custom button
+            //var HelloButton = function (context)
+            //{
+            //    var ui = $.summernote.ui;
+
+            //    // create button
+            //    var button = ui.button({
+            //    contents: '<i class="fa fa-user"/> Customer',
+            //    tooltip: 'hello',
+            //    click: function () {
+            //        // invoke insertText method with 'hello' on editor module.
+            //        context.invoke('editor.insertText', '{CustomerName}');
+            //    }
+            //    });
+
+            //    return button.render();   // return button as jquery object
+            //}
+
+            // SUMMERNOTE
+            // =================================================================
+            // Require Summernote
+            // http://hackerwins.github.io/summernote/
+            // =================================================================
+            $('#fcEmailBody').summernote({
+                height: '500px',
+                lang: 'es-ES', // Change to your chosen language
+                  //buttons: {
+                  //  hello: HelloButton
+                  //},
+                toolbar: [
+                    // [groupName, [list of button]]
+                    ['action', ['undo', 'redo']],
+                    ['color', ['color']],
+                    ['fontsize', ['fontsize']],
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['fontname']],
+
+                    ['para', ['paragraph', 'ul', 'ol', ]],
+                    ['table', [ 'table']],
+                    ['parastyle', ['style']],
+                    ['insert', ['link', 'picture']],
+                    //['picture', ['picture']],
+                    //['mybutton', ['hello']]
+
+                ],
+                 hint: {
+                     @*mentions: JSON.parse('@Html.Raw(Json.Encode(Model.ListVariables))'),*@// ['CustomerName', 'IDCustomer', 'Direccion', 'Correo'],
+                    match: /\B{(\w*)$/,
+                     search: function (keyword, callback)
+                     {
+                        callback($.grep(this.mentions, function (item) {
+                        return item.indexOf(keyword) == 0;
+                        }));
+
+                    },
+                    content: function (item) {
+                      return '{' + item+'}';
+                    }
+                 }
+            });
+
+
+
+
+
+
+        });
+
+
+</script>
+}
+

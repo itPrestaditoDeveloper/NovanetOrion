@@ -1,0 +1,201 @@
+﻿@model IEnumerable<OrionCoreCableColor.Models.Prestamo.ListFacturacionDetalleViewModel>
+
+<style>
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .dt-buttons {
+        float: left;
+    }
+
+    #TablaCatalogoProductos_filter > label {
+        float: right;
+    }
+</style>
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">
+       Productos
+    </h2>
+    <button type="button" class="close" data-dismiss="modal">
+        <i class="fal fa-times-circle fa-fw fa-lg"></i>
+    </button>
+
+</div>
+
+
+<div class="modal-body">
+
+    <div class="col-lg-12">
+        <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaCatalogoProductos">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Producto</th>
+                    <th>Existencia</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+    <div class="modal-footer">
+        <div class="clearfix" style="width:100%;">
+            <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+            <button id="agregarItems" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    var listModel = @Html.Raw(Json.Encode(Model)) ?? [];
+    var ubicacion = 1;
+
+    var tablaPrincipal = $('#TablaCatalogoProductos').DataTable({
+        autoWidth: true,
+        responsive: true,
+        language: {
+            "emptyTable": "No se encontraron resultados.",
+            //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+            "paginate": {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            "lengthMenu": " _MENU_ ",
+            "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+            "infoEmpty": "No hay registros para mostrar.",
+        },
+        dom: `<"row" <"#add.col-sm-4"><"col-sm-4 left"><"col-sm-4"f>>rtip`,
+        "aaSorting": [],
+        ajax: {
+            url: '@Url.Action("ListInventarioStock", "Prestamo")',
+            method: "Get",
+            data: function (d) {
+                d.fiIdUbicacion = ubicacion;
+            },
+            dataSrc: function (data)
+            {
+                for (var item of listModel ?? []) {
+                    data.find(x => x.fiIDProducto == item.fiIDProducto).fbSeleccionado = true;
+                }
+                return data;
+            }
+        },
+        pageLength: 5,
+        columns: [
+            {
+                data: null,
+                className: "text-center",
+                render: function (data) {
+                    return `<div class="col-lg-12 float-left">
+                                <div class="custom-control custom-checkbox">
+                                    <input ${(data.fbSeleccionado == 1 ? "checked" : "")} id="fiProductoSeleccionable-${data.fiIDProducto}" name="fbSeleccionado" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla">
+                                    <label class="custom-control-label" style="cursor:pointer;" for="fiProductoSeleccionable-${data.fiIDProducto}"></label>
+                                </div>
+                            </div>`;
+                }
+            },
+            {
+                data: null,
+                className: "text-center",
+                render: function (data) {
+                    return data.Foto == "" ? "" : `<img src="${data.Foto}"  onclick="ShowBigImage(this)" data-Description="" src="" alt="img" class="img-square img-md img-thumbnail" style="width:50px;height:50px; cursor:pointer;" />`;
+                }
+            },
+            {
+                data: "fcProducto"
+            },
+            {
+                data: "fnExistencia"
+            }
+
+        ],
+        initComplete: function () {
+            $("#Ubicaciones").select2({ dropdownParent: $("#MyModalBig") }).val(ubicacion).trigger("change");
+            $("#Ubicaciones").change(function () {
+                ubicacion = $(this).val();
+                tablaPrincipal.ajax.reload();
+            });
+
+
+        }
+
+    });
+
+
+    $select = $(`@Html.DropDownList("Ubicaciones", new SelectList(ViewBag.ListarBodegasConStock, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })`).appendTo('#add');
+
+    $("#TablaCatalogoProductos tbody").on("click", "tr input[name=fbSeleccionado]", function () {
+        var tablaCatalogoProductos = $.fn.dataTable.Api("#TablaCatalogoProductos");
+        var tr = $(this).closest("tr");
+        var data = tablaCatalogoProductos.row(tr).data();
+        data.fbSeleccionado = $(this).prop("checked");
+
+    });
+
+    
+
+    $("#agregarItems").click(function () {
+        var tablaCatalogoProductos = $.fn.dataTable.Api("#TablaCatalogoProductos");
+        var data = tablaCatalogoProductos.rows().data().toArray();
+
+        var tablaProductos = $.fn.dataTable.Api("#TablaProductos");
+        tablaProductos.rows().remove().draw(false);
+
+        var seleccionados = data.filter(x => x.fbSeleccionado);
+        
+        for (var item of seleccionados)
+        {
+            var row = NuevaLinea();
+            row.fiIDProducto = item.fiIDProducto;
+            row.fcProducto = item.fcProducto;
+            row.fnValorVentaDeContado = item.fnValorVentaDeContado;
+
+            if (listModel.some(x => x.fiIDProducto == row.fiIDProducto))
+            {
+               
+                var model = listModel.find(x => x.fiIDProducto == row.fiIDProducto);
+                row.fiIDFacturacionDetalle = model.fiIDFacturacionDetalle;
+                row.fnCantidad = model.fnCantidad;
+                row.fnPorcentajeImpuesto1 = model.fnPorcentajeImpuesto1;
+                row.fnPorcentajeImpuesto2 = model.fnPorcentajeImpuesto2;
+                row.fnValorProductoME = model.fnValorProductoME;
+                row.fnSubTotal = model.fnSubTotal;
+                row.fnTotal = model.fnTotal;
+                row.fcToken = model.fcToken;
+                row.fbAplicaImpuesto = model.fbAplicaImpuesto;
+                row.fnValorImpuesto = model.fnValorImpuesto;
+                row.fbSeleccionado = model.fbSeleccionado;
+                row.fnExistencia = model.fnExistencia;
+                row.Foto = model.Foto;
+                row.fiIDInventarioMovimientoMaestro = model.fiIDInventarioMovimientoMaestro;
+                row.DetalleInventario = model.DetalleInventario ?? []
+            }
+
+            tablaProductos.row.add(row).draw(false);
+        }
+
+        var nodes = tablaProductos.rows().nodes().toArray();
+        
+        for (var tr of nodes)
+        {
+            CalcularValores(tr);
+        }
+        CalcularTotales();
+        CerrarModal();
+        
+
+    });
+
+</script>

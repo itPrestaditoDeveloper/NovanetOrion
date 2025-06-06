@@ -1,0 +1,784 @@
+﻿@using OrionCoreCableColor.App_Helper
+@using System.Net
+
+<!DOCTYPE html>
+<!--
+Template Name:  SmartAdmin Responsive WebApp - Template build with Twitter Bootstrap 4
+Version: 4.5.1
+Author: Sunnyat A.
+Website: http://gootbootstrap.com
+Purchase: https://wrapbootstrap.com/theme/smartadmin-responsive-webapp-WB0573SK0?ref=myorange
+License: You must have a valid license purchased only from wrapbootstrap.com (link above) in order to legally use this theme for your project.
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>
+        ORION
+    </title>
+    <meta name="description" content="Page Title">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+    <!-- Call App Mode on ios devices -->
+
+
+    <link rel="apple-touch-icon" href="~/Content/img/logos.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="NOVANET">
+
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <!-- base css -->
+    @Styles.Render("~/styles/externalstylesheets")
+    <link rel="manifest" href="/manifest.json">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@4.1.3/dist/maplibre-gl.css' />
+
+    <script src='https://unpkg.com/maplibre-gl@4.1.3/dist/maplibre-gl.js'></script>
+
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Template/css/fontLetter.css" rel="stylesheet" />
+    <link href="~/Template/css/themes/type-c/theme-navy.min.css" rel="stylesheet" />
+    <link rel="stylesheet" media="screen, print" href="~/Content/css/miscellaneous/fullcalendar/fullcalendar.bundle.css">
+
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <link media="screen, print" href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet">
+
+
+    <link rel="icon" type="image/x-icon" href="~/Content/img/favicon/favicon.ico">
+
+    <link rel="mask-icon" href="~/Content/img/logos.png" color="#5bbad5">
+    <link rel="stylesheet" href="~/Template/plugins/ionicons/css/ionicons.css" />
+    <link href="~/Content/css/statistics/chartjs/chartjs.css" rel="stylesheet" />
+
+    <!-- You can add your own stylesheet here to override any styles that comes before it
+    <link rel="stylesheet" media="screen, print" href="css/your_styles.css">-->
+    <style type="text/css">
+        .jqstooltip {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            visibility: hidden;
+            background: rgb(0, 0, 0) transparent;
+            background-color: rgba(0,0,0,0.6);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+            -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+            color: white;
+            font: 10px arial, san serif;
+            text-align: left;
+            white-space: nowrap;
+            padding: 5px;
+            border: 1px solid white;
+            box-sizing: content-box;
+            z-index: 10000;
+        }
+
+        .jqsfield {
+            color: white;
+            font: 10px arial, san serif;
+            text-align: left;
+        }
+
+
+        .drawCanvas {
+            border: 2px dotted #CCCCCC;
+            border-radius: 5px;
+            cursor: crosshair;
+        }
+    </style>
+    <style>
+        td.details-control {
+            background: url('../Content/img/plus.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('../Content/img/minus.png') no-repeat center center;
+        }
+    </style>
+
+    <style>
+        /*Stilos de la suit alert*/
+        /*body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }*/
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+        }
+
+        #notification {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+            #notification h2 {
+                margin-top: 0;
+            }
+
+        #buttons {
+            margin-top: 20px;
+        }
+
+            #buttons button {
+                background-color: #3498db;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-right: 10px;
+            }
+
+                #buttons button:last-child {
+                    margin-right: 0;
+                }
+    </style>
+
+
+
+</head>
+<!-- BEGIN Body -->
+<!-- Possible Classes
+
+    * 'header-function-fixed'         - header is in a fixed at all times
+    * 'nav-function-fixed'            - left panel is fixed
+    * 'nav-function-minify'			  - skew nav to maximize space
+    * 'nav-function-hidden'           - roll mouse on edge to reveal
+    * 'nav-function-top'              - relocate left pane to top
+    * 'mod-main-boxed'                - encapsulates to a container
+    * 'nav-mobile-push'               - content pushed on menu reveal
+    * 'nav-mobile-no-overlay'         - removes mesh on menu reveal
+    * 'nav-mobile-slide-out'          - content overlaps menu
+    * 'mod-bigger-font'               - content fonts are bigger for readability
+    * 'mod-high-contrast'             - 4.5:1 text contrast ratio
+    * 'mod-color-blind'               - color vision deficiency
+    * 'mod-pace-custom'               - preloader will be inside content
+    * 'mod-clean-page-bg'             - adds more whitespace
+    * 'mod-hide-nav-icons'            - invisible navigation icons
+    * 'mod-disable-animation'         - disables css based animations
+    * 'mod-hide-info-card'            - hides info card from left panel
+    * 'mod-lean-subheader'            - distinguished page header
+    * 'mod-nav-link'                  - clear breakdown of nav links
+
+    >>> more settings are described inside documentation page >>>
+-->
+
+<body class="mod-bg-1 mod-nav-link desktop chrome webkit pace-done modal-open blur">
+   
+    <script>
+        /**
+         *	This script should be placed right after the body tag for fast execution
+         *	Note: the script is written in pure javascript and does not depend on thirdparty library
+         **/
+        'use strict';
+
+        var classHolder = document.getElementsByTagName("BODY")[0];
+        /**
+         * Load from localstorage
+         **/
+        var themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) : {};
+        if (typeof (themeSettings.themeOptions) === "undefined")
+            themeSettings = Object.assign({ themeOptions: "mod-bg-1 nav-function-fixed mod-high-contrast mod-skin-dark" });
+        var themeURL = themeSettings.themeURL || '';
+        var themeOptions = themeSettings.themeOptions || '';
+        /**
+         * Load theme options
+         **/
+        if (themeSettings.themeOptions) {
+            classHolder.className = "mod-bg-1 nav-function-fixed";///themeSettings.themeOptions;
+            //console.log("%c✔ Theme settings loaded", "color: #148f32");
+        }
+        else {
+            //console.log("%c✔ Heads up! Theme settings is empty or does not exist, loading default settings...", "color: #ed1c24");
+        }
+        if (themeSettings.themeURL && !document.getElementById('mytheme')) {
+            var cssfile = document.createElement('link');
+            cssfile.id = 'mytheme';
+            cssfile.rel = 'stylesheet';
+            cssfile.href = themeURL;
+            document.getElementsByTagName('head')[0].appendChild(cssfile);
+
+        }
+        else if (themeSettings.themeURL && document.getElementById('mytheme')) {
+            document.getElementById('mytheme').href = themeSettings.themeURL;
+        }
+        /**
+         * Save to localstorage
+         **/
+        var saveSettings = function () {
+
+            themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function (item) {
+                return /^(nav|header|footer|mod|display)-/i.test(item);
+            }).join(' ');
+
+            if (document.getElementById('mytheme')) {
+                themeSettings.themeURL = document.getElementById('mytheme').getAttribute("href");
+            };
+            localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
+        }
+        /**
+         * Reset settings
+         **/
+        var resetSettings = function () {
+            localStorage.setItem("themeSettings", "");
+        }
+
+
+
+
+    </script>
+    @Html.Partial("_PartialModal")
+
+
+    @*<script>
+        /**
+                     *	This script should be placed right after the body tag for fast execution
+                     *	Note: the script is written in pure javascript and does not depend on thirdparty library
+                     **/
+        'use strict';
+
+        var classHolder = document.getElementsByTagName("BODY")[0],
+            /**
+             * Load from localstorage
+             **/
+            themeSettings = (localStorage.getItem('themeSettings')) ? JSON.parse(localStorage.getItem('themeSettings')) :
+                {},
+            themeURL = themeSettings.themeURL || '',
+            themeOptions = themeSettings.themeOptions || '';
+        /**
+         * Load theme options
+         **/
+        if (themeSettings.themeOptions) {
+            classHolder.className = themeSettings.themeOptions;
+            console.log("%c✔ Theme settings loaded", "color: #148f32");
+        }
+        else {
+            console.log("%c✔ Heads up! Theme settings is empty or does not exist, loading default settings...", "color: #ed1c24");
+        }
+        if (themeSettings.themeURL && !document.getElementById('mytheme')) {
+            var cssfile = document.createElement('link');
+            cssfile.id = 'mytheme';
+            cssfile.rel = 'stylesheet';
+            cssfile.href = themeURL;
+            document.getElementsByTagName('head')[0].appendChild(cssfile);
+
+        }
+        else if (themeSettings.themeURL && document.getElementById('mytheme')) {
+            document.getElementById('mytheme').href = themeSettings.themeURL;
+        }
+        /**
+         * Save to localstorage
+         **/
+        var saveSettings = function () {
+            themeSettings.themeOptions = String(classHolder.className).split(/[^\w-]+/).filter(function (item) {
+                return /^(nav|header|footer|mod|display)-/i.test(item);
+            }).join(' ');
+            if (document.getElementById('mytheme')) {
+                themeSettings.themeURL = document.getElementById('mytheme').getAttribute("href");
+            };
+            localStorage.setItem('themeSettings', JSON.stringify(themeSettings));
+        }
+        /**
+         * Reset settings
+         **/
+        var resetSettings = function () {
+            localStorage.setItem("themeSettings", "");
+        }</script>*@
+
+
+    <!-- DOC: script to save and load page settings -->
+    <!-- BEGIN Page Wrapper -->
+
+    <div id="overlay" style="display:none;"></div>
+
+    <div class="page-wrapper">
+        <div class="page-inner">
+            <!-- BEGIN Left Aside -->
+            <aside class="page-sidebar" style="background: linear-gradient(to bottom, #515287, #232233); ">
+
+                <!-- BEGIN PRIMARY NAVIGATION -->
+
+
+                @Html.Partial("_PartialMenu")
+
+
+                <!-- END PRIMARY NAVIGATION -->
+                <!-- NAV FOOTER -->
+                <!--<div class="nav-footer shadow-top">
+                    <a href="#" onclick="return false;" data-action="toggle" data-class="nav-function-minify" class="hidden-md-down">
+                        <i class="ni ni-chevron-right"></i>
+                        <i class="ni ni-chevron-right"></i>
+                    </a>
+                    <ul class="list-table m-auto nav-footer-buttons">
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Chat logs">
+                                <i class="fal fa-comments"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Support Chat">
+                                <i class="fal fa-life-ring"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="Make a call">
+                                <i class="fal fa-phone"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+                <!-- END NAV FOOTER -->
+            </aside>
+            <!-- END Left Aside -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN Page Header -->
+
+
+                @Html.Partial("_PartialHeader")
+
+
+                <!-- END Page Header -->
+                <!-- BEGIN Page Content -->
+                <!-- the #js-page-content id is needed for some plugins to initialize -->
+
+                <main id="js-page-content" role="main" class="page-content" style="background-image: url('../Content/img/fondo.png');background-size: 100% ;  width:100%; height:100%; resize: both;">
+                    @RenderBody()
+                </main>
+                <!-- this overlay is activated only when mobile menu is triggered -->
+                <div class="page-content-overlay" data-action="toggle" data-class="mobile-nav-on"></div> <!-- END Page Content -->
+                <!-- BEGIN Page Footer -->
+                <footer class="page-footer" role="contentinfo">
+                    <div class="d-flex align-items-center flex-1 text-muted">
+
+                    </div>
+                    <div>
+
+                    </div>
+                </footer>
+                <!-- END Page Footer -->
+                <!-- BEGIN Shortcuts -->
+                <!-- END Shortcuts -->
+                <!-- BEGIN Color profile -->
+                <!-- this area is hidden and will not be seen on screens or screen readers -->
+                <!-- we use this only for CSS color refernce for JS stuff -->
+                <!-- END Color profile -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- END Messenger -->
+    <!-- BEGIN Page Settings -->
+    <!-- END Page Settings -->
+    <!-- base vendor bundle:
+         DOC: if you remove pace.js from core please note on Internet Explorer some CSS animations may execute before a page is fully loaded, resulting 'jump' animations
+                    + pace.js (recommended)
+                    + jquery.js (core)
+                    + jquery-ui-cust.js (core)
+                    + popper.js (core)
+                    + bootstrap.js (core)
+                    + slimscroll.js (extension)
+                    + app.navigation.js (core)
+                    + ba-throttle-debounce.js (core)
+                    + waves.js (extension)
+                    + smartpanels.js (extension)
+                    + src/../jquery-snippets.js (core) -->
+    @Scripts.Render("~/scripts/external-plugins")
+    @Scripts.Render("~/bundles/personalized")
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/Content/js/statistics/chartjs/chartjs.bundle.js"></script>
+    <script src="~/Content/js/statistics/flot/flot.bundle.js"></script>
+
+    <script src="@Url.Content("~/signalr/hubs")"></script>
+    @*@if (MemoryLoadManager.Produccion)
+        {
+
+            <script src="/Orion/signalr/hubs"></script>
+        }
+        else
+        {
+            <script src="/signalr/hubs"></script>
+        }*@
+
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script>
+
+        var getBrowserInfo = function () {
+            var ua = navigator.userAgent, tem,
+                M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+            if (/trident/i.test(M[1])) {
+                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                return 'IE ' + (tem[1] || '');
+            }
+            if (M[1] === 'Chrome') {
+                tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+            }
+            M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+            if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+            return M.join(' ');
+        };
+
+        var url = "@MemoryLoadManager.UrlWeb";
+
+        var Usuario =
+        {
+            @*//IP: "@Dns.GetHostEntry(Request.UserHostName).HostName",*@
+            IP: "@Request.UserHostName",
+            UserName: "@User.Identity.Name",
+            Navegador: getBrowserInfo(),
+            localConnectionId: ""
+        };
+
+        var pantallaPrincipal = 0;
+
+        //$(document).ready(function () {
+
+        //});
+
+        var imRequest = "/Orion/Content/img/LogoCabeceraOrion.png";
+
+
+        let localStream;
+        let peerConnection;
+        const servers = {
+            iceServers:
+                [
+                    { url: "stun:stun.l.google.com:19302" }
+                ]
+        };
+
+        let usuarioDestino;
+
+
+        var audio = new Audio('@Url.Content("/Content/media/sound/WhatsApp-Web.mp3")');
+        if ('serviceWorker' in navigator) {
+
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                registrations.forEach(function (registration) {
+                    registration.unregister().then(function (success) {
+                        if (success) {
+                            console.log('Service worker desinstalado exitosamente');
+                        }
+                    });
+                });
+            });
+
+
+            navigator.serviceWorker.register('@Url.Content("~/sw.js")');
+        }
+
+
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": 300,
+            "hideDuration": 100,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        window.FontAwesomeConfig = {
+            searchPseudoElements: true
+        }
+
+
+
+
+        var chat = $.connection.notificacionesHub;
+        var hubConnection = $.connection.hub.start().done(function () {
+            Usuario.localConnectionId = $.connection.hub.id;
+            //setupWebRTC();
+        });
+
+
+        $.connection.hub.error(function (err) {
+            console.log(err);
+        });
+
+        chat.client.enviarNotificacion = function (mensajeNotificaciones, RolesMostrarNotificacion, UsuarioEspecifico) {
+            ToastrSuccess("Notificación", mensajeNotificaciones);
+
+
+            try {
+
+                //audio.play();
+                Notification.requestPermission(function (result) {
+                    if (result === 'granted') {
+                        navigator.serviceWorker.ready.then(function (registration) {
+                            registration.showNotification("Novanet", {
+                                body: mensajeNotificaciones,
+                                //image: img,
+                            });
+                        });
+                    }
+                });
+
+            } catch (error) {
+                ToastrError("error", error.message);
+            }
+
+
+
+           // audio.play();
+
+
+
+
+
+        };
+
+
+
+
+
+
+
+        chat.client.consultarUsuarios = function (userPeticion) {
+            debugger;
+            $.ajax({
+                url: "@Url.Action("RegistrarUsuariosLogueados", "Base")",
+                type: "Post",
+                data: { model: Usuario, usuarioPeticion: userPeticion},
+                success: function (resp) {
+                    console.log(resp);
+                }
+            });
+        }
+
+        chat.client.mostrarModal = function (resp)
+        {
+            if (Usuario.UserName == resp.user.UserName && pantallaPrincipal == 0)
+            {
+                debugger;
+                VerModalSignalRScrollConObjetoDeParametro(resp.model, resp.url);
+            }
+        }
+
+        chat.client.getGeolocalizacionUsuario = function (resp) {
+            var usuarioPeticion = resp.usuarioPeticion;
+            if (Usuario.UserName == resp.usuarioGeolocalizado) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    lat = position.coords.latitude;
+                    long = position.coords.longitude;
+
+
+                    $.ajax({
+                        url: "@Url.Action("RetornoGeolocalizacionUsuario", "Usuario")",
+                        type: "get",
+                        data: {
+                            usuarioPeticion: usuarioPeticion,
+                            latitud: lat,
+                            longitud: long
+                        },
+                        success: function (resp) {
+                            console.log(resp);
+                        }
+                    });
+
+
+                });
+            }
+        }
+
+        chat.client.mostrarMensajeEnviado = function (resp) {
+            if (resp.fcUsuarioReceptor == Usuario.UserName)
+            {
+
+                if (document.visibilityState === "visible") {
+
+                    VerModalMensajeDirectoConObjetoDeParametro(
+                        {
+                            fiIDUsuarioMensajero: resp.fiIDUsuarioMensajero,
+                            fcUsuarioMensajero: resp.fcUsuarioMensajero,
+                            fiIDUsuarioReceptor: resp.fiIDUsuarioReceptor,
+                            fcUsuarioReceptor: resp.fcUsuarioReceptor,
+                            fcMensajeEnviado: resp.fcMensajeEnviado
+                        }, "@Url.Action("MensajeDirecto", "Usuario")");
+
+                    Notification.requestPermission(function (result) {
+                        if (result === 'granted') {
+                            navigator.serviceWorker.ready.then(function (registration) {
+                                registration.showNotification(resp.fcUsuarioMensajero, {
+                                    body: resp.fcMensajeEnviado
+                                });
+                            });
+                        }
+                    });
+
+                }
+            }
+
+        }
+
+        ///////////llamadas////////////////
+
+        //chat.on("recibirSeñal", async (señal, iniciador) => {
+        //    const sdpOferta = JSON.parse(señal);
+
+        //    if (!peerConnection) {
+        //        // Si no existe, creamos la conexión peer-to-peer
+        //        crearPeerConnection(iniciador);
+        //    }
+
+        //    // Establecer la oferta remota
+        //    await peerConnection.setRemoteDescription(new RTCSessionDescription(sdpOferta));
+
+        //    if (peerConnection.remoteDescription.type === "offer") {
+        //        // Si es una oferta, generamos y enviamos una respuesta
+        //        const sdpRespuesta = await peerConnection.createAnswer();
+        //        await peerConnection.setLocalDescription(sdpRespuesta);
+        //        chat.invoke("EnviarSeñal", iniciador, JSON.stringify(sdpRespuesta));
+        //    }
+        //});
+
+
+        //chat.on("recibirCandidatoIce", async (candidato) => {
+        //    if (!peerConnection) return;
+        //    const iceCandidate = new RTCIceCandidate(JSON.parse(candidato));
+        //    await peerConnection.addIceCandidate(iceCandidate);
+        //});
+
+
+        //function crearPeerConnection(iniciador) {
+        //    peerConnection = new RTCPeerConnection(servers);
+
+        //    // Configurar el manejo de los candidatos ICE
+        //    peerConnection.onicecandidate = ({ candidate }) => {
+        //        if (candidate) {
+        //            chat.invoke("EnviarCandidatoIce", iniciador, JSON.stringify(candidate));
+        //        }
+        //    };
+
+        //    // Configurar la recepción del audio remoto
+        //    peerConnection.ontrack = (event) => {
+        //        const remoteStream = event.streams[0];
+        //        document.getElementById("remoteAudio").srcObject = remoteStream;
+        //    };
+        //}
+
+
+        //async function iniciarLlamada(usuarioDestino) {
+        //    crearPeerConnection(usuarioDestino);
+
+        //    //// Obtener acceso al audio local (opcional si el emisor también envía audio)
+        //    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        //    //stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+
+        //    //// Crear una oferta SDP y enviarla
+        //    const sdpOferta = await peerConnection.createOffer();
+        //    await peerConnection.setLocalDescription(sdpOferta);
+        //    chat.invoke("EnviarSeñal", usuarioDestino, JSON.stringify(sdpOferta));
+        //}
+
+
+        //// Contestar la llamada
+        //document.getElementById("contestarLlamadaBtn").addEventListener("click", () => {
+        //    // No necesitamos hacer nada extra, ya que cuando llega la oferta,
+        //    // la respuesta se maneja automáticamente en el evento RecibirSeñal.
+        //    console.log("Esperando la oferta para contestar...");
+        //});
+
+        /////fin llamadas
+        ///////////PARA CHAT
+
+         function CargarUsuarios()
+         {
+             $.ajax({
+                 url: "@Url.Action("CargarListaUsuarios", "Usuario")",
+                 method: "Get",
+                 success: function (resp) {
+                     debugger;
+                     todosUsuarios = resp;
+                     $.ajax({
+                         url: "@Url.Action("GetUsuariosConectados","Base")",
+                         method: "Get",
+                         success: function (resp) {
+
+                         }
+                     });
+                 }
+             });
+        }
+
+        chat.client.insertarUsuarios = function (resp, userPeticion)
+        {
+            debugger;
+            if ("@User.Identity.Name" != resp.UserName)
+            {
+                
+                let appendUser = ""; 
+                let itemUsuario = todosUsuarios.find(x => x.UserName == resp.UserName);
+                if (itemUsuario != null)
+                {
+                    if ((usuariosConectadosHedear?.find(x => x.UserName == resp.UserName) ?? null) == null) {
+                        usuariosConectadosHedear.push(resp);
+                        appendUser = $(`<div class="dropdown-divider m-0"></div>
+                                        <a href="javascript:void(0)" class="dropdown-item" onclick="EnviarMensajeLayout(${itemUsuario.fiIdUsuario})">
+                                            <i class="fal fa-2xs fa-circle text-success" style="background-color: #1dc9b7; border-radius:50%;"></i> <span data-i18n="drpdwn.page-logout">${itemUsuario.UserName}</span>
+                                        </a>`);
+                        $("#tabUsuarios").append(appendUser);
+                    }
+                    
+                    
+                }
+                //usuariosConectadosHedear.push()
+            }
+
+
+        }
+
+
+        function EnviarMensajeLayout(fiIDUsuario) {
+            $("#tabUsuarios").empty();
+            $("#mensajesDeNotificacion").dropdown('toggle');
+            usuariosConectadosHedear = [];
+            VerModalMensajeDirectoConObjetoDeParametro({ fcUsuarioMensajero: Usuario.UserName, fiIDUsuarioReceptor: fiIDUsuario }, "@Url.Action("MensajeDirecto", "Usuario")");
+
+        }
+
+        ////fin de chat
+    </script>
+
+    @RenderSection("scripts", required: false)
+    <!--This page contains the basic JS and CSS files to get started on your project. If you need aditional addon's or plugins please see scripts located at the bottom of each page in order to find out which JS/CSS files to add.-->
+</body>
+<!-- END Body -->
+</html>

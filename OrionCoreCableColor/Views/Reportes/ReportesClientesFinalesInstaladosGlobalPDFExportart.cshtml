@@ -1,0 +1,1105 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.datosclienteViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/styles/externalstylesheets")
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Template/css/fontLetter.css" rel="stylesheet" />
+    <link href="~/Template/css/themes/type-c/theme-navy.min.css" rel="stylesheet" />
+    <link rel="stylesheet" media="screen, print" href="~/Content/css/miscellaneous/fullcalendar/fullcalendar.bundle.css">
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <link media="screen, print" href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="~/Content/img/LogoCabeceraOrion.ico">
+    <link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="stylesheet" href="~/Template/plugins/ionicons/css/ionicons.css" />
+    <link href="~/Content/css/statistics/chartjs/chartjs.css" rel="stylesheet" />
+    <link href="~/Content/css/Reporte.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 mt-1 mb-1">
+                <button type="button" id="btnExportarDocumento" class="btn btn-primary js-btn-next">Exportar</button>
+            </div>
+            <div class="col-12 mt-1 mb-1">
+                <button type="button" id="btnExportarDocumentoMovil" class="btn btn-primary js-btn-next">Exportar</button>
+            </div>
+        </div>
+        <div class="row" id="VistaGeneral">
+            <div class="col-12" id="grafica1">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>Ventas <span class="fw-300"><i>Novanet</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="panel-tag">
+                                Proyección de Ventas del Mes: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionVentaMes"></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                Ventas del mes: <span class="fw-300" style="font-size: 19px !important" id="txtVentaMes"></span>
+                            </div>
+                            <div id="chartVenta" style="width:100%; height:auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" id="grafica2">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>Arpu <span class="fw-300"><i>Novanet</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="panel-tag">
+                                Proyección Arpu del Mes: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionArpuMes"></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                Proyección Arpu General: <span class="fw-300" style="font-size: 15px !important" id="txtProyeccionArpu"></span>
+                            </div>
+                            <div id="chartArpu" style="width:100%; height:auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" id="grafica3">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>Mora <span class="fw-300"><i>Cliente</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="panel-tag">
+                                Clientes en mora al cierre: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionMoraMes"></span>
+                            </div>
+                            <div id="chartMoraCliente" style="width:100%; height:auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" id="grafica4">
+                <div id="panel-8" class="panel">
+                    <div class="panel-hdr">
+                        <h2>Clientes <span class="fw-300"><i>Activos</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="panel-tag">
+                                <div class="row">
+                                    <div class="col-3">Proyección del Mes:</div>
+                                    <div class="col-3" id="txtProyeccionMes"></div>
+                                    <div class="col-3">Clientes:</div>
+                                    <div class="col-3" id="txtClientesTotales"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">Proyección total:</div>
+                                    <div class="col-3" id="txtProyeccionTotal"></div>
+                                    <div class="col-3">Clientes Netos:</div>
+                                    <div class="col-3" id="txtClientesNetos"></div>
+                                </div>
+                            </div>
+                            <div id="GraficaClientesActivos" style="width:100%; height:auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12" id="grafica5">
+                <div id="panel-3" class="panel">
+                    <div class="panel-hdr">
+                        <h2>Facturación <span class="fw-300"><i>Novanet</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div id="stackedColumnChart" style="width: 100%; height: auto;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12" id="grafica6">
+                <div id="panel-3" class="panel">
+                    <div class="panel-hdr">
+                        <h2>Comparativo <span class="fw-300"><i>Paquete-Servicio</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="row ">
+                                <div id="countextrachart" class="col-12 col-md-4 col-sm-12 mx-auto text-center" style="width: 100%; height: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-12" id="grafica7">
+                <div id="panel-3" class="panel">
+                    <div class="panel-hdr">
+                        <h2>customer <span class="fw-300"><i>churn</i></span></h2>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <div class="panel-tag">
+                                <div class="row">
+                                    <div class="col-3">Can. ultimos  30 dias:</div>
+                                    <div class="col-3" id="txtCancelacionesMes" style="font-size: 15px !important"></div>
+                                    <div class="col-3">% Churn ultimo 30 dias:</div>
+                                    <div class="col-3" id="txtChurmMes" style="font-size: 15px !important"></div>
+                                </div>
+
+                            </div>
+                            <div id="graficaCancelaciones" style="width: 100%; height: 600px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @Scripts.Render("~/scripts/external-plugins")
+    @Scripts.Render("~/bundles/personalized")
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/Content/js/statistics/chartjs/chartjs.bundle.js"></script>
+    <script src="~/Scripts/accounting/accounting.min.js"></script>
+    <script src="~/Content/js/statistics/ApexchartEchoaMano.js"></script>
+    <script src="~/Content/js/statistics/html2pdf/html2pdf.bundle.js"></script>
+    <script src="~/Content/js/statistics/jspdf.js"></script>
+    <script src="~/Content/js/statistics/html2canvas.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            graficaclientesactivos();
+            grafVenta();
+            grafArpu();
+            grafMoraClientes();
+            grafFacturacion();
+            graficaClientesProducto();
+            graficaCancelaciones();
+
+        });
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+          /* Venta */
+        function grafVenta() {
+            $.ajax({
+                url: "@Url.Action("DashBoardInformativo", "Reportes")",
+                type: "POST",
+                success: function (respuesta) {
+
+                    var datos = respuesta;
+                    console.log(datos);
+                    var mes = [];
+                    var valor = [];
+                    for (var item of datos.DataVentas) {
+                        mes.push(item.fcMes)
+                        valor.push(item.fiConteoVentas)
+
+                    }
+                    $("#txtProyeccionVentaMes").text(datos.fiProyeccionVentas);
+                    $("#txtVentaMes").text(datos.fiClientesNuevosMes);
+                    $("#txtProyeccionArpuMes").text(datos.fnValorARPUDelMes);
+                    $("#txtProyeccionArpu").text(datos.fnValorARPUGeneral);
+
+                    $("#txtProyeccionMes").text(datos.fiProyeccionVentas);
+                    $("#txtClientesTotales").text(datos.fiClientesActivos);
+                    $("#txtProyeccionTotal").text(datos.fiProyeccionVentasAcumulada);
+                    $("#txtClientesNetos").text(datos.fiClientesNetos);
+                    $("#txtCancelacionesMes").text(datos.fiCancelacion1Mes);
+                    $("#txtChurmMes").text(datos.fiChurnRate1Mes);
+
+                    var options = {
+                        series: [{
+                            name: 'Ventas',
+                            data: valor
+                        }],
+                        chart: {
+                            type: 'bar',
+                            height: 350,
+                            stacked: true,
+                            toolbar: {
+                                show: true
+                            },
+                            zoom: {
+                                enabled: true
+                            }
+                        },
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                chart: {
+                                    width: '100%',
+                                    height: 350
+                                },
+                                legend: {
+
+                                    position: 'bottom',
+                                    onItemClick: {
+                                        toggleDataSeries: true
+                                    },
+                                }
+                            }
+                        }],
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                borderRadius: 10,
+                                borderRadiusApplication: 'end',
+                                borderRadiusWhenStacked: 'last',
+
+                                dataLabels: {
+                                    total: {
+                                        enabled: true,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontWeight: 900,
+
+                                        }
+                                    }
+                                }
+                            },
+                        },
+                        xaxis: {
+                            type: 'char',
+                            categories: mes
+                        },
+                        legend: {
+                            position: 'right',
+                            offsetY: 40
+                        },
+                        fill: {
+                            opacity: 1,
+                            colors: ["#faa61c"]
+                        }
+                    };
+                    var chart = new ApexCharts(document.querySelector("#chartVenta"), options);
+                    chart.render();
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta)
+                }
+            });
+
+
+        }
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+        /* line Arpu */
+        function grafArpu() {
+
+           $.ajax({
+                url: "@Url.Action("DashBoardInformativo", "Reportes")",
+                type: "POST",
+                success: function (respuesta) {
+
+                    var datos = respuesta;
+                    var mes = [];
+                    var valor = [];
+                    for (var item of datos.DataArpusVentas) {
+                        mes.push(item.fcMes)
+                        valor.push(item.fnArpuMensual)
+                    }
+
+                    var options = {
+                        series: [{
+                            name: 'Ventas',
+                            data: valor
+                        }],
+                        chart: {
+                            type: 'bar',
+                            height: 350,
+                            stacked: true,
+                            toolbar: {
+                                show: true
+                            },
+                            zoom: {
+                                enabled: true
+                            }
+                        },
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                chart: {
+                                    width: '100%',
+                                    height: 350
+                                },
+                                legend: {
+
+                                    position: 'bottom',
+                                    onItemClick: {
+                                        toggleDataSeries: true
+                                    },
+                                }
+                            }
+                        }],
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                borderRadius: 10,
+                                borderRadiusApplication: 'end',
+                                borderRadiusWhenStacked: 'last',
+
+                                dataLabels: {
+                                    total: {
+                                        enabled: true,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontWeight: 900,
+
+                                        }
+                                    }
+                                }
+                            },
+                        },
+                        xaxis: {
+                            type: 'char',
+                            categories: mes
+                        },
+                        legend: {
+                            position: 'right',
+                            offsetY: 40
+                        },
+                        fill: {
+                            opacity: 1,
+                            colors: ["#faa61c"]
+                        }
+                    };
+                    var chart = new ApexCharts(document.querySelector("#chartArpu"), options);
+                    chart.render();
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta)
+                }
+            });
+
+        }
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+        function grafMoraClientes(){
+                        $.ajax({
+                url: "@Url.Action("DashBoardInformativo", "Reportes")",
+                type: "POST",
+                success: function (respuesta) {
+
+                    var datos = respuesta;
+                    var mes = [];
+                    var valor = [];
+                    var PorcentajeMora = [];
+                    for (var item of datos.DataMora) {
+                        mes.push(item.fcMes)
+                        valor.push(item.fiClientesEnMora)
+                        PorcentajeMora.push(item.fnPorcentajedeMora)
+                    }
+                    $("#txtProyeccionMoraMes").text(PorcentajeMora[1]);
+                    var options = {
+                        series: [{
+                            name: 'Ventas',
+                            data: valor
+                        }],
+                        chart: {
+                            type: 'bar',
+                            height: 350,
+                            stacked: true,
+                            toolbar: {
+                                show: true
+                            },
+                            zoom: {
+                                enabled: true
+                            }
+                        },
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                chart: {
+                                    width: '100%',
+                                    height: 350
+                                },
+                                legend: {
+
+                                    position: 'bottom',
+                                    onItemClick: {
+                                        toggleDataSeries: true
+                                    },
+                                }
+                            }
+                        }],
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                borderRadius: 10,
+                                borderRadiusApplication: 'end',
+                                borderRadiusWhenStacked: 'last',
+
+                                dataLabels: {
+                                    total: {
+
+                                        enabled: true,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontWeight: 900,
+
+                                        }
+                                    }
+                                }
+                            },
+                        },
+                        xaxis: {
+                            type: 'char',
+                            categories: mes
+                        },
+                        legend: {
+                            position: 'right',
+                            offsetY: 40
+                        },
+                        fill: {
+                            opacity: 1,
+                            colors: ["#faa61c"]
+                        }
+                    };
+                    var chart = new ApexCharts(document.querySelector("#chartMoraCliente"), options);
+                    chart.render();
+
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta)
+                }
+            });
+        }
+
+        /* Venta */
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+        var graficaclientesactivos = function () {
+
+             $.ajax({
+                url: "@Url.Action("DashBoardInformativo", "Reportes")",
+                type: "POST",
+                success: function (respuesta) {
+
+                    var datos = respuesta;
+                    var mes = [];
+                    var valor = [];
+                    var valorClientesCancelados = [];
+                    for (var item of datos.DataClientesActivos) {
+                        mes.push(item.fcMes)
+                        valor.push(item.fiConteoVentas)
+                        valorClientesCancelados.push(item.fiClientesCancelados)
+                    }
+                    var stackedColumnChartOptions = {
+                        series: [
+                            {
+                                name: 'Clientes Activos',
+                                data: valor
+                            },
+                            {
+                                name: 'Clientes Cancelados',
+                                data: valorClientesCancelados
+                            }],
+                        chart:
+                        {
+                            type: 'bar',
+                            height: 350,
+                            stacked: true,
+                            toolbar:
+                            {
+                                show: true
+                            },
+                            zoom:
+                            {
+                                enabled: true
+                            }
+                        },
+                        colors: ["#faa61c", "#6e6e6e"],
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                chart: {
+                                    width: '100%',
+                                    height: 350
+                                },
+                                legend: {
+
+                                    position: 'bottom',
+                                    onItemClick: {
+                                        toggleDataSeries: true
+                                    },
+                                }
+                            }
+                        }],
+                        plotOptions:
+                        {
+                            bar:
+                            {
+                                horizontal: false,
+                            },
+                        },
+                        xaxis:
+                        {
+                            type: 'char',
+                            categories: mes,
+
+                        },
+                        legend:
+                        {
+                            position: 'right',
+                            offsetY: 40
+                        },
+                        fill:
+                        {
+                            opacity: 1
+                        }
+                    };
+                    var stackedColumnChart = new ApexCharts(document.querySelector("#GraficaClientesActivos"), stackedColumnChartOptions);
+                    stackedColumnChart.render();
+
+                },
+                error: function (respuesta) {
+                    console.log(respuesta)
+                }
+            });
+
+        }
+
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+       /* Facturacion */
+
+        function grafFacturacion() {
+    $.ajax({
+        url: "@Url.Action("DashBoardInformativo", "Reportes")",
+        type: "POST",
+        success: function (respuesta) {
+            var datos = respuesta;
+
+            var mes = [];
+            var valorIngreso = [];
+            var valorAcumulado = [];
+            for (var item of datos.DataIngresos) {
+                mes.push(item.fcMes);
+                valorIngreso.push(item.fnValorAbono);
+                valorAcumulado.push(item.fnValorAbonoAcumulado);
+            }
+
+            var stackedColumnChartOptions = {
+                series: [
+                    {
+                        name: 'Ingreso',
+                        data: valorIngreso
+                    },
+                    {
+                        name: 'Acumulado',
+                        data: valorAcumulado
+                    }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    stacked: true,
+                    toolbar: {
+                        show: true
+                    },
+                    zoom: {
+                        enabled: true
+                    }
+                },
+                colors: ["#faa61c", "#2196F3"],
+                responsive: [
+                    {
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: '100%',
+                                height: 350
+                            },
+                            legend: {
+                                position: 'bottom',
+                                onItemClick: {
+                                    toggleDataSeries: true
+                                }
+                            },
+                            xaxis: {
+                                labels: {
+                                    rotate: -45,
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            },
+                            plotOptions: {
+                                bar: {
+                                    barHeight: '40%',
+                                    dataLabels: {
+                                        total: {
+                                            enabled: true,
+                                            formatter: function (value, opt) {
+                                                return accounting.formatNumber(value, 2);
+                                            },
+                                            style: {
+                                                fontSize: '10px',
+                                                fontWeight: 700
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 10,
+                        borderRadiusApplication: 'end', // 'around', 'end'
+                        borderRadiusWhenStacked: 'last', // 'all', 'last'
+                        barHeight: '70%', // Ajusta la altura de las barras
+                        dataLabels: {
+                            total: {
+                                enabled: true,
+                                formatter: function (value, opt) {
+                                    return accounting.formatNumber(value, 2);
+                                },
+                                style: {
+                                    fontSize: '13px',
+                                    fontWeight: 900
+                                }
+                            }
+                        }
+                    }
+                },
+                xaxis: {
+                    type: 'category',
+                    categories: mes,
+                    labels: {
+                        rotate: -45, // Rotar las etiquetas del eje x
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                legend: {
+                    position: 'right',
+                    offsetY: 40
+                },
+                fill: {
+                    opacity: 1
+                }
+            };
+
+            var stackedColumnChart = new ApexCharts(document.querySelector("#stackedColumnChart"), stackedColumnChartOptions);
+            stackedColumnChart.render();
+        },
+        error: function (respuesta) {
+            console.log(respuesta);
+        }
+    });
+        }
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+   function graficaClientesProducto() {
+
+    $.ajax({
+          url: "@Url.Action("PaqueteServicio", "Home")",
+
+        type: "GET",
+        success: function (respuesta) {
+            var resultados = respuesta.reduce(function (acumulador, solicitud) {
+                if (solicitud.fcDescripcion == "Instalado" || solicitud.fcDescripcion == "Validado soporte") {
+                    if (solicitud.fbArticulosExtra) {
+                        acumulador.articulosExtra++;
+                    } else {
+                        acumulador.articulosBase++;
+                    }
+                }
+                return acumulador;
+            }, { articulosExtra: 0, articulosBase: 0 });
+
+            var options = {
+                labels: ["Clientes con Productos", "Clientes con Servicios"],
+                series: [resultados.articulosExtra, resultados.articulosBase],
+                colors: ['#535085', '#FAA61C'],
+                plotOptions: {
+                    pie: {
+                        startAngle: 0,
+                        endAngle: 360,
+                        expandOnClick: true,
+                        offsetX: 0,
+                        offsetY: 0,
+                        customScale: 1,
+                        dataLabels: {
+                            offset: 0,
+                            minAngleToShowLabel: 10
+                        },
+                        donut: {
+                            size: '65%',
+                            background: 'transparent',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    showAlways: true,
+                                    label: 'Total de Clientes',
+                                    fontSize: '22px',
+                                    fontFamily: 'Helvetica, Arial, sans-serif',
+                                    fontWeight: 600,
+                                    color: '#373d3f',
+                                    formatter: function (w) {
+                                        return w.globals.seriesTotals.reduce((a, b) => {
+                                            return a + b;
+                                        }, 0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                chart: {
+                    toolbar: {
+                        show: true,
+                        offsetX: 0,
+                        offsetY: 0,
+                        tools: {
+                            download: true,
+                            selection: true,
+                            zoom: true,
+                            zoomin: true,
+                            zoomout: true,
+                            pan: true,
+                            reset: true | '<img src="/static/icons/reset.png" width="20">',
+                            customIcons: []
+                        },
+                        export: {
+                            csv: {
+                                filename: 'Grafica',
+                                columnDelimiter: ',',
+                                headerCategory: 'category',
+                                headerValue: 'value',
+                                dateFormatter: function (timestamp) {
+                                    return new Date(timestamp).toDateString();
+                                }
+                            },
+                            svg: {
+                                filename: 'Grafica',
+                            },
+                            png: {
+                                filename: 'Grafica',
+                            }
+                        },
+                        autoSelected: 'zoom'
+                    },
+                    type: 'donut',
+                    width: 600,
+                    height: 600
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: '100%',
+                            height: 600
+                        },
+                        legend: {
+                            position: 'bottom',
+                            onItemClick: {
+                                toggleDataSeries: true
+                            }
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#countextrachart"), options);
+            chart.render();
+        },
+        error: function (respuesta) {
+            console.log(respuesta);
+        }
+    });
+        }
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+       /* Cancelaciones */
+
+function graficaCancelaciones() {
+    $.ajax({
+        url: "@Url.Action("GraficaCancelaciones", "Reportes")",
+        type: "POST",
+        success: function (respuesta) {
+            var datos = respuesta;
+
+            var fechas = [];
+            var cancelacionServicios = [];
+            var cancelacionProductos = [];
+            var calculoChurnRate = []; // Nuevo arreglo para fiCalculoChurnRate
+
+            for (var item of datos) {
+                fechas.push(item.fcFechaDato);
+                cancelacionServicios.push(item.fiCancelacionServicios);
+                cancelacionProductos.push(item.fiCancelacionProductos);
+                calculoChurnRate.push(item.fiCalculoChurnRate); // Agregamos los valores
+            }
+
+            var horizontalBarChartOptions = {
+                series: [
+                    {
+                        name: 'Cancelación Servicios',
+                        data: cancelacionServicios
+                    },
+                    {
+                        name: 'Cancelación Productos',
+                        data: cancelacionProductos
+                    }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 400,
+                    stacked: true,
+                    toolbar: {
+                        show: true
+                    },
+                    zoom: {
+                        enabled: true
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 10
+                    }
+                },
+                colors: ["#535085", "#faa61c"],
+                legend: {
+                    show: true,
+                    position: 'bottom',
+                    horizontalAlign: 'center'
+                },
+                xaxis: {
+                    categories: fechas,
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Cancelaciones'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (value, { seriesIndex, dataPointIndex, w }) {
+                        // Retorna el valor normal para las series de cancelación
+                        return accounting.formatNumber(value);
+                    },
+                    style: {
+                        fontSize: '13px',
+                        fontWeight: 'bold'
+                    }
+                },
+                annotations: {
+                    points: fechas.map((fecha, index) => ({
+                        x: fecha, // Fecha en el eje X
+                        y: cancelacionServicios[index] + cancelacionProductos[index], // Suma de las barras
+                        label: {
+                            text: `T ${cancelacionServicios[index] + cancelacionProductos[index]} |
+                             ${calculoChurnRate[index]}%`, // Texto del churn rate
+                            borderColor: '#2196F3',
+                            style: {
+                                color: '#2196F3',
+                                fontSize: '12px'
+                            },
+                            offsetY: -15 // Ajuste de posición vertical
+                        }
+                    }))
+                },
+                responsive: [
+                    {
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: '100%',
+                                height: 400
+                            },
+                            legend: {
+                                position: 'bottom',
+                                onItemClick: {
+                                    toggleDataSeries: true
+                                }
+                            },
+                            xaxis: {
+                                labels: {
+                                    rotate: 0,
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                fill: {
+                    opacity: 1
+                }
+            };
+
+            var horizontalBarChart = new ApexCharts(document.querySelector("#graficaCancelaciones"), horizontalBarChartOptions);
+            horizontalBarChart.render();
+        },
+        error: function (respuesta) {
+            console.log("Error al cargar los datos de la gráfica: ", respuesta);
+        }
+    });
+}
+
+
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
+        $("#btnExportarDocumento").click(function () {
+            exportToPDF('Contrato_General_Novanet', ['grafica1', 'grafica2', 'grafica3', 'grafica4', 'grafica5', 'grafica6','grafica7']);
+        });
+
+        async function exportToPDF(nombreDelArchivo, idsDivs) {
+            const opt = {
+                margin: [0.1, 0.1, 0.1, 0.1],
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    dpi: 300,
+                    scale: 4,
+                    letterRendering: true,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'in',
+                    format: 'a4',
+                    orientation: 'landscape'
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF(opt.jsPDF.orientation, opt.jsPDF.unit, opt.jsPDF.format);
+            const pdfWidth = pdf.internal.pageSize.getWidth() - opt.margin[1] - opt.margin[3];
+            const pdfHeight = pdf.internal.pageSize.getHeight() - opt.margin[0] - opt.margin[2];
+
+            const aspectRatio = 1885 / 550;
+
+            let currentPageHeight = 0;
+            const maxPageHeight = pdfHeight - opt.margin[0] - opt.margin[2];
+
+            for (let i = 0; i < idsDivs.length; i++) {
+                const element = document.getElementById(idsDivs[i]);
+                const canvas = await html2canvas(element, opt.html2canvas);
+                const imgData = canvas.toDataURL('image/jpeg', opt.image.quality);
+
+                let imgWidth = pdfWidth;
+                let imgHeight = imgWidth / aspectRatio;
+
+                if (imgHeight > maxPageHeight - currentPageHeight) {
+                    pdf.addPage();
+                    currentPageHeight = 0;
+                }
+
+                pdf.addImage(imgData, 'JPEG', opt.margin[1], opt.margin[0] + currentPageHeight, imgWidth, imgHeight);
+                currentPageHeight += imgHeight + 0.2;
+            }
+
+            pdf.save('Solicitud_' + nombreDelArchivo + '.pdf');
+        }
+
+
+
+
+        $("#btnExportarDocumentoMovil").click(function () {
+            exportToPDFMovil('Contrato_General_Novanet', ['grafica1', 'grafica2', 'grafica3', 'grafica4', 'grafica5', 'grafica6', 'grafica7']);
+        });
+
+        async function exportToPDFMovil(nombreDelArchivo, idsDivs) {
+            const opt = {
+                margin: [0, 0, 0, 0],
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    dpi: 300,
+                    scale: 4,
+                    letterRendering: true,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'pt',
+                    format: [345, 555],
+                    orientation: 'portrait'
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF(opt.jsPDF.orientation, opt.jsPDF.unit, opt.jsPDF.format);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+
+            for (let i = 0; i < idsDivs.length; i++) {
+                const element = document.getElementById(idsDivs[i]);
+                const canvas = await html2canvas(element, opt.html2canvas);
+                const imgData = canvas.toDataURL('image/jpeg', opt.image.quality);
+
+                let imgWidth = pdfWidth;
+                let imgHeight = pdfHeight;
+
+                // Solo agregamos una nueva página si no es la primera
+                if (i > 0) {
+                    pdf.addPage();
+                }
+
+                pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
+            }
+
+            pdf.save('Solicitud_' + nombreDelArchivo + '.pdf');
+        }
+
+
+
+
+        function dataURLtoFile(dataurl, filename) {
+            var arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[arr.length - 1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
+
+
+
+    </script>
+</body>
+</html>

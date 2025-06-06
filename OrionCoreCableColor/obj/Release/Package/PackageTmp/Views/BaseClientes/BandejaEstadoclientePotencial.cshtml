@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewBag.Title = "BandejaEstadoclientePotencial";
+}
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Estatus Clientes Potenciales</h2>
+
+    </div>
+
+    <div id="panelprincipal" class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaEstadoClientesPotenciales">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>Nombre Estado</th>
+                        <th>Descripcion Estado</th>
+                        <th>Color</th>
+                        <th>Activo</th>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        var tablaPrincipal = $('#BandejaEstadoClientesPotenciales').DataTable({
+            dom: "<'row mb-3'<'col-sm-12 col-md-6 d-flex align-items-center justify-content-start'f><'col-sm-12 col-md-6 d-flex align-items-center justify-content-end'B>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListadoEstadusClientePotencial")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            buttons: [
+                {
+                    text: 'Agregar',
+                    className: 'btn btn-success btnAgregarRef',
+                    action: function (datas) {
+                        $.ajax({
+                            url: "@Url.Action("AgregarEstadoClientePotencial", "BaseClientes")",
+                            //data: { fiLiugarDondeCrea: 2},
+                            method: "Get",
+                            success: function (resp) {
+                                ShowModal(resp);
+                            },
+                            error: function (resp) {
+                                AlertaError();
+                            }
+                        });
+                    }
+                }
+            ],
+            rowCallback: function (row, data, index) {
+
+            },
+            columns: [
+                {
+                    data: null,
+                    className: "text-center",
+                    render: function (data) {
+                        var opt = '';
+                        if (data.fbPuedeEliminarlo) {
+                            opt += `<a href='javascript:void(0);' onclick="EliminarFuenteclientePotencial(${data.fiIdFuenteCliente})" class='btn btn-sm btn-icon btn-outline-danger rounded-circle mr-1' title='Eliminar Cliente'><i class=\"fal fa-times\"></i></a>`;
+                        }
+
+                        opt += `
+                                    <div class='dropdown d-inline-block dropleft'>
+                                        <a href='#'' class='btn btn-sm btn-icon btn-outline-primary rounded-circle shadow-0' data-toggle='dropdown' aria-expanded='true' title='Mas Opciones'><i class=\"fal fa-ellipsis-v\"></i></a>
+                                        <div class='dropdown-menu'>
+                                           <a class='dropdown-item' href='javascript:void(0);' onclick="ModalEditarEstatusClientePotenciales(${data.fiIdEstatusCliente})" >Editar Estatus</a> `;
+
+
+                        opt += `</div>
+                                </div>`;
+                        return opt;
+                    }
+                },
+
+                {
+                    data: 'fcNombreEstatus'
+                },
+                {
+                    data: 'fcdescripcionEstatus'
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<span class="btn-sm btn-block badge text-white" style="background-color: ${data.fcHexadecimal};">${data.fcNombreEstatus}</span>`;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        var etiqueta = '';
+                        if (data.fbEstadoActivo) {
+                            etiqueta = `<span class="btn-sm btn-block badge badge-success text-white">SI</span>`
+                        } else {
+                            etiqueta = `<span class="btn-sm btn-block badge badge-danger text-white">NO</span>`
+                        }
+                        //return `<span class="btn-sm btn-block badge badge-${data.fcClase} text-white">${data.fcNombreEstatus}</span>`
+                        return etiqueta;
+                    }
+                }
+            ]
+        });
+
+        function ModalEditarEstatusClientePotenciales(idestatus) {
+            $.ajax({
+                url: "@Url.Action("EditarEstatusClientePotenciales", "BaseClientes")",
+                data: { fiIdEstatusCliente: idestatus},
+                method: "Get",
+                success: function (resp) {
+
+                    ShowModal(resp);
+                },
+                error: function (resp) {
+                    AlertaError();
+                }
+            });
+        }
+
+
+
+        //signal R
+
+        chat.client.AgregarRowEstatusClientes = function (modelo) {
+            var tabla = $.fn.dataTable.Api(`#BandejaEstadoClientesPotenciales`);
+            tabla.row.add(modelo).draw(false);
+        }
+
+        chat.client.EditarRowEstatusCliente = function (modelo) {
+            console.log(modelo);
+            var tabla = $.fn.dataTable.Api("#BandejaEstadoClientesPotenciales");
+            var nodes = tabla.rows().nodes().toArray();
+            var node = nodes.find(x => tabla.row(x).data().fiIdEstatusCliente == modelo.fiIdEstatusCliente);
+            tabla.row(node).data(modelo).draw(false);
+        }
+
+
+    </script>
+}
+
+
+
+

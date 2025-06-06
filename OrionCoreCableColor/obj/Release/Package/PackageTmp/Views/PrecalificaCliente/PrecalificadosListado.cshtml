@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "PrecalificadosListado";
+}
+
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Precalificados Listado</h2>
+
+    </div>
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="dataTableClientesPrecalificados">
+                <thead>
+                    <tr>
+                        <th>Accion</th>
+                        <th>ID Cliente</th>
+                        <th style="width:700px;">Cliente</th>
+                        <th>Score Actual</th>
+                        <th>Score Promedio</th>
+                        <th>Estado Resolucion</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+
+    <script>
+
+        var tablaPrincipal = $('#dataTableClientesPrecalificados').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'Bfrtip',
+            order: [[1, "desc"]],
+              ajax: {
+                url: '@Url.Action("ListadoPrecalificadosBandeja", "PrecalificaCliente")',
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+                {
+                data: null,
+                render: function (data) {
+
+                   var opciones = '<div class="btn-group"> <button class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false"> Acciones</button>';
+                    opciones += '<div class="dropdown-menu">';
+                    if (data.fcEstadoPrecalificado != "Pendiente" && data.fcEstadoPrecalificado != "Requiere Validacion")
+                    {
+                        opciones += '<a href="javascript:void(0)" onclick="SeguirProceso(\''+ data.fcIdentidad+'\')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Seguir Proceso</a>';
+                    }
+
+                    opciones += '</div></div>';
+                    return opciones;
+                    }
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fiIDEquifax;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return data.fcIdentidad + ' | ' + data.fcNombre;
+                    }
+
+                },
+                {
+                    data: 'fiScoreActual'
+                },
+                {
+                    data: 'fiScorePromedio'
+                },
+                {
+                    data: null,
+                    render: function (data)
+                    {
+                        if (data.fcEstadoPrecalificado == "Solo servicios")
+                        {
+                            return '<div class="badge badge-success">Solo servicios</div>';
+                        }
+                        else if (data.fcEstadoPrecalificado == "Pendiente") {
+                            return '<div class="badge badge-warning">Pendiente</div>';
+                        }
+                        else
+                        {
+                            return '<div class="badge badge-info">' + data.fcEstadoPrecalificado+'</div>';
+                        }
+                    }
+
+                },
+
+
+
+            ]
+
+        });
+
+
+        function SeguirProceso(fcIdentidad)
+        {
+            location.href = "@Url.Action("ViewPrecalificadoValidadoCredito", "PrecalificaCliente")?identidad=" + fcIdentidad;
+            
+        }
+
+    </script>
+}
+
+

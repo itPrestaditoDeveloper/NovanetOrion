@@ -1,0 +1,55 @@
+﻿@model OrionCoreCableColor.Models.Contratista.BitacorasInstalacion
+@{
+    ViewBag.Title = "ViewBitacora";
+}
+
+<h2>Bitacoras</h2>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-map fa-fw"></i>Instalacion a cliente @Model.nombreCliente </h2>
+
+    </div>
+    <div id="panelprincipal" class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaBitacoras">
+                <thead>
+                    <tr>
+                        @*<th>Acciones</th>*@
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Comentario</th>
+                        <!--<th>Articulos a instalar</th>-->
+                        @*<th>Agencia Instalacion</th>*@
+                        @*<th>Agencia Contratista</th>*@
+
+                        @*<th>Usuario creador</th>*@
+                        <!--<th>Fecha instalación</th>
+                        <th>Comentario</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                @foreach (var item in Model.ListadoBitacoras)
+                {
+                    <tr>
+                        <td>@item.fechaCreacion.ToString("yyyy-MM-dd HH:mm") </td>
+                        <td>@item.usuario</td>
+                        <td>@item.comentario</td>
+                    </tr>
+
+                }
+            </table>
+        </div>
+
+
+
+    </div>
+</div>
+@section Scripts{
+    <script>
+       // var tablaPrincipal = $('#BandejaBitacoras').DataTable()
+    </script>
+}
+

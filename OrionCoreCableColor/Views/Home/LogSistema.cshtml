@@ -1,0 +1,91 @@
+﻿<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="panel-title"> <i class="fal fa-code-merge fa-fw"></i>Log del sistema</h2>
+
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                        <th><input type="text" class="form-control" style="width:100%;" placeholder=""></th>
+                    </tr>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Operacion</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        var tablaPrincipal;
+        $.ajax({
+            url: 'https://orion.novanetgroup.com/servicios/Inventario/logs/logOrion.json',
+            dataType: 'json',
+            success: function (dataLog) {
+                tablaPrincipal = $('#TablaPrincipal').DataTable({
+
+                    autoWidth: true,
+                    responsive: true,
+                    language: {
+                        "emptyTable": "No se encontraron resultados.",
+                        //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                        "paginate": {
+                            first: "Primero",
+                            previous: "Anterior",
+                            next: "Siguiente",
+                            last: "Ultimo"
+                        },
+                        "lengthMenu": " _MENU_ ",
+                        "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                        "infoEmpty": "No hay registros para mostrar.",
+                    },
+
+                    order: [[1, "desc"]],
+                    data: dataLog,
+                    columns: [
+                        {
+                            data: null,
+                            className: "text-center",
+                            render: function (data) {
+                                return `<div class="badge badge-${data.fcClase}">${data.fcTipoTransaccion}</div>`;
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function (data) {
+                                return `<label style="display:none;">${data.fdFechaTransaccion}</label>` + moment(data.fdFechaTransaccion).format("DD/MM/YYYY HH:mm:ss");
+                            }
+                        },
+                        { data: "fcUsuario" },
+                        { data: "fcOperacion" }
+                    ]
+
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error al cargar el archivo JSON:', textStatus, errorThrown);
+            }
+        });
+
+        $("#TablaPrincipal thead th input[type=text]").on('keyup change', function () {
+            var tabla = new $.fn.dataTable.Api("#TablaPrincipal");
+            tabla.column($(this).parent().index() + ':visible').search(this.value).draw();
+        });
+
+
+
+    </script>
+}

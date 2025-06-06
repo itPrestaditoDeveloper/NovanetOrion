@@ -1,0 +1,302 @@
+﻿@model OrionCoreCableColor.Models.Soporte.BitacoraInventarioViewModel
+<style>
+    .left {
+        float: left;
+    }
+
+    .right {
+        float: right;
+    }
+
+    .dt-buttons {
+        float: left;
+    }
+
+    #TablaPrincipal_filter > label {
+        float: right;
+    }
+</style>
+<div class="panel">
+    <div class="panel-hdr">
+        <h2 class="ui-sortable-handle"> <i class="fal fa-upload fa-fw"></i> Control de Inventario</h2>
+
+
+    </div>
+
+    <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="control-label">Ubicacion</label>
+                <div class="input-group mar-btm">
+
+                </div>
+                @Html.ValidationMessageFor(model => model.fiIDUbicacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="col-lg-12">
+            <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaPrincipal">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cant. Sistema</th>
+                        <th>Cant. Fisico</th>
+                        <th>Diferencia</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label">Observacion</label>
+                <div class="input-group mar-btm">
+                    <textarea rows="4" class="form-control" style="resize:none; margin-bottom:10px;" id="fcObservacion"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12" style="margin-top:15px;">
+            <div class="clearfix" style="width:100%;">
+                <button type="button" onclick="GuardarControlInventario()" class="btn btn-success btn-lg waves-effect waves-themed float-right " id="btnGuardarForm">Guardar</button>
+                <button data-dismiss="modal" class="btn btn-danger waves-effect waves-themed float-right btn-lg " type="button" style="margin-right: 15px; ">Cancelar</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/Content/js/datagrid/datatables/datatables.export.js"></script>
+    <script>
+
+        var ubicacion = 0;
+        var model = @Html.Raw(Json.Encode(Model));
+
+        var tablaPrincipal = $('#TablaPrincipal').DataTable({
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            pageLength: -1,
+            dom: `<"row" <"#add.col-sm-4"><"col-sm-4 left"B><"col-sm-4"f>>rtip`,
+            "aaSorting": [],
+            ajax: {
+                url: '@Url.Action("CargarConteoInventario", "Soporte")',
+                method: "Get",
+                data: function (d) {
+                    d.IDUbicacion = ubicacion;
+                },
+                dataSrc: function (data) {
+
+                    var ListInventario = data.Existencia
+                    return ListInventario;
+                }
+            },
+
+            columns: [
+                {
+                    data: "fcProducto",
+
+                },
+                {
+
+                    data: null,
+                    render: function (data) {
+                        return data.fnCantidadSistema != 0 ? `<label class="text-danger">${data.fnCantidadSistema}</label>` : data.fnCantidadSistema;
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+                        return `<input type="number" class="form-control InputDecimal" data-class="ClaseDecimal" name="fnCantidadFisico" type="text"  value="${data.fnCantidadFisico}" ></input>`;
+
+                    }
+                },
+                {
+                    className: "fnDiferencia",
+                    data: "fnDiferencia",
+
+                },
+                {
+                    data: null,
+                    render: function (data) {
+
+                        return `<input class="form-control" name="fcComentario" autocomplete="off" type="text" value="" ></input>`;
+                    }
+
+                }
+            ],
+
+            drawCallback: function (settings) {
+                var tablaPrincipal = $.fn.dataTable.Api("#TablaPrincipal");
+                // Recorrer cada fila después de que la tabla ha sido renderizada
+                $('#TablaPrincipal tbody tr').each(function () {
+                    var tr = $(this);
+                    var rowData =  tablaPrincipal.row(tr).data(); // Obtener datos de la fila actual
+
+                    if (rowData && rowData.Series) {
+                        if (rowData.fbGenerico == false && rowData.Series.length>0 )
+                        {
+                            // Generar subtabla para la fila actual
+                            const subtableHtml = `
+                        <tr class="subtable-row">
+                        <td colspan="5" style="background-color:#ffffb5;">
+                            <table class="table table-bordered w-100" style="background-color: white;" id="TablaProducto-${rowData.fiIDProducto}">
+                                <thead>
+                                    <tr>
+                                        <th>Serie 1</th>
+                                        <th>Serie 2</th>
+                                        <th>Faltante</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                ${rowData.Series.map(sub => `<tr>
+                                                                <td>${sub.fcCodigoSerie1}</td>
+                                                                <td>${sub.fcCodigoSerie2 == "null" ? "" : sub.fcCodigoSerie2}</td>
+                                                                <td><div class="col-lg-12 float-left">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input onclick = "SeleccionarFaltante('#TablaProducto-${rowData.fiIDProducto}', ${sub.fiIDProducto},'${sub.fcCodigoSerie1}',this)" id="fiProductoSeleccionable-${sub.fiIDProducto}-${sub.fcCodigoSerie1}"  name="fbCheckeado" class="custom-control-input" style="margin-left:auto; margin-right:auto;" type="checkbox" name="CheckCheckedFalla">
+                                                        <label class="custom-control-label" style="cursor:pointer;" for="fiProductoSeleccionable-${sub.fiIDProducto}-${sub.fcCodigoSerie1}"></label>
+                                                    </div>
+                                                </div></td>
+                                                            </tr>
+                                                        `).join('')}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    `;
+
+
+
+
+                            // Insertar la subtabla después de la fila principal
+                            tr.after(subtableHtml);
+                            $('#TablaProducto-' + rowData.fiIDProducto).DataTable({
+                                autoWidth: true,
+                                responsive: true,
+                                language: {
+                                    "emptyTable": "No se encontraron resultados.",
+                                    //"searUrlh": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                                    "paginate": {
+                                        first: "Primero",
+                                        previous: "Anterior",
+                                        next: "Siguiente",
+                                        last: "Ultimo"
+                                    },
+                                    "lengthMenu": " _MENU_ ",
+                                    "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                                    "infoEmpty": "No hay registros para mostrar.",
+                                },
+                            });
+                        }
+
+                    }
+                });
+            },
+            initComplete: function () {
+
+                $("#fiIDUbicacion").select2().val(null).trigger("change");
+
+                $("#fiIDUbicacion").change(function () {
+                    ubicacion = $(this).val();
+                    tablaPrincipal.ajax.reload();
+                });
+
+
+            }
+
+        });
+
+        $select = $(`@Html.DropDownList("fiIDUbicacion", new SelectList(ViewBag.ListUbicaciones, "Value", "Text"), null, new { @class = "form-control input-lg", @style = "width:100%;" })`).appendTo('#add');
+
+
+        $('#TablaPrincipal tbody').on("change", "tr input[name=fnCantidadFisico]", function () {
+            var tablaPrincipal = $.fn.dataTable.Api("#TablaPrincipal");
+            var tr = $(this).closest("tr");
+            var data = tablaPrincipal.row(tr).data();
+            var diferencia = $(tr).find(".fnDiferencia");
+
+            data.fnCantidadFisico = parseFloat($(this).val());
+            data.fnDiferencia = data.fnCantidadSistema - data.fnCantidadFisico;
+            $(diferencia).text(data.fnCantidadSistema - data.fnCantidadFisico);
+
+        });
+
+        $('#TablaPrincipal tbody').on("change", "tr input[name=fcComentario]", function () {
+            var tablaPrincipal = $.fn.dataTable.Api("#TablaPrincipal");
+            var tr = $(this).closest("tr");
+            var data = tablaPrincipal.row(tr).data();
+            data.fcComentario = $(this).val();
+        });
+
+
+        function SeleccionarFaltante(tabla, IDProducto, CodigoSerie1,e)
+        {
+            var tablaPrincipal = $.fn.dataTable.Api("#TablaPrincipal");
+            var tr = $(e).closest("table").closest("tr").prev();
+            var data = tablaPrincipal.row(tr).data();
+            var serie = data.Series.find(x => x.fcCodigoSerie1 == CodigoSerie1);
+            serie.fbFaltante = $(e).prop("checked");
+        }
+
+        function GuardarControlInventario()
+        {
+            $("#btnGuardarForm").hide();
+
+            if (ubicacion == 0)
+            {
+                ToastrWarning("Advertencia", "Seleccione una ubicacion validad");
+                $("#btnGuardarForm").show();
+                return
+            }
+            var tablaPrincipal = $.fn.dataTable.Api("#TablaPrincipal");
+            var data = tablaPrincipal.rows().data().toArray();
+
+            model.fiIDUbicacion = ubicacion;
+            model.Existencia = data;
+            model.fcObservacion = $("#fcObservacion").val();
+
+
+            $.ajax({
+                url: "@Url.Action("InsertarControlInventario", "Soporte")",
+                type: 'POST',
+                data: {model: model},
+                success: function (resp) {
+                    if (resp.Estado) {
+                        window.location.href = "@Url.Action("IndexControlInvventario", "Soporte")";
+                        ToastrSuccess("Control de Inventario", resp.Mensaje);
+                    } else {
+                        ToastrError("Error", resp.Mensaje);
+                        $("#btnGuardarForm").show();
+                    }
+                }, error: function () {
+                    ToastrError("Error", resp.Mensaje);
+                    $("#btnGuardarForm").show();
+                }
+            });
+
+        }
+
+
+    </script>
+
+
+}

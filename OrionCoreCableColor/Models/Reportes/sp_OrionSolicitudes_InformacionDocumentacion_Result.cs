@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace OrionCoreCableColor.Models.Reportes
+{
+    public class sp_OrionSolicitudes_InformacionDocumentacion_Result
+    {
+        public string fcNombre { get; set; }
+        public string fcIdentidad { get; set; }
+        public string fcTelefono { get; set; }
+        public string fcLugarTrabajo { get; set; }
+        public string fcLugarVive { get; set; }
+        public string fcCiudad { get; set; }
+        public string fcDireccionDetallada { get; set; }
+        public Nullable<int> fiIdClientesMaestro { get; set; }
+        public int fiEstadoProductoServicio { get; set; }
+        public int fiEstadoCivil { get; set; }
+        public string fcDescripcionEstadoCivil { get; set; }
+        public string fcArticulosdelContrato { get; set; }
+        public string fcDescripcionTelevisor { get; set; }
+        public Nullable<int> fiIDFondo { get; set; }
+        public string fcRazonSocial { get; set; }
+        public string fcNombreComercial { get; set; }
+        public string fcRTNEmpresa { get; set; }
+        public string fcCiudadDomiciliada { get; set; }
+        public string fcDepartamentoDomiciliada { get; set; }
+        public string fcBarrioFondo { get; set; }
+        public string fcTelefonoFondo { get; set; }
+        public string fcEmail { get; set; }
+        public string fcConstitucionFondo { get; set; }
+        public Nullable<int> fiIDRepresentanteLegal { get; set; }
+        public string fcUrlLogo { get; set; }
+        public Nullable<byte> fiIDTipodeFondo { get; set; }
+        public string fcNumeroFolio { get; set; }
+        public string fcRegistroMercantil { get; set; }
+        public int fiPlazoSeleccionado { get; set; }
+        public decimal fnValorGarantia { get; set; }
+        public decimal fnMontoFinalFinanciar { get; set; }
+        public decimal fnTasaMensual { get; set; }
+        public decimal fnCuotaMensual { get; set; }
+        public decimal fnTasaAnual { get; set; }
+        public int fiIDMoneda { get; set; }
+        public string fcCorreo { get; set; }
+        public Nullable<int> fiIDSolicitud { get; set; }
+        public string fcDepartamento { get; set; }
+        public string fcMunicipio { get; set; }
+        public string fcBarrio { get; set; }
+        public decimal fnTotalValorContrato { get; set; }
+        public string fcIDPrestamo { get; set; }
+        public System.DateTime fdFechaIniciodeCredito { get; set; }
+        public string fcFirmaNovaNet { get; set; }
+        public int fiIDFirma { get; set; }
+        public int fiIDTipoContrato { get; set; }
+        public string fcInternetContratoPrestamo { get; set; }
+        public string fcMesesCuotasContrato { get; set; }
+        public string fcCoutaMontoPalabrasContratoPrestamo { get; set; }
+        public string fcMoraRetraso { get; set; }
+        public string fcDiaPAgoContratoPrestamo { get; set; }
+        public string fcFechaPrimerPagoContratoPrestamo { get; set; }
+        public string fcMontoPalabrasContratoPrestamo { get; set; }
+        public string fcTipoTasa { get; set; }
+        public string fcMontoFinalContrato { get; set; }
+        public string fcTipoTasaInteresSimple { get; set; }
+        public string fcPlazoPlabrasContratoPrestamo { get; set; }
+        public string fcCoreoCLienteContratoPrestamo { get; set; }
+        public string fcCostoInstalacionPlabras { get; set; }
+        public string fcCostoInstalacion { get; set; }
+        public string fcMinimoPlazo { get; set; }
+        public string fcTipoTasaInsolutos { get; set; }
+        public string fcDiaPagoContrtoPrestamo { get; set; }
+        public string fcCostosAdministrativos { get; set; }
+        public string fcDiasSuspencion { get; set; }
+        public string fcMontoEnPalabrasContrato { get; set; }
+        public string fcPorcentajeDepreciacion { get; set; }
+        public string fcCiudadFirmaContratoPrestamo { get; set; }
+        public string fcNumeroDiaFirmaContratoPrestamo { get; set; }
+        public string fcMesFirmaContratoPrestamo { get; set; }
+        public string fcAnioFirmaContratoPrestamo { get; set; }
+        public string fcFirmaCliente { get; set; }
+
+    }
+}

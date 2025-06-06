@@ -1,0 +1,305 @@
+﻿@model OrionCoreCableColor.Models.DatosCliente.referenciaclienteViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/styles/externalstylesheets")
+    <link href="~/Content/css/formplugins/select2/select2.bundle.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet" />
+    <link href="~/Content/css/formplugins/datetime-picker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/css/skins/skin-master.css" rel="stylesheet" />
+    <link href="~/Content/js/loading/loading.css" rel="stylesheet" />
+    <link media="screen, print" href="~/Content/css/notifications/toastr/toastr.css" rel="stylesheet">
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/Content/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Content/img/favicon/favicon-32x32.png">
+
+    <link rel="mask-icon" href="~/Content/img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link href="~/Content/css/wizard/style.css" rel="stylesheet" />
+    <link href="~/Content/css/notifications/sweetalert2/sweetalert2.bundle.css" rel="stylesheet" />
+    <title>ViewFormReferenciasCliente</title>
+</head>
+<body>
+
+    <div class="row" id="contenido">
+        <div class="col-md-8 col-lg-8 col-sm-8 col-xl-8">
+            <div class="col-md-12">
+                <div class="content" style="font-size: 100%; display: grid;">
+                    <div class="content__inner">
+                        <div>
+                            <div class="card" style="margin: 2%;">
+                                <div class="row" id="contentWizar">
+                                    <div class="col-lg-12" id="">
+                                        <div class="multisteps-form">
+                                            <div class="row">
+                                                <div class="col-12 col-lg-12 col-md-12 ml-auto mr-auto mb-4">
+                                                    <br />
+
+
+                                                    <div class="multisteps-form__progress">
+                                                        <button class="multisteps-form__progress-btn js-active" type="button"
+                                                                disabled="disabled">
+                                                            Aceptar
+                                                        </button>
+                                                        <button class="multisteps-form__progress-btn" type="button"
+                                                                disabled="disabled">
+                                                            Validación
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-lg-12">
+                                                    <form class="multisteps-form__form" id="formCliente">
+                                                        <div class="multisteps-form__panel  rounded bg-white js-active"
+                                                             data-animation="scaleIn">
+                                                            <div class="multisteps-form__content tarjeta">
+                                                                <div class="col-lg-12">
+                                                                    <h4 class="text-center subheader-title">Referencia Personal</h4>
+                                                                    <div id="cardProducto" class="row producto">
+                                                                        <div class="p-6">
+
+                                                                            <div class="panel-container collapse show" style="">
+                                                                                <div class="panel-content">
+                                                                                    <div class="panel-tag">
+                                                                                        Estimado(a) <span id="referencia"></span> ha recibido este mensaje , porque la persona <span id="senior"></span> lo ha puesto como
+                                                                                        Referencia en NovaNet, solo estamos realizando una pequeña validación, si está de acuerdo con
+                                                                                        Servir como referencia haga click en "Estoy de acuerdo" , caso contrario en "No estoy de Acuerdo"
+                                                                                    </div>
+                                                                                    <div class="row">
+                                                                                        <div class="col-6 col-md-2 col-sm-6 col-lg-2 col-xl-4">
+                                                                                            <button type="button" id="btnEstoydeacuerdo" class="btn-success btn btn-sm js-btn-next ">Estoy de acuerdo</button>
+                                                                                        </div>
+                                                                                        <div class="col-6 col-md-2 col-sm-6 col-lg-2 col-xl-4">
+                                                                                            <button type="button" id="btnNoestoydeacuerdo" class=" btn text-white btn-sm" style="background-color: #FD463D">No estoy de acuerdo</button>
+                                                                                        </div>
+                                                                                    </div>
+
+
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="button-row d-flex  col-12 float-right">
+
+                                                                    <button class="btn btn-primary js-btn-next float-right ml-auto"
+                                                                            type="button" id="productosiguiente"
+                                                                            style="display:none">
+                                                                        Seguir
+                                                                    </button>
+                                                                </div>
+
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="multisteps-form__panel  rounded bg-white"
+                                                             data-animation="scaleIn">
+                                                            <div class="multisteps-form__content tarjeta" id="partialView">
+                                                                <!--<div class="col-lg-12">
+                                                                    <h4 class="text-center subheader-title">Validación Referencia Personal</h4>
+                                                                    <div id="cardTipoAuto" class="row tipoauto">
+                                                                        <div class="p-6">
+
+                                                                            <div class="panel-container show">
+                                                                                <div class="panel-content">
+
+                                                                                    <div class="row">
+                                                                                        <div class="panel-tag ">
+                                                                                            Favor responda cada pregunta
+                                                                                        </div>
+                                                                                        <div class="col-10">
+                                                                                            <label class="form-label text-muted" for="example-static-disabled"><span id="nombre1"></span> @Model.fcPregunta1</label>
+                                                                                            <input type="text" class="form-control" id="txtrespuesta1" value="">
+                                                                                        </div>
+                                                                                        <div class="col-10">
+                                                                                            <label class="form-label text-muted" for="example-static-disabled"><span id="nombre2"></span> @Model.fcPregunta2</label>
+                                                                                            <input type="text" class="form-control" id="txtrespuesta2" value="">
+                                                                                        </div>
+                                                                                        <div class="col-10">
+                                                                                            <label class="form-label text-muted" for="example-static-disabled"><span id="nombre3"></span> @Model.fcPregunta3</label>
+                                                                                            <input type="text" class="form-control" id="txtrespuesta3" value="">
+                                                                                        </div>
+                                                                                        <div class="col-10">
+                                                                                            <br />
+                                                                                            <button class="btn btn-primary  float-right ml-auto"
+                                                                                                    type="button" id="btnenviar"
+                                                                                                    style="">
+                                                                                                Enviar Datos
+                                                                                            </button>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="button-row d-flex mt-4 col-12">
+                                                                        <button class="btn btn-success js-btn-prev" type="button" style="display:none"
+                                                                                id="autoanterior">
+                                                                            Regresar
+                                                                        </button>-->
+                                                                <!--<button class="btn btn-primary text-center  ml-auto p-2 js-btn-next"
+                                                                            style="" type="button"
+                                                                            id="autosiguiente">
+                                                                        Aplicar
+                                                                    </button>
+                                                                </div>-->
+                                                                <!--</div>
+                                                                </div>-->
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+
+
+
+
+
+
+
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    @Scripts.Render("~/scripts/external-plugins")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Content/js/datagrid/datatables/datatables.bundle.js"></script>
+    <script src="~/Content/js/formplugins/select2/select2.bundle.js"></script>
+    <script src="~/Content/js/formplugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Content/js/dependency/moment/moment.js"></script>
+    <script src="~/Content/js/notifications/toastr/toastr.js"></script>
+    <script src="~/Content/js/notificaciones/notificaciones.js"></script>
+
+    <script src="~/Content/js/formplugins/datetime-picker/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Content/js/wizard/function.js"></script>
+    <script src="~/Template/js/Personalized/Alertas.js"></script>
+    <script src="~/Content/js/notifications/sweetalert2/sweetalert2.bundle.js"></script>
+    <script src="~/Content/js/loading/loading.js"></script>
+    <script>
+
+        //debugger;
+        //const searchParams = new URLSearchParams(window.location.search);
+        //let idCliente = Number(searchParams.get('cu'));
+        //let referencia = searchParams.get('re');
+        //ObtenerIdentidadCliente(idCliente);
+
+
+        var urlActual = window.location.href;
+        var valorEnURL = urlActual.match(/\/(\d+)$/);
+        var nombreReferencia = "";
+        // Si se encuentra el valor, accede a él
+        if (valorEnURL && valorEnURL.length > 1) {
+          /*  let datosDivididos = valorEnURL[1].split("_");*/
+            ObtenerIdentidadCliente(Number(valorEnURL[1]));
+           // nombreReferencia = datosDivididos[1]
+        } else {
+            var dataerror = { Titulo: "Error", Mensaje: "Error de sistema", Estado: false }
+            AlertaAjax(dataerror)
+        }
+
+        function ObtenerIdentidadCliente(idReferencia) {
+
+            let url = '@Url.Action("ObtenerNombre", "DatosCliente")';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ fiIDReferencia: idReferencia }),
+            })
+                .then(response => {
+
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    if (data.resultadollenoForm == true) {
+                        document.getElementById("contenido").style.display = "none";
+                        var dataParaAlert = { Estado: true, Titulo: "Atencion!", Mensaje: "Ya enviaste esta información, muchas gracias!" };
+                        AlertaAjax(dataParaAlert);
+                    }
+                    else {
+                        debugger
+                    let idequifax;
+                    idequifax = data.idEquifax;
+                    document.getElementById("referencia").textContent = data.fcReferencia;
+                    document.getElementById("senior").textContent = data.fcNombre;
+
+                    //otro fectch
+
+            let url2 = '@Url.Action("ObtenerRespuestas", "DatosCliente")';
+            fetch(url2, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify({ fiIDReferencia: idReferencia }),
+            })
+                .then(response => {
+
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    let datos = data;
+                    CrearView(idequifax, idReferencia, datos.respuestaCorrectaVive, datos.respuestaCorrectaTrabajo, datos.respuestaCorrectaParentesco,datos.respuestaCorrectaEstadoCivil,datos.respuestaCorrectaCiudad,datos.respuestaCorrectaTieneHijos);
+                })
+                .catch(error => {
+
+                });
+                    }
+                })
+                .catch(error => {
+
+                });
+
+            //
+
+        }
+
+
+        function CrearView(idEquifax, fiIDReferencia, lugar, trabajo, parentesco, estadocivil, ciudad, tieneHijos) {
+            debugger
+             let url = '@Url.Action("ViewPartialRespuestas", "DatosCliente")';
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: ({ fiIDEquifax: idEquifax, fiIDReferencia: fiIDReferencia, lugar: lugar, trabajo: trabajo, parentesco, estadocivil: estadocivil, ciudad: ciudad, tieneHijos: tieneHijos }),
+                success: function (data) {
+                    $("#partialView").html(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                    AlertaError();
+                }
+            });
+
+        }
+    </script>
+</body>
+</html>

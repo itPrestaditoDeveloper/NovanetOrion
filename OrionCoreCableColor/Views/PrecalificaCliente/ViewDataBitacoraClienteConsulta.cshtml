@@ -1,0 +1,86 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "DetalleCliente";
+}
+
+
+
+<table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="TablaDetalle">
+    <thead>
+        <tr>
+            <th style="width:100px;">Nombre</th>
+            <th style="width:100px;">Telefono</th>
+            <th style="width:100px;">Comentario</th>
+            <th style="width:100px;">Gestion</th>
+            <th style="width:100px;">Gestor</th>
+            <th style="width:100px;">Fecha de Gestion</th>
+
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<script>
+
+    var ID = "@Model";
+    console.log(ID);
+    var tablaPrincipal = $('#TablaDetalle').DataTable({
+
+            autoWidth: true,
+            responsive: true,
+            language: {
+                "emptyTable": "No se encontraron resultados.",
+                //"search": '<div class="icon-addon addon-md"><label for="search" class="ion-search"></label>',
+                "paginate": {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                "lengthMenu": " _MENU_ ",
+                "info": "Mostrando registros del _START_ al _END_ de _TOTAL_ registros totales.",
+                "infoEmpty": "No hay registros para mostrar.",
+            },
+            dom: 'ip',
+            order: [[0, "desc"]],
+              ajax: {
+                  url: '@Url.Action("BitacoraClientePorIdentidad", "PrecalificaCliente")',
+                  data: { fcIdentidad: ID },
+                  method: "Get",
+                  dataSrc: function (data) {
+                      return data;
+                  }
+            },
+            columns: [
+
+                {
+                    data: 'fcNombreCliente'
+                },
+                {
+                    data: 'fcTelefonoContacto'
+                },
+                {
+                    data: 'fcComentarioGestion'
+                },
+                {
+                    data: 'fcGestion'
+                },
+                {
+                    data: 'fcUsuario'
+                },
+
+                {
+                    data: null,
+                    render: function (data) {
+                        return moment(data.fdFechaGestion).format("DD/MM/YYYY");
+                    }
+
+                }
+
+            ]
+
+        });
+
+</script>
