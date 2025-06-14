@@ -44,7 +44,7 @@
                 </div>
 
             </div>
-            <div class="row" >
+            <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         @Html.LabelFor(model => model.fiIDAgencia, htmlAttributes: new { @class = "control-label" })
@@ -53,6 +53,16 @@
 
                         </div>
                         @Html.ValidationMessageFor(model => model.fiIDAgencia, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.fiIDGestion, htmlAttributes: new { @class = "control-label" })
+                        <div class="input-group mar-btm">
+                            @Html.DropDownListFor(model => model.fiIDGestion, new SelectList(ViewBag.ListadoGestion, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.fiIDGestion, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-sm-6" style="display:none">
@@ -117,19 +127,24 @@
             ToastrWarning("Campos vacios", "Escriba un comentario");
             return false;
         }
-
+        if ($("#fiIDGestion  :selected").val() == "") {
+            ToastrWarning("Campos vacios", "Seleccione la gestion del cliente");
+            return false;
+        }
 
 
         var Comentario = $("#Comentario").val();
         var idAgencia = $("#fiIDAgencia :selected").val();
         var idAgenciaContratista = $("#fiIDContratista :selected").val();
+        var idGestion = $("#fiIDGestion :selected").val();
+    
 
 
         $.ajax({
                 url: "@Url.Action("EnviarSolicitudTrabajoContratista", "PrecalificaCliente")",
                 type: "POST",
             //data: { model: model, Comentario: Comentario, idAgencia: idAgencia, idAgenciaContratista: idAgenciaContratista },
-            data: { model: model, Comentario: Comentario, idAgencia: idAgencia, idAgenciaContratista: 0 },
+            data: { model: model, Comentario: Comentario, idAgencia: idAgencia, idAgenciaContratista: 0, idGestion: idGestion},
             success: function (resp) {
                 if (resp.Estado) {
 

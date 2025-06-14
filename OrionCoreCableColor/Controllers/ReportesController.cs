@@ -2036,7 +2036,7 @@ namespace OrionCoreCableColor.Controllers
                         //var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, "", "",2,"", null);
 
                         var datos = context.sp_OrionContratista_DetalleBySolicitud(GetIdUser(), idSolicitud, 0, 0).FirstOrDefault();
-                        var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), datos.fiIDEquifax, idSolicitud, idAgencia, idAgenciaContratista, Comentario, datos.fcCodigoCliente, datos.fcNumeroOrdenCfeus, 3, "", null);
+                        var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), datos.fiIDEquifax, idSolicitud, idAgencia, idAgenciaContratista, Comentario, datos.fcCodigoCliente, datos.fcNumeroOrdenCfeus, 3, "", null,0);
                         var datosCliente = context.sp_OrionContratista_DetalleBySolicitud(GetIdUser(), idSolicitud, 0, 0).FirstOrDefault();
                         // var Correo = "aebautista63@gmail.com";
                         var modelCorreo = new SendEmailViewModel();

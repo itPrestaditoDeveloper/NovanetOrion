@@ -970,7 +970,7 @@ namespace OrionCoreCableColor.Controllers
                     {
                         var _emailTemplateService = new EmailTemplateService();
                         var tipoSolicitudInstalacion = 1;
-                        var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, CodigoCliente, NumeroOrden, 1, NumeroOrdenTrabajo, FechaInstalacionAsignada);
+                        var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, CodigoCliente, NumeroOrden, 1, NumeroOrdenTrabajo, FechaInstalacionAsignada,0);
 
                         var datosCliente = context.sp_OrionContratista_DetalleBySolicitud(GetIdUser(), model.IDSolicitud, 0, 0).FirstOrDefault();
                         //var Correo = "aebautista63@gmail.com";

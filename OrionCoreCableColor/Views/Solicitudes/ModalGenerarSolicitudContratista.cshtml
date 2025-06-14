@@ -52,7 +52,7 @@
                         @Html.ValidationMessageFor(model => model.fiIDAgencia, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" style="display:none">
                     <div class="form-group">
                         @Html.LabelFor(model => model.fiIDContratista, htmlAttributes: new { @class = "control-label" })
                         <div class="input-group mar-btm">
@@ -153,14 +153,14 @@
             ToastrWarning("Campos vacios", "Seleccione la agencia de la solicitud");
             return false;
         }
-        if ($("#fiIDContratista  :selected").val() == "") {            
-            ToastrWarning("Campos vacios", "Seleccione el contratista");
-            return false;
-        }
-        if ($("#ComentarioAgencia").val() == "") {
-            ToastrWarning("Campos vacios", "Escriba un comentario");
-            return false;
-        }
+        //if ($("#fiIDContratista  :selected").val() == "") {            
+        //    ToastrWarning("Campos vacios", "Seleccione el contratista");
+        //    return false;
+        //}
+        //if ($("#ComentarioAgencia").val() == "") {
+        //    ToastrWarning("Campos vacios", "Escriba un comentario");
+        //    return false;
+        //}
         if ($("#CodigoCliente").val() == "") {
             ToastrWarning("Campos vacios", "escriba el codigo de cliente");
             return false;
@@ -182,7 +182,8 @@
 
         var Comentario = $("#ComentarioAgencia").val();
         var idAgencia = $("#fiIDAgencia :selected").val();
-        var idAgenciaContratista = $("#fiIDContratista :selected").val();
+        //var idAgenciaContratista = $("#fiIDContratista :selected").val();
+        var idAgenciaContratista = 0;
         var CodigoCliente = $("#CodigoCliente").val();
         var NumeroOrden = $("#NumeroOrdenCepheus").val();
         var NumeroOrdenTrabajo = $("#NumeroOrdenTrabajoCepheus").val(); 

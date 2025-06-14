@@ -1122,7 +1122,7 @@ namespace OrionCoreCableColor.Controllers
                         }
                         else
                         {
-                            var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, CodigoCliente, NumeroOrden, tipoSolicitudInstalacion, NumeroOrdenTrabajo, FechaInstalacionAsignada);
+                            var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, CodigoCliente, NumeroOrden, tipoSolicitudInstalacion, NumeroOrdenTrabajo, FechaInstalacionAsignada,0);
 
                         }
                         //var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, CodigoCliente, NumeroOrden, 1, NumeroOrdenTrabajo, FechaInstalacionAsignada);
@@ -1148,22 +1148,24 @@ namespace OrionCoreCableColor.Controllers
                         modelCorreo.Body = CuerpoComentarioCorreo;
                         modelCorreo.EmailName = "Novanet";
 
-
-                        await _emailTemplateService.SendEmailToCustomer(new EmailTemplateServiceModel
+                        if (tipoSolicitudInstalacion == 4)
                         {
-                            IdEmailTemplate = 20,
-                            CustomerEmail = modelCorreo.DestinationEmail,
-                            //CustomerEmail = Correo,
-                            //IdCustomer = model.fcIDCustomer,
-                            //IdLoan = model.fcIDLoan,
-                            Comment = "Solicitud de contratista.",
-                            IDSolicitud = model.IDSolicitud,
-                            IdCliente = model.IdCliente,
-                            IdTransaccion = 0,
-                            IDSolicitudContratrista = 0,
-                            List_CC = new List<string> { MemoryLoadManager.EmailSystemAdministrator }
+                            await _emailTemplateService.SendEmailToCustomer(new EmailTemplateServiceModel
+                            {
+                                IdEmailTemplate = 20,
+                                CustomerEmail = modelCorreo.DestinationEmail,
+                                //CustomerEmail = Correo,
+                                //IdCustomer = model.fcIDCustomer,
+                                //IdLoan = model.fcIDLoan,
+                                Comment = "Solicitud de contratista.",
+                                IDSolicitud = model.IDSolicitud,
+                                IdCliente = model.IdCliente,
+                                IdTransaccion = 0,
+                                IDSolicitudContratrista = 0,
+                                List_CC = new List<string> { MemoryLoadManager.EmailSystemAdministrator }
 
-                        });
+                            });
+                        }
 
 
                         return EnviarResultado(true, "Solicitud", "Mensaje Enviado");
