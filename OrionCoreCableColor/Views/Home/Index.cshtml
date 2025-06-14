@@ -1,489 +1,493 @@
 ﻿<style>
-    .card-container {
-        height: 150px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
+	.card-container {
+		height: 150px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+	}
 
-    .card-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
+	.card-content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
 
-    .card-container-header {
-        position: relative;
-    }
+	.card-container-header {
+		position: relative;
+	}
 
-    .overlay-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1;
-    }
+	.overlay-header {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 1;
+	}
 
-    .card-content-header {
-        position: relative;
-        z-index: 2;
-    }
+	.card-content-header {
+		position: relative;
+		z-index: 2;
+	}
 
-    .hidden-button {
-        display: none !important;
-    }
+	.hidden-button {
+		display: none !important;
+	}
 </style>
 
 
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12 mb-3">
-            <div class="pt-5 pb-5 rounded overflow-hidden position-relative text-white card-container-header"
-                 style="background-position: center; background-repeat: no-repeat; background-size: cover; background-image: url(/Content/img/fondocard.jpg); position: relative;">
-                <div class="overlay-header" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);"></div>
-                <i class="fal fa-user position-absolute opacity-50 mt-5" style="font-size: 8rem; bottom: 0; right: 0;"></i>
-                <div class="row">
-                    <!-- Parte izquierda: Texto Bienvenida y Hora Actual/Fecha -->
-                    <div class="col-12 col-lg-5 mb-3 mb-lg-0 px-4 text-center text-lg-start">
+	<div class="row">
+		<div class="col-12 mb-3">
+			<div class="pt-5 pb-5 rounded overflow-hidden position-relative text-white card-container-header"
+				 style="background-position: center; background-repeat: no-repeat; background-size: cover; background-image: url(/Content/img/fondocard.jpg); position: relative;">
+				<div class="overlay-header" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);"></div>
+				<i class="fal fa-user position-absolute opacity-50 mt-5" style="font-size: 8rem; bottom: 0; right: 0;"></i>
+				<div class="row">
+					<!-- Parte izquierda: Texto Bienvenida y Hora Actual/Fecha -->
+					<div class="col-12 col-lg-5 mb-3 mb-lg-0 px-4 text-center text-lg-start">
 
-                        <div class="card-content-header" style="position: relative; z-index: 10;">
-                            <h3 class="text-white display-4 d-block l-h-n m-0 fw-500 text-capitalize" id="bienvenida"></h3>
-                        </div>
+						<div class="card-content-header" style="position: relative; z-index: 10;">
+							<h3 class="text-white display-4 d-block l-h-n m-0 fw-500 text-capitalize" id="bienvenida"></h3>
+						</div>
 
-                        <div class="card-content-header mt-3">
-                            <h3 class="text-white display-5 d-block l-h-n m-0 fw-500" id="fecha"></h3>
-                            <h3 class="text-white display-5 d-block l-h-n m-0 fw-500" id="hora"></h3>
-                        </div>
+						<div class="card-content-header mt-3">
+							<h3 class="text-white display-5 d-block l-h-n m-0 fw-500" id="fecha"></h3>
+							<h3 class="text-white display-5 d-block l-h-n m-0 fw-500" id="hora"></h3>
+						</div>
 
-                    </div>
+					</div>
 
-                    <!-- Parte derecha: Tabs -->
-                    <div class="col-12 col-lg-7 mb-3 mb-lg-0 px-4">
-                        <div class="card-content-header text-center" style="position: relative; z-index: 10;">
+					<!-- Parte derecha: Tabs -->
+					<div class="col-12 col-lg-7 mb-3 mb-lg-0 px-4">
+						<div class="card-content-header text-center" style="position: relative; z-index: 10;">
 
-                        </div>
-                    </div>
+						</div>
+					</div>
 
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="row" id="InventarioSinFirmar">
-        <div class="col-sm-12">
-            <label>Inventario sin confirmar:</label>
-        </div>
-    </div>
-    <div class="row" id="BodegasAsignadas">
+	<div class="row" id="InventarioSinFirmar">
+		<div class="col-sm-12">
+			<label>Inventario sin confirmar:</label>
+		</div>
+	</div>
+	<div class="row" id="BodegasAsignadas">
 
-    </div>
-    @if (User.IsInRole("Orion_Acceso_Dashboard"))
-    {
-        <div class="row">
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="clienteactivoscant"></label>
-                            <small class="m-0 l-h-n">Clientes Activos</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-danger-200 rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="clientecortados"></label>
-                            <small class="m-0 l-h-n">Clientes Cortados</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="clienteReconectados"></label>
-                            <small class="m-0 l-h-n">Clientes Reconectados</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n5 mr-n6" style="font-size: 8rem;"></i>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-warning-700 rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="clientesenatraso"></label>
-                            <small class="m-0 l-h-n">Clientes Atrasados</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="clientenuevo"></label>
-                            <small class="m-0 l-h-n">Clientes Nuevos</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-secondary  rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="solicitudesporInstalar"></label>
-                            <small class="m-0 l-h-n">Clientes por Instalar</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-globe position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-info-700 rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="ingresosmensuales"></label>
-                            <small class="m-0 l-h-n">Ingresos Ventas</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-dollar-sign position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
-                </div>
-            </div>
+	</div>
+	@if (User.IsInRole("Orion_Acceso_Dashboard"))
+	{
+		<div class="row">
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="clienteactivoscant"></label>
+							<small class="m-0 l-h-n">Clientes Activos</small>
+						</h3>
+					</div>
+					<i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-danger-200 rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="clientecortados"></label>
+							<small class="m-0 l-h-n">Clientes Cortados</small>
+						</h3>
+					</div>
+					<i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="clienteReconectados"></label>
+							<small class="m-0 l-h-n">Clientes Reconectados</small>
+						</h3>
+					</div>
+					<i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n5 mr-n6" style="font-size: 8rem;"></i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-warning-700 rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="clientesenatraso"></label>
+							<small class="m-0 l-h-n">Clientes Atrasados</small>
+						</h3>
+					</div>
+					<i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
+				</div>
+			</div>
+		</div>
 
 
-            <div class="col-sm-6 col-xl-3">
-                <div class="p-3 bg-brand-gradient rounded overflow-hidden position-relative text-white mb-g">
-                    <div class="">
-                        <h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
-                            <label id="clientesprecalificados"></label>
-                            <small class="m-0 l-h-n">Clientes Precalificados</small>
-                        </h3>
-                    </div>
-                    <i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
-                </div>
-            </div>
-        </div>
+		<div class="row">
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-success-700 rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="clientenuevo"></label>
+							<small class="m-0 l-h-n">Clientes Nuevos</small>
+						</h3>
+					</div>
+					<i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-secondary  rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="solicitudesporInstalar"></label>
+							<small class="m-0 l-h-n">Clientes por Instalar</small>
+						</h3>
+					</div>
+					<i class="fal fa-globe position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-info-700 rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="ingresosmensuales"></label>
+							<small class="m-0 l-h-n">Ingresos Ventas</small>
+						</h3>
+					</div>
+					<i class="fal fa-dollar-sign position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n1" style="font-size:6rem"></i>
+				</div>
+			</div>
 
 
-
-
-        <div class="col-lg-12" style="display: block;">
-            <div id="panel-1" class="panel panel-locked" data-panel-lock="false"
-                 data-panel-close="false" data-panel-fullscreen="false" data-panel-collapsed="false"
-                 data-panel-color="false" data-panel-locked="false" data-panel-refresh="false"
-                 data-panel-reset="false">
-
-                <div class="panel-hdr">
-                    <!--aqui esta la parte del header -->
-                    <h2>
-                        Facturacion
-                    </h2>
-                    <div class="panel-toolbar pr-3 align-self-end">
-                        <ul id="demo_panel-tabs" class="nav nav-tabs border-bottom-0 nav-tabs-clean"
-                            role="tablist">
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="panel-container show">
-                    <div class="panel-content border-faded border-left-0 border-right-0 border-top-0">
-                        <div class="row no-gutters">
-                            <div class="col-lg-7 col-xl-8">
-                                <div class="position-relative">
-                                    <div class="custom-control custom-switch position-absolute pos-top pos-left ml-5 mt-3 z-index-cloud">
-                                        <input type="checkbox" class="custom-control-input"
-                                               id="start_interval">
-                                    </div>
-                                    <div id="updating-chart" style="height:242px"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 col-xl-4 pl-lg-3" id="proyeccionmes">
-                                @*<div class="d-flex mt-2">
-                                        Arpu
-                                        <span class="d-inline-block ml-auto">130 / 500</span>
-                                    </div>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-fusion-400" role="progressbar"
-                                             style="width: 65%;" aria-valuenow="65" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="d-flex">
-                                        Ventas
-                                        <span class="d-inline-block ml-auto">440 TB</span>
-                                    </div>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-success-500" role="progressbar"
-                                             style="width: 34%;" aria-valuenow="34" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="d-flex">
-                                        Clientes Activos
-                                        <span class="d-inline-block ml-auto">77%</span>
-                                    </div>
-                                    <div class="progress progress-sm mb-3">
-                                        <div class="progress-bar bg-info-400" role="progressbar"
-                                             style="width: 77%;" aria-valuenow="77" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="d-flex">
-                                        User Testing
-                                        <span class="d-inline-block ml-auto">7 days</span>
-                                    </div>
-                                    <div class="progress progress-sm mb-g">
-                                        <div class="progress-bar bg-primary-300" role="progressbar"
-                                             style="width: 84%;" aria-valuenow="84" aria-valuemin="0"
-                                             aria-valuemax="100"></div>
-                                    </div>*@
-                                @*<div class="row no-gutters">
-                                        <div class="col-6 pr-1">
-                                            <a href="#" class="btn btn-default btn-block">Generate PDF</a>
-                                        </div>
-                                        <div class="col-6 pl-1">
-                                            <a href="#" class="btn btn-default btn-block">Report a Bug</a>
-                                        </div>
-                                    </div>*@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-content p-0">
-
-                        @*<div class="row row-grid no-gutters">
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                    <div class="px-3 py-2 d-flex align-items-center">
-                                        <div class="js-easy-pie-chart color-primary-300 position-relative d-inline-flex align-items-center justify-content-center"
-                                             data-percent="75" data-piesize="50" data-linewidth="5"
-                                             data-linecap="butt" data-scalelength="0">
-                                            <div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
-                                                <span class="js-percent d-block text-dark"></span>
-                                            </div>
-                                        </div>
-                                        <span class="d-inline-block ml-2 text-muted">
-                                            SERVER LOAD
-                                            <i class="fal fa-caret-up color-danger-500 ml-1"></i>
-                                        </span>
-                                        <div class="ml-auto d-inline-flex align-items-center">
-                                            <div class="sparklines d-inline-flex" sparktype="line"
-                                                 sparkheight="30" sparkwidth="70" sparklinecolor="#886ab5"
-                                                 sparkfillcolor="false" sparklinewidth="1"
-                                                 values="5,6,5,3,8,6,9,7,4,2"></div>
-                                            <div class="d-inline-flex flex-column small ml-2">
-                                                <span class="d-inline-block badge badge-success opacity-50 text-center p-1 width-6">97%</span>
-                                                <span class="d-inline-block badge bg-fusion-300 opacity-50 text-center p-1 width-6 mt-1">44%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                    <div class="px-3 py-2 d-flex align-items-center">
-                                        <div class="js-easy-pie-chart color-success-500 position-relative d-inline-flex align-items-center justify-content-center"
-                                             data-percent="79" data-piesize="50" data-linewidth="5"
-                                             data-linecap="butt">
-                                            <div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
-                                                <span class="js-percent d-block text-dark"></span>
-                                            </div>
-                                        </div>
-                                        <span class="d-inline-block ml-2 text-muted">
-                                            DISK SPACE
-                                            <i class="fal fa-caret-down color-success-500 ml-1"></i>
-                                        </span>
-                                        <div class="ml-auto d-inline-flex align-items-center">
-                                            <div class="sparklines d-inline-flex" sparktype="line"
-                                                 sparkheight="30" sparkwidth="70" sparklinecolor="#1dc9b7"
-                                                 sparkfillcolor="false" sparklinewidth="1"
-                                                 values="5,9,7,3,5,2,5,3,9,6"></div>
-                                            <div class="d-inline-flex flex-column small ml-2">
-                                                <span class="d-inline-block badge badge-info opacity-50 text-center p-1 width-6">76%</span>
-                                                <span class="d-inline-block badge bg-warning-300 opacity-50 text-center p-1 width-6 mt-1">3%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                    <div class="px-3 py-2 d-flex align-items-center">
-                                        <div class="js-easy-pie-chart color-info-500 position-relative d-inline-flex align-items-center justify-content-center"
-                                             data-percent="23" data-piesize="50" data-linewidth="5"
-                                             data-linecap="butt">
-                                            <div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
-                                                <span class="js-percent d-block text-dark"></span>
-                                            </div>
-                                        </div>
-                                        <span class="d-inline-block ml-2 text-muted">
-                                            DATA TTF
-                                            <i class="fal fa-caret-up color-success-500 ml-1"></i>
-                                        </span>
-                                        <div class="ml-auto d-inline-flex align-items-center">
-                                            <div class="sparklines d-inline-flex" sparktype="line"
-                                                 sparkheight="30" sparkwidth="70" sparklinecolor="#51adf6"
-                                                 sparkfillcolor="false" sparklinewidth="1"
-                                                 values="3,5,2,5,3,9,6,5,9,7"></div>
-                                            <div class="d-inline-flex flex-column small ml-2">
-                                                <span class="d-inline-block badge bg-fusion-500 opacity-50 text-center p-1 width-6">10GB</span>
-                                                <span class="d-inline-block badge bg-fusion-300 opacity-50 text-center p-1 width-6 mt-1">10%</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-                                    <div class="px-3 py-2 d-flex align-items-center">
-                                        <div class="js-easy-pie-chart color-fusion-500 position-relative d-inline-flex align-items-center justify-content-center"
-                                             data-percent="36" data-piesize="50" data-linewidth="5"
-                                             data-linecap="butt">
-                                            <div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
-                                                <span class="js-percent d-block text-dark"></span>
-                                            </div>
-                                        </div>
-                                        <span class="d-inline-block ml-2 text-muted">
-                                            TEMP.
-                                            <i class="fal fa-caret-down color-success-500 ml-1"></i>
-                                        </span>
-                                        <div class="ml-auto d-inline-flex align-items-center">
-                                            <div class="sparklines d-inline-flex" sparktype="line"
-                                                 sparkheight="30" sparkwidth="70" sparklinecolor="#fd3995"
-                                                 sparkfillcolor="false" sparklinewidth="1"
-                                                 values="5,3,9,6,5,9,7,3,5,2"></div>
-                                            <div class="d-inline-flex flex-column small ml-2">
-                                                <span class="d-inline-block badge badge-danger opacity-50 text-center p-1 width-6">124</span>
-                                                <span class="d-inline-block badge bg-info-300 opacity-50 text-center p-1 width-6 mt-1">40F</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*@
-
-                    </div>
-                </div>
-            </div>
-        </div>
+			<div class="col-sm-6 col-xl-3">
+				<div class="p-3 bg-brand-gradient rounded overflow-hidden position-relative text-white mb-g">
+					<div class="">
+						<h3 class="text-white display-4 d-block l-h-n m-0 fw-500">
+							<label id="clientesprecalificados"></label>
+							<small class="m-0 l-h-n">Clientes Precalificados</small>
+						</h3>
+					</div>
+					<i class="fal fa-user position-absolute pos-right pos-bottom opacity-15 mb-n1 mr-n4" style="font-size: 6rem;"></i>
+				</div>
+			</div>
+		</div>
 
 
 
 
-        <div class="row d-flex" style="display: flex;">
-            <div class="col-xl-6" style="display: flex;">
-                <div id="panel-1" class="panel" style="flex: 1;">
-                    <div class="panel-hdr">
-                        <h2>
-                            Comparativo <span class="fw-300"><i>Paquete-Servicio</i></span>
-                        </h2>
-                        <div class="panel-toolbar">
-                            <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
-                            <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
-                        </div>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                Gráfico comparativo entre solicitudes realizadas exclusivamente por internet y aquellas que incluyen artículos extra.
-                            </div>
-                            <div id="countextrachart" style="width: 100%; height: 1px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+		<div class="col-lg-12" style="display: block;">
+			<div id="panel-1" class="panel panel-locked" data-panel-lock="false"
+				 data-panel-close="false" data-panel-fullscreen="false" data-panel-collapsed="false"
+				 data-panel-color="false" data-panel-locked="false" data-panel-refresh="false"
+				 data-panel-reset="false">
 
-            <div class="col-xl-6" style="display: flex;">
-                <div id="panel-1" class="panel" style="flex: 1;">
-                    <div class="panel-hdr">
-                        <h2>
-                            Mapa <span class="fw-300"><i>Direcciones de Clientes</i></span>
-                        </h2>
-                        <div class="panel-toolbar">
-                            <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                            <button class="btn btn-panel" data-action="" data-toggle="tooltip" data-offset="0,10" data-original-title="Pantalla Completa" id="fullscreen-btn"><i class="fal fa-expand-arrows"></i></button>
-                        </div>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                Mapa con las direcciones de los clientes
-                            </div>
+				<div class="panel-hdr">
+					<!--aqui esta la parte del header -->
+					<h2>
+						Facturacion
+					</h2>
+					<div class="panel-toolbar pr-3 align-self-end">
+						<ul id="demo_panel-tabs" class="nav nav-tabs border-bottom-0 nav-tabs-clean"
+							role="tablist">
+						</ul>
+					</div>
+				</div>
 
-                            <select id="clientes-select" class="form-control mb-3" style="padding:10px;"></select>
+				<div class="panel-container show">
+					<div class="panel-content border-faded border-left-0 border-right-0 border-top-0">
+						<div class="row no-gutters">
+							<div class="col-lg-7 col-xl-8">
+								<div class="position-relative">
+									<div class="custom-control custom-switch position-absolute pos-top pos-left ml-5 mt-3 z-index-cloud">
+										<input type="checkbox" class="custom-control-input"
+											   id="start_interval">
+									</div>
+									<div id="updating-chart" style="height:242px"></div>
+								</div>
+							</div>
+							<div class="col-lg-5 col-xl-4 pl-lg-3" id="proyeccionmes">
+								@*<div class="d-flex mt-2">
+										Arpu
+										<span class="d-inline-block ml-auto">130 / 500</span>
+									</div>
+									<div class="progress progress-sm mb-3">
+										<div class="progress-bar bg-fusion-400" role="progressbar"
+											 style="width: 65%;" aria-valuenow="65" aria-valuemin="0"
+											 aria-valuemax="100"></div>
+									</div>
+									<div class="d-flex">
+										Ventas
+										<span class="d-inline-block ml-auto">440 TB</span>
+									</div>
+									<div class="progress progress-sm mb-3">
+										<div class="progress-bar bg-success-500" role="progressbar"
+											 style="width: 34%;" aria-valuenow="34" aria-valuemin="0"
+											 aria-valuemax="100"></div>
+									</div>
+									<div class="d-flex">
+										Clientes Activos
+										<span class="d-inline-block ml-auto">77%</span>
+									</div>
+									<div class="progress progress-sm mb-3">
+										<div class="progress-bar bg-info-400" role="progressbar"
+											 style="width: 77%;" aria-valuenow="77" aria-valuemin="0"
+											 aria-valuemax="100"></div>
+									</div>
+									<div class="d-flex">
+										User Testing
+										<span class="d-inline-block ml-auto">7 days</span>
+									</div>
+									<div class="progress progress-sm mb-g">
+										<div class="progress-bar bg-primary-300" role="progressbar"
+											 style="width: 84%;" aria-valuenow="84" aria-valuemin="0"
+											 aria-valuemax="100"></div>
+									</div>*@
+								@*<div class="row no-gutters">
+										<div class="col-6 pr-1">
+											<a href="#" class="btn btn-default btn-block">Generate PDF</a>
+										</div>
+										<div class="col-6 pl-1">
+											<a href="#" class="btn btn-default btn-block">Report a Bug</a>
+										</div>
+									</div>*@
+							</div>
+						</div>
+					</div>
+					<div class="panel-content p-0">
 
-                            <div id="map" style="width: 100%; height: 545px; padding-top:10px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+						@*<div class="row row-grid no-gutters">
+								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+									<div class="px-3 py-2 d-flex align-items-center">
+										<div class="js-easy-pie-chart color-primary-300 position-relative d-inline-flex align-items-center justify-content-center"
+											 data-percent="75" data-piesize="50" data-linewidth="5"
+											 data-linecap="butt" data-scalelength="0">
+											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
+												<span class="js-percent d-block text-dark"></span>
+											</div>
+										</div>
+										<span class="d-inline-block ml-2 text-muted">
+											SERVER LOAD
+											<i class="fal fa-caret-up color-danger-500 ml-1"></i>
+										</span>
+										<div class="ml-auto d-inline-flex align-items-center">
+											<div class="sparklines d-inline-flex" sparktype="line"
+												 sparkheight="30" sparkwidth="70" sparklinecolor="#886ab5"
+												 sparkfillcolor="false" sparklinewidth="1"
+												 values="5,6,5,3,8,6,9,7,4,2"></div>
+											<div class="d-inline-flex flex-column small ml-2">
+												<span class="d-inline-block badge badge-success opacity-50 text-center p-1 width-6">97%</span>
+												<span class="d-inline-block badge bg-fusion-300 opacity-50 text-center p-1 width-6 mt-1">44%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+									<div class="px-3 py-2 d-flex align-items-center">
+										<div class="js-easy-pie-chart color-success-500 position-relative d-inline-flex align-items-center justify-content-center"
+											 data-percent="79" data-piesize="50" data-linewidth="5"
+											 data-linecap="butt">
+											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
+												<span class="js-percent d-block text-dark"></span>
+											</div>
+										</div>
+										<span class="d-inline-block ml-2 text-muted">
+											DISK SPACE
+											<i class="fal fa-caret-down color-success-500 ml-1"></i>
+										</span>
+										<div class="ml-auto d-inline-flex align-items-center">
+											<div class="sparklines d-inline-flex" sparktype="line"
+												 sparkheight="30" sparkwidth="70" sparklinecolor="#1dc9b7"
+												 sparkfillcolor="false" sparklinewidth="1"
+												 values="5,9,7,3,5,2,5,3,9,6"></div>
+											<div class="d-inline-flex flex-column small ml-2">
+												<span class="d-inline-block badge badge-info opacity-50 text-center p-1 width-6">76%</span>
+												<span class="d-inline-block badge bg-warning-300 opacity-50 text-center p-1 width-6 mt-1">3%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+									<div class="px-3 py-2 d-flex align-items-center">
+										<div class="js-easy-pie-chart color-info-500 position-relative d-inline-flex align-items-center justify-content-center"
+											 data-percent="23" data-piesize="50" data-linewidth="5"
+											 data-linecap="butt">
+											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
+												<span class="js-percent d-block text-dark"></span>
+											</div>
+										</div>
+										<span class="d-inline-block ml-2 text-muted">
+											DATA TTF
+											<i class="fal fa-caret-up color-success-500 ml-1"></i>
+										</span>
+										<div class="ml-auto d-inline-flex align-items-center">
+											<div class="sparklines d-inline-flex" sparktype="line"
+												 sparkheight="30" sparkwidth="70" sparklinecolor="#51adf6"
+												 sparkfillcolor="false" sparklinewidth="1"
+												 values="3,5,2,5,3,9,6,5,9,7"></div>
+											<div class="d-inline-flex flex-column small ml-2">
+												<span class="d-inline-block badge bg-fusion-500 opacity-50 text-center p-1 width-6">10GB</span>
+												<span class="d-inline-block badge bg-fusion-300 opacity-50 text-center p-1 width-6 mt-1">10%</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+									<div class="px-3 py-2 d-flex align-items-center">
+										<div class="js-easy-pie-chart color-fusion-500 position-relative d-inline-flex align-items-center justify-content-center"
+											 data-percent="36" data-piesize="50" data-linewidth="5"
+											 data-linecap="butt">
+											<div class="d-flex flex-column align-items-center justify-content-center position-absolute pos-left pos-right pos-top pos-bottom fw-300 fs-lg">
+												<span class="js-percent d-block text-dark"></span>
+											</div>
+										</div>
+										<span class="d-inline-block ml-2 text-muted">
+											TEMP.
+											<i class="fal fa-caret-down color-success-500 ml-1"></i>
+										</span>
+										<div class="ml-auto d-inline-flex align-items-center">
+											<div class="sparklines d-inline-flex" sparktype="line"
+												 sparkheight="30" sparkwidth="70" sparklinecolor="#fd3995"
+												 sparkfillcolor="false" sparklinewidth="1"
+												 values="5,3,9,6,5,9,7,3,5,2"></div>
+											<div class="d-inline-flex flex-column small ml-2">
+												<span class="d-inline-block badge badge-danger opacity-50 text-center p-1 width-6">124</span>
+												<span class="d-inline-block badge bg-info-300 opacity-50 text-center p-1 width-6 mt-1">40F</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>*@
+
+					</div>
+				</div>
+			</div>
+		</div>
 
 
-        <div class="row">
-            <div class="col-xl-12">
-                <div id="panel-1" class="panel">
-                    <div class="panel-hdr">
-                        <h2>
-                            Fechas <span class="fw-300"><i>de Instalación</i></span>
-                        </h2>
-                        <div class="panel-toolbar">
-                            <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
-                        </div>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div id="calendar"></div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="ModalInfoCalender" tabindex="-1" aria-labelledby="ModalInfoCalenderLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" style="text-transform:capitalize" id="nombreCliente"></h1>
-                    </div>
-                    <div class="modal-body">
-
-                        <div id="fcDescripcion" style="text-align: center; margin: auto"> </div>
-
-                        <div class="mb-3 mt-3">
-                            <label for="fcNombreTecnico" class="form-label">Técnico Asignado:</label>
-                            <input type="text" readonly style="text-transform:capitalize" class="form-control" id="fcNombreTecnico">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="fcTelefonoCliente" class="form-label">Teléfono del Cliente:</label>
-                            <input type="text" readonly style="text-transform:capitalize" class="form-control" id="fcTelefonoCliente">
-                        </div>
 
 
-                        <div class="mb-3">
-                            <label for="fechaInstalacion" class="form-label">Fecha de Instalación:</label>
-                            <input type="date" readonly class="form-control" id="fechaInstalacion">
-                        </div>
+		<div class="row d-flex" style="display: flex;">
+			<div class="col-xl-6" style="display: flex;">
+				<div id="panel-1" class="panel" style="flex: 1;">
+					<div class="panel-hdr">
+						<h2>
+							Comparativo <span class="fw-300"><i>Paquete-Servicio</i></span>
+						</h2>
+						<div class="panel-toolbar">
+							<button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+							<button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+							<button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+						</div>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								Gráfico comparativo entre solicitudes realizadas exclusivamente por internet y aquellas que incluyen artículos extra.
+							</div>
+							<div id="countextrachart" style="width: 100%; height: 1px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xl-6" style="display: flex;">
+				<div id="panel-1" class="panel" style="flex: 1;">
+					<div class="panel-hdr">
+						<h2>
+							Mapa <span class="fw-300"><i>Direcciones de Clientes</i></span>
+						</h2>
+						<div class="panel-toolbar">
+							<button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+							<button class="btn btn-panel" data-action="" data-toggle="tooltip" data-offset="0,10" data-original-title="Pantalla Completa" id="fullscreen-btn"><i class="fal fa-expand-arrows"></i></button>
+						</div>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								Mapa con las direcciones de los clientes
+							</div>
+
+							<select id="clientes-select" class="form-control mb-3" style="padding:10px;"></select>
+
+							<div id="map" style="width: 100%; height: 545px; padding-top:10px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="modalClose()">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="row">
+			<div class="col-xl-12">
+				<div id="panel-1" class="panel">
+					<div class="panel-hdr">
+						<h2>
+							Fechas <span class="fw-300"><i>de Instalación</i></span>
+						</h2>
+						<div class="panel-toolbar">
+							<button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+						</div>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div id="calendar"></div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="ModalInfoCalender" tabindex="-1" aria-labelledby="ModalInfoCalenderLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" style="text-transform:capitalize" id="nombreCliente"></h1>
+					</div>
+					<div class="modal-body">
+
+						<div id="fcDescripcion" style="text-align: center; margin: auto"> </div>
+
+						<div class="mb-3 mt-3">
+							<label for="fcNombreTecnico" class="form-label">Técnico Asignado:</label>
+							<input type="text" readonly style="text-transform:capitalize" class="form-control" id="fcNombreTecnico">
+						</div>
+
+						<div class="mb-3">
+							<label for="fcTelefonoCliente" class="form-label">Teléfono del Cliente:</label>
+							<input type="text" readonly style="text-transform:capitalize" class="form-control" id="fcTelefonoCliente">
+						</div>
 
 
-    }
+						<div class="mb-3">
+							<label for="fechaInstalacion" class="form-label">Fecha de Creación Instalación:</label>
+							<input type="date" readonly class="form-control" id="fechaInstalacion">
+						</div>
+
+						<div class="mb-3">
+							<label for="fechaInstalacionFinal" class="form-label">Fecha de Instalación Final:</label>
+							<input type="date" readonly class="form-control" id="fechaInstalacionFinal">
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="modalClose()">Cerrar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	}
 </div>
 
 
@@ -495,8 +499,8 @@
 <script src="~/Content/js/statistics/sparkline/sparkline.bundle.js"></script>
 
 @section Scripts{
-    
-    <script>
+
+	<script>
 
 
 
@@ -1099,10 +1103,10 @@
 }
 
 
-    </script>
+	</script>
 
 
-    <script>
+	<script>
         function newEvent(titulo, fecha, clase, objetocompleto) {
             var milliseconds = parseInt(fecha.replace(/\/Date\((-?\d+)\)\//, '$1'));
             var date = new Date(milliseconds);
@@ -1143,11 +1147,20 @@
             var momentDate = moment(date);
             var fechaformat = momentDate.format('YYYY-MM-DD');
 
+			var fechaformat2 = null;
+
+			if (info.fechaInstalacionFinal && /\/Date\((-?\d+)\)\//.test(info.fechaInstalacionFinal)) {
+				var milliseconds2 = parseInt(info.fechaInstalacionFinal.replace(/\/Date\((-?\d+)\)\//, '$1'));
+				var date2 = new Date(milliseconds2);
+				var momentDate2 = moment(date2);
+				fechaformat2 = momentDate2.format('YYYY-MM-DD');
+			}
 
             $('#nombreCliente').text("Cliente: "+info.fcNombreCliente);
-            $('#fechaInstalacion').val(fechaformat);
+			$('#fechaInstalacion').val(fechaformat);
+			$('#fechaInstalacionFinal').val(fechaformat2);
             $('#fcTelefonoCliente').val(info.fcTelefonoCliente);
-            $('#fcNombreTecnico').val(info.fcNombreTecnico);
+            $('#fcNombreTecnico').val(info.fcNombreTecnicoAsignado);
             $('#fcDescripcion').text(info.fcDescripcion);
             $('#fcDescripcion').removeClass();
             $('#fcDescripcion').addClass(`bg-${info.fcClase} text-white fs-2 opacity-50 col-12 pt-3 pb-3 rounded`);
@@ -1165,13 +1178,13 @@
             var jsonEvent = [];
 
             $.ajax({
-                url: "@Url.Action("ListaSolicitudes", "Contratista")",
+                url: "@Url.Action("ListaSolicitudes", "Home")",
                 type: "GET",
                 success: function (respuesta) {
-
+                    debugger
                     for (var i in respuesta) {
 
-                        if (["Pendiente", "Asignado", "Proceso", "Validacion", "Validado soporte"].includes(respuesta[i]["fcDescripcion"])) {
+						if (["Pendiente", "Asignado", "Proceso", "Validacion", "Validado soporte", "Pend Articulo"].includes(respuesta[i]["fcDescripcion"])) {
 
                             jsonEvent.push(newEvent(respuesta[i]["fcNombreCliente"], respuesta[i]["fdFechaInstalacion"], respuesta[i]["fcClase"], respuesta[i]));
                         }
@@ -1392,7 +1405,7 @@
         }
 
 
-    </script>
+	</script>
 
 
 

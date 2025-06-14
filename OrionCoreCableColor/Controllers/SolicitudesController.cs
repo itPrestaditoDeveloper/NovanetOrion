@@ -94,13 +94,14 @@ namespace OrionCoreCableColor.Controllers
 
 
         [HttpGet]
-        public JsonResult LsitaSolicitudes()
+        public ActionResult LsitaSolicitudes()
         {
             using (var conetion = new ORIONDBEntities())
             {
                 var IDRol = GetUser().IdRol;
                 var IDUser = GetIdUser();
                 var fiIDDistribuidor = GetUser().fiIDDistribuidor;
+
                 var rolesAsesorFreelancer = GetConfiguracion<int>("Orion_Ventas_Freelancer", ',');
                 var rolesAsesor = GetConfiguracion<int>("Orion_Ventas_Asesor_Externo_Por_Distribuidor", ',');
                 var rolesAdminDistribuidor = GetConfiguracion<int>("Orion_Admin_Ventas_Distribuidor", ',');
@@ -109,21 +110,19 @@ namespace OrionCoreCableColor.Controllers
 
                 if (rolesAsesor.Contains(IDRol) || rolesAsesorFreelancer.Contains(IDRol))
                 {
-                    // Asesor: solo sus solicitudes
                     solicitudes = solicitudes.Where(x => x.fiIDUsuario == IDUser);
                 }
                 else if (rolesAdminDistribuidor.Contains(IDRol))
                 {
-                    // Admin distribuidor: todas las solicitudes de los asesores externos por el id distribuidor
                     solicitudes = solicitudes.Where(x => x.fiIDDistribuidor == fiIDDistribuidor);
                 }
 
                 var resultado = solicitudes.ToList();
 
                 if (!resultado.Any())
-                    return Json(new { success = false, message = "Sin datos." }, JsonRequestBehavior.AllowGet);
+                    return new LargeJsonResult(new { success = false, message = "Sin datos." });
 
-                return Json(resultado, JsonRequestBehavior.AllowGet);
+                return new LargeJsonResult(resultado);
             }
         }
 
