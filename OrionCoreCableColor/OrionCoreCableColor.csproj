@@ -451,6 +451,7 @@
     <Compile Include="App_Helper\ExcelFunctionsHelper.cs" />
     <Compile Include="App_Helper\ExtensionForDataRow.cs" />
     <Compile Include="App_Helper\HttpClientManager.cs" />
+    <Compile Include="App_Helper\LargeJsonResult.cs" />
     <Compile Include="App_Helper\MemoryLoadManager.cs" />
     <Compile Include="App_Helper\MemoryPostedFile.cs" />
     <Compile Include="App_Helper\MensajeDeTexto.cs" />

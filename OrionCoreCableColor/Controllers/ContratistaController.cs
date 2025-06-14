@@ -627,6 +627,8 @@ namespace OrionCoreCableColor.Controllers
                     string longi = ubicacion.Split(',')[1];
                     string urlMaps = $"https://www.google.com/maps?z=12&t=k&q={lat},{longi}";
                     //email a tecnico
+                    var bod = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",Cliente: " + cliente + "" + informacion + "Ubicacion:" + urlMaps;
+
                     var modelCorreo = new SendEmailViewModel();
                     modelCorreo.DestinationEmail = InformacionTecnico.fcCorreoTecnico;
                     // modelCorreo.DestinationEmail = "denis.saavedra@miprestadito.com";    
@@ -653,6 +655,8 @@ namespace OrionCoreCableColor.Controllers
                     modelCorreoCliente.Body = "Estimado  " + cliente + " se le notifica que la instalacion de su servicio sera realizada por el tecnico: " + "<br>" + InformacionTecnico.fcNombreTecnico.Replace('.', ' ') + "</b>,Con identidad " + InformacionTecnico.fcIdentidadTecnico + "<br>Se contactara con usted del telefono: " + InformacionTecnico.fcTelefonoMovil;
                     modelCorreoCliente.EmailName = "Novanet";
                     await ServicioCorreo.SendEmailAsync(modelCorreoCliente);
+                    MensajeriaApi.MensajesDigitales(InformacionTecnico.fcTelefonoMovil, bod);
+
                     //telegram a cliente
 
 

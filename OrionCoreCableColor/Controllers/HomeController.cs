@@ -12,7 +12,6 @@ using System.Configuration;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace OrionCoreCableColor.Controllers
@@ -60,14 +59,14 @@ namespace OrionCoreCableColor.Controllers
         [Authorize(Roles = ("Orion_Acceso_Dashboard"))]
         public JsonResult DashBoardInformativo()
         {
-            var prueba = _connection.OrionContext.sp_OrionSolicitud_Detalle_ClienteListar(GetIdUser(), 37).ToList(); 
+            var prueba = _connection.OrionContext.sp_OrionSolicitud_Detalle_ClienteListar(GetIdUser(), 37).ToList();
 
             var etiqu = _connection.OrionContext.sp_DashboardInformativo(1).ToList();
 
             return EnviarListaJson(etiqu);
         }
 
-        public ActionResult Cotizador() 
+        public ActionResult Cotizador()
         {
             var productosacotizar = _connection.OrionContext.sp_Producto_Maestro_Listar().GroupBy(a => a.fiIDTipoProducto).ToList();
 
@@ -102,20 +101,20 @@ namespace OrionCoreCableColor.Controllers
                     var list = JsonConvert.DeserializeObject<ComparativoPaqueteServicios>(item);
                     result.Add(list);
                 }
-                return EnviarListaJson(result.ToList()) ;
+                return EnviarListaJson(result.ToList());
             }
             catch (Exception ex)
             {
 
                 throw;
             }
-            
+
         }
         public JsonResult FacturacionMensual()
         {
             try
             {
-                List<FacturacionMensualViewModel> facturacionmensual= new List<FacturacionMensualViewModel>();
+                List<FacturacionMensualViewModel> facturacionmensual = new List<FacturacionMensualViewModel>();
                 List<VentasMensualesViewModel> ventasmensuales = new List<VentasMensualesViewModel>();
                 List<ArpusViewModel> arpumes = new List<ArpusViewModel>();
                 List<ProyeccionyActualViewModel> proyeccionmes = new List<ProyeccionyActualViewModel>();
@@ -151,22 +150,22 @@ namespace OrionCoreCableColor.Controllers
                         }
                         reader.NextResult();
                         var proyeccion = db.ObjectContext.Translate<string>(reader).ToList();
-                        foreach(var item in proyeccion)
+                        foreach (var item in proyeccion)
                         {
                             var list = JsonConvert.DeserializeObject<ProyeccionyActualViewModel>(item);
                             proyeccionmes.Add(list);
                         }
                     }
                 }
-                
-                return EnviarListaJson(new ListaDashBoardViewModel { facturacionmensual= facturacionmensual.ToList(), ventasMensuales = ventasmensuales.ToList(), Arpumensuales = arpumes.ToList(), proyecciones = proyeccionmes.ToList() }) ;
+
+                return EnviarListaJson(new ListaDashBoardViewModel { facturacionmensual = facturacionmensual.ToList(), ventasMensuales = ventasmensuales.ToList(), Arpumensuales = arpumes.ToList(), proyecciones = proyeccionmes.ToList() });
             }
             catch (Exception ex)
             {
 
                 throw;
             }
-            
+
         }
 
         [HttpGet]
@@ -183,7 +182,7 @@ namespace OrionCoreCableColor.Controllers
                     var tecnicos = MemoryLoadManager.ListaUsuarios.Where(x => x.fnLatitud != 0).ToList();
                     //await kmzService.LoadKMZFromPath();
                     var listaInfoOnus = conetion.sp_MapaConInfoOnuyOlt().ToList();
-                    
+
                     //foreach(var item in kmzService.Placemarks)
                     //{
                     //    listaInfoOnus.Add(new sp_MapaConInfoOnuyOlt_Result
@@ -229,10 +228,10 @@ namespace OrionCoreCableColor.Controllers
 
         public JsonResult GetInventarioPendientePorFirmar()
         {
-            using(var contexto = new ORIONDBEntities())
+            using (var contexto = new ORIONDBEntities())
             {
                 var lista = contexto.sp_Inventario_Movimiento_Maestro_PendientesPorUsuario(GetIdUser()).ToList();
-                
+
                 return EnviarListaJson(lista);
             }
         }
@@ -278,9 +277,9 @@ namespace OrionCoreCableColor.Controllers
 
         public ActionResult ListaProductosPorUsuario()
         {
-            using(var contexto = new ORIONDBEntities())
+            using (var contexto = new ORIONDBEntities())
             {
-                
+
                 var lista = new List<ListProductosPorUbicacionViewModel>();
                 var listUbicaciones = new List<ListUbicacionesPorUsuarioViewModel>();
 
@@ -288,10 +287,10 @@ namespace OrionCoreCableColor.Controllers
                 var ubicaciones = ListarUbicacionesPorTipo();
                 var ubicacionUsuario = ubicaciones.Where(x => x.fcTipoUbicacion == "USUARIO").FirstOrDefault(x => x.fcUbicacion.Split('-')[0] == GetIdUser().ToString());
                 var productosLocal = contexto.sp_InventarioPorUbicacionDetallado(ubicacionUsuario.fiIDUbicacion).ToList();
-                var bodegas = contexto.sp_UbicacionesPorUsuarios_ListarPorUsuario(GetIdUser()).Where(x=>x.fiIDUbicacion != ubicacionUsuario.fiIDUbicacion).ToList();
+                var bodegas = contexto.sp_UbicacionesPorUsuarios_ListarPorUsuario(GetIdUser()).Where(x => x.fiIDUbicacion != ubicacionUsuario.fiIDUbicacion).ToList();
 
 
-                if (productosLocal != null) 
+                if (productosLocal != null)
                 {
                     if (productosLocal.Sum(x => x.fnCantidad) > 0)
                     {
@@ -316,16 +315,16 @@ namespace OrionCoreCableColor.Controllers
                     }
                 }
 
-                
 
 
-                
-                foreach(var item in bodegas)
+
+
+                foreach (var item in bodegas)
                 {
                     var inventario = contexto.sp_InventarioPorUbicacionDetallado(item.fiIDUbicacion).ToList();
                     var ubicacionItem = ubicaciones.FirstOrDefault(x => x.fiIDUbicacion == item.fiIDUbicacion);
                     var nombreUbicacion = "";
-                    
+
                     if (ubicacionItem.fcTipoUbicacion == "BODEGA") nombreUbicacion = $"BODEGA: {ubicacionItem.fcUbicacion.ToUpper()}";
                     if (ubicacionItem.fcTipoUbicacion == "USUARIO") nombreUbicacion = $"BODEGA DE USUARIO: {ubicacionItem.fcNombreCorto.ToUpper()} EMPRESA {ubicacionItem.fcNombreComercial.ToUpper()}";
                     if (ubicacionItem.fcTipoUbicacion == "CLIENTE") nombreUbicacion = $"CLIENTE: {ubicacionItem.fcUbicacion.ToUpper()} | {ubicacionItem.fcNombreCorto.ToUpper()}";
@@ -349,7 +348,7 @@ namespace OrionCoreCableColor.Controllers
                         });
                     }
 
-                    
+
                 }
 
                 var grupo = lista.GroupBy(x => x.fiIDUbicacion).Select(x => new ListUbicacionesPorUsuarioViewModel
@@ -360,11 +359,11 @@ namespace OrionCoreCableColor.Controllers
                     fbUsuarioPrincipal = x.FirstOrDefault().fbUsuarioPrincipal
                 }).ToList();
                 //listUbicaciones.Add();
-                
+
 
                 return PartialView(grupo);
             }
-            
+
         }
 
         [HttpPost]
@@ -374,60 +373,60 @@ namespace OrionCoreCableColor.Controllers
             using (var context = new OrionSecurityEntities())
             {
                 using (var contexto = new ORIONDBEntities())
-            {
-                var SalidaInventario = new CrearSalidaInventarioViewModel
                 {
-                    fbEditar = false,
-                    fiIdUbicacion = model.fiIDUbicacion,
-                    fcUbicacion = model.fcUbicacion,
-                    fiIDTipoMomvimento = 2,
-                    fdFechaCreacion = DateTime.Now,
-                    fiIDUsuarioDestino = 0,
-                    fiIDInventarioMovimientoMaestro = 0
-                };
-
-                SalidaInventario.ListaInventarioDetalle = new List<ListInventarioMovimientoDetalleViewModel>();
-                var i = 0;
-                foreach (var item in model.Productos)
-                {
-                    var detalle = new ListInventarioMovimientoDetalleViewModel
+                    var SalidaInventario = new CrearSalidaInventarioViewModel
                     {
-                        fbPorCodigo = item.fbConsumible,
-                        fbEditado = true,
-                        fcCodigoSerie1 = item.fcCodigoSerie1,
-                        fcCodigoSerie2 = item.fcCodigoSerie2,
-                        fcDescripcion = item.fcReferenciaMovimiento,
-                        fcPrecios = "",
-                        fcProducto = item.fcProducto,
-                        fcToken = "",
-                        fcUbicacionDestino = "",
-                        fcUbicacionInicial = model.fcUbicacion,
-                        fiIDInventarioMovimientoDetalle = 0,
-                        fiIDInventarioMovimientoMaestro = 0,
-                        fiIDMovimiento = item.fiIDMovimiento,
-                        fiIdProducto = item.fiIDProducto,
-                        fiIDTipoMovimiento = 2,
-                        fiIDUbicacionDestino = 0,
-                        fiIDUbicacionInicial = model.fiIDUbicacion,
-                        fnCantidad = item.fbConsumible ? item.fnCantidad : 0,
-                        index = i
+                        fbEditar = false,
+                        fiIdUbicacion = model.fiIDUbicacion,
+                        fcUbicacion = model.fcUbicacion,
+                        fiIDTipoMomvimento = 2,
+                        fdFechaCreacion = DateTime.Now,
+                        fiIDUsuarioDestino = 0,
+                        fiIDInventarioMovimientoMaestro = 0
                     };
-                    i++;
-                    SalidaInventario.ListaInventarioDetalle.Add(detalle);
+
+                    SalidaInventario.ListaInventarioDetalle = new List<ListInventarioMovimientoDetalleViewModel>();
+                    var i = 0;
+                    foreach (var item in model.Productos)
+                    {
+                        var detalle = new ListInventarioMovimientoDetalleViewModel
+                        {
+                            fbPorCodigo = item.fbConsumible,
+                            fbEditado = true,
+                            fcCodigoSerie1 = item.fcCodigoSerie1,
+                            fcCodigoSerie2 = item.fcCodigoSerie2,
+                            fcDescripcion = item.fcReferenciaMovimiento,
+                            fcPrecios = "",
+                            fcProducto = item.fcProducto,
+                            fcToken = "",
+                            fcUbicacionDestino = "",
+                            fcUbicacionInicial = model.fcUbicacion,
+                            fiIDInventarioMovimientoDetalle = 0,
+                            fiIDInventarioMovimientoMaestro = 0,
+                            fiIDMovimiento = item.fiIDMovimiento,
+                            fiIdProducto = item.fiIDProducto,
+                            fiIDTipoMovimiento = 2,
+                            fiIDUbicacionDestino = 0,
+                            fiIDUbicacionInicial = model.fiIDUbicacion,
+                            fnCantidad = item.fbConsumible ? item.fnCantidad : 0,
+                            index = i
+                        };
+                        i++;
+                        SalidaInventario.ListaInventarioDetalle.Add(detalle);
+                    }
+
+                    var usuario = GetUser();
+
+                    var RolesAdmin = GetConfiguracion<int>("RolesPermisoMovInvent", ',');
+
+                    ViewBag.BagPermisoTotal = RolesAdmin.Contains(GetUser().IdRol);
+
+                    ViewBag.ListUbicaciones = GetListUbicaciones();
+                    ViewBag.ListUbicacionesExternos = GetListUbicacionesExternos(usuario);
+                    return PartialView(SalidaInventario);
                 }
-
-                var usuario = GetUser();
-
-                var RolesAdmin = GetConfiguracion<int>("RolesPermisoMovInvent", ',');
-
-                ViewBag.BagPermisoTotal = RolesAdmin.Contains(GetUser().IdRol);
-
-                ViewBag.ListUbicaciones = GetListUbicaciones();
-                ViewBag.ListUbicacionesExternos = GetListUbicacionesExternos(usuario);
-                return PartialView(SalidaInventario);
             }
         }
-    }
 
 
         [HttpGet]
@@ -441,8 +440,8 @@ namespace OrionCoreCableColor.Controllers
         {
             using (var contexto = new ORIONDBEntities())
             {
-                var ArticulosExtra = GetConfiguracion<int>("Productos_Que_No_Lleva_Contratista",',').ToList();
-                var ArticulosRed = GetConfiguracion<int>("Id_Productos_que_Sirven_Para_Red",',').ToList();
+                var ArticulosExtra = GetConfiguracion<int>("Productos_Que_No_Lleva_Contratista", ',').ToList();
+                var ArticulosRed = GetConfiguracion<int>("Id_Productos_que_Sirven_Para_Red", ',').ToList();
 
                 ViewBag.ListaEquipos = _connection.OrionContext.sp_Producto_Maestro_Listar().Where(a => ArticulosRed.Any(b => b == a.fiIDProducto)).ToList().Select(a => new SelectListItem { Value = a.fnValorProductoMN.ToString(), Text = a.fcProducto });
                 ViewBag.ListaAdicionales = _connection.OrionContext.sp_Producto_Maestro_Listar().Where(a => ArticulosExtra.Any(b => b == a.fiIDProducto)).ToList().Select(a => new SelectListItem { Value = a.fnValorProductoMN.ToString(), Text = a.fcProducto });
@@ -450,5 +449,26 @@ namespace OrionCoreCableColor.Controllers
             }
         }
 
+
+
+        public JsonResult ListaSolicitudes()
+        {
+            try
+            {
+                var jsonResult = new JsonResult();
+                var Roles_Contratista_Bandeja = GetConfiguracion<string>("Roles_Contratista_Bandeja", ',').Select(x => _connection.OrionContext.sp_Roles_ObtenerPorRole(x).FirstOrDefault()).ToList();
+
+                var usuaruiologueado = GetUser();
+                var listadoTecnico = _connection.OrionContext.sp_SolicitudesAsignadas_By_Tecnico(usuaruiologueado.fiIdUsuario, usuaruiologueado.IdRol).ToList();
+
+                jsonResult = EnviarListaJson(listadoTecnico);
+
+                return jsonResult;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

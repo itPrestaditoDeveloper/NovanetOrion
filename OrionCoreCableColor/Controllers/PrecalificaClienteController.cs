@@ -11,8 +11,6 @@ using OrionCoreCableColor.Models.Mantenimiento;
 using OrionCoreCableColor.Models.Precalificado;
 using OrionCoreCableColor.Models.Prestamo;
 using OrionCoreCableColor.Models.Productos;
-using OrionCoreCableColor.Models.Reportes;
-using OrionCoreCableColor.Models.Roles;
 using OrionCoreCableColor.Models.Solicitudes;
 using OrionCoreCableColor.Models.Usuario;
 using System;
@@ -1545,7 +1543,7 @@ namespace OrionCoreCableColor.Controllers
                     command.ExecuteNonQuery();
 
                     permiteCrearOrden = (bool)paramCreacion.Value;
-                    mensajeValidacion = paramMensaje.Value?.ToString(); 
+                    mensajeValidacion = paramMensaje.Value?.ToString();
                 }
 
                 if (!permiteCrearOrden)
@@ -1819,7 +1817,6 @@ namespace OrionCoreCableColor.Controllers
             {
                 using (var security = new OrionSecurityEntities())
                 {
-
                     using (var client = new HttpClient())
                     {
                         client.BaseAddress = new Uri("http://192.168.20.23:8984/API/crearOrden");
@@ -1840,7 +1837,7 @@ namespace OrionCoreCableColor.Controllers
 
                         try
                         {
-                            var result = context.sp_Orion_ClienteBitacora_Registrar(GetIdUser(), 5, Comentario, model.IDSolicitud) > 0;
+
                             var response = await client.PostAsync("", content);
 
                             Console.WriteLine(response);
@@ -1848,15 +1845,29 @@ namespace OrionCoreCableColor.Controllers
                             {
                                 var responseContent = await response.Content.ReadAsStringAsync();
                                 responseContent = JsonConvert.DeserializeObject<dynamic>(responseContent);
-                                return response.IsSuccessStatusCode;
 
+
+
+                                // Execute stored procedure using command text
+                                var sql = "EXEC [dbo].[sp_Orion_Clientes_Bitacoras_Registrar] @piIDUsuario, @piIDGestion, @pcBitacora, @piIDSolicitud";
+
+                                var parameters = new[]
+                                {
+                                    new SqlParameter("@piIDUsuario", GetIdUser()),
+                                    new SqlParameter("@piIDGestion", 5),
+                                    new SqlParameter("@pcBitacora", Comentario),
+                                    new SqlParameter("@piIDSolicitud", model.IDSolicitud),
+                                    new SqlParameter("@jsonResponse", responseContent)
+                                };
+
+                                var result = await context.Database.ExecuteSqlCommandAsync(sql, parameters) > 0;
+                                return response.IsSuccessStatusCode;
                             }
                             else
                             {
                                 Console.WriteLine("Error: " + response.StatusCode);
                                 return false;
                             }
-
                         }
                         catch (Exception ex)
                         {
@@ -1865,9 +1876,9 @@ namespace OrionCoreCableColor.Controllers
                         }
                     }
                 }
-
             }
         }
+
         [HttpGet]
         public ActionResult ModalEnvioSMS(string Nombre, string Telefono, int IDCliente)
         {
@@ -2122,12 +2133,12 @@ namespace OrionCoreCableColor.Controllers
                     {
                         listaVendedores = listaVendedores.Where(x => x.fiUsuarioCreador == IDUser);
                     }
-                   
+
                     return EnviarListaJson(listaVendedores.ToList());
-                      
-                    
+
+
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -2163,10 +2174,10 @@ namespace OrionCoreCableColor.Controllers
 
                 return PartialView(viewModel);
             }
-           
+
         }
 
-      
+
 
         [HttpGet]
         public ActionResult ModalAgregarDatosVendedorComision(string Nombre, int IDVendedor)
@@ -2278,10 +2289,10 @@ namespace OrionCoreCableColor.Controllers
 
                 var tiposFormularioVendedores = GetConfiguracion<int>("Orion_Ventas_Vendedores_EnvioFormulario", ',');
                 if (tiposFormularioVendedores.Contains(model.fiIDEnvioFormulario))
-                    urlFormulario = $"{MemoryLoadManager.orionUrl}PrecalificaCliente/ViewFormuDistribuidores";                
+                    urlFormulario = $"{MemoryLoadManager.orionUrl}PrecalificaCliente/ViewFormuDistribuidores";
                 else
                     urlFormulario = $"{MemoryLoadManager.orionUrl}PrecalificaCliente/ViewFormuVendedoresExternos";
-                
+
                 urlFormulario += $"?tipo={model.fiIDEnvioFormulario}";
                 string urlBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(urlFormulario));
                 string redirectUrl = $"{MemoryLoadManager.orionUrl}PrecalificaCliente/formulario?id={Uri.EscapeDataString(urlBase64)}";
@@ -2291,9 +2302,9 @@ namespace OrionCoreCableColor.Controllers
                 if (!string.IsNullOrEmpty(model.fcTelefono))
                 {
                     if (model.fcTelefono.Contains(","))
-                         telefonos = model.fcTelefono.Split(',', (char)StringSplitOptions.RemoveEmptyEntries).Select(t => t.Replace("-", "").Trim()).ToList(); //verificar si hay comas
+                        telefonos = model.fcTelefono.Split(',', (char)StringSplitOptions.RemoveEmptyEntries).Select(t => t.Replace("-", "").Trim()).ToList(); //verificar si hay comas
                     else
-                        telefonos = model.fcTelefono.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries) .Select(t => t.Replace("-", "").Trim()).ToList();  //saltos de línea
+                        telefonos = model.fcTelefono.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Replace("-", "").Trim()).ToList();  //saltos de línea
                 }
 
                 if (!telefonos.Any()) return EnviarResultado(false, "", "Error: No se proporcionaron números de teléfono válidos.");
@@ -2330,7 +2341,7 @@ namespace OrionCoreCableColor.Controllers
             }
         }
 
-  
+
 
 
 
@@ -2368,7 +2379,7 @@ namespace OrionCoreCableColor.Controllers
             {
                 try
                 {
-                  
+
                     var configuraciones = GetConfigurationJson<ConfigDistribuidorVendedor>("Orion_Ventas_Vendedor_Distribuidor");
                     var carpetaV = $@"DocumentosVendedores\Vendedor_{model.fcIdentidad.Trim()}";
                     var carpetaFisica = $@"C:\inetpub\novanetgroup.com_Orion\{carpetaV}";
@@ -2432,7 +2443,7 @@ namespace OrionCoreCableColor.Controllers
                         }
 
 
-                       
+
                     }
 
                     return EnviarResultado(idInsertado > 0, "", idInsertado > 0 ? "Vendedor registrado exitosamente" : "Error al registrar");
@@ -2455,16 +2466,16 @@ namespace OrionCoreCableColor.Controllers
                     {
 
                         var _emailTemplateService = new EmailTemplateService();
-                        var datosVendedor = _connection.OrionContext.sp_OrionSolicitud_Repartidor_Listar(1).Where(x=>x.fiIDVendedorRepartidor == model.fiIDVendedorRepartidor).FirstOrDefault();
+                        var datosVendedor = _connection.OrionContext.sp_OrionSolicitud_Repartidor_Listar(1).Where(x => x.fiIDVendedorRepartidor == model.fiIDVendedorRepartidor).FirstOrDefault();
                         await _emailTemplateService.SendEmailToAcuerdoColaboracionVendedor(new EmailTemplateServiceModel
                         {
                             CustomerEmail = datosVendedor.fcCorreo,
-                            IdCustomer = datosVendedor.fcNombreVendedor,  
+                            IdCustomer = datosVendedor.fcNombreVendedor,
                             fiIDVendedorRepartidor = datosVendedor.fiIDVendedorRepartidor,
                             List_CC = new List<string> { MemoryLoadManager.EmailSystemGustavo }
                         });
 
-                        context.Database.ExecuteSqlCommand("EXEC sp_Orion_Ventas_RepartidorMaestro_Actualizar @fiIDVendedorRepartidor",new SqlParameter("@fiIDVendedorRepartidor", model.fiIDVendedorRepartidor));
+                        context.Database.ExecuteSqlCommand("EXEC sp_Orion_Ventas_RepartidorMaestro_Actualizar @fiIDVendedorRepartidor", new SqlParameter("@fiIDVendedorRepartidor", model.fiIDVendedorRepartidor));
                         return EnviarResultado(true, "Firma", "Solicitud de firma enviado correctamente.");
 
 
@@ -2514,7 +2525,7 @@ namespace OrionCoreCableColor.Controllers
         {
             try
             {
-                var IDRol =  GetUser().IdRol;
+                var IDRol = GetUser().IdRol;
                 var IDUser = GetIdUser();
                 var fiIDDistribuidor = GetUser().fiIDDistribuidor;
 
@@ -2522,11 +2533,11 @@ namespace OrionCoreCableColor.Controllers
                 {
                     var rolesAdminDistribuidor = GetConfiguracion<int>("Orion_Admin_Ventas_Distribuidor", ',');
                     bool esAdminDistribuidor = rolesAdminDistribuidor.Contains(IDRol);
-                    var distribuidores = contexto.Database .SqlQuery<ListDistribuidorViewModel>("Exec sp_Orion_Ventas_Distribuidor_Listado").ToList(); 
+                    var distribuidores = contexto.Database.SqlQuery<ListDistribuidorViewModel>("Exec sp_Orion_Ventas_Distribuidor_Listado").ToList();
 
                     if (rolesAdminDistribuidor.Contains(IDRol))
                     {
-                        distribuidores = distribuidores .Where(x => x.fiIDDistribuidor == fiIDDistribuidor).ToList();
+                        distribuidores = distribuidores.Where(x => x.fiIDDistribuidor == fiIDDistribuidor).ToList();
                     }
 
                     if (!distribuidores.Any())
@@ -2567,7 +2578,7 @@ namespace OrionCoreCableColor.Controllers
                     viewModel.fcCorreoElectronico = datos.fcCorreoElectronico;
 
                     viewModel.fcNombreComercial = datos.fcNombreComercial;
-                    viewModel.fcRTN = datos.fcRTN;  
+                    viewModel.fcRTN = datos.fcRTN;
                     viewModel.fcTelefono = datos.fcTelefono;
                     viewModel.fcDireccion = datos.fcDireccion;
                 }
@@ -2587,7 +2598,7 @@ namespace OrionCoreCableColor.Controllers
             {
                 if (fiIDDistribuidor == 0)
                     return PartialView(new ListDistribuidorViewModel());
-                
+
                 var modelDb = contexto.Database.SqlQuery<ListDistribuidorViewModel>("EXEC sp_Orion_Ventas_Distribuidor_ListadobyId @p0", fiIDDistribuidor).FirstOrDefault();
                 var model = new ListDistribuidorViewModel
                 {
@@ -2608,7 +2619,7 @@ namespace OrionCoreCableColor.Controllers
 
                 return PartialView("ModalActulizarDistribuidor", model);
             }
-          
+
         }
 
 
@@ -2635,7 +2646,7 @@ namespace OrionCoreCableColor.Controllers
             catch (Exception ex)
             {
                 return EnviarException(ex, "error");
-            }          
+            }
 
         }
 
@@ -2730,8 +2741,8 @@ namespace OrionCoreCableColor.Controllers
                         {
                             if (reader.Read())
                             {
-                                idInsertado = reader.GetInt32(0);     
-                                esNuevo = reader.GetInt32(1) == 1;   
+                                idInsertado = reader.GetInt32(0);
+                                esNuevo = reader.GetInt32(1) == 1;
                             }
                         }
                         connection.Close();
@@ -2751,10 +2762,10 @@ namespace OrionCoreCableColor.Controllers
                             {
                                 contexto.sp_OrionDistribuidor_Documentos_Insertar(idInsertado, archivo.FileName.Replace(".jpg", ""), ".jpg", carpetaFisica, documentoURL, item.fiIDDocumento, item.fcComentario, GetIdUser());
                             }
-                          
+
                         }
                     }
-                    if(!esNuevo) return EnviarResultado(false, "Distribuidor", "Ya hay un registro con este distribuidor.");
+                    if (!esNuevo) return EnviarResultado(false, "Distribuidor", "Ya hay un registro con este distribuidor.");
 
                     return EnviarResultado(true, "Distribuidor", "Registro guardado correctamente.");
                 }
