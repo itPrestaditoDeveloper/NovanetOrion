@@ -56,7 +56,6 @@
     <FunctionImportMapping FunctionImportName="sp_Admin_ClienteProductos" FunctionName="OrionDB.Store.sp_Admin_ClienteProductos" />
     <FunctionImportMapping FunctionImportName="sp_Admin_ListaNegra_AgregarIdentidad" FunctionName="OrionDB.Store.sp_Admin_ListaNegra_AgregarIdentidad" />
     <FunctionImportMapping FunctionImportName="sp_Admin_ReasignarCliente" FunctionName="OrionDB.Store.sp_Admin_ReasignarCliente" />
-    <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista" />
     <FunctionImportMapping FunctionImportName="sp_Auditoria_ListaClientesAuditados" FunctionName="OrionDB.Store.sp_Auditoria_ListaClientesAuditados">
       <ResultMapping>
         <ComplexTypeMapping TypeName="OrionDB.sp_Auditoria_ListaClientesAuditados_Result">
@@ -2993,7 +2992,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" FunctionName="OrionDB.Store.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" />
     <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_CrearPrestamo" FunctionName="OrionDB.Store.sp_OrionSolicitud_CrearPrestamo" />
     <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_DetalleClienteServicioContratado_Guardar" FunctionName="OrionDB.Store.sp_OrionSolicitud_DetalleClienteServicioContratado_Guardar" />
     <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_detallePlantillaCorreo" FunctionName="OrionDB.Store.sp_OrionSolicitud_detallePlantillaCorreo">
@@ -7054,56 +7052,6 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_SolicitudInstalacion_CambioServicio__Insertar" FunctionName="OrionDB.Store.sp_OrionSolicitud_SolicitudInstalacion_CambioServicio__Insertar" />
-    <FunctionImportMapping FunctionImportName="sp_Solicitudes_Bandeja" FunctionName="OrionDB.Store.sp_Solicitudes_Bandeja">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="OrionDB.sp_Solicitudes_Bandeja_Result">
-          <ScalarProperty Name="fiIDSolicitud" ColumnName="fiIDSolicitud" />
-          <ScalarProperty Name="fiIDCliente" ColumnName="fiIDCliente" />
-          <ScalarProperty Name="fcNombre" ColumnName="fcNombre" />
-          <ScalarProperty Name="fcTelefono" ColumnName="fcTelefono" />
-          <ScalarProperty Name="fcIdentidad" ColumnName="fcIdentidad" />
-          <ScalarProperty Name="fiPlazoSeleccionado" ColumnName="fiPlazoSeleccionado" />
-          <ScalarProperty Name="fiEstadoSolicitud" ColumnName="fiEstadoSolicitud" />
-          <ScalarProperty Name="fnValorGarantia" ColumnName="fnValorGarantia" />
-          <ScalarProperty Name="fnMontoFinalFinanciar" ColumnName="fnMontoFinalFinanciar" />
-          <ScalarProperty Name="fcComentarioResolucion" ColumnName="fcComentarioResolucion" />
-          <ScalarProperty Name="fdFechaCreacionSolicitud" ColumnName="fdFechaCreacionSolicitud" />
-          <ScalarProperty Name="fiIDPagoInicial" ColumnName="fiIDPagoInicial" />
-          <ScalarProperty Name="fcComentarioPagoInicial" ColumnName="fcComentarioPagoInicial" />
-          <ScalarProperty Name="fdFinFirma" ColumnName="fdFinFirma" />
-          <ScalarProperty Name="fiIDFirma" ColumnName="fiIDFirma" />
-          <ScalarProperty Name="fiIDEstado" ColumnName="fiIDEstado" />
-          <ScalarProperty Name="fcGeolocalizacion" ColumnName="fcGeolocalizacion" />
-          <ScalarProperty Name="fiUbicacionGuardada" ColumnName="fiUbicacionGuardada" />
-          <ScalarProperty Name="fcCorreo" ColumnName="fcCorreo" />
-          <ScalarProperty Name="fiIDContratista" ColumnName="fiIDContratista" />
-          <ScalarProperty Name="fiIDEstadoInstalacion" ColumnName="fiIDEstadoInstalacion" />
-          <ScalarProperty Name="fcDescripcion" ColumnName="fcDescripcion" />
-          <ScalarProperty Name="fcClase" ColumnName="fcClase" />
-          <ScalarProperty Name="fcDireccionDetallada" ColumnName="fcDireccionDetallada" />
-          <ScalarProperty Name="fcColonia" ColumnName="fcColonia" />
-          <ScalarProperty Name="fiIDTipoCliente" ColumnName="fiIDTipoCliente" />
-          <ScalarProperty Name="fiIDIdentidadSubida" ColumnName="fiIDIdentidadSubida" />
-          <ScalarProperty Name="fiIDSelfieSubida" ColumnName="fiIDSelfieSubida" />
-          <ScalarProperty Name="fiIDContratistaSolicitud" ColumnName="fiIDContratistaSolicitud" />
-          <ScalarProperty Name="fdFechaInstalacionFinal" ColumnName="fdFechaInstalacionFinal" />
-          <ScalarProperty Name="NombreOficial" ColumnName="NombreOficial" />
-          <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
-          <ScalarProperty Name="fiIDDistribuidor" ColumnName="fiIDDistribuidor" />
-          <ScalarProperty Name="fiEstadoDeCampo" ColumnName="fiEstadoDeCampo" />
-          <ScalarProperty Name="fcObservacionesDeCampo" ColumnName="fcObservacionesDeCampo" />
-          <ScalarProperty Name="fnCuotaMensual" ColumnName="fnCuotaMensual" />
-          <ScalarProperty Name="fnCuotaMensualMonedaNacional" ColumnName="fnCuotaMensualMonedaNacional" />
-          <ScalarProperty Name="fcArticulosdelContrato" ColumnName="fcArticulosdelContrato" />
-          <ScalarProperty Name="fiDiasTranscurridos" ColumnName="fiDiasTranscurridos" />
-          <ScalarProperty Name="fiIDMoneda" ColumnName="fiIDMoneda" />
-          <ScalarProperty Name="fiEstadoRenovacion" ColumnName="fiEstadoRenovacion" />
-          <ScalarProperty Name="fiIdOperacionSolicitud" ColumnName="fiIdOperacionSolicitud" />
-          <ScalarProperty Name="fiMesesCondicion" ColumnName="fiMesesCondicion" />
-          <ScalarProperty Name="fcOperacionTipoSolicitud" ColumnName="fcOperacionTipoSolicitud" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_ReporteClientes" FunctionName="OrionDB.Store.sp_ReporteClientes">
       <ResultMapping>
         <ComplexTypeMapping TypeName="OrionDB.sp_ReporteClientes_Result">
@@ -7170,5 +7118,57 @@
     <FunctionImportMapping FunctionImportName="sp_Firmas_Orion_Vendedores_Insertar" FunctionName="OrionDB.Store.sp_Firmas_Orion_Vendedores_Insertar" />
     <FunctionImportMapping FunctionImportName="sp_OrionDistribuidor_Documentos_Insertar" FunctionName="OrionDB.Store.sp_OrionDistribuidor_Documentos_Insertar" />
     <FunctionImportMapping FunctionImportName="sp_OrionVentas_VendedorExterno_Guardar" FunctionName="OrionDB.Store.sp_OrionVentas_VendedorExterno_Guardar" />
+    <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista" />
+    <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" FunctionName="OrionDB.Store.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" />
+    <FunctionImportMapping FunctionImportName="sp_Solicitudes_Bandeja" FunctionName="OrionDB.Store.sp_Solicitudes_Bandeja">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OrionDB.sp_Solicitudes_Bandeja_Result">
+          <ScalarProperty Name="fiIDSolicitud" ColumnName="fiIDSolicitud" />
+          <ScalarProperty Name="fiIDCliente" ColumnName="fiIDCliente" />
+          <ScalarProperty Name="fcNombre" ColumnName="fcNombre" />
+          <ScalarProperty Name="fcTelefono" ColumnName="fcTelefono" />
+          <ScalarProperty Name="fcIdentidad" ColumnName="fcIdentidad" />
+          <ScalarProperty Name="fiPlazoSeleccionado" ColumnName="fiPlazoSeleccionado" />
+          <ScalarProperty Name="fiEstadoSolicitud" ColumnName="fiEstadoSolicitud" />
+          <ScalarProperty Name="fnValorGarantia" ColumnName="fnValorGarantia" />
+          <ScalarProperty Name="fnMontoFinalFinanciar" ColumnName="fnMontoFinalFinanciar" />
+          <ScalarProperty Name="fcComentarioResolucion" ColumnName="fcComentarioResolucion" />
+          <ScalarProperty Name="fdFechaCreacionSolicitud" ColumnName="fdFechaCreacionSolicitud" />
+          <ScalarProperty Name="fiIDPagoInicial" ColumnName="fiIDPagoInicial" />
+          <ScalarProperty Name="fcComentarioPagoInicial" ColumnName="fcComentarioPagoInicial" />
+          <ScalarProperty Name="fdFinFirma" ColumnName="fdFinFirma" />
+          <ScalarProperty Name="fiIDFirma" ColumnName="fiIDFirma" />
+          <ScalarProperty Name="fiIDEstado" ColumnName="fiIDEstado" />
+          <ScalarProperty Name="fcGeolocalizacion" ColumnName="fcGeolocalizacion" />
+          <ScalarProperty Name="fiUbicacionGuardada" ColumnName="fiUbicacionGuardada" />
+          <ScalarProperty Name="fcCorreo" ColumnName="fcCorreo" />
+          <ScalarProperty Name="fiIDContratista" ColumnName="fiIDContratista" />
+          <ScalarProperty Name="fiIDEstadoInstalacion" ColumnName="fiIDEstadoInstalacion" />
+          <ScalarProperty Name="fcDescripcion" ColumnName="fcDescripcion" />
+          <ScalarProperty Name="fcClase" ColumnName="fcClase" />
+          <ScalarProperty Name="fcDireccionDetallada" ColumnName="fcDireccionDetallada" />
+          <ScalarProperty Name="fcColonia" ColumnName="fcColonia" />
+          <ScalarProperty Name="fiIDTipoCliente" ColumnName="fiIDTipoCliente" />
+          <ScalarProperty Name="fiIDIdentidadSubida" ColumnName="fiIDIdentidadSubida" />
+          <ScalarProperty Name="fiIDSelfieSubida" ColumnName="fiIDSelfieSubida" />
+          <ScalarProperty Name="fiIDContratistaSolicitud" ColumnName="fiIDContratistaSolicitud" />
+          <ScalarProperty Name="fdFechaInstalacionFinal" ColumnName="fdFechaInstalacionFinal" />
+          <ScalarProperty Name="NombreOficial" ColumnName="NombreOficial" />
+          <ScalarProperty Name="fiIDUsuario" ColumnName="fiIDUsuario" />
+          <ScalarProperty Name="fiIDDistribuidor" ColumnName="fiIDDistribuidor" />
+          <ScalarProperty Name="fiEstadoDeCampo" ColumnName="fiEstadoDeCampo" />
+          <ScalarProperty Name="fcObservacionesDeCampo" ColumnName="fcObservacionesDeCampo" />
+          <ScalarProperty Name="fnCuotaMensual" ColumnName="fnCuotaMensual" />
+          <ScalarProperty Name="fnCuotaMensualMonedaNacional" ColumnName="fnCuotaMensualMonedaNacional" />
+          <ScalarProperty Name="fcArticulosdelContrato" ColumnName="fcArticulosdelContrato" />
+          <ScalarProperty Name="fiDiasTranscurridos" ColumnName="fiDiasTranscurridos" />
+          <ScalarProperty Name="fiIDMoneda" ColumnName="fiIDMoneda" />
+          <ScalarProperty Name="fiEstadoRenovacion" ColumnName="fiEstadoRenovacion" />
+          <ScalarProperty Name="fiIdOperacionSolicitud" ColumnName="fiIdOperacionSolicitud" />
+          <ScalarProperty Name="fiMesesCondicion" ColumnName="fiMesesCondicion" />
+          <ScalarProperty Name="fcOperacionTipoSolicitud" ColumnName="fcOperacionTipoSolicitud" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

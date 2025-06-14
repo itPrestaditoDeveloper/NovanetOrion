@@ -425,19 +425,6 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("sp_Admin_ReasignarCliente", piIDSesionParameter, piIDAppParameter, piIDUsuarioParameter, pcIdentidadParameter, piIDUsuarioAsignadoParameter);
         }
     
-        public virtual int sp_AsignarSolicitud_Contratista(Nullable<int> fiIDContratistaSolicitud, Nullable<int> fiIDTecnico)
-        {
-            var fiIDContratistaSolicitudParameter = fiIDContratistaSolicitud.HasValue ?
-                new ObjectParameter("fiIDContratistaSolicitud", fiIDContratistaSolicitud) :
-                new ObjectParameter("fiIDContratistaSolicitud", typeof(int));
-    
-            var fiIDTecnicoParameter = fiIDTecnico.HasValue ?
-                new ObjectParameter("fiIDTecnico", fiIDTecnico) :
-                new ObjectParameter("fiIDTecnico", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AsignarSolicitud_Contratista", fiIDContratistaSolicitudParameter, fiIDTecnicoParameter);
-        }
-    
         public virtual ObjectResult<sp_Auditoria_ListaClientesAuditados_Result> sp_Auditoria_ListaClientesAuditados()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Auditoria_ListaClientesAuditados_Result>("sp_Auditoria_ListaClientesAuditados");
@@ -5740,55 +5727,6 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OrionSolicitud_CantidadProductosInventarioPorCliente_Result>("sp_OrionSolicitud_CantidadProductosInventarioPorCliente", pcIDProductosParameter);
         }
     
-        public virtual int sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(Nullable<int> piIDUsuario, Nullable<int> piIDClienteEquifax, Nullable<int> piIDSolicitud, Nullable<int> piIDAgenciaInstalacion, Nullable<int> piIDAgenciaContratista, string pcCometarioContratista, string pcfcCodigoCliente, string pcNumeroOrdenCfeus, Nullable<int> piIDTipoSolicitud, string pcNumeroOrdenTrabajo, Nullable<System.DateTime> fdFechaInstalacionAsignada)
-        {
-            var piIDUsuarioParameter = piIDUsuario.HasValue ?
-                new ObjectParameter("piIDUsuario", piIDUsuario) :
-                new ObjectParameter("piIDUsuario", typeof(int));
-    
-            var piIDClienteEquifaxParameter = piIDClienteEquifax.HasValue ?
-                new ObjectParameter("piIDClienteEquifax", piIDClienteEquifax) :
-                new ObjectParameter("piIDClienteEquifax", typeof(int));
-    
-            var piIDSolicitudParameter = piIDSolicitud.HasValue ?
-                new ObjectParameter("piIDSolicitud", piIDSolicitud) :
-                new ObjectParameter("piIDSolicitud", typeof(int));
-    
-            var piIDAgenciaInstalacionParameter = piIDAgenciaInstalacion.HasValue ?
-                new ObjectParameter("piIDAgenciaInstalacion", piIDAgenciaInstalacion) :
-                new ObjectParameter("piIDAgenciaInstalacion", typeof(int));
-    
-            var piIDAgenciaContratistaParameter = piIDAgenciaContratista.HasValue ?
-                new ObjectParameter("piIDAgenciaContratista", piIDAgenciaContratista) :
-                new ObjectParameter("piIDAgenciaContratista", typeof(int));
-    
-            var pcCometarioContratistaParameter = pcCometarioContratista != null ?
-                new ObjectParameter("pcCometarioContratista", pcCometarioContratista) :
-                new ObjectParameter("pcCometarioContratista", typeof(string));
-    
-            var pcfcCodigoClienteParameter = pcfcCodigoCliente != null ?
-                new ObjectParameter("pcfcCodigoCliente", pcfcCodigoCliente) :
-                new ObjectParameter("pcfcCodigoCliente", typeof(string));
-    
-            var pcNumeroOrdenCfeusParameter = pcNumeroOrdenCfeus != null ?
-                new ObjectParameter("pcNumeroOrdenCfeus", pcNumeroOrdenCfeus) :
-                new ObjectParameter("pcNumeroOrdenCfeus", typeof(string));
-    
-            var piIDTipoSolicitudParameter = piIDTipoSolicitud.HasValue ?
-                new ObjectParameter("piIDTipoSolicitud", piIDTipoSolicitud) :
-                new ObjectParameter("piIDTipoSolicitud", typeof(int));
-    
-            var pcNumeroOrdenTrabajoParameter = pcNumeroOrdenTrabajo != null ?
-                new ObjectParameter("pcNumeroOrdenTrabajo", pcNumeroOrdenTrabajo) :
-                new ObjectParameter("pcNumeroOrdenTrabajo", typeof(string));
-    
-            var fdFechaInstalacionAsignadaParameter = fdFechaInstalacionAsignada.HasValue ?
-                new ObjectParameter("fdFechaInstalacionAsignada", fdFechaInstalacionAsignada) :
-                new ObjectParameter("fdFechaInstalacionAsignada", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar", piIDUsuarioParameter, piIDClienteEquifaxParameter, piIDSolicitudParameter, piIDAgenciaInstalacionParameter, piIDAgenciaContratistaParameter, pcCometarioContratistaParameter, pcfcCodigoClienteParameter, pcNumeroOrdenCfeusParameter, piIDTipoSolicitudParameter, pcNumeroOrdenTrabajoParameter, fdFechaInstalacionAsignadaParameter);
-        }
-    
         public virtual int sp_OrionSolicitud_CrearPrestamo(Nullable<int> piIDSolicitud)
         {
             var piIDSolicitudParameter = piIDSolicitud.HasValue ?
@@ -10309,19 +10247,6 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("sp_OrionSolicitud_SolicitudInstalacion_CambioServicio__Insertar", piIDUsuarioParameter, piIDClienteEquifaxParameter, piIDSolicitudParameter, piIDAgenciaInstalacionParameter, piIDAgenciaContratistaParameter, pcCometarioContratistaParameter, pcfcCodigoClienteParameter, pcNumeroOrdenCfeusParameter, piIDTipoSolicitudParameter, pcNumeroOrdenTrabajoParameter, fdFechaInstalacionAsignadaParameter);
         }
     
-        public virtual ObjectResult<sp_Solicitudes_Bandeja_Result> sp_Solicitudes_Bandeja(Nullable<int> piIDRol, Nullable<int> piIDUsuario)
-        {
-            var piIDRolParameter = piIDRol.HasValue ?
-                new ObjectParameter("piIDRol", piIDRol) :
-                new ObjectParameter("piIDRol", typeof(int));
-    
-            var piIDUsuarioParameter = piIDUsuario.HasValue ?
-                new ObjectParameter("piIDUsuario", piIDUsuario) :
-                new ObjectParameter("piIDUsuario", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Solicitudes_Bandeja_Result>("sp_Solicitudes_Bandeja", piIDRolParameter, piIDUsuarioParameter);
-        }
-    
         public virtual ObjectResult<sp_ReporteClientes_Result> sp_ReporteClientes()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ReporteClientes_Result>("sp_ReporteClientes");
@@ -10467,6 +10392,89 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
                 new ObjectParameter("fiIDUsuario", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("sp_OrionVentas_VendedorExterno_Guardar", pcNombreVendedorParameter, pcTelefonoParameter, pcIdentidadVendedorParameter, fiIDOcupacionParameter, fiIDTipoVendedorParameter, pcCiudadParameter, pcDireccionParameter, pcLongitudParameter, pcfcLatitudParameter, pdFechaNacimientoParameter, pcCorreoParameter, pcPrimerNombreParameter, pcSegundoNombreParameter, pcPrimerApellidoParameter, pcSegundoApellidoParameter, fiIDUsuarioParameter);
+        }
+    
+        public virtual int sp_AsignarSolicitud_Contratista(Nullable<int> fiIDContratistaSolicitud, Nullable<int> fiIDTecnico, Nullable<int> piIdContratista)
+        {
+            var fiIDContratistaSolicitudParameter = fiIDContratistaSolicitud.HasValue ?
+                new ObjectParameter("fiIDContratistaSolicitud", fiIDContratistaSolicitud) :
+                new ObjectParameter("fiIDContratistaSolicitud", typeof(int));
+    
+            var fiIDTecnicoParameter = fiIDTecnico.HasValue ?
+                new ObjectParameter("fiIDTecnico", fiIDTecnico) :
+                new ObjectParameter("fiIDTecnico", typeof(int));
+    
+            var piIdContratistaParameter = piIdContratista.HasValue ?
+                new ObjectParameter("piIdContratista", piIdContratista) :
+                new ObjectParameter("piIdContratista", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AsignarSolicitud_Contratista", fiIDContratistaSolicitudParameter, fiIDTecnicoParameter, piIdContratistaParameter);
+        }
+    
+        public virtual int sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(Nullable<int> piIDUsuario, Nullable<int> piIDClienteEquifax, Nullable<int> piIDSolicitud, Nullable<int> piIDAgenciaInstalacion, Nullable<int> piIDAgenciaContratista, string pcCometarioContratista, string pcfcCodigoCliente, string pcNumeroOrdenCfeus, Nullable<int> piIDTipoSolicitud, string pcNumeroOrdenTrabajo, Nullable<System.DateTime> fdFechaInstalacionAsignada, Nullable<int> piIDTipoGestion)
+        {
+            var piIDUsuarioParameter = piIDUsuario.HasValue ?
+                new ObjectParameter("piIDUsuario", piIDUsuario) :
+                new ObjectParameter("piIDUsuario", typeof(int));
+    
+            var piIDClienteEquifaxParameter = piIDClienteEquifax.HasValue ?
+                new ObjectParameter("piIDClienteEquifax", piIDClienteEquifax) :
+                new ObjectParameter("piIDClienteEquifax", typeof(int));
+    
+            var piIDSolicitudParameter = piIDSolicitud.HasValue ?
+                new ObjectParameter("piIDSolicitud", piIDSolicitud) :
+                new ObjectParameter("piIDSolicitud", typeof(int));
+    
+            var piIDAgenciaInstalacionParameter = piIDAgenciaInstalacion.HasValue ?
+                new ObjectParameter("piIDAgenciaInstalacion", piIDAgenciaInstalacion) :
+                new ObjectParameter("piIDAgenciaInstalacion", typeof(int));
+    
+            var piIDAgenciaContratistaParameter = piIDAgenciaContratista.HasValue ?
+                new ObjectParameter("piIDAgenciaContratista", piIDAgenciaContratista) :
+                new ObjectParameter("piIDAgenciaContratista", typeof(int));
+    
+            var pcCometarioContratistaParameter = pcCometarioContratista != null ?
+                new ObjectParameter("pcCometarioContratista", pcCometarioContratista) :
+                new ObjectParameter("pcCometarioContratista", typeof(string));
+    
+            var pcfcCodigoClienteParameter = pcfcCodigoCliente != null ?
+                new ObjectParameter("pcfcCodigoCliente", pcfcCodigoCliente) :
+                new ObjectParameter("pcfcCodigoCliente", typeof(string));
+    
+            var pcNumeroOrdenCfeusParameter = pcNumeroOrdenCfeus != null ?
+                new ObjectParameter("pcNumeroOrdenCfeus", pcNumeroOrdenCfeus) :
+                new ObjectParameter("pcNumeroOrdenCfeus", typeof(string));
+    
+            var piIDTipoSolicitudParameter = piIDTipoSolicitud.HasValue ?
+                new ObjectParameter("piIDTipoSolicitud", piIDTipoSolicitud) :
+                new ObjectParameter("piIDTipoSolicitud", typeof(int));
+    
+            var pcNumeroOrdenTrabajoParameter = pcNumeroOrdenTrabajo != null ?
+                new ObjectParameter("pcNumeroOrdenTrabajo", pcNumeroOrdenTrabajo) :
+                new ObjectParameter("pcNumeroOrdenTrabajo", typeof(string));
+    
+            var fdFechaInstalacionAsignadaParameter = fdFechaInstalacionAsignada.HasValue ?
+                new ObjectParameter("fdFechaInstalacionAsignada", fdFechaInstalacionAsignada) :
+                new ObjectParameter("fdFechaInstalacionAsignada", typeof(System.DateTime));
+    
+            var piIDTipoGestionParameter = piIDTipoGestion.HasValue ?
+                new ObjectParameter("piIDTipoGestion", piIDTipoGestion) :
+                new ObjectParameter("piIDTipoGestion", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar", piIDUsuarioParameter, piIDClienteEquifaxParameter, piIDSolicitudParameter, piIDAgenciaInstalacionParameter, piIDAgenciaContratistaParameter, pcCometarioContratistaParameter, pcfcCodigoClienteParameter, pcNumeroOrdenCfeusParameter, piIDTipoSolicitudParameter, pcNumeroOrdenTrabajoParameter, fdFechaInstalacionAsignadaParameter, piIDTipoGestionParameter);
+        }
+    
+        public virtual ObjectResult<sp_Solicitudes_Bandeja_Result> sp_Solicitudes_Bandeja(Nullable<int> piIDRol, Nullable<int> piIDUsuario)
+        {
+            var piIDRolParameter = piIDRol.HasValue ?
+                new ObjectParameter("piIDRol", piIDRol) :
+                new ObjectParameter("piIDRol", typeof(int));
+    
+            var piIDUsuarioParameter = piIDUsuario.HasValue ?
+                new ObjectParameter("piIDUsuario", piIDUsuario) :
+                new ObjectParameter("piIDUsuario", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Solicitudes_Bandeja_Result>("sp_Solicitudes_Bandeja", piIDRolParameter, piIDUsuarioParameter);
         }
     }
 }

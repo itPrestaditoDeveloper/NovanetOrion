@@ -113,10 +113,6 @@
       <Parameter Name="pcIdentidad" Mode="In" Type="String" />
       <Parameter Name="piIDUsuarioAsignado" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_AsignarSolicitud_Contratista">
-      <Parameter Name="fiIDContratistaSolicitud" Mode="In" Type="Int32" />
-      <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_Auditoria_ListaClientesAuditados" ReturnType="Collection(OrionDB.sp_Auditoria_ListaClientesAuditados_Result)" />
     <FunctionImport Name="sp_Auditoria_ListarClientes" ReturnType="Collection(OrionDB.sp_Auditoria_ListarClientes_Result)" />
     <FunctionImport Name="sp_AuditoriaContratistas_Insertar">
@@ -1658,19 +1654,6 @@
     <FunctionImport Name="sp_OrionSolicitud_CantidadProductosInventarioPorCliente" ReturnType="Collection(OrionDB.sp_OrionSolicitud_CantidadProductosInventarioPorCliente_Result)">
       <Parameter Name="pcIDProductos" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar">
-      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
-      <Parameter Name="piIDClienteEquifax" Mode="In" Type="Int32" />
-      <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
-      <Parameter Name="piIDAgenciaInstalacion" Mode="In" Type="Int32" />
-      <Parameter Name="piIDAgenciaContratista" Mode="In" Type="Int32" />
-      <Parameter Name="pcCometarioContratista" Mode="In" Type="String" />
-      <Parameter Name="pcfcCodigoCliente" Mode="In" Type="String" />
-      <Parameter Name="pcNumeroOrdenCfeus" Mode="In" Type="String" />
-      <Parameter Name="piIDTipoSolicitud" Mode="In" Type="Int32" />
-      <Parameter Name="pcNumeroOrdenTrabajo" Mode="In" Type="String" />
-      <Parameter Name="fdFechaInstalacionAsignada" Mode="In" Type="DateTime" />
-    </FunctionImport>
     <FunctionImport Name="sp_OrionSolicitud_CrearPrestamo">
       <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
     </FunctionImport>
@@ -2966,10 +2949,6 @@
       <Parameter Name="pcNumeroOrdenTrabajo" Mode="In" Type="String" />
       <Parameter Name="fdFechaInstalacionAsignada" Mode="In" Type="DateTime" />
     </FunctionImport>
-    <FunctionImport Name="sp_Solicitudes_Bandeja" ReturnType="Collection(OrionDB.sp_Solicitudes_Bandeja_Result)">
-      <Parameter Name="piIDRol" Mode="In" Type="Int32" />
-      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_ReporteClientes" ReturnType="Collection(OrionDB.sp_ReporteClientes_Result)" />
     <FunctionImport Name="sp_ReporteClientes_SinContestar" ReturnType="Collection(OrionDB.sp_ReporteClientes_SinContestar_Result)" />
     <FunctionImport Name="sp_Orion_Ventas_Distribuidor_Listado" ReturnType="Collection(OrionDB.sp_Orion_Ventas_Distribuidor_Listado_Result)" />
@@ -3008,6 +2987,29 @@
       <Parameter Name="pcPrimerApellido" Mode="In" Type="String" />
       <Parameter Name="pcSegundoApellido" Mode="In" Type="String" />
       <Parameter Name="fiIDUsuario" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_AsignarSolicitud_Contratista">
+      <Parameter Name="fiIDContratistaSolicitud" Mode="In" Type="Int32" />
+      <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
+      <Parameter Name="piIdContratista" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar">
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+      <Parameter Name="piIDClienteEquifax" Mode="In" Type="Int32" />
+      <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
+      <Parameter Name="piIDAgenciaInstalacion" Mode="In" Type="Int32" />
+      <Parameter Name="piIDAgenciaContratista" Mode="In" Type="Int32" />
+      <Parameter Name="pcCometarioContratista" Mode="In" Type="String" />
+      <Parameter Name="pcfcCodigoCliente" Mode="In" Type="String" />
+      <Parameter Name="pcNumeroOrdenCfeus" Mode="In" Type="String" />
+      <Parameter Name="piIDTipoSolicitud" Mode="In" Type="Int32" />
+      <Parameter Name="pcNumeroOrdenTrabajo" Mode="In" Type="String" />
+      <Parameter Name="fdFechaInstalacionAsignada" Mode="In" Type="DateTime" />
+      <Parameter Name="piIDTipoGestion" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_Solicitudes_Bandeja" ReturnType="Collection(OrionDB.sp_Solicitudes_Bandeja_Result)">
+      <Parameter Name="piIDRol" Mode="In" Type="Int32" />
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="ListadoTecnicos_PorContratista_Result">
@@ -8286,52 +8288,6 @@
     <Property Type="String" Name="fnCuotaMensualMonedaNacional" Nullable="true" MaxLength="15" />
     <Property Type="String" Name="TotalcuotaMensual" Nullable="true" MaxLength="15" />
   </ComplexType>
-  <ComplexType Name="sp_Solicitudes_Bandeja_Result">
-    <Property Type="Int32" Name="fiIDSolicitud" Nullable="false" />
-    <Property Type="Int32" Name="fiIDCliente" Nullable="false" />
-    <Property Type="String" Name="fcNombre" Nullable="true" MaxLength="80" />
-    <Property Type="String" Name="fcTelefono" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="fcIdentidad" Nullable="true" MaxLength="20" />
-    <Property Type="Int32" Name="fiPlazoSeleccionado" Nullable="true" />
-    <Property Type="Int32" Name="fiEstadoSolicitud" Nullable="false" />
-    <Property Type="Decimal" Name="fnValorGarantia" Nullable="true" Precision="13" Scale="2" />
-    <Property Type="Decimal" Name="fnMontoFinalFinanciar" Nullable="true" Precision="13" Scale="2" />
-    <Property Type="String" Name="fcComentarioResolucion" Nullable="true" MaxLength="500" />
-    <Property Type="DateTime" Name="fdFechaCreacionSolicitud" Nullable="true" Precision="23" />
-    <Property Type="Int32" Name="fiIDPagoInicial" Nullable="false" />
-    <Property Type="String" Name="fcComentarioPagoInicial" Nullable="false" MaxLength="500" />
-    <Property Type="DateTime" Name="fdFinFirma" Nullable="true" Precision="23" />
-    <Property Type="Int32" Name="fiIDFirma" Nullable="true" />
-    <Property Type="Int32" Name="fiIDEstado" Nullable="true" />
-    <Property Type="String" Name="fcGeolocalizacion" Nullable="false" MaxLength="400" />
-    <Property Type="Int32" Name="fiUbicacionGuardada" Nullable="false" />
-    <Property Type="String" Name="fcCorreo" Nullable="false" MaxLength="200" />
-    <Property Type="Int32" Name="fiIDContratista" Nullable="false" />
-    <Property Type="Int32" Name="fiIDEstadoInstalacion" Nullable="false" />
-    <Property Type="String" Name="fcDescripcion" Nullable="false" MaxLength="50" />
-    <Property Type="String" Name="fcClase" Nullable="false" MaxLength="50" />
-    <Property Type="String" Name="fcDireccionDetallada" Nullable="false" MaxLength="1000" />
-    <Property Type="String" Name="fcColonia" Nullable="false" MaxLength="50" />
-    <Property Type="Int32" Name="fiIDTipoCliente" Nullable="false" />
-    <Property Type="Int32" Name="fiIDIdentidadSubida" Nullable="false" />
-    <Property Type="Int32" Name="fiIDSelfieSubida" Nullable="false" />
-    <Property Type="Int32" Name="fiIDContratistaSolicitud" Nullable="false" />
-    <Property Type="DateTime" Name="fdFechaInstalacionFinal" Nullable="false" Precision="23" />
-    <Property Type="String" Name="NombreOficial" Nullable="false" MaxLength="41" />
-    <Property Type="Int32" Name="fiIDUsuario" Nullable="false" />
-    <Property Type="Int32" Name="fiIDDistribuidor" Nullable="false" />
-    <Property Type="Int32" Name="fiEstadoDeCampo" Nullable="false" />
-    <Property Type="String" Name="fcObservacionesDeCampo" Nullable="false" MaxLength="500" />
-    <Property Type="Decimal" Name="fnCuotaMensual" Nullable="false" Precision="13" Scale="2" />
-    <Property Type="Decimal" Name="fnCuotaMensualMonedaNacional" Nullable="true" Precision="13" Scale="2" />
-    <Property Type="String" Name="fcArticulosdelContrato" Nullable="false" MaxLength="8000" />
-    <Property Type="Int32" Name="fiDiasTranscurridos" Nullable="true" />
-    <Property Type="Int32" Name="fiIDMoneda" Nullable="true" />
-    <Property Type="Int32" Name="fiEstadoRenovacion" Nullable="false" />
-    <Property Type="Int32" Name="fiIdOperacionSolicitud" Nullable="false" />
-    <Property Type="Int32" Name="fiMesesCondicion" Nullable="false" />
-    <Property Type="String" Name="fcOperacionTipoSolicitud" Nullable="false" MaxLength="50" />
-  </ComplexType>
   <ComplexType Name="sp_ReporteClientes_Result">
     <Property Type="Int32" Name="fiIDEquifax" Nullable="false" />
     <Property Type="String" Name="fcIdentidad" Nullable="true" MaxLength="20" />
@@ -8381,5 +8337,51 @@
     <Property Type="String" Name="fcFirmaErick" Nullable="false" MaxLength="Max" />
     <Property Type="Int32" Name="fiIDFirmado" Nullable="false" />
     <Property Type="String" Name="fcDocumentosJSON" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_Solicitudes_Bandeja_Result">
+    <Property Type="Int32" Name="fiIDSolicitud" Nullable="false" />
+    <Property Type="Int32" Name="fiIDCliente" Nullable="false" />
+    <Property Type="String" Name="fcNombre" Nullable="true" MaxLength="80" />
+    <Property Type="String" Name="fcTelefono" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="fcIdentidad" Nullable="true" MaxLength="20" />
+    <Property Type="Int32" Name="fiPlazoSeleccionado" Nullable="true" />
+    <Property Type="Int32" Name="fiEstadoSolicitud" Nullable="false" />
+    <Property Type="Decimal" Name="fnValorGarantia" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnMontoFinalFinanciar" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcComentarioResolucion" Nullable="true" MaxLength="500" />
+    <Property Type="DateTime" Name="fdFechaCreacionSolicitud" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="fiIDPagoInicial" Nullable="false" />
+    <Property Type="String" Name="fcComentarioPagoInicial" Nullable="false" MaxLength="500" />
+    <Property Type="DateTime" Name="fdFinFirma" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="fiIDFirma" Nullable="true" />
+    <Property Type="Int32" Name="fiIDEstado" Nullable="true" />
+    <Property Type="String" Name="fcGeolocalizacion" Nullable="false" MaxLength="400" />
+    <Property Type="Int32" Name="fiUbicacionGuardada" Nullable="false" />
+    <Property Type="String" Name="fcCorreo" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="fiIDContratista" Nullable="false" />
+    <Property Type="Int32" Name="fiIDEstadoInstalacion" Nullable="false" />
+    <Property Type="String" Name="fcDescripcion" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="fcClase" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="fcDireccionDetallada" Nullable="false" MaxLength="1000" />
+    <Property Type="String" Name="fcColonia" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="fiIDTipoCliente" Nullable="false" />
+    <Property Type="Int32" Name="fiIDIdentidadSubida" Nullable="false" />
+    <Property Type="Int32" Name="fiIDSelfieSubida" Nullable="false" />
+    <Property Type="Int32" Name="fiIDContratistaSolicitud" Nullable="false" />
+    <Property Type="DateTime" Name="fdFechaInstalacionFinal" Nullable="false" Precision="23" />
+    <Property Type="String" Name="NombreOficial" Nullable="false" MaxLength="41" />
+    <Property Type="Int32" Name="fiIDUsuario" Nullable="false" />
+    <Property Type="Int32" Name="fiIDDistribuidor" Nullable="false" />
+    <Property Type="Int32" Name="fiEstadoDeCampo" Nullable="false" />
+    <Property Type="String" Name="fcObservacionesDeCampo" Nullable="false" MaxLength="500" />
+    <Property Type="Decimal" Name="fnCuotaMensual" Nullable="false" Precision="13" Scale="2" />
+    <Property Type="Decimal" Name="fnCuotaMensualMonedaNacional" Nullable="true" Precision="13" Scale="2" />
+    <Property Type="String" Name="fcArticulosdelContrato" Nullable="false" MaxLength="8000" />
+    <Property Type="Int32" Name="fiDiasTranscurridos" Nullable="true" />
+    <Property Type="Int32" Name="fiIDMoneda" Nullable="true" />
+    <Property Type="Int32" Name="fiEstadoRenovacion" Nullable="false" />
+    <Property Type="Int32" Name="fiIdOperacionSolicitud" Nullable="false" />
+    <Property Type="Int32" Name="fiMesesCondicion" Nullable="false" />
+    <Property Type="String" Name="fcOperacionTipoSolicitud" Nullable="false" MaxLength="50" />
   </ComplexType>
 </Schema>

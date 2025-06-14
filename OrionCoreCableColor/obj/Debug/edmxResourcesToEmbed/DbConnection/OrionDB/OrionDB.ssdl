@@ -163,6 +163,7 @@
   <Function Name="sp_AsignarSolicitud_Contratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
     <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
+    <Parameter Name="piIdContratista" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_ASPNETUSER_ObtenerInformacionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="pcUsuario" Type="varchar" Mode="In" />
@@ -2012,6 +2013,7 @@
     <Parameter Name="piIDTipoSolicitud" Type="int" Mode="In" />
     <Parameter Name="pcNumeroOrdenTrabajo" Type="varchar" Mode="In" />
     <Parameter Name="fdFechaInstalacionAsignada" Type="datetime" Mode="In" />
+    <Parameter Name="piIDTipoGestion" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_OrionSolicitud_CrearPrestamo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
