@@ -147,9 +147,9 @@
                                 opciones += `<a href="@(Url.Action("ViewDetalleInstalacionOrdenTrabajo","Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-edit fa-fw"></i> Terminar instalacion</a>`;
                             } else if (data.fiIDEstadoInstalacion == 3){
 
-                                opciones += `<a href="@(Url.Action("ViewDetalleInstalacion","Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-edit fa-fw"></i> Terminar instalacion</a>`;
                             }
                         }
+                            opciones += `<a href="@(Url.Action("ViewDetalleInstalacion","Tenico"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-edit fa-fw"></i> Terminar instalacion</a>`;
                         if(data.fiIDTipoSolicitud == 2) {
                         }else {
                             opciones += (data.fiQRAcceso == 1 && data.fiIDEstadoInstalacion != 4)? `<a  href="javascript:void(0)" onclick="EscanearQR('${data.fiIDSolicitudInstalacion}')" class="dropdown-item"><i class="fal fa-camera"></i>Escanear QR</a>`:"";

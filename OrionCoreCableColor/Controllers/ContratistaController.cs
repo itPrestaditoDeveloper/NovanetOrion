@@ -388,10 +388,33 @@ namespace OrionCoreCableColor.Controllers
             try
             {
                 var empresa = _connection.OrionContext.sp_ObtenerEmpresa_ByIdUsuario(GetIdUser()).FirstOrDefault();
-                ViewBag.ListadoTecnico = _connection.OrionContext.sp_TecnicosPorContratista_GetByIdContratista(empresa).ToList().Select(x => new { Value = x.fiIDUsuarioTecnico, Text = x.fcTecnico }).ToList();
+
+                //ViewBag.ListadoTecnico = _connection.OrionContext.sp_TecnicosPorContratista_GetByIdContratista(empresa).ToList().Select(x => new { Value = x.fiIDUsuarioTecnico, Text = x.fcTecnico }).ToList();
+                ViewBag.ListadoAgente = _connection.OrionContext.sp_ListadoContratistas().Select(a => new SelectListItem { Value = Convert.ToString(a.fiIDContratista), Text = a.fcNombreContratista}).ToList();
+                //ViewBag.ListaEstadosCiviles = ListaEstadosCiviles().Select(z => new SelectListItem { Value = Convert.ToString(z.id), Text = z.descripcion.ToString() }).ToList();
                 return PartialView(new contratistaAsignacionViewModel() { fiIDSolicitudInstalacion = fiIDSolicitudInstalacion, cliente = Cliente, ubicacion = ubicacion });
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public ActionResult ShowAsignacionTecnico(int fiIDSolicitudInstalacion, int fiIDContratista, string Cliente, string ubicacion)
+        {
+            try
+            {
+                using (var connection = new ORIONDBEntities())
+                {
+                    
+                    var empresa = _connection.OrionContext.sp_ObtenerEmpresa_ByIdUsuario(GetIdUser()).FirstOrDefault();
+
+                    ViewBag.ListadoTecnico = _connection.OrionContext.sp_TecnicosPorContratista_GetByIdContratista(empresa).ToList().Select(x => new SelectListItem { Value = x.fiIDUsuarioTecnico.ToString(), Text = x.fcTecnico }).ToList();
+                    
+                }
+                return PartialView(new contratistaAsignacionViewModel() { fiIDSolicitudInstalacion = fiIDSolicitudInstalacion, cliente = Cliente, ubicacion = ubicacion });
+            }
+            catch (Exception ex)
             {
                 throw;
             }
@@ -514,14 +537,14 @@ namespace OrionCoreCableColor.Controllers
 
         [ValidateInput(false)]
         [AllowAnonymous]
-        public async Task<ActionResult> AsignarSolicitudContratista(int fiIDSolicitudInstalacion, int fiIDTecnico, string cliente, string ubicacion)
+        public async Task<ActionResult> AsignarSolicitudContratista(int fiIDSolicitudInstalacion, int fiIDTecnico, string cliente, string ubicacion,int fiidAgencia = 0)
         {
             try
             {
                 // ubicacion = ubicacion.Replace('A', ',');
                 var actualizaraAsignado = _connection.OrionContext.sp_ActualizarInstalacion_Tecnico(fiIDSolicitudInstalacion, 2, 0, "_");
                 var InformacionPaquete = _connection.OrionContext.sp_InformacionInstalacion_Tecnico(fiIDSolicitudInstalacion).FirstOrDefault();
-                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico) > 0;
+                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
                 string informacion = $"Servicio a instalar: {InformacionPaquete.fcArticulosdelContrato} ";
                 var InformacionTecnico = _connection.OrionContext.sp_InformacionTecnico(fiIDTecnico).FirstOrDefault();
                 var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
@@ -587,14 +610,14 @@ namespace OrionCoreCableColor.Controllers
         }
 
         [ValidateInput(false)]
-        public async Task<ActionResult> AsignarSolicitudContratistaSinQR(int fiIDSolicitudInstalacion, int fiIDTecnico, string cliente, string ubicacion)
+        public async Task<ActionResult> AsignarSolicitudContratistaSinQR(int fiIDSolicitudInstalacion, int fiIDTecnico, string cliente, string ubicacion, int fiidAgencia = 0)
         {
             try
             {
                 // ubicacion = ubicacion.Replace('A', ',');
                 var actualizaraAsignado = _connection.OrionContext.sp_ActualizarInstalacion_Tecnico(fiIDSolicitudInstalacion, 2, 0, "_");
                 var InformacionPaquete = _connection.OrionContext.sp_InformacionInstalacion_Tecnico(fiIDSolicitudInstalacion).FirstOrDefault();
-                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico) > 0;
+                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
                 string informacion = $"Servicio a instalar: {InformacionPaquete.fcArticulosdelContrato} ";
                 var InformacionTecnico = _connection.OrionContext.sp_InformacionTecnico(fiIDTecnico).FirstOrDefault();
                 var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();

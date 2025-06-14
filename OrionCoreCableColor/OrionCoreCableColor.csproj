@@ -3654,6 +3654,7 @@
     <Content Include="Views\Reportes\FirmaAcuerdoDistribuidor.cshtml" />
     <Content Include="Views\PrecalificaCliente\DetalleDistribuidor.cshtml" />
     <Content Include="Views\Soporte\BandejaRespuestaApiCpheus.cshtml" />
+    <Content Include="Views\Contratista\ShowAsignacionTecnico.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

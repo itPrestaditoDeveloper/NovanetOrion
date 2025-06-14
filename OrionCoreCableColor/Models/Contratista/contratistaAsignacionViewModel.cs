@@ -9,7 +9,7 @@ namespace OrionCoreCableColor.Models.Contratista
     {
         public int fiIDSolicitudInstalacion { get; set; }
         public int fiIDTecnico { get; set; }
-        public int MyProperty { get; set; }
+        public int fiIDContratista { get; set; }
         public string cliente  { get; set; }
         public string ubicacion { get; set; }
     }

@@ -13,22 +13,51 @@
     <form id="MyFormModal">
 
         <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
-            
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="control-label">Seleccione Tecnico</label>
-                        <div class="input-group mar-btm">
-                            <div class="input-group-prepend">
-                                @*<span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>*@
-                            </div>
-                            @Html.DropDownListFor(model => model.fiIDTecnico, new SelectList(ViewBag.ListadoTecnico, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })
 
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="control-label">Agente</label>
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                            @*<span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>*@
                         </div>
-                        @Html.ValidationMessageFor(model => model.fiIDTecnico, "", new { @class = "text-danger" })
+
+
+
+                        @*Html.DropDownListFor(model => model.fiIDContratista, new SelectList(ViewBag.ListadoAgente, "Value", "Text"), new { @class = "form-control select2", @style = "width:100%;" })*@
+                        
+                        <select id="fiIDContratista" name="fiIDContratista" class="form-control select2" style="width:100%;">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            @foreach (var item in ViewBag.ListadoAgente)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+
                     </div>
+                    @*Html.ValidationMessageFor(model => model.fiIDTecnico, "", new { @class = "text-danger" })*@
                 </div>
-         
-            
+            </div>
+
+
+            <div class="col-sm-12" id="fptecnico">
+                <div class="form-group">
+                    <label class="control-label">Tecnico</label>
+                    <div class="input-group mar-btm" >
+                        <div class="input-group-prepend">
+                            @*<span class="input-group-text"><i class="fal fa-user fa-fw"></i></span>*@
+                        </div>
+
+                        <select id="fiIDTecnico" class="form-select form-control">
+                        </select>
+
+                        @*Html.DropDownListFor(model => model.fiIDTecnico, new SelectList(ViewBag.ListadoTecnico, "Value", "Text"), "", new { @class = "form-control", @style = "width:100%;" })*@
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.fiIDTecnico, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
 
 
 
@@ -62,15 +91,67 @@
         return result;
     }*@
 
+
+    $(`#fiIDContratista`).on(`change`,function(){
+        
+        //cambiarlo despues a mas dinamico :,v Edgardo 12/06/2025
+        console.log($(this).val());
+        if ($(this).val() != 2) {
+            
+            document.getElementById("fptecnico").style.display = `block`;
+            $.ajax({
+                url: "@Url.Action("ListadoTecnicosPorAgencia", "LlenarCampos")",
+                type: "GET",
+                data: { fiEmpreza: $(this).val() },
+                success: function (respuesta) {
+
+                    var selectTecnico = $("#fiIDTecnico");
+
+                    selectTecnico.empty();
+                    selectTecnico.append($('<option>', {
+                        value: 0,
+                        text: 'Seleccione un Tecnico'
+                    }));
+
+                    $.each(respuesta, function (index, item) {
+                        selectTecnico.append($('<option>', {
+                            value: item.Value,
+                            text: item.Text
+                        }));
+                    });
+
+                    $("#fiIDTecnico").select2({ dropdownParent: $("#MyModalContent") }).val(null).trigger("change");
+                },
+                error: function (respuesta) {
+                    console.log(respuesta);
+                }
+            });
+        } else {
+            
+            document.getElementById("fptecnico").style.display = `none`;
+        }
+
+    });
+
+
     $("#btnConfirmarEnvio").click(function () {
         debugger;
         let fiIDSolicitudInstalacion = '@Model.fiIDSolicitudInstalacion';
-        let fiIDTecnico=$("#fiIDTecnico").val()
+        let fiIDTecnico = $(`#fptecnico`).is(`:visible`) ? $("#fiIDTecnico").val() : 0;
+        let fiIdAgente = $("#fiIDContratista").val();
+        console.log(fiIDTecnico);
+        console.log(fiIdAgente);
        // var token = generarRandom(7);
         $.ajax({
                 url: "@Url.Action("AsignarSolicitudContratista", "Contratista")",
             type: "POST",
-            data: { fiIDSolicitudInstalacion: fiIDSolicitudInstalacion, fiIDTecnico: fiIDTecnico, cliente: '@Model.cliente', ubicacion: '@Model.ubicacion' },
+            data: {
+                fiIDSolicitudInstalacion: fiIDSolicitudInstalacion,
+                fiIDTecnico: fiIDTecnico,
+                cliente: '@Model.cliente',
+                ubicacion: '@Model.ubicacion',
+                fiidAgencia: fiIdAgente
+            },
             success: function (resp) {
                 if (resp.Estado) {
 

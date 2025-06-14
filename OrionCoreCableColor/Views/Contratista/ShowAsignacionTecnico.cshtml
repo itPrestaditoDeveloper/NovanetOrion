@@ -1,0 +1,93 @@
+﻿
+@model OrionCoreCableColor.Models.Contratista.contratistaAsignacionViewModel
+
+<div class="modal-header bg-primary-600 bg-primary-gradient">
+    <h2 class="modal-title text-white">Asignar Tecnico a Instalación @Model.fiIDSolicitudInstalacion</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true"><i class="fal fa-times"></i></span>
+    </button>
+</div>
+
+<!--Modal body-->
+<div class="modal-body">
+    <form id="MyFormModal">
+
+        <div class="panel-container" style="padding-top:12px; padding-bottom:15px;">
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="control-label">Agente</label>
+                    <div class="input-group mar-btm">
+                        <div class="input-group-prepend">
+                        </div>
+
+                        <select id="fiIDTecnico" name="fiIDTecnico" class="form-control select2" style="width:100%;">
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            @foreach (var item in ViewBag.ListadoTecnico)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="modal-footer">
+            <div class="clearfix" style="width:100%;">
+                <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
+                <button type="button" id="btnConfirmarEnvio" class="btn btn-link btn-lg waves-effect waves-themed float-right text-success"><i class="text-lg ion-checkmark-round"></i></button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<script>
+
+    $("#btnConfirmarEnvio").click(function () {
+        debugger;
+        let fiIDSolicitudInstalacion = '@Model.fiIDSolicitudInstalacion';
+        let fiIDTecnico = $("#fiIDTecnico").val(); //$(`#fptecnico`).is(`:visible`) ? $("#fiIDTecnico").val() : 0;
+        let fiIdAgente = 0;//$("#fiIDContratista").val();
+        console.log(fiIDTecnico);
+        console.log(fiIdAgente);
+       // var token = generarRandom(7);
+        $.ajax({
+                url: "@Url.Action("AsignarSolicitudContratista", "Contratista")",
+            type: "POST",
+            data: {
+                fiIDSolicitudInstalacion: fiIDSolicitudInstalacion,
+                fiIDTecnico: fiIDTecnico,
+                cliente: '@Model.cliente',
+                ubicacion: '@Model.ubicacion',
+                fiidAgencia: fiIdAgente
+            },
+            success: function (resp) {
+                if (resp.Estado) {
+
+                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    CerrarModal();
+                } else {
+                    ToastrError("Error", resp.Mensaje);
+                }
+            },
+            error: function (data) {
+                ToastrError("Error", "Error de Red");
+            },
+        });
+
+    });
+
+
+</script>
+
+
+
+
+
+

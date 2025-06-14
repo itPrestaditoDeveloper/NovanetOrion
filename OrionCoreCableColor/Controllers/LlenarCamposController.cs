@@ -112,6 +112,25 @@ namespace OrionCoreCableColor.Controllers
             }
         }
 
+        public JsonResult ListadoTecnicosPorAgencia(int fiEmpreza)
+        {
+            try
+            {
+                using (var connection = new ORIONDBEntities())
+                {
+                    var Usuario = GetUser();
+                    var listado = connection.sp_TecnicosPorContratista_GetByIdContratista(fiEmpreza).ToList().Select(x => new SelectListItem { Value = x.fiIDUsuarioTecnico.ToString(), Text = x.fcTecnico }).ToList();
+
+                    return EnviarListaJson(listado);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
 
     }
 }
