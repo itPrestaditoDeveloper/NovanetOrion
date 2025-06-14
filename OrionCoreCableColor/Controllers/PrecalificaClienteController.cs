@@ -661,15 +661,28 @@ namespace OrionCoreCableColor.Controllers
             int fiIDSolicitudDireccion = 0
         )
         {
+            var conetion = new ORIONDBEntities();
+            var consultarBandejaReporte = conetion.sp_ReporteClientes_SinContestar().FirstOrDefault(x => x.fcIdentidad == model.fcIdentidad);
 
-            ViewBag.ValorPlazo = ValorPlazo;
-            ViewBag.condicionMes = condicionMes;
-            ViewBag.ValorCondicion = ValorCondicion;
-            ViewBag.fcPlazo = fcPlazo;
-            ViewBag.fcPaquete = fcPaquete;
-            ViewBag.fiIDSolicitudDireccion = fiIDSolicitudDireccion;
+            if(consultarBandejaReporte==null)
+            {
+                ViewBag.ValorPlazo = ValorPlazo;
+                ViewBag.condicionMes = condicionMes;
+                ViewBag.ValorCondicion = ValorCondicion;
+                ViewBag.fcPlazo = fcPlazo;
+                ViewBag.fcPaquete = fcPaquete;
+                ViewBag.fiIDSolicitudDireccion = fiIDSolicitudDireccion;
 
-            return PartialView(model);
+                return PartialView(model);
+            }
+            else
+            {
+                return EnviarResultado( resultado: false,Titulo: "Error al procesar la solicitud", Mensaje: $"Este cliente ya ha sido consultado por primera vez por el Asesor {consultarBandejaReporte.fcAsesor.ToUpper()} " 
+                    + $"el {consultarBandejaReporte.fdFechaPrimerConsulta:dd/MM/yyyy HH:mm}");
+
+            }
+
+
         }
         [HttpGet]
         public ActionResult ViewVerBuro(string IDIDentidad)

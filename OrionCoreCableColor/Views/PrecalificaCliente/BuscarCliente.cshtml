@@ -517,7 +517,7 @@
         }*@
 
         function ProcesarSolicitud() {
-
+            debugger
 			var telefono = $("#txtNumeroCelularCliente").val();
 			var selectdirec = $("#selectdireccionescli").val();
 			var solicitud = $("#selectdirec").val();
@@ -588,7 +588,19 @@
                    fiIDSolicitudDireccion: $("#selectdirec").val()
                },
                success: function (datas) {
-                   ShowModal(datas);
+                   ///ShowModal(datas);
+                   try {
+                       if (typeof datas === "object" && datas.Estado !== undefined) {
+                           if (!datas.Estado) {
+                               AlertaErrorMensaje(datas.Mensaje);
+                           }
+                       } else {
+                           ShowModal(datas);
+                       }
+                   } catch (e) {
+                       console.error("Error interpretando la respuesta:", e);
+                       AlertaErrorMensaje("Error al interpretar la respuesta del servidor.");
+                   }
                 },
                error: function (datae) {
                    console.log(datae)
@@ -598,7 +610,8 @@
             });
 
         }
-        function AgregarSolicitud(){
+        function AgregarSolicitud() {
+            debugger
             VerModalScrollConObjetoDeParametro({},"@Url.Action("ViewDataProducto", "PrecalificaCliente")");
         }
         function AgregarPaquete(){
@@ -607,7 +620,7 @@
         }
 
         function VerBuro() {
-
+            debugger
             var IDIDentidad = $("#txtIDentidadCliente").val();
             $.ajax({
                 url: "@Url.Action("ViewVerBuro", "PrecalificaCliente")",
