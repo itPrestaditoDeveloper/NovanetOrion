@@ -12,15 +12,11 @@ namespace OrionCoreCableColor.App_Helper
         public static string MensajesDigitales(string pcTelefonoDestino, string pcMensaje, string pcURLAdjunto = "")
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://srv2.rob.chat/REST_API/RobChat/EnviarTexto");
-            request.Headers.Add("comercioId", "");
-            request.Headers.Add("token", "");
-            request.Headers.Add("key", "");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.rob.chat/v1/mensaje/enviar");
+            request.Headers.Add("apiKey", "NGE3Mjk1YjExMjk1NTQ0ZWMyZTE2NzA5NGJkNmE2MDUuMTUuc3J2Mi42ODRjMzUyMDcwYjcx");
 
             var content = new MultipartFormDataContent();
-            content.Add(new StringContent("15"), "comercioId");
-            content.Add(new StringContent("RC15"), "token");
-            content.Add(new StringContent("8cbea7517da189fdcd89ff68dac8e67c"), "key");
+
             content.Add(new StringContent("504" + pcTelefonoDestino), "para");
             content.Add(new StringContent(pcMensaje), "mensaje");
             content.Add(new StringContent(pcURLAdjunto), "adjunto");
@@ -34,15 +30,11 @@ namespace OrionCoreCableColor.App_Helper
         public async static Task<string> MensajeWhatsapp(string pcTelefonoDestino, string pcMensaje, string pcURLAdjunto = "")
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://srv2.rob.chat/REST_API/RobChat/EnviarTexto");
-            request.Headers.Add("comercioId", "");
-            request.Headers.Add("token", "");
-            request.Headers.Add("key", "");
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.rob.chat/v1/mensaje/enviar");
+            request.Headers.Add("apiKey", "NGE3Mjk1YjExMjk1NTQ0ZWMyZTE2NzA5NGJkNmE2MDUuMTUuc3J2Mi42ODRjMzUyMDcwYjcx");
+
 
             var content = new MultipartFormDataContent();
-            content.Add(new StringContent("15"), "comercioId");
-            content.Add(new StringContent("RC15"), "token");
-            content.Add(new StringContent("8cbea7517da189fdcd89ff68dac8e67c"), "key");
             content.Add(new StringContent("504" + pcTelefonoDestino), "para");
             content.Add(new StringContent(pcMensaje), "mensaje");
             content.Add(new StringContent(pcURLAdjunto), "adjunto");
