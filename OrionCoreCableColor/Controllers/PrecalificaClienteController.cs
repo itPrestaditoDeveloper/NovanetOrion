@@ -1508,7 +1508,7 @@ namespace OrionCoreCableColor.Controllers
         }
 
         [HttpGet]
-        public ActionResult ModalGenerarOrdenTrabajoContratista(string Nombre, int IDSolicitud, int idCliente)
+        public ActionResult ModalGenerarOrdenTrabajoContratista(string Nombre, int IDSolicitud, int idCliente , int idGestion)
         {
             bool permiteCrearOrden;
             string mensajeValidacion;
@@ -1571,6 +1571,15 @@ namespace OrionCoreCableColor.Controllers
                         reader.NextResult();
                         var List2 = db.ObjectContext.Translate<SolicitudesViewModel>(reader).ToList();
                         ViewBag.Listado2 = List2.Select(z => new SelectListItem { Value = Convert.ToString(z.fiIDContratista), Text = z.fcNombreEmpresa }).ToList();
+                    }
+
+                    command.CommandText = $"EXEC sp_OrionSolicitud_LlenarListaGestion_byId {1}, {idGestion}";
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var db = ((IObjectContextAdapter)new ORIONDBEntities());
+                        var Lista = db.ObjectContext.Translate<SolicitudesViewModel>(reader).ToList();
+                        ViewBag.ListadoGestion = Lista.Select(z => new SelectListItem { Value = Convert.ToString(z.fiIDGestion), Text = z.fcGestion }).ToList();
+
                     }
                 }
 
@@ -1756,7 +1765,7 @@ namespace OrionCoreCableColor.Controllers
             }
         }
         [HttpPost]
-        public async Task<JsonResult> EnviarSolicitudTrabajoContratista(SolicitudesViewModel model, string Comentario, int idAgencia, int idAgenciaContratista)
+        public async Task<JsonResult> EnviarSolicitudTrabajoContratista(SolicitudesViewModel model, string Comentario, int idAgencia, int idAgenciaContratista , int idGestion)
         {
             using (var context = new ORIONDBEntities())
             {
@@ -1770,7 +1779,7 @@ namespace OrionCoreCableColor.Controllers
                         //var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, "", "",2,"", null);
 
                         var datos = context.sp_OrionContratista_DetalleBySolicitud(GetIdUser(), model.IDSolicitud, 0, 0).FirstOrDefault();
-                        var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, datos.fcCodigoCliente, datos.fcNumeroOrdenCfeus, 2, "", null);
+                        var result = context.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), model.IdCliente, model.IDSolicitud, idAgencia, idAgenciaContratista, Comentario, datos.fcCodigoCliente, datos.fcNumeroOrdenCfeus, 2, "", null, idGestion);
                         var datosCliente = context.sp_OrionContratista_DetalleBySolicitud(GetIdUser(), model.IDSolicitud, 0, 0).FirstOrDefault();
                         //var Correo = "aebautista63@gmail.com";
                         var modelCorreo = new SendEmailViewModel();

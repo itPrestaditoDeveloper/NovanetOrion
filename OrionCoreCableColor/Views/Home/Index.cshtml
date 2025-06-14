@@ -755,7 +755,7 @@
                     success: function (respuesta) {
                         //console.log(respuesta)
                         var resultados = respuesta.reduce(function (acumulador, solicitud) {
-                            if (solicitud.fcDescripcion == "Instalado" || solicitud.fcDescripcion == "Validado soporte") {
+                            if (solicitud.fcDescripcion == "Instalado" || solicitud.fcDescripcion == "Validado soporte" || solicitud.fcDescripcion == "Pend Articulo") {
                                 console.log(`entro aqui`);
                                 if (solicitud.fbArticulosExtra) {
                                     acumulador.articulosExtra++;

@@ -519,11 +519,11 @@
         }
 
         function ModalGenerarOrdenTrabajo(Nombre, IDSolicitud, idCliente) {
-
+            var idGestion = 3;
             $.ajax({
                 url: "@Url.Action("ModalGenerarOrdenTrabajoContratista", "PrecalificaCliente")",
                 method: "get",
-                data: { Nombre: Nombre, IDSolicitud: IDSolicitud, idCliente: idCliente },
+                data: { Nombre: Nombre, IDSolicitud: IDSolicitud, idCliente: idCliente, idGestion: idGestion },
                 success: function (resp) {
                     if (resp && typeof resp.exito !== 'undefined') {
                         if (!resp.exito) {

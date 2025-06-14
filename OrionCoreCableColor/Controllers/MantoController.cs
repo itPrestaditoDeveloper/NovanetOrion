@@ -732,7 +732,7 @@ namespace OrionCoreCableColor.Controllers
                 if(solicitudInstalacion.Count() == 0)
                 {
                     var cliente = contexto.sp_OrionSolicitud_Detalle_ClienteListar(1, IDSolicitud).FirstOrDefault();
-                    contexto.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), idEquifaxCliente, IDSolicitud, 1, 1, "", "", "", 1,"",null);
+                    contexto.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(GetIdUser(), idEquifaxCliente, IDSolicitud, 1, 1, "", "", "", 1,"",null,0);
                 }
 
                 var model = contexto.sp_Contratista_SolicitudInstalacion_ListarProductosInstalados(IDSolicitud).Select((x, i) => new DetalleInstalacionViewModel
