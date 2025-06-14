@@ -1395,7 +1395,7 @@ function graficaCancelaciones() {
         type: "GET",
         success: function (respuesta) {
             var resultados = respuesta.reduce(function (acumulador, solicitud) {
-                if (solicitud.fcDescripcion == "Instalado" || solicitud.fcDescripcion == "Validado soporte") {
+				if (solicitud.fcDescripcion == "Instalado" || solicitud.fcDescripcion == "Validado soporte" || solicitud.fcDescripcion == "Pend Articulo") {
                     if (solicitud.fbArticulosExtra) {
                         acumulador.articulosExtra++;
                     } else {
