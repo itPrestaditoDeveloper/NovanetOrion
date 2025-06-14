@@ -35,132 +35,162 @@
                 <button type="button" id="btnExportarDocumentoMovil" class="btn btn-primary js-btn-next">Exportar</button>
             </div>
         </div>
-        <div class="row" id="VistaGeneral">
-            <div class="col-12" id="grafica1">
-                <div id="panel-1" class="panel">
-                    <div class="panel-hdr">
-                        <h2>Ventas <span class="fw-300"><i>Novanet</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                Proyección de Ventas del Mes: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionVentaMes"></span>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                Ventas del mes: <span class="fw-300" style="font-size: 19px !important" id="txtVentaMes"></span>
-                            </div>
-                            <div id="chartVenta" style="width:100%; height:auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12" id="grafica2">
-                <div id="panel-1" class="panel">
-                    <div class="panel-hdr">
-                        <h2>Arpu <span class="fw-300"><i>Novanet</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                Proyección Arpu del Mes: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionArpuMes"></span>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                Proyección Arpu General: <span class="fw-300" style="font-size: 15px !important" id="txtProyeccionArpu"></span>
-                            </div>
-                            <div id="chartArpu" style="width:100%; height:auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12" id="grafica3">
-                <div id="panel-1" class="panel">
-                    <div class="panel-hdr">
-                        <h2>Mora <span class="fw-300"><i>Cliente</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                Clientes en mora al cierre: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionMoraMes"></span>
-                            </div>
-                            <div id="chartMoraCliente" style="width:100%; height:auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12" id="grafica4">
-                <div id="panel-8" class="panel">
-                    <div class="panel-hdr">
-                        <h2>Clientes <span class="fw-300"><i>Activos</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                <div class="row">
-                                    <div class="col-3">Proyección del Mes:</div>
-                                    <div class="col-3" id="txtProyeccionMes"></div>
-                                    <div class="col-3">Clientes:</div>
-                                    <div class="col-3" id="txtClientesTotales"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-3">Proyección total:</div>
-                                    <div class="col-3" id="txtProyeccionTotal"></div>
-                                    <div class="col-3">Clientes Netos:</div>
-                                    <div class="col-3" id="txtClientesNetos"></div>
-                                </div>
-                            </div>
-                            <div id="GraficaClientesActivos" style="width:100%; height:auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12" id="grafica5">
-                <div id="panel-3" class="panel">
-                    <div class="panel-hdr">
-                        <h2>Facturación <span class="fw-300"><i>Novanet</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div id="stackedColumnChart" style="width: 100%; height: auto;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+		<div class="row" id="VistaGeneral">
+			<div class="col-12" id="grafica1">
+				<div id="panel-1" class="panel">
+					<div class="panel-hdr">
+						<h2>Ventas <span class="fw-300"><i>Novanet</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								Proyección de Ventas del Mes: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionVentaMes"></span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								Ventas del mes: <span class="fw-300" style="font-size: 19px !important" id="txtVentaMes"></span>
+							</div>
+							<div id="chartVenta" style="width:100%; height:auto;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12" id="grafica2">
+				<div id="panel-1" class="panel">
+					<div class="panel-hdr">
+						<h2>Arpu <span class="fw-300"><i>Novanet</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								Proyección Arpu del Mes: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionArpuMes"></span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								Proyección Arpu General: <span class="fw-300" style="font-size: 15px !important" id="txtProyeccionArpu"></span>
+							</div>
+							<div id="chartArpu" style="width:100%; height:auto;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12" id="grafica3">
+				<div id="panel-1" class="panel">
+					<div class="panel-hdr">
+						<h2>Mora <span class="fw-300"><i>Cliente</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								Clientes en mora al cierre: <span class="fw-300" style="font-size: 19px !important" id="txtProyeccionMoraMes"></span>
+							</div>
+							<div id="chartMoraCliente" style="width:100%; height:auto;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12" id="grafica4">
+				<div id="panel-8" class="panel">
+					<div class="panel-hdr">
+						<h2>Clientes <span class="fw-300"><i>Activos</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								<div class="row">
+									<div class="col-3">Proyección del Mes:</div>
+									<div class="col-3" id="txtProyeccionMes"></div>
+									<div class="col-3">Clientes:</div>
+									<div class="col-3" id="txtClientesTotales"></div>
+								</div>
+								<div class="row">
+									<div class="col-3">Proyección total:</div>
+									<div class="col-3" id="txtProyeccionTotal"></div>
+									<div class="col-3">Clientes Netos:</div>
+									<div class="col-3" id="txtClientesNetos"></div>
+								</div>
+							</div>
+							<div>
+								<label for="filtroMeses">Mostrar últimos: </label>
+								<select id="filtroMeses" class="form-control" onchange="graficaclientesactivos()">
+									<option value="3">3 meses</option>
+									<option value="6" selected>6 meses</option>
+									<option value="12">12 meses</option>
+								</select>
+							</div>
+							<div id="GraficaClientesActivos" style="width:100%; height:auto;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12" id="grafica5">
+				<div id="panel-3" class="panel">
+					<div class="panel-hdr">
+						<h2>Facturación <span class="fw-300"><i>Novanet</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div id="stackedColumnChart" style="width: 100%; height: auto;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            <div class="col-12" id="grafica6">
-                <div id="panel-3" class="panel">
-                    <div class="panel-hdr">
-                        <h2>Comparativo <span class="fw-300"><i>Paquete-Servicio</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="row ">
-                                <div id="countextrachart" class="col-12 col-md-4 col-sm-12 mx-auto text-center" style="width: 100%; height: auto;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<div class="col-12" id="grafica6">
+				<div id="panel-3" class="panel">
+					<div class="panel-hdr">
+						<h2>Comparativo <span class="fw-300"><i>Paquete-Servicio Mensual</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div>
+								<label for="filtroMeses2">Mostrar últimos: </label>
+								<select id="filtroMeses2" class="form-control" onchange="graficaComparativaPaquetes()">
+									<option value="3">3 meses</option>
+									<option value="6" selected>6 meses</option>
+									<option value="12">12 meses</option>
+								</select>
+							</div>
+							<div id="GraficaComparativaPaquetes" style="width: 100%; height: 600px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            <div class="col-12 col-md-12" id="grafica7">
-                <div id="panel-3" class="panel">
-                    <div class="panel-hdr">
-                        <h2>customer <span class="fw-300"><i>churn</i></span></h2>
-                    </div>
-                    <div class="panel-container show">
-                        <div class="panel-content">
-                            <div class="panel-tag">
-                                <div class="row">
-                                    <div class="col-3">Can. ultimos  30 dias:</div>
-                                    <div class="col-3" id="txtCancelacionesMes" style="font-size: 15px !important"></div>
-                                    <div class="col-3">% Churn ultimo 30 dias:</div>
-                                    <div class="col-3" id="txtChurmMes" style="font-size: 15px !important"></div>
-                                </div>
+			<div class="col-12" id="grafica7">
+				<div id="panel-3" class="panel">
+					<div class="panel-hdr">
+						<h2>Comparativo <span class="fw-300"><i>Paquete-Servicio</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="row ">
+								<div id="countextrachart" class="col-12 col-md-4 col-sm-12 mx-auto text-center" style="width: 100%; height: auto;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-                            </div>
-                            <div id="graficaCancelaciones" style="width: 100%; height: 600px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+			<div class="col-12 col-md-12" id="grafica8">
+				<div id="panel-3" class="panel">
+					<div class="panel-hdr">
+						<h2>customer <span class="fw-300"><i>churn</i></span></h2>
+					</div>
+					<div class="panel-container show">
+						<div class="panel-content">
+							<div class="panel-tag">
+								<div class="row">
+									<div class="col-3">Can. ultimos  30 dias:</div>
+									<div class="col-3" id="txtCancelacionesMes" style="font-size: 15px !important"></div>
+									<div class="col-3">% Churn ultimo 30 dias:</div>
+									<div class="col-3" id="txtChurmMes" style="font-size: 15px !important"></div>
+								</div>
+
+							</div>
+							<div id="graficaCancelaciones" style="width: 100%; height: 600px;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
     </div>
 
 
@@ -181,405 +211,782 @@
     <script src="~/Content/js/statistics/jspdf.js"></script>
     <script src="~/Content/js/statistics/html2canvas.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            graficaclientesactivos();
-            grafVenta();
-            grafArpu();
-            grafMoraClientes();
-            grafFacturacion();
-            graficaClientesProducto();
-            graficaCancelaciones();
+	<script>
+		$(document).ready(function () {
+			graficaclientesactivos();
+			grafVenta();
+			grafArpu();
+			grafMoraClientes();
+			graficaComparativaPaquetes();
+			grafFacturacion();
+			graficaCancelaciones();
+			graficaClientesProducto();
+			graficaValorVidaUtil();
 
-        });
+			// Ajustar la altura de todos los paneles a la altura máxima
+			var heights = $(".panel-container").map(function () {
+				return $(this).height();
+			}).get();
+			var maxHeight = Math.max.apply(null, heights);
+			$(".panel-container").height(maxHeight);
+		});
 
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
           /* Venta */
         function grafVenta() {
-            $.ajax({
-                url: "@Url.Action("DashBoardInformativo", "Reportes")",
-                type: "POST",
-                success: function (respuesta) {
+        $.ajax({
+            url: "@Url.Action("DashBoardInformativo", "Reportes")",
+            type: "POST",
+            success: function (respuesta) {
 
-                    var datos = respuesta;
-                    console.log(datos);
-                    var mes = [];
-                    var valor = [];
-                    for (var item of datos.DataVentas) {
-                        mes.push(item.fcMes)
-                        valor.push(item.fiConteoVentas)
+                var datos = respuesta;
+                console.log(datos);
+                var mes = [];
+                var valor = [];
+                for (var item of datos.DataVentas) {
+                    mes.push(item.fcMes)
+                    valor.push(item.fiConteoVentas)
 
-                    }
-                    $("#txtProyeccionVentaMes").text(datos.fiProyeccionVentas);
-                    $("#txtVentaMes").text(datos.fiClientesNuevosMes);
-                    $("#txtProyeccionArpuMes").text(datos.fnValorARPUDelMes);
-                    $("#txtProyeccionArpu").text(datos.fnValorARPUGeneral);
-
-                    $("#txtProyeccionMes").text(datos.fiProyeccionVentas);
-                    $("#txtClientesTotales").text(datos.fiClientesActivos);
-                    $("#txtProyeccionTotal").text(datos.fiProyeccionVentasAcumulada);
-                    $("#txtClientesNetos").text(datos.fiClientesNetos);
-                    $("#txtCancelacionesMes").text(datos.fiCancelacion1Mes);
-                    $("#txtChurmMes").text(datos.fiChurnRate1Mes);
-
-                    var options = {
-                        series: [{
-                            name: 'Ventas',
-                            data: valor
-                        }],
-                        chart: {
-                            type: 'bar',
-                            height: 350,
-                            stacked: true,
-                            toolbar: {
-                                show: true
-                            },
-                            zoom: {
-                                enabled: true
-                            }
-                        },
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: '100%',
-                                    height: 350
-                                },
-                                legend: {
-
-                                    position: 'bottom',
-                                    onItemClick: {
-                                        toggleDataSeries: true
-                                    },
-                                }
-                            }
-                        }],
-                        plotOptions: {
-                            bar: {
-                                horizontal: false,
-                                borderRadius: 10,
-                                borderRadiusApplication: 'end',
-                                borderRadiusWhenStacked: 'last',
-
-                                dataLabels: {
-                                    total: {
-                                        enabled: true,
-                                        style: {
-                                            fontSize: '13px',
-                                            fontWeight: 900,
-
-                                        }
-                                    }
-                                }
-                            },
-                        },
-                        xaxis: {
-                            type: 'char',
-                            categories: mes
-                        },
-                        legend: {
-                            position: 'right',
-                            offsetY: 40
-                        },
-                        fill: {
-                            opacity: 1,
-                            colors: ["#faa61c"]
-                        }
-                    };
-                    var chart = new ApexCharts(document.querySelector("#chartVenta"), options);
-                    chart.render();
-
-                },
-                error: function (respuesta) {
-                    console.log(respuesta)
                 }
-            });
+                $("#txtProyeccionVentaMes").text(datos.fiProyeccionVentas);
+                $("#txtVentaMes").text(datos.fiClientesNuevosMes);
+                $("#txtProyeccionArpuMes").text(datos.fnValorARPUDelMes);
+                $("#txtProyeccionArpu").text(datos.fnValorARPUGeneral);
+
+                $("#txtProyeccionMes").text(datos.fiProyeccionVentas);
+                $("#txtClientesTotales").text(datos.fiClientesActivos);
+                $("#txtProyeccionTotal").text(datos.fiProyeccionVentasAcumulada);
+                $("#txtClientesNetos").text(datos.fiClientesNetos);
+                $("#txtCancelacionesMes").text(datos.fiCancelacion1Mes);
+                $("#txtChurmMes").text(datos.fiChurnRate1Mes );
+
+                grafVentaLlenado();
+            },
+            error: function (respuesta) {
+                console.log(respuesta)
+            }
+        });
 
 
         }
+
+         function grafVentaLlenado() {
+    $.ajax({
+        url: "@Url.Action("GraficaVentas", "Reportes")",
+        type: "POST",
+        success: function (respuesta) {
+            var datos = respuesta;
+
+            var meses = [
+                "enero", "febrero", "marzo", "abril", "mayo", "junio",
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+            ];
+            var valoresActual = new Array(12).fill(0);
+            var valoresAnterior = new Array(12).fill(0);
+            var tooltipsVariacion = new Array(12).fill({ actual: 0, anterior: 0, variacion: "N/A" });
+
+            var datosActual = datos.find(x => x.TipoAnio === 'Actual')?.Meses || [];
+            var datosAnterior = datos.find(x => x.TipoAnio === 'Anterior')?.Meses || [];
+
+            // Llenar datos del año actual
+            datosActual.forEach(actual => {
+                var index = meses.indexOf(actual.FcMes.toLowerCase());
+                if (index !== -1) {
+                    valoresActual[index] = actual.FiConteoMensual || 0;
+                    tooltipsVariacion[index] = { ...tooltipsVariacion[index], actual: actual.FiConteoMensual || 0 };
+                }
+            });
+
+            // Llenar datos del año anterior
+            datosAnterior.forEach(anterior => {
+                var index = meses.indexOf(anterior.FcMes.toLowerCase());
+                if (index !== -1) {
+                    valoresAnterior[index] = anterior.FiConteoMensual || 0;
+                    tooltipsVariacion[index] = { ...tooltipsVariacion[index], anterior: anterior.FiConteoMensual || 0 };
+                    var variacion = valoresAnterior[index] > 0
+                        ? (((valoresActual[index] - valoresAnterior[index]) / valoresAnterior[index]) * 100).toFixed(1)
+                        : "N/A";
+                    tooltipsVariacion[index].variacion = variacion;
+                }
+            });
+
+            // Crear gráfico
+            var options = {
+                series: [
+			        {
+				        name: '2024',
+				        data: valoresAnterior,
+				        type: 'area',
+				        color: 'rgba(128,128,128,0.2)',
+				        stroke: {
+					        width: 2,
+					        colors: ['#aaaaaa']
+				        },
+				        fill: {
+					        type: 'solid',
+					        colors: ['rgba(128,128,128,0.2)']
+				        }
+			        },
+			        {
+				        name: '2025',
+				        data: valoresActual,
+				        type: 'bar',
+				        color: '#faa61c',
+				        // Configuración específica para las etiquetas de las barras
+				        dataLabels: {
+					        enabled: true,
+					        offsetY: -5, // Ajusta la posición vertical
+					        formatter: function (val) {
+						        return val; // Muestra el valor numérico
+					        },
+					        style: {
+						        fontSize: '12px',
+						        fontWeight: 'bold',
+						        colors: ['#000'] // Color del texto
+					        }
+				        }
+			        }
+                ],
+                chart: {
+                    height: 400,
+                    toolbar: { show: true },
+                    zoom: { enabled: true }
+                },
+                tooltip: {
+                    custom: function ({ dataPointIndex }) {
+                        const info = tooltipsVariacion[dataPointIndex];
+                        return `<div style="padding: 5px;">
+                            <strong>${meses[dataPointIndex]}</strong><br>
+                            2025: ${info.actual}<br>
+                            2024: ${info.anterior}<br>
+                            Variación: ${info.variacion}%
+                        </div>`;
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 6,
+                        columnWidth: '50%'
+                    }
+                },
+		        dataLabels: {
+			        enabled: true // Configuración global desactivada
+		        },
+                xaxis: {
+                    categories: meses,
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        colors: '#000'
+                    }
+                },
+                fill: {
+                    opacity: 1
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chartVenta"), options);
+            chart.render();
+        },
+        error: function (respuesta) {
+            console.log(respuesta);
+        }
+    });
+}
 
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
         /* line Arpu */
         function grafArpu() {
+    $.ajax({
+        url: "@Url.Action("GraficaArpu", "Reportes")",
+        type: "POST",
+        success: function (respuesta) {
+            var datos = respuesta;
 
-           $.ajax({
-                url: "@Url.Action("DashBoardInformativo", "Reportes")",
-                type: "POST",
-                success: function (respuesta) {
+            var meses = [
+                "enero", "febrero", "marzo", "abril", "mayo", "junio",
+                "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+            ];
+            var valoresActual = new Array(12).fill(0);
+            var valoresAnterior = new Array(12).fill(0);
+            var tooltipsVariacion = new Array(12).fill({ actual: 0, anterior: 0, variacion: "N/A" });
 
-                    var datos = respuesta;
-                    var mes = [];
-                    var valor = [];
-                    for (var item of datos.DataArpusVentas) {
-                        mes.push(item.fcMes)
-                        valor.push(item.fnArpuMensual)
-                    }
+            // Obtener datos del año actual (2025) y anterior (2024)
+            var datosActual = datos.find(x => x.tipoAnio === 'Actual')?.meses || [];
+            var datosAnterior = datos.find(x => x.tipoAnio === 'Anterior')?.meses || [];
 
-                    var options = {
-                        series: [{
-                            name: 'Ventas',
-                            data: valor
-                        }],
-                        chart: {
-                            type: 'bar',
-                            height: 350,
-                            stacked: true,
-                            toolbar: {
-                                show: true
-                            },
-                            zoom: {
-                                enabled: true
-                            }
-                        },
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: '100%',
-                                    height: 350
-                                },
-                                legend: {
-
-                                    position: 'bottom',
-                                    onItemClick: {
-                                        toggleDataSeries: true
-                                    },
-                                }
-                            }
-                        }],
-                        plotOptions: {
-                            bar: {
-                                horizontal: false,
-                                borderRadius: 10,
-                                borderRadiusApplication: 'end',
-                                borderRadiusWhenStacked: 'last',
-
-                                dataLabels: {
-                                    total: {
-                                        enabled: true,
-                                        style: {
-                                            fontSize: '13px',
-                                            fontWeight: 900,
-
-                                        }
-                                    }
-                                }
-                            },
-                        },
-                        xaxis: {
-                            type: 'char',
-                            categories: mes
-                        },
-                        legend: {
-                            position: 'right',
-                            offsetY: 40
-                        },
-                        fill: {
-                            opacity: 1,
-                            colors: ["#faa61c"]
-                        }
-                    };
-                    var chart = new ApexCharts(document.querySelector("#chartArpu"), options);
-                    chart.render();
-
-                },
-                error: function (respuesta) {
-                    console.log(respuesta)
+            // Llenar datos del año actual (2025)
+            datosActual.forEach(actual => {
+                var index = meses.indexOf(actual.fcMes.toLowerCase());
+                if (index !== -1) {
+                    valoresActual[index] = actual.fnArpuMensual || 0;
+                    tooltipsVariacion[index] = { ...tooltipsVariacion[index], actual: actual.fnArpuMensual || 0 };
                 }
             });
 
+            // Llenar datos del año anterior (2024)
+            datosAnterior.forEach(anterior => {
+                var index = meses.indexOf(anterior.fcMes.toLowerCase());
+                if (index !== -1) {
+                    valoresAnterior[index] = anterior.fnArpuMensual || 0;
+                    tooltipsVariacion[index] = { ...tooltipsVariacion[index], anterior: anterior.fnArpuMensual || 0 };
+                    var variacion = valoresAnterior[index] > 0
+                        ? (((valoresActual[index] - valoresAnterior[index]) / valoresAnterior[index]) * 100).toFixed(1)
+                        : "N/A";
+                    tooltipsVariacion[index].variacion = variacion;
+                }
+            });
+
+            // Crear gráfico
+            var options = {
+                series: [
+                    {
+                        name: '2024',
+                        data: valoresAnterior,
+                        type: 'area',
+                        color: 'rgba(128,128,128,0.2)',
+                        stroke: {
+                            width: 2,
+                            colors: ['#aaaaaa']
+                        },
+                        fill: {
+                            type: 'solid',
+                            colors: ['rgba(128,128,128,0.2)']
+                        }
+                    },
+                    {
+                        name: '2025',
+                        data: valoresActual,
+                        type: 'bar',
+                        color: '#faa61c',
+                        dataLabels: {
+                            enabled: true,
+                            offsetY: -5,
+                            formatter: function (val) {
+                                return val;
+                            },
+                            style: {
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                colors: ['#000']
+                            }
+                        }
+                    }
+                ],
+                chart: {
+                    height: 400,
+                    toolbar: { show: true },
+                    zoom: { enabled: true }
+                },
+                tooltip: {
+                    custom: function ({ dataPointIndex }) {
+                        const info = tooltipsVariacion[dataPointIndex];
+                        return `<div style="padding: 5px;">
+                            <strong>${meses[dataPointIndex]}</strong><br>
+                            2025: ${info.actual}<br>
+                            2024: ${info.anterior}<br>
+                            Variación: ${info.variacion}%
+                        </div>`;
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 6,
+                        columnWidth: '50%'
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                xaxis: {
+                    categories: meses,
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        colors: '#000'
+                    }
+                },
+                fill: {
+                    opacity: 1
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chartArpu"), options);
+            chart.render();
+        },
+        error: function (respuesta) {
+            console.log(respuesta);
         }
+    });
+}
 
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
         function grafMoraClientes(){
-                        $.ajax({
-                url: "@Url.Action("DashBoardInformativo", "Reportes")",
-                type: "POST",
-                success: function (respuesta) {
+                $.ajax({
+        url: "@Url.Action("DashBoardInformativo", "Reportes")",
+        type: "POST",
+        success: function (respuesta) {
 
-                    var datos = respuesta;
-                    var mes = [];
-                    var valor = [];
-                    var PorcentajeMora = [];
-                    for (var item of datos.DataMora) {
-                        mes.push(item.fcMes)
-                        valor.push(item.fiClientesEnMora)
-                        PorcentajeMora.push(item.fnPorcentajedeMora)
-                    }
-                    $("#txtProyeccionMoraMes").text(PorcentajeMora[1]);
-                    var options = {
-                        series: [{
-                            name: 'Ventas',
-                            data: valor
-                        }],
-                        chart: {
-                            type: 'bar',
-                            height: 350,
-                            stacked: true,
-                            toolbar: {
-                                show: true
-                            },
-                            zoom: {
-                                enabled: true
-                            }
-                        },
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: '100%',
-                                    height: 350
-                                },
-                                legend: {
+            var datos = respuesta;
+            var mes = [];
+            var valor = [];
+            var PorcentajeMora = [];
+            for (var item of datos.DataMora) {
+                mes.push(item.fcMes)
+                valor.push(item.fiClientesEnMora)
+                PorcentajeMora.push(item.fnPorcentajedeMora)
+            }
+            $("#txtProyeccionMoraMes").text(PorcentajeMora[1]);
 
-                                    position: 'bottom',
-                                    onItemClick: {
-                                        toggleDataSeries: true
-                                    },
-                                }
-                            }
-                        }],
-                        plotOptions: {
-                            bar: {
-                                horizontal: false,
-                                borderRadius: 10,
-                                borderRadiusApplication: 'end',
-                                borderRadiusWhenStacked: 'last',
+            LlenargrafMoraClientes();
 
-                                dataLabels: {
-                                    total: {
+        },
+        error: function (respuesta) {
+            console.log(respuesta)
+        }
+    });
+        }
+ function LlenargrafMoraClientes() {
+    $.ajax({
+        url: "@Url.Action("GraficaMora", "Reportes")",
+        type: "POST",
+        success: function (respuesta) {
+            var datos = respuesta;
 
-                                        enabled: true,
-                                        style: {
-                                            fontSize: '13px',
-                                            fontWeight: 900,
+			var meses = [
+				"enero", "febrero", "marzo", "abril", "mayo", "junio",
+				"julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+			];
+			var valoresActual = new Array(12).fill(0);
+			var valoresAnterior = new Array(12).fill(0);
+			var tooltipsVariacion = new Array(12).fill({ actual: 0, anterior: 0, variacion: "N/A" });
 
-                                        }
-                                    }
-                                }
-                            },
-                        },
-                        xaxis: {
-                            type: 'char',
-                            categories: mes
-                        },
-                        legend: {
-                            position: 'right',
-                            offsetY: 40
+			// Obtener datos del año actual (2025) y anterior (2024)
+			var datosActual = datos.find(x => x.TipoAnio === 'Actual')?.Meses || [];
+			var datosAnterior = datos.find(x => x.TipoAnio === 'Anterior')?.Meses || [];
+
+			// Llenar datos del año actual (2025)
+			datosActual.forEach(actual => {
+				var index = meses.indexOf(actual.FcMes.toLowerCase());
+				if (index !== -1) {
+					valoresActual[index] = actual.FiClientesEnMora || 0;
+					tooltipsVariacion[index] = { ...tooltipsVariacion[index], actual: actual.FiClientesEnMora || 0 };
+				}
+			});
+
+			// Llenar datos del año anterior (2024) y calcular variación
+			datosAnterior.forEach(anterior => {
+				var index = meses.indexOf(anterior.FcMes.toLowerCase());
+				if (index !== -1) {
+					valoresAnterior[index] = anterior.FiClientesEnMora || 0;
+					tooltipsVariacion[index] = { ...tooltipsVariacion[index], anterior: anterior.FiClientesEnMora || 0 };
+					var variacion = valoresAnterior[index] > 0
+						? (((valoresActual[index] - valoresAnterior[index]) / valoresAnterior[index]) * 100).toFixed(1)
+						: "N/A";
+					tooltipsVariacion[index].variacion = variacion;
+				}
+			});
+
+            // Crear gráfico
+            var options = {
+                series: [
+                    {
+                        name: '2024',
+                        data: valoresAnterior,
+                        type: 'area',
+                        color: 'rgba(128,128,128,0.2)',
+                        stroke: {
+                            width: 2,
+                            colors: ['#aaaaaa']
                         },
                         fill: {
-                            opacity: 1,
-                            colors: ["#faa61c"]
+                            type: 'solid',
+                            colors: ['rgba(128,128,128,0.2)']
                         }
-                    };
-                    var chart = new ApexCharts(document.querySelector("#chartMoraCliente"), options);
-                    chart.render();
-
-
+                    },
+                    {
+                        name: '2025',
+                        data: valoresActual,
+                        type: 'bar',
+                        color: '#faa61c',
+                        dataLabels: {
+                            enabled: true,
+                            offsetY: -5,
+                            formatter: function (val) {
+                                return val;
+                            },
+                            style: {
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                colors: ['#000']
+                            }
+                        }
+                    }
+                ],
+                chart: {
+                    height: 400,
+                    toolbar: { show: true },
+                    zoom: { enabled: true }
                 },
-                error: function (respuesta) {
-                    console.log(respuesta)
+                tooltip: {
+                    custom: function ({ dataPointIndex }) {
+                        const info = tooltipsVariacion[dataPointIndex];
+                        return `<div style="padding: 5px;">
+                            <strong>${meses[dataPointIndex]}</strong><br>
+                            2025: ${info.actual}<br>
+                            2024: ${info.anterior}<br>
+                            Variación: ${info.variacion}%
+                        </div>`;
+                    }
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 6,
+                        columnWidth: '50%'
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                xaxis: {
+                    categories: meses,
+                    labels: {
+                        style: {
+                            fontSize: '12px'
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        colors: '#000'
+                    }
+                },
+                fill: {
+                    opacity: 1
                 }
-            });
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chartMoraCliente"), options);
+            chart.render();
+        },
+        error: function (respuesta) {
+            console.log(respuesta);
         }
+    });
+}
 
         /* Venta */
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-        var graficaclientesactivos = function () {
+        	$("#filtroMeses").val(12)
+    var graficaclientesactivos = function () {
+    var numMeses = parseInt($("#filtroMeses").val()) || 12;
 
-             $.ajax({
-                url: "@Url.Action("DashBoardInformativo", "Reportes")",
-                type: "POST",
-                success: function (respuesta) {
+    // Mostrar loader mientras se carga
+    $("#GraficaClientesActivos").html('<div class="text-center"><i class="fal fa-spinner fa-spin fa-3x"></i></div>');
 
-                    var datos = respuesta;
-                    var mes = [];
-                    var valor = [];
-                    var valorClientesCancelados = [];
-                    for (var item of datos.DataClientesActivos) {
-                        mes.push(item.fcMes)
-                        valor.push(item.fiConteoVentas)
-                        valorClientesCancelados.push(item.fiClientesCancelados)
-                    }
-                    var stackedColumnChartOptions = {
-                        series: [
-                            {
-                                name: 'Clientes Activos',
-                                data: valor
-                            },
-                            {
-                                name: 'Clientes Cancelados',
-                                data: valorClientesCancelados
-                            }],
-                        chart:
-                        {
-                            type: 'bar',
-                            height: 350,
-                            stacked: true,
-                            toolbar:
-                            {
-                                show: true
-                            },
-                            zoom:
-                            {
-                                enabled: true
-                            }
-                        },
-                        colors: ["#faa61c", "#6e6e6e"],
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: '100%',
-                                    height: 350
-                                },
-                                legend: {
+    $.ajax({
+        url: "@Url.Action("GraficaClientesActivos", "Reportes")",
+        type: "POST",
+        data: { piMeses: numMeses },
+        success: function (respuesta) {
+            // Verificar si hay datos válidos
+            if (!respuesta || !Array.isArray(respuesta) || respuesta.length === 0) {
+                $("#GraficaClientesActivos").html('<div class="alert alert-warning">No hay datos disponibles</div>');
+                return;
+            }
 
-                                    position: 'bottom',
-                                    onItemClick: {
-                                        toggleDataSeries: true
-                                    },
-                                }
-                            }
-                        }],
-                        plotOptions:
-                        {
-                            bar:
-                            {
-                                horizontal: false,
-                            },
-                        },
-                        xaxis:
-                        {
-                            type: 'char',
-                            categories: mes,
+            // Procesar datos
+            var mes = [], activos = [], cancelados = [];
 
-                        },
-                        legend:
-                        {
-                            position: 'right',
-                            offsetY: 40
-                        },
-                        fill:
-                        {
-                            opacity: 1
-                        }
-                    };
-                    var stackedColumnChart = new ApexCharts(document.querySelector("#GraficaClientesActivos"), stackedColumnChartOptions);
-                    stackedColumnChart.render();
-
-                },
-                error: function (respuesta) {
-                    console.log(respuesta)
-                }
+            respuesta.forEach(function(item) {
+                mes.push(`${item.fcMes} ${item.fiAno}`);
+                activos.push(item.fiConteoVentas);
+                cancelados.push(item.fiClientesCancelados);
             });
 
+            // Configuración optimizada de la gráfica
+            var options = {
+                series: [
+                    { name: 'Clientes Activos', data: activos },
+                    { name: 'Clientes Cancelados', data: cancelados }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 400,
+                    stacked: true,
+                    toolbar: { show: true },
+                    zoom: { enabled: true },
+                    animations: { enabled: true },
+                    id: 'clientesChart',
+                    events: {
+                        animationEnd: function() {
+                            // Acciones después de que termine la animación
+                        }
+                    }
+                },
+                colors: ["#faa61c", "#6e6e6e"],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        endingShape: 'rounded',
+                        columnWidth: '70%'
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: mes,
+                    labels: {
+                        style: { fontSize: '12px' },
+                        rotate: -45,
+                        hideOverlappingLabels: true,
+                        trim: true
+                    },
+                    axisTicks: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    title: { text: 'Cantidad de Clientes' },
+                    labels: {
+                        formatter: function(val) {
+                            return Math.floor(val);
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val) {
+                            return val + " clientes";
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'center',
+                    markers: {
+                        radius: 12
+                    }
+                },
+                responsive: [{
+                    breakpoint: 768,
+                    options: {
+                        chart: { height: 500 },
+                        legend: { position: 'bottom' }
+                    }
+                }]
+            };
+
+            // Destruir gráfica existente de forma segura
+            var chartElement = document.getElementById("GraficaClientesActivos");
+            if (window.clientesChart) {
+                try {
+                    window.clientesChart.destroy();
+                } catch(e) {
+                    console.log("Error al destruir gráfica previa:", e);
+                }
+            }
+
+            // Limpiar contenedor
+            $(chartElement).html('');
+
+            // Crear nueva instancia
+            window.clientesChart = new ApexCharts(chartElement, options);
+            window.clientesChart.render();
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la petición:", status, error);
+            $("#GraficaClientesActivos").html(
+                '<div class="alert alert-danger">Error al cargar los datos. Intente nuevamente.</div>'
+            );
+        },
+        complete: function() {
+            // Ocultar loader al finalizar
+            $(".fa-spinner").parent().hide();
         }
+    });
+};
+
+
+
+	$("#filtroMeses2").val(12)
+
+var graficaComparativaPaquetes = function () {
+    var numMeses = parseInt($("#filtroMeses2").val()) || 12;
+
+    // Mostrar loader mientras se carga
+    $("#GraficaComparativaPaquetes").html('<div class="text-center"><i class="fal fa-spinner fa-spin fa-3x"></i></div>');
+
+    $.ajax({
+        url: "@Url.Action("GraficaComparativaPaquetes", "Reportes")",
+        type: "POST",
+        data: { piMeses: numMeses },
+        success: function (respuesta) {
+            // Verificar si hay datos válidos
+            if (!respuesta || !Array.isArray(respuesta) || respuesta.length === 0) {
+                $("#GraficaComparativaPaquetes").html('<div class="alert alert-warning">No hay datos disponibles</div>');
+                return;
+            }
+
+            // Procesar datos
+            var mes = [];
+            var clientesConServicio = [];
+            var clientesConProducto = [];
+
+            respuesta.forEach(function (item) {
+                mes.push(`${item.fcMes} ${item.fiAno}`); // Ejemplo: "Junio 2024"
+                clientesConServicio.push(item.fiClientesConServicio);
+                clientesConProducto.push(item.fiClientesConProducto);
+            });
+
+            // Configuración optimizada de la gráfica
+            var options = {
+                series: [
+                    {
+                        name: 'Clientes con Servicio',
+                        data: clientesConServicio
+                    },
+                    {
+                        name: 'Clientes con Producto',
+                        data: clientesConProducto
+                    }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 400,
+                    stacked: true,
+                    toolbar: { show: true },
+                    zoom: { enabled: true },
+                    animations: { enabled: true },
+                    id: 'paquetesChart',
+                    events: {
+                        animationEnd: function () {
+                            // Acciones después de que termine la animación
+                        }
+                    }
+                },
+				colors: ["#faa61c", "#535085"], // Colores para las dos series
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        endingShape: 'rounded',
+                        columnWidth: '70%'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val > 0 ? val : ''; // Mostrar solo si el valor es mayor que 0
+                    }
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: mes,
+                    labels: {
+                        style: { fontSize: '12px' },
+                        rotate: -45,
+                        hideOverlappingLabels: true,
+                        trim: true
+                    },
+                    axisTicks: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    title: { text: 'Cantidad de Clientes' },
+                    labels: {
+                        formatter: function (val) {
+                            return Math.floor(val);
+                        }
+                    }
+                },
+                tooltip: {
+                    custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+                        const totalClientes = respuesta[dataPointIndex].fiTotalClientes;
+                        return `<div style="padding: 5px;">
+                                    <strong>${mes[dataPointIndex]}</strong><br>
+                                    Clientes con Servicio: ${series[0][dataPointIndex]}<br>
+                                    Clientes con Producto: ${series[1][dataPointIndex]}<br>
+                                    Total Clientes: ${totalClientes}
+                                </div>`;
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'center',
+                    markers: {
+                        radius: 12
+                    }
+                },
+                responsive: [{
+                    breakpoint: 768,
+                    options: {
+                        chart: { height: 500 },
+                        legend: { position: 'bottom' }
+                    }
+                }]
+            };
+
+            // Destruir gráfica existente de forma segura
+            var chartElement = document.getElementById("GraficaComparativaPaquetes");
+            if (window.paquetesChart) {
+                try {
+                    window.paquetesChart.destroy();
+                } catch (e) {
+                    console.log("Error al destruir gráfica previa:", e);
+                }
+            }
+
+            // Limpiar contenedor
+            $(chartElement).html('');
+
+            // Crear nueva instancia
+            window.paquetesChart = new ApexCharts(chartElement, options);
+            window.paquetesChart.render();
+        },
+        error: function (xhr, status, error) {
+            console.error("Error en la petición:", status, error);
+            $("#GraficaComparativaPaquetes").html(
+                '<div class="alert alert-danger">Error al cargar los datos. Intente nuevamente.</div>'
+            );
+        },
+        complete: function () {
+            // Ocultar loader al finalizar
+            $(".fa-spinner").parent().hide();
+        }
+    });
+};
 
 
         //------------------------------------------------------------------------------------------------------------------------------------------------
@@ -976,6 +1383,10 @@ function graficaCancelaciones() {
 
 
 
+	</script>
+
+
+<script>
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -983,7 +1394,7 @@ function graficaCancelaciones() {
         //------------------------------------------------------------------------------------------------------------------------------------------------
 
         $("#btnExportarDocumento").click(function () {
-            exportToPDF('Contrato_General_Novanet', ['grafica1', 'grafica2', 'grafica3', 'grafica4', 'grafica5', 'grafica6','grafica7']);
+			exportToPDF('Contrato_General_Novanet', ['grafica1', 'grafica2', 'grafica3', 'grafica4', 'grafica5', 'grafica6', 'grafica7', 'grafica8']);
         });
 
         async function exportToPDF(nombreDelArchivo, idsDivs) {
@@ -1038,7 +1449,7 @@ function graficaCancelaciones() {
 
 
         $("#btnExportarDocumentoMovil").click(function () {
-            exportToPDFMovil('Contrato_General_Novanet', ['grafica1', 'grafica2', 'grafica3', 'grafica4', 'grafica5', 'grafica6', 'grafica7']);
+			exportToPDFMovil('Contrato_General_Novanet', ['grafica1', 'grafica2', 'grafica3', 'grafica4', 'grafica5', 'grafica6', 'grafica7', 'grafica8']);
         });
 
         async function exportToPDFMovil(nombreDelArchivo, idsDivs) {
