@@ -1511,7 +1511,7 @@ namespace OrionCoreCableColor.App_Services.EmailService
         {
 
             var comandList = $"sp_OrionSolicitudes_InformacionDocumentacion {model.IDSolicitud}, 0, 1";
-            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
             Attachment fileAttachment = null;
 
             var contratoTemplate = new ContratoTemplateService();

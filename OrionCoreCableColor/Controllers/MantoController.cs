@@ -562,7 +562,7 @@ namespace OrionCoreCableColor.Controllers
         {
 
             var comandList = $"sp_OrionSolicitudes_InformacionDocumentacion {idSolicitud}, 0, 1";
-            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
 
             var nombrePagare = $"Pagare_Solicitud{idSolicitud}_Identidad{datosCliente.fcIdentidad}.pdf";
             UploadFileServer148Async(@"Solicitudes\Solicitud_" + idSolicitud, GenerarPagare(idSolicitud, nombrePagare));
@@ -951,7 +951,7 @@ namespace OrionCoreCableColor.Controllers
                 {
                     var datosClientebyContratista = context.sp_OrionContratista_DetalleBySolicitud(GetIdUser(), IDSolicitud,0,0).FirstOrDefault();
                     var comandList = $"sp_OrionSolicitudes_InformacionDocumentacion {IDSolicitud}, 0, 1";
-                    var datosClienteInformacionDocumentacion = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+                    var datosClienteInformacionDocumentacion = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
                     //var datosClienteInformacionDocumentacion = context.sp_OrionSolicitudes_InformacionDocumentacion(IDSolicitud, 0, GetIdUser()).FirstOrDefault();
                     var datosClienteDetalle = context.sp_OrionSolicitud_Detalle_ClienteListar(GetIdUser(), IDSolicitud).FirstOrDefault();
                     var _emailTemplateService = new EmailTemplateService();
