@@ -5,7 +5,7 @@ using System.Web;
 
 namespace OrionCoreCableColor.Models.Reportes
 {
-    public class sp_OrionSolicitudes_InformacionDocumentacion_Result
+    public class sp_OrionSolicitudes_InformacionDocumentacion_ResultV2
     {
         public string fcNombre { get; set; }
         public string fcIdentidad { get; set; }
@@ -79,6 +79,7 @@ namespace OrionCoreCableColor.Models.Reportes
         public string fcMesFirmaContratoPrestamo { get; set; }
         public string fcAnioFirmaContratoPrestamo { get; set; }
         public string fcFirmaCliente { get; set; }
+        public int fiTipoMoneda { get; set; }
 
     }
 }

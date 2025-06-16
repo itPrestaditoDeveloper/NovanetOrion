@@ -80,7 +80,7 @@ namespace OrionCoreCableColor.App_Services.ContratoService
             var ci = new CultureInfo("es-ES");
             
             var comandList = $"{Procedimiento} {idSolicitud}, {idCliente}, 1";
-            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
             //var datosCliente = _connection.OrionContext.sp_OrionSolicitudes_InformacionDocumentacion(idSolicitud, idCliente, 1);
             //var NumeroOrden = Convert.ToString(datosCliente.fiNoOrden);
             DictionaryList.Clear();
@@ -124,7 +124,7 @@ namespace OrionCoreCableColor.App_Services.ContratoService
             var ci = new CultureInfo("es-ES");
 
             var comandList = $"sp_OrionSolicitudes_InformacionDocumentacion {idSolicitud}, 0, 1";
-            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+            var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
 
             DictionaryList.Clear();
             DictionaryList.Add("fcIDPrestamo", datosCliente.fcIDPrestamo);
@@ -134,7 +134,7 @@ namespace OrionCoreCableColor.App_Services.ContratoService
             DictionaryList.Add("fcRazonSocial", "{BLACK" + datosCliente.fcRazonSocial + "}");
             //DictionaryList.Add("fnMontoFinalFinanciarLetras", "{BLACK" + NumerosALetras.ConvertirCantidadALetras(datosCliente.fnValorGarantia.ToString()) + " DOLARES DE ESTADOS UNIDOS DE NORTE AMERICA. (USD" + datosCliente.fnValorGarantia.ToString("n") +")}");
             //DictionaryList.Add("fnMontoFinalFinanciarLetras", "{BLACK" + NumerosALetras.ConvertirCantidadALetras(datosCliente.fnTotalValorContrato.ToString()) + " DOLARES DE ESTADOS UNIDOS DE NORTE AMERICA. (USD" + datosCliente.fnTotalValorContrato.ToString("n") + ")}");
-            DictionaryList.Add("fnMontoFinalFinanciarLetras", "{BLACK" + NumerosALetras.ConvertirCantidadALetras(datosCliente.fnTotalValorContrato.ToString()) + " LEMPIRAS. (L. " + datosCliente.fnTotalValorContrato.ToString("n") + ")}");
+            DictionaryList.Add("fnMontoFinalFinanciarLetras", "{BLACK" + NumerosALetras.ConvertirCantidadALetras(datosCliente.fnTotalValorContrato.ToString()) + $" {(datosCliente.fiTipoMoneda == 1 ? "Lempiras" : "Dolares")}  ({(datosCliente.fiTipoMoneda == 1 ? "L." : "$")} " + datosCliente.fnTotalValorContrato.ToString("n") + ")}");
             DictionaryList.Add("fcCiudadDomiciliada", datosCliente.fcCiudadDomiciliada);
             DictionaryList.Add("lblNumeroDia_FirmaPagare", datosCliente.fcNumeroDiaFirmaContratoPrestamo);
             DictionaryList.Add("lblMes_FirmaPagare", datosCliente.fcMesFirmaContratoPrestamo);

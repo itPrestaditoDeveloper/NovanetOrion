@@ -894,7 +894,7 @@ namespace OrionCoreCableColor.Controllers
                         log.WriteEntry(comandList, EventLogEntryType.Warning, 101, 1);
                     }
 
-                    var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+                    var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
 
 
 
@@ -950,7 +950,7 @@ namespace OrionCoreCableColor.Controllers
                         log.WriteEntry(comandList, EventLogEntryType.Warning, 101, 1);
                     }
 
-                    var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_Result>(comandList).FirstOrDefault();
+                    var datosCliente = _connection.LoadListDataWithDbContext<Models.Reportes.sp_OrionSolicitudes_InformacionDocumentacion_ResultV2>(comandList).FirstOrDefault();
 
 
 
