@@ -54,9 +54,11 @@
         let fiIDSolicitudInstalacion = '@Model.fiIDSolicitudInstalacion';
         let fiIDTecnico = $("#fiIDTecnico").val(); //$(`#fptecnico`).is(`:visible`) ? $("#fiIDTecnico").val() : 0;
         let fiIdAgente = 0;//$("#fiIDContratista").val();
-        console.log(fiIDTecnico);
-        console.log(fiIdAgente);
-       // var token = generarRandom(7);
+        //console.log(fiIDTecnico);
+        //console.log(fiIdAgente);
+        if (fiIDTecnico == null) fiIDTecnico = 0;
+
+       
         $.ajax({
                 url: "@Url.Action("AsignarSolicitudContratista", "Contratista")",
             type: "POST",
@@ -68,16 +70,16 @@
                 fiidAgencia: fiIdAgente
             },
             success: function (resp) {
-                if (resp.Estado) {
+                if (resp.fiCodeStatus == 200) {
 
-                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                    ToastrSuccess("Exito", resp.Mensaje);
                     CerrarModal();
                 } else {
-                    ToastrError("Error", resp.Mensaje);
+                    ToastrError("Error", resp.fcMessageStatus);
                 }
             },
             error: function (data) {
-                ToastrError("Error", "Error de Red");
+                ToastrError("Error", data.fcMessageStatus);
             },
         });
 

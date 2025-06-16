@@ -675,6 +675,9 @@
     <Compile Include="DbConnection\OrionDB\sp_Admin_ClienteBitacoraMantenimientos_Result.cs">
       <DependentUpon>OrionDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="DbConnection\OrionDB\sp_AsignarSolicitud_Contratista_Y_Tecnico_Result.cs">
+      <DependentUpon>OrionDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="DbConnection\OrionDB\sp_ASPNETUSER_ObtenerInformacionUsuario_Result.cs">
       <DependentUpon>OrionDB.tt</DependentUpon>
     </Compile>

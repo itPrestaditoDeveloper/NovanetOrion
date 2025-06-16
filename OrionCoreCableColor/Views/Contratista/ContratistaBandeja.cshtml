@@ -331,6 +331,11 @@
                         opciones += data.fcDescripcion == 'Pendiente' || data.fcDescripcion == 'Asignado' ? ` <a href="javascript:void(0)" onclick="ModalConfirmacion(${data.fiIDSolicitudInstalacion},${data.fiIDContratista},${cliente},${ubicacion})" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Tecnico</a>` : '';
 
 
+                        //opciones += `<a href="javascript:void(0)" onclick="ModalConfirmacion(${data.fiIDSolicitudInstalacion},${data.fiIDContratista},'${data.fcNombreCliente}','${data.fcubicacion}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Agencia/Tecnico</a>`;
+                        //if (data.fcNombreTecnicoAsignado == "Pendiente" && data.fcNombreEmpresa != null) {
+
+                        //    opciones += `<a href="javascript:void(0)" onclick="ModalAsignarTecnico(${data.fiIDSolicitudInstalacion},${data.fiIDContratista},'${data.fcNombreCliente}','${data.fcubicacion}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Tecnico</a>`;
+                        //}
 
                         //opciones += data.fcDescripcion == 'Validacion' ? `<a href="(Url.Action("ViewDetalleInstalacion","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}&idSolicitud=${data.fiIDSolicitud}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Ver Instalación</a>` : '';
                         //opciones += 10 != 11 ? `<a href="(Url.Action("ViewBitacora","Contratista"))?idSolicitudInstalacion=${data.fiIDSolicitudInstalacion}" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Bitacoras</a>` : '';
@@ -626,6 +631,7 @@
                 {
                     data: null,
                     render: function (data) {
+                        console.log(data);
                         let cliente = "'" + data.fcNombreCliente + "'";
                         let ubicacion = "'" + data.fcubicacion + "'";
                         debugger;
@@ -636,7 +642,7 @@
 
 
                         opciones += `<a href="javascript:void(0)" onclick="ModalConfirmacion(${data.fiIDSolicitudInstalacion},${data.fiIDContratista},'${data.fcNombreCliente}','${data.fcubicacion}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Agencia/Tecnico</a>`;
-                        if (data.fcNombreTecnicoAsignado == "Pendiente") {
+                        if (data.fcNombreTecnicoAsignado == "Pendiente" && data.fcNombreEmpresa != null) {
 
                             opciones += `<a href="javascript:void(0)" onclick="ModalAsignarTecnico(${data.fiIDSolicitudInstalacion},${data.fiIDContratista},'${data.fcNombreCliente}','${data.fcubicacion}')" class="dropdown-item"><i class="fal fa-plus fa-fw"></i>Asignar Tecnico</a>`;
                         }
@@ -1063,7 +1069,11 @@
 
 
 
-        function ModalConfirmacion(fiIDSolicitudInstalacion, fiIDContratista,cliente,ubicacion) {
+        function ModalConfirmacion(fiIDSolicitudInstalacion, fiIDContratista, cliente, ubicacion) {
+
+            if (fiIDContratista == null) {
+                fiIDContratista = 0;
+            }
             debugger
              $.ajax({
                 url: "@Url.Action("ShowAsignacionContratista", "Contratista")",

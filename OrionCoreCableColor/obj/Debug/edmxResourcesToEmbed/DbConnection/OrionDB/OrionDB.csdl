@@ -3011,6 +3011,11 @@
       <Parameter Name="piIDRol" Mode="In" Type="Int32" />
       <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_AsignarSolicitud_Contratista_Y_Tecnico" ReturnType="Collection(OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result)">
+      <Parameter Name="fiIDContratistaSolicitud" Mode="In" Type="Int32" />
+      <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
+      <Parameter Name="piIdContratista" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="ListadoTecnicos_PorContratista_Result">
     <Property Type="String" Name="fcNombreCorto" Nullable="true" MaxLength="30" />
@@ -8383,5 +8388,10 @@
     <Property Type="Int32" Name="fiIdOperacionSolicitud" Nullable="false" />
     <Property Type="Int32" Name="fiMesesCondicion" Nullable="false" />
     <Property Type="String" Name="fcOperacionTipoSolicitud" Nullable="false" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
+    <Property Type="Int32" Name="fiCodeStatus" Nullable="true" />
+    <Property Type="String" Name="fcMessageStatus" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="fjValorDevuelto" Nullable="true" />
   </ComplexType>
 </Schema>

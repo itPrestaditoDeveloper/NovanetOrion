@@ -170,6 +170,11 @@
           <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
           <Parameter Name="piIdContratista" Type="int" Mode="In" />
         </Function>
+        <Function Name="sp_AsignarSolicitud_Contratista_Y_Tecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
+          <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
+          <Parameter Name="piIdContratista" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_ASPNETUSER_ObtenerInformacionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="pcUsuario" Type="varchar" Mode="In" />
         </Function>
@@ -6069,6 +6074,11 @@
             <Parameter Name="piIDRol" Mode="In" Type="Int32" />
             <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_AsignarSolicitud_Contratista_Y_Tecnico" ReturnType="Collection(OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result)">
+            <Parameter Name="fiIDContratistaSolicitud" Mode="In" Type="Int32" />
+            <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
+            <Parameter Name="piIdContratista" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="ListadoTecnicos_PorContratista_Result">
           <Property Type="String" Name="fcNombreCorto" Nullable="true" MaxLength="30" />
@@ -11441,6 +11451,11 @@
           <Property Type="Int32" Name="fiIdOperacionSolicitud" Nullable="false" />
           <Property Type="Int32" Name="fiMesesCondicion" Nullable="false" />
           <Property Type="String" Name="fcOperacionTipoSolicitud" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
+          <Property Type="Int32" Name="fiCodeStatus" Nullable="true" />
+          <Property Type="String" Name="fcMessageStatus" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="fjValorDevuelto" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -18614,6 +18629,15 @@
                 <ScalarProperty Name="fiIdOperacionSolicitud" ColumnName="fiIdOperacionSolicitud" />
                 <ScalarProperty Name="fiMesesCondicion" ColumnName="fiMesesCondicion" />
                 <ScalarProperty Name="fcOperacionTipoSolicitud" ColumnName="fcOperacionTipoSolicitud" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista_Y_Tecnico" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista_Y_Tecnico">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
+                <ScalarProperty Name="fiCodeStatus" ColumnName="fiCodeStatus" />
+                <ScalarProperty Name="fcMessageStatus" ColumnName="fcMessageStatus" />
+                <ScalarProperty Name="fjValorDevuelto" ColumnName="fjValorDevuelto" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

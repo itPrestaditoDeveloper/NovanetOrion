@@ -544,11 +544,16 @@ namespace OrionCoreCableColor.Controllers
                 // ubicacion = ubicacion.Replace('A', ',');
                 var actualizaraAsignado = _connection.OrionContext.sp_ActualizarInstalacion_Tecnico(fiIDSolicitudInstalacion, 2, 0, "_");
                 var InformacionPaquete = _connection.OrionContext.sp_InformacionInstalacion_Tecnico(fiIDSolicitudInstalacion).FirstOrDefault();
-                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
+
+                var asignarcosas = _connection.OrionContext.sp_AsignarSolicitud_Contratista_Y_Tecnico(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia).FirstOrDefault();
+
+                //var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
+                
                 string informacion = $"Servicio a instalar: {InformacionPaquete.fcArticulosdelContrato} ";
                 var InformacionTecnico = _connection.OrionContext.sp_InformacionTecnico(fiIDTecnico).FirstOrDefault();
                 var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
-                if (Asignar)
+                bool fbPrueba = false;
+                if (asignarcosas.fiCodeStatus == 200 && !fbPrueba )
                 {
                     string lat = ubicacion.Split(',')[0];
                     string longi = ubicacion.Split(',')[1];
@@ -599,7 +604,7 @@ namespace OrionCoreCableColor.Controllers
 
                     //EnviarNotificacion($"Se te asigno una instalacion, revisa tu bandeja {  InformacionTecnico.fcNombreTecnico }");
                 }
-                return EnviarResultado(Asignar, "Se asigno correctamente la instalación");
+                return EnviarListaJson(asignarcosas);
 
             }
             catch (Exception e)

@@ -139,6 +139,10 @@
         let fiIDSolicitudInstalacion = '@Model.fiIDSolicitudInstalacion';
         let fiIDTecnico = $(`#fptecnico`).is(`:visible`) ? $("#fiIDTecnico").val() : 0;
         let fiIdAgente = $("#fiIDContratista").val();
+
+        if (fiIDTecnico == null) fiIDTecnico = 0;
+
+        
         console.log(fiIDTecnico);
         console.log(fiIdAgente);
        // var token = generarRandom(7);
@@ -153,16 +157,15 @@
                 fiidAgencia: fiIdAgente
             },
             success: function (resp) {
-                if (resp.Estado) {
-
-                    ToastrSuccess(resp.Titulo, resp.Mensaje);
+                if (resp.fiCodeStatus == 200) {
+                    ToastrSuccess("Exito", resp.Mensaje);
                     CerrarModal();
                 } else {
-                    ToastrError("Error", resp.Mensaje);
+                    ToastrError("Error", resp.fcMessageStatus);
                 }
             },
             error: function (data) {
-                ToastrError("Error", "Error de Red");
+                ToastrError("Error", data.fcMessageStatus);
             },
         });
 

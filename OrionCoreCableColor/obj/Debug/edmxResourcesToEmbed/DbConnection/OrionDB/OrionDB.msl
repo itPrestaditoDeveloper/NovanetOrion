@@ -7170,5 +7170,14 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista_Y_Tecnico" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista_Y_Tecnico">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
+          <ScalarProperty Name="fiCodeStatus" ColumnName="fiCodeStatus" />
+          <ScalarProperty Name="fcMessageStatus" ColumnName="fcMessageStatus" />
+          <ScalarProperty Name="fjValorDevuelto" ColumnName="fjValorDevuelto" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>
