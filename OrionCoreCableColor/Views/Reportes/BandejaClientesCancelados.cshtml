@@ -23,12 +23,13 @@
                     <tr>
                         <th>ID Solicitud</th>
                         <th>Identidad</th>
-                        <th>Nombre Cliente</th>
+                        <th>Nombre Cliente</th>                       
                         <th>Plazo (Meses)</th>
                         <th>Cuota Mensual</th>
                         <th>Estado Instalación</th>
                         <th>Fecha Inicio Instalación</th>
                         <th>Fecha Fin Instalación</th>
+                        <th>Fecha Cancelacion</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -105,6 +106,12 @@
                 },
                 {
                     data: "fdFechaInstalacionFinal",
+                    render: function (d) {
+                        return d ? moment(d).format('DD/MM/YYYY') : '';
+                    }
+                },
+                {
+                    data: "fdFechaTransaccion",
                     render: function (d) {
                         return d ? moment(d).format('DD/MM/YYYY') : '';
                     }
