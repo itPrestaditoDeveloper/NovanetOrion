@@ -3659,6 +3659,7 @@
     <Content Include="Views\PrecalificaCliente\DetalleDistribuidor.cshtml" />
     <Content Include="Views\Soporte\BandejaRespuestaApiCpheus.cshtml" />
     <Content Include="Views\Contratista\ShowAsignacionTecnico.cshtml" />
+    <Content Include="Views\Manto\ConfirmacionTokenHabilitarBtns.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

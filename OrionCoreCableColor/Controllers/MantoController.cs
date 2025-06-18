@@ -1225,5 +1225,60 @@ namespace OrionCoreCableColor.Controllers
             }
         }
 
+
+        [HttpGet]
+        public ActionResult GetDeshabilitar_Botones_Manto(int fiIDSolicitud)
+        {
+            try
+            {
+                using (var context = new ORIONDBEntities())
+                {
+                    var connection = (SqlConnection)context.Database.Connection;
+                    var command = new SqlCommand("Orion.dbo.sp_Solicitudes_Manto_DeshabilitarBotones", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@fiIDSolicitud", fiIDSolicitud);
+                    command.Parameters.AddWithValue("@fiIDUsuario", GetIdUser());
+
+                    connection.Open();
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var resultado = new
+                            {
+                                fiIDSolicitud = reader["fiIDSolicitud"],
+                                fiIDEstadoInstalacion = reader["fiIDEstadoInstalacion"],
+                                fbInstalada = Convert.ToBoolean(reader["fbInstalada"]),
+                                fbEsAdmin = Convert.ToBoolean(reader["fbEsAdmin"])
+                            };
+
+                            connection.Close();
+                            return Json(resultado, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+
+                    connection.Close();
+                }
+                return Json(null, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                return EnviarException(e, "Error");
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult ConfirmacionTokenHabilitarBtns(int IDSolicitud, string codigoToken)
+        {
+            using (var conetion = new ORIONDBEntities())
+            {
+                return PartialView(new SolicitudesViewModel { IDSolicitud = IDSolicitud, CodigoSeccionToken = codigoToken });
+            }
+
+        }
+
+
     }
 }
