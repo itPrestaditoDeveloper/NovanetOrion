@@ -1942,6 +1942,7 @@
     <Compile Include="Models\Reportes\ReporteGeneral\GraficoComparativaPaquetes.cs" />
     <Compile Include="Models\Reportes\ReporteGeneral\GraficoMora.cs" />
     <Compile Include="Models\Reportes\ReporteGeneral\GraficoVentas.cs" />
+    <Compile Include="Models\Reportes\ReporteHistorialToken.cs" />
     <Compile Include="Models\Reportes\sp_OrionSolicitudes_InformacionDocumentacion_Result.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\Roles\CrearRolViewModel.cs" />
@@ -3659,6 +3660,7 @@
     <Content Include="Views\PrecalificaCliente\DetalleDistribuidor.cshtml" />
     <Content Include="Views\Soporte\BandejaRespuestaApiCpheus.cshtml" />
     <Content Include="Views\Contratista\ShowAsignacionTecnico.cshtml" />
+    <Content Include="Views\Reportes\ReporteTokenSeguridad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
