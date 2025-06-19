@@ -467,7 +467,39 @@ namespace OrionCoreCableColor.Controllers
         public ActionResult ViewHistorialConeccionONU(string fcTipoDispositivo, string propiedadUnica, string valor, string titulo)
         {
             ViewBag.Titulo = titulo;
-            var listado = Dispositivos.GetIntervaloConexionDispositivo(fcTipoDispositivo, propiedadUnica, valor);
+            var listado = new List<IntervaloConexionViewModel>();
+            using (var contexto = new ORIONDBEntities())
+            {
+                if(fcTipoDispositivo == "ONU")
+                {
+                    listado = contexto.sp_BitacoraONU_ListarPorSolicitud(Convert.ToInt32(valor)).OrderBy(x=>x.fdFechaHoraCreacionRegistro).Select((x, i) =>
+                    new IntervaloConexionViewModel
+                    {
+                        fiIndex = i,
+                        fbEstado = x.fbEstadoConexion ?? false,
+                        fdTiempoInicial = x.fdFechaHoraCreacionRegistro ?? DateTime.Now,
+                        fdTiempoFinal = x.fdFechaHoraActualizacionRegistro,
+                        fcIntervalor = x.fcUltimaConexion
+                    }).ToList();
+
+                }
+
+                if(fcTipoDispositivo == "OLT")
+                {
+                    listado = contexto.sp_BitacoraOLT_ListarPorIDOLT(Convert.ToInt32(valor)).OrderBy(x => x.fdFechaHoraCreacionRegistro).Select((x, i) =>
+                    new IntervaloConexionViewModel
+                    {
+                        fiIndex = i,
+                        fbEstado = x.fbEstadoConexion ?? false,
+                        fdTiempoInicial = x.fdFechaHoraCreacionRegistro ?? DateTime.Now,
+                        fdTiempoFinal = x.fdFechaHoraActualizacionRegistro,
+                        fcIntervalor = x.fcUltimaConexion
+                    }).ToList();
+                }
+                
+            }
+
+            //var listado = Dispositivos.GetIntervaloConexionDispositivo(fcTipoDispositivo, propiedadUnica, valor);
             return PartialView(listado);
         }
 

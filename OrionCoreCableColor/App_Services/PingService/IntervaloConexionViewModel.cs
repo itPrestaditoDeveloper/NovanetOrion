@@ -18,5 +18,6 @@ namespace OrionCoreCableColor.App_Services.PingService
         public DateTime fdTiempoInicial { get; set; }
         public DateTime fdTiempoFinal { get; set; }
         public TimeSpan fdIntervalo { get; set; }
+        public string fcIntervalor { get; set; }
     }
 }

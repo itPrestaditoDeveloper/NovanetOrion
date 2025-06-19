@@ -207,7 +207,7 @@ namespace OrionCoreCableColor.App_Services.EmailService
                 message.To.Add(new MailAddress("kevin.santos@miprestadito.com"));
                 message.From = new MailAddress(From_Email, "Exception Error");
                 message.Subject = "Exception Error!";
-                message.Body = (e.InnerException?.Message ?? e.Message) + ": " + e.StackTrace;
+                message.Body = (e.InnerException?.Message ?? e.Message) + ": " + e.StackTrace + ",||||||| USUARIO: " + HttpContext.Current.User?.Identity?.Name ?? "NOVANET";
 
 
                 using (var smtp = new SmtpClient(Host, Port))
@@ -245,7 +245,7 @@ namespace OrionCoreCableColor.App_Services.EmailService
                 message.To.Add(new MailAddress("sistemas@miprestadito.com"));
                 message.From = new MailAddress(From_Email, "Exception Error");
                 message.Subject = "Exception Error!";
-                message.Body = (e.InnerException?.Message ?? e.Message) + ": " + e.StackTrace;
+                message.Body = (e.InnerException?.Message ?? e.Message) + ": " + e.StackTrace + ",||||||| USUARIO: " + HttpContext.Current.User?.Identity?.Name ?? "NOVANET";
 
 
                 using (var smtp = new SmtpClient(Host, Port))
