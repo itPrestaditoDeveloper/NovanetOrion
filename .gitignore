@@ -1,3 +1,48 @@
-/OrionCoreCableColor/.vs
-/OrionCoreCableColor/obj
-/OrionCoreCableColor/bin
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## NuGet
+*.nupkg
+# The packages folder can be ignored if you use PackageReference
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+## Rider
+.idea/
+
+## ASP.NET Core secrets
+secrets.json
+
+## dotnet CLI
+.project.lock.json
+project.lock.json
+artifacts/
+
+## Logs
+*.log
+
+## Others
+*.dbmdl
+*.db
+*.pdb
+*.cache
+*.tmp
+*.bak
+
+## Configuration
+appsettings.Development.json

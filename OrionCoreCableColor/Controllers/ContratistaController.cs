@@ -530,7 +530,6 @@ namespace OrionCoreCableColor.Controllers
                 connection.Close();
             }
 
-
             return PartialView(new SolicitudesViewModel { Nombre = cliente, IDSolicitud = fiSolicitud, fiIDSolicitudInstalacion = fiIDSolicitudInstalacion });
 
         }
@@ -547,11 +546,18 @@ namespace OrionCoreCableColor.Controllers
 
                 var asignarcosas = _connection.OrionContext.sp_AsignarSolicitud_Contratista_Y_Tecnico(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia).FirstOrDefault();
 
+                SolicitudesViewModel solicitudes = new SolicitudesViewModel();
+
+                var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
+
+                solicitudes.Nombre = cliente;
+                solicitudes.IDSolicitud = fiIDSolicitudInstalacion;
+                solicitudes.IdCliente = (int)InfoCliente.fiIDEquifax;
+                await EnviarSolicitudContratista(solicitudes,"");
                 //var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
-                
+
                 string informacion = $"Servicio a instalar: {InformacionPaquete.fcArticulosdelContrato} ";
                 var InformacionTecnico = _connection.OrionContext.sp_InformacionTecnico(fiIDTecnico).FirstOrDefault();
-                var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
                 bool fbPrueba = false;
                 if (asignarcosas.fiCodeStatus == 200 && !fbPrueba )
                 {
