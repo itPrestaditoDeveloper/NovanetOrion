@@ -3016,6 +3016,12 @@
       <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
       <Parameter Name="piIdContratista" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_BitacoraOLT_ListarPorIDOLT" ReturnType="Collection(OrionDB.sp_BitacoraOLT_ListarPorIDOLT_Result)">
+      <Parameter Name="piIDOLT" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_BitacoraONU_ListarPorSolicitud" ReturnType="Collection(OrionDB.sp_BitacoraONU_ListarPorSolicitud_Result)">
+      <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="ListadoTecnicos_PorContratista_Result">
     <Property Type="String" Name="fcNombreCorto" Nullable="true" MaxLength="30" />
@@ -8393,5 +8399,30 @@
     <Property Type="Int32" Name="fiCodeStatus" Nullable="true" />
     <Property Type="String" Name="fcMessageStatus" Nullable="true" MaxLength="255" />
     <Property Type="String" Name="fjValorDevuelto" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_BitacoraOLT_ListarPorIDOLT_Result">
+    <Property Type="Int32" Name="fiIDOlt" Nullable="true" />
+    <Property Type="String" Name="fcDescripcionOLT" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="fcIPOLT" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="fbEstadoConexion" Nullable="true" />
+    <Property Type="DateTime" Name="fdFechaHoraCreacionRegistro" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaHoraActualizacionRegistro" Nullable="false" Precision="23" />
+    <Property Type="String" Name="fcEstadoConexion" Nullable="false" MaxLength="12" />
+    <Property Type="String" Name="fcUltimaConexion" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="sp_BitacoraONU_ListarPorSolicitud_Result">
+    <Property Type="Int32" Name="fiIDDetalleCliente_Servicio" Nullable="true" />
+    <Property Type="Int32" Name="fiIDSolicitud" Nullable="true" />
+    <Property Type="String" Name="fcNombre" Nullable="true" MaxLength="80" />
+    <Property Type="String" Name="fcCodigoCepheus" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="fcMac" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="fcIP" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="fcPom" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="fcNombreWifi" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="fbEstadoConexion" Nullable="true" />
+    <Property Type="DateTime" Name="fdFechaHoraCreacionRegistro" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaHoraActualizacionRegistro" Nullable="false" Precision="23" />
+    <Property Type="String" Name="fcEstadoConexion" Nullable="false" MaxLength="12" />
+    <Property Type="String" Name="fcUltimaConexion" Nullable="true" MaxLength="100" />
   </ComplexType>
 </Schema>

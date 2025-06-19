@@ -226,7 +226,13 @@
     <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_BitacoraOLT_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_BitacoraOLT_ListarPorIDOLT" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDOLT" Type="int" Mode="In" />
+  </Function>
   <Function Name="sp_BitacoraONU_Listar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_BitacoraONU_ListarPorSolicitud" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="piIDSolicitud" Type="int" Mode="In" />
+  </Function>
   <Function Name="sp_BitacoraSolicitudHistorialMantenimiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="fiIDSolicitud" Type="int" Mode="In" />
     <Parameter Name="fiIdCliente" Type="int" Mode="In" />

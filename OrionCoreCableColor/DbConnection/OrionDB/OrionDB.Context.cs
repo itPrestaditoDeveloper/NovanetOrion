@@ -10493,5 +10493,23 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_AsignarSolicitud_Contratista_Y_Tecnico_Result>("sp_AsignarSolicitud_Contratista_Y_Tecnico", fiIDContratistaSolicitudParameter, fiIDTecnicoParameter, piIdContratistaParameter);
         }
+    
+        public virtual ObjectResult<sp_BitacoraOLT_ListarPorIDOLT_Result> sp_BitacoraOLT_ListarPorIDOLT(Nullable<int> piIDOLT)
+        {
+            var piIDOLTParameter = piIDOLT.HasValue ?
+                new ObjectParameter("piIDOLT", piIDOLT) :
+                new ObjectParameter("piIDOLT", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BitacoraOLT_ListarPorIDOLT_Result>("sp_BitacoraOLT_ListarPorIDOLT", piIDOLTParameter);
+        }
+    
+        public virtual ObjectResult<sp_BitacoraONU_ListarPorSolicitud_Result> sp_BitacoraONU_ListarPorSolicitud(Nullable<int> piIDSolicitud)
+        {
+            var piIDSolicitudParameter = piIDSolicitud.HasValue ?
+                new ObjectParameter("piIDSolicitud", piIDSolicitud) :
+                new ObjectParameter("piIDSolicitud", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BitacoraONU_ListarPorSolicitud_Result>("sp_BitacoraONU_ListarPorSolicitud", piIDSolicitudParameter);
+        }
     }
 }
