@@ -136,7 +136,10 @@ namespace OrionCoreCableColor.Controllers
         {
             return View();
         }
-
+        public ActionResult ReporteTokenSeguridad()
+        {
+            return View();
+        }
 
         public ActionResult ReportesClientesFinalesInstaladosGlobalPDF()
         {
@@ -206,10 +209,46 @@ namespace OrionCoreCableColor.Controllers
 
             return Json(listaDetalleDatos, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult ListaTokenGenerados(string fechaMinima = null, string fechaMaxima = null)
+        {
+            var listaDetalleDatos = new List<ReporteHistorialToken>();
 
+            DateTime? fechaInicio = null;
+            DateTime? fechaFin = null;
 
+            if (!string.IsNullOrEmpty(fechaMinima) && !string.IsNullOrEmpty(fechaMaxima))
+            {
+                fechaInicio = DateTime.Parse(fechaMinima);
+                fechaFin = DateTime.Parse(fechaMaxima);
+            }
+            else
+            {
+                fechaInicio = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                fechaFin = DateTime.Now;
+            }
 
+            using (var connection = (new ORIONDBEntities()).Database.Connection)
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
 
+                string fechaInicioParam = fechaInicio.HasValue ? $"'{fechaInicio.Value:yyyy-MM-dd}'" : "NULL";
+                string fechaFinParam = fechaFin.HasValue ? $"'{fechaFin.Value:yyyy-MM-dd}'" : "NULL";
+
+                command.CommandText = $"EXEC sp_Token_Historial_Novanet  {GetIdUser()}, {fechaInicioParam}, {fechaFinParam}";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    var db = ((IObjectContextAdapter)new ORIONDBEntities());
+
+                    listaDetalleDatos = db.ObjectContext.Translate<ReporteHistorialToken>(reader).ToList();
+                }
+
+                connection.Close();
+            }
+
+            return Json(listaDetalleDatos, JsonRequestBehavior.AllowGet);
+        }
 
 
         public JsonResult CargarListaGastoPorPublicidad()
