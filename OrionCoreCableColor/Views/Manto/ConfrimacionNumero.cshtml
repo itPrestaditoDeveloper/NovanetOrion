@@ -253,7 +253,7 @@
         $.ajax({
             url: "@Url.Action("GuardarFinanciamiento", "Manto")",
             type: "POST",
-            data: { cuotamensual: mensual, plazo: plazofijado, solicitud: idsol, idequifax: idcliente, correo: correodatos, telefono: telefonodatos},
+            data: { cuotamensual: mensual, plazo: plazofijado, solicitud: idsol, idequifax: idcliente, correo: correodatos, telefono: telefonodatos, Token: '@ViewBag.Token', codigo: '@ViewBag.Codigo', comentario: obser },
             success: function (resp) {
                 console.log(resp);
                 if (resp.Estado) {
@@ -344,7 +344,7 @@
                 {
                     data: "fnValorProductoMN"
                 },
-                
+
             ]
     });
 

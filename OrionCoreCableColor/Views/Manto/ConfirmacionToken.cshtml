@@ -66,22 +66,7 @@
                     CerrarModal();
                     $("#fcMensaje").val("");
                     if ('@Model.CodigoSeccionToken' == 'N001') {
-                         $.ajax({
-                            url: '@Url.Action("InsertarBitacoraToken", "Manto")',
-                            type: 'POST',
-                            data: {
-                                fiIDSolicitud: @Model.IDSolicitud,
-                                fcTokenAplicado: Token,
-                                fcCodigoToken: '@Model.CodigoSeccionToken'
-                            },
-                            success: function (data) {
-
-                                VerModalConObjetoDeParametro({ Nombre: "", IDCliente: @Model.IdCliente, IDSolicitud: @Model.IDSolicitud}, "@Url.Action("ConfrimacionNumero", "Manto")");
-                            },
-                            error: function () {
-                                ToastrError("Error", "No se pudo insertar la bitácora");
-                            }
-                        });
+                         VerModalConObjetoDeParametro({ Nombre: "", IDCliente: @Model.IdCliente, IDSolicitud: @Model.IDSolicitud, Token: Token, codigo: codigoToken  }, "@Url.Action("ConfrimacionNumero", "Manto")");
                     }
 
                    if ('@Model.CodigoSeccionToken' == 'N002') {
@@ -105,22 +90,7 @@
                     }
                     if ('@Model.CodigoSeccionToken' == 'N004') {
 
-                         $.ajax({
-                            url: '@Url.Action("InsertarBitacoraToken", "Manto")',
-                            type: 'POST',
-                            data: {
-                                fiIDSolicitud: @Model.IDSolicitud,
-                                fcTokenAplicado: Token,
-                                fcCodigoToken: '@Model.CodigoSeccionToken'
-                            },
-                            success: function (data) {
-
-                               VerModalScrollConObjetoDeParametro({ IDSolicitud: @Model.IDSolicitud, idEquifaxCliente: @Model.IdCliente }, "@Url.Action("ViewDetalleGarantia","Manto")");
-                            },
-                            error: function () {
-                                ToastrError("Error", "No se pudo insertar la bitácora");
-                            }
-                        });
+                         VerModalScrollConObjetoDeParametro({ IDSolicitud: @Model.IDSolicitud, idEquifaxCliente: @Model.IdCliente, Token: Token, codigo: codigoToken }, "@Url.Action("ViewDetalleGarantia","Manto")");
 
 
                     }
