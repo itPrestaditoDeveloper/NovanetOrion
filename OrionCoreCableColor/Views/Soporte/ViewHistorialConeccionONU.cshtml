@@ -32,7 +32,8 @@
                         <td><label class='@(item.fbEstado ? "text-success" : "text-danger")'>@(item.fbEstado ? "Conectado" : "Desconectado")</label></td>
                         <td>@item.fdTiempoInicial.ToString("dd/MM/yyyy HH:mm:ss")</td>
                         <td>@item.fdTiempoFinal.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                        <td>@((int)item.fdIntervalo.TotalDays + " Dias, " + item.fdIntervalo.Hours + " H, " + item.fdIntervalo.Minutes + " M, " + item.fdIntervalo.Seconds + " S" )</td>
+                        @*<td>@((int)item.fdIntervalo.TotalDays + " Dias, " + item.fdIntervalo.Hours + " H, " + item.fdIntervalo.Minutes + " M, " + item.fdIntervalo.Seconds + " S" )</td>*@
+                        <td>@item.fcIntervalor</td>
                     </tr>
                     }
                 </tbody>

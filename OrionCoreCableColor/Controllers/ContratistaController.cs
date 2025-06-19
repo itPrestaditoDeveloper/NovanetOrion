@@ -580,7 +580,16 @@ namespace OrionCoreCableColor.Controllers
                     var numeroTecnicoJefe = _connection.OrionContext.sp_Configuraciones().FirstOrDefault(a => a.NombreLlave == "NumeroTecnicoJefe").ValorLLave;
 
                     //sms a cliente
-                    MensajeriaApi.EnviarMensajeInstalacionaCliente(cliente, InformacionPaquete.fiIDSolicitud ?? 0, InfoCliente.fcTelefono, InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil, InformacionTecnico.fcIdentidadTecnico);
+                    try
+                    {
+                        MensajeriaApi.EnviarMensajeInstalacionaCliente(cliente, InformacionPaquete.fiIDSolicitud ?? 0, InfoCliente.fcTelefono, InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil, InformacionTecnico.fcIdentidadTecnico);
+                    }
+                    catch(Exception ex)
+                    {
+
+
+                    }
+                    
 
                     //mensaje al Tecnico Superior
                     MensajeriaApi.MensajesDigitales(numeroTecnicoJefe, bod);

@@ -708,7 +708,13 @@
     <Compile Include="DbConnection\OrionDB\sp_BitacoraMantenimientoHistorialSolicitudLista_Result.cs">
       <DependentUpon>OrionDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="DbConnection\OrionDB\sp_BitacoraOLT_ListarPorIDOLT_Result.cs">
+      <DependentUpon>OrionDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="DbConnection\OrionDB\sp_BitacoraOLT_Listar_Result.cs">
+      <DependentUpon>OrionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DbConnection\OrionDB\sp_BitacoraONU_ListarPorSolicitud_Result.cs">
       <DependentUpon>OrionDB.tt</DependentUpon>
     </Compile>
     <Compile Include="DbConnection\OrionDB\sp_BitacoraONU_Listar_Result.cs">
