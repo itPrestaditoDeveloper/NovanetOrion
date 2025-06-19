@@ -183,18 +183,20 @@
                             <button id="btnEditarCuota" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/edit_file_50px.png');">
                                 Editar Cuota Mensual
                             </button>
-                            @if (User.IsInRole("Orion_Acceso_MantoSolicitudes_EditarGarantia"))
+                            @if (User.IsInRole("Orion_Acceso_MantoSolicitudes_EditarGarantia") && ViewBag.RolesAdmin)
                             {
+
+
                                 <button id="btnEditarGarantia" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
                                     Editar Garantia
                                 </button>
                             }
-
-                            @if (User.IsInRole("Orion_Acceso_Manto_EditarGarantia_Supervisor"))
+                            else if(User.IsInRole("Orion_Acceso_Manto_EditarGarantia_Supervisor"))
                             {
-                                <button id="btnEditarGarantiaToken" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
-                                    Editar Garantia
-                                </button>
+                                
+                                    <button id="btnEditarGarantiaToken" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                        Editar Garantia
+                                    </button>                             
                             }
 
                             <button id="btnEditarInstalacion" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
@@ -273,7 +275,7 @@
 @section Scripts{
 
     <script>
-
+       
         var idsol = 0;
         var fnValorPagadoPrimerPago = 0;
         var idPlazo = 0;

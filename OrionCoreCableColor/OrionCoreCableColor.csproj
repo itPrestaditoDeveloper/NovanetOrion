@@ -1872,6 +1872,7 @@
     <Compile Include="Models\Mantenimiento\ListPaqueteDetalleViewModel.cs" />
     <Compile Include="Models\Mantenimiento\CrearPaqueteViewModel.cs" />
     <Compile Include="Models\Mantenimiento\ListPlazoPorPaqueteViewModel.cs" />
+    <Compile Include="Models\Manto\CrearBitacoraTokenViewModel.cs" />
     <Compile Include="Models\Manto\DetalleInstalacionViewModel.cs" />
     <Compile Include="Models\Manto\EditPaqueteViewModel.cs" />
     <Compile Include="Models\Manto\ListarEquifaxGarantiaViewModel.cs" />

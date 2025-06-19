@@ -1,4 +1,5 @@
-﻿using OrionCoreCableColor.App_Helper;
+﻿using Newtonsoft.Json;
+using OrionCoreCableColor.App_Helper;
 using OrionCoreCableColor.App_Services.ContratoService;
 using OrionCoreCableColor.App_Services.EmailService;
 using OrionCoreCableColor.App_Services.ReportesService;
@@ -17,9 +18,11 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static OrionCoreCableColor.Models.Manto.CrearBitacoraTokenViewModel;
 
 namespace OrionCoreCableColor.Controllers
 {
@@ -44,6 +47,8 @@ namespace OrionCoreCableColor.Controllers
 
         public ActionResult Solicitudes()
         {
+            var RolesAdmin = GetConfiguracion<int>("Orion_Admin", ',');
+            ViewBag.RolesAdmin = RolesAdmin.Contains(GetUser().IdRol);
             return View();
         }
 
@@ -682,6 +687,46 @@ namespace OrionCoreCableColor.Controllers
             }
         }
 
+
+
+
+        [HttpPost]
+        public JsonResult InsertarBitacoraToken(int fiIDSolicitud, string fcTokenAplicado, string fcCodigoToken)
+        {
+            string mensajeSalida = "";
+
+            using (var context = new ORIONDBEntities())
+            {
+                var connection = (SqlConnection)context.Database.Connection;
+                using (var command = new SqlCommand("sp_Solicitudes_Token_Maestro_Bitacora_Insertar", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@fiIDSolicitud", fiIDSolicitud);
+                    command.Parameters.AddWithValue("@fiIDUsuario", GetIdUser());
+                    command.Parameters.AddWithValue("@fcTokenAplicado", fcTokenAplicado);
+                    command.Parameters.AddWithValue("@fcCodigoToken", fcCodigoToken);
+
+                    var salida = new SqlParameter("@MensajeSalida", SqlDbType.NVarChar, 500)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    command.Parameters.Add(salida);
+
+                    if (connection.State != ConnectionState.Open)
+                        connection.Open();
+
+                    command.ExecuteNonQuery();
+                    mensajeSalida = salida.Value?.ToString();
+                }
+            }
+
+            return Json(new { Estado = true, Mensaje = mensajeSalida }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
         [HttpGet]
         public JsonResult VerificarToken(string Token, string codigo)
         {
@@ -692,12 +737,12 @@ namespace OrionCoreCableColor.Controllers
                 //var codigo = "N001";
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = $"EXEC sp_Token_Aplicar {GetIdUser()}, {ip}, {Token} , {codigo}";              
+                command.CommandText = $"EXEC sp_Token_Aplicar {GetIdUser()}, {ip}, {Token} , {codigo}";
                 using (var reader = command.ExecuteReader())
                 {
                     var db = ((IObjectContextAdapter)new ORIONDBEntities());
-                     datos = db.ObjectContext.Translate<SolicitudesViewModel>(reader).FirstOrDefault();
-                }              
+                    datos = db.ObjectContext.Translate<SolicitudesViewModel>(reader).FirstOrDefault();
+                }
                 connection.Close();
                 //return EnviarResultado(datos);
                 return EnviarResultado(true, "", datos.fcMensaje);
@@ -814,26 +859,101 @@ namespace OrionCoreCableColor.Controllers
                 }
             }
         }
-        public JsonResult GuardarFinanciamiento(decimal cuotamensual, int plazo, int solicitud, int idequifax,string correo, string telefono) 
+
+
+        [HttpPost]
+        public JsonResult GuardarFinanciamiento(decimal cuotamensual, int plazo, int solicitud, int idequifax, string correo, string telefono)
         {
             try
             {
+                var datosCliente = _connection.OrionContext.sp_OrionSolicitudes_InformacionDocumentacion(solicitud, idequifax, 1).FirstOrDefault();
                 var guardarFinanciamiento = _connection.OrionContext.sp_MantenimientoSolicitud_RecalculoCuota(cuotamensual, plazo, solicitud, idequifax, correo, telefono).FirstOrDefault();
-                if (guardarFinanciamiento.fiMensaje == "1" )
+
+                if (guardarFinanciamiento != null && guardarFinanciamiento.fiMensaje == "1")
                 {
-                    return EnviarResultado(true, "", "Guardada Exitosamente");
+                    CampoAfectadoViewModel Campo(string nombre, object antes, object despues) =>
+                        new CampoAfectadoViewModel
+                        {
+                            fcNombreCampo = nombre,
+                            fcValorAntes = antes?.ToString(),
+                            fcValorDespues = despues?.ToString()
+                        };
+
+                    var camposAfectados = new List<CampoAfectadoViewModel>
+                    {
+                        Campo("fnCuotaMensual", datosCliente.fnCuotaMensual, cuotamensual.ToString("F2")),
+                        Campo("fiPlazoSeleccionado", datosCliente.fiPlazoSeleccionado, plazo)
+                    };
+
+                    string jsonCampos = JsonConvert.SerializeObject(camposAfectados);
+                    using (var context = new ORIONDBEntities())
+                    {
+                        var connection = (SqlConnection)context.Database.Connection;
+                        using (var command = new SqlCommand("sp_Solicitudes_Token_Maestro_CamposAfectados_Insertar", connection))
+                        {
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("@fiIDSolicitud", solicitud);
+                            command.Parameters.AddWithValue("@jsonCamposAfectados", jsonCampos);
+
+                            var mensajeSalida = new SqlParameter("@MensajeSalida", SqlDbType.NVarChar, 500)
+                            {
+                                Direction = ParameterDirection.Output
+                            };
+                            command.Parameters.Add(mensajeSalida);
+
+                            if (connection.State != ConnectionState.Open)
+                                connection.Open();
+
+                            command.ExecuteNonQuery();
+
+                            string resultadoBitacora = mensajeSalida.Value?.ToString();
+                           
+                        }
+                        if (context.Database.Connection.State == ConnectionState.Open)
+                            context.Database.Connection.Close();
+                    }
+
+                    return EnviarResultado(true, "Guardado correctamente", "Guardada exitosamente");
                 }
                 else
                 {
-                    return EnviarResultado(true, "", "Ocurrio un Error al querer ");
+                    return EnviarResultado(false, "Error", "Ocurrió un error al guardar el financiamiento");
                 }
             }
-            catch (Exception e )
+            catch (Exception ex)
             {
-
-                throw;
+                return EnviarResultado(false, "Excepción", "Error inesperado: " + ex.Message);
             }
         }
+
+
+
+
+        //public JsonResult GuardarFinanciamiento(decimal cuotamensual, int plazo, int solicitud, int idequifax,string correo, string telefono) 
+        //{
+        //    try
+        //    {
+        //        var guardarFinanciamiento = _connection.OrionContext.sp_MantenimientoSolicitud_RecalculoCuota(cuotamensual, plazo, solicitud, idequifax, correo, telefono).FirstOrDefault();
+
+        //       //guardar campos antes  y despues 
+        //        //  var guradarCamposAfectados = _connection.OrionContext.sp_Solicitudes_Token_Maestro_Bitacora_Insertar();
+        //        if (guardarFinanciamiento.fiMensaje == "1" )
+        //        {
+        //            return EnviarResultado(true, "", "Guardada Exitosamente");
+        //        }
+        //        else
+        //        {
+        //            return EnviarResultado(true, "", "Ocurrio un Error al querer ");
+        //        }
+        //    }
+        //    catch (Exception e )
+        //    {
+
+        //        throw;
+        //    }
+        //}
+
+
         [HttpPost]
         public JsonResult ActualizarDatosInstalacionCepheus(int IDSolicitud , string NumeroCepheus , string CodigoCliente, string NumeroTrabajoCepheus)
         {
@@ -1026,21 +1146,20 @@ namespace OrionCoreCableColor.Controllers
                 return EnviarListaJson(lista);
             }
         }
+
+
+
         [HttpPost]
         public JsonResult ActualizarProductosGarantia(List<ListarEquifaxGarantiaViewModel> model)
         {
-            using(var contexto = new ORIONDBEntities())
+            using (var contexto = new ORIONDBEntities())
             {
                 try
                 {
                     var fiIDSolicitud = model.FirstOrDefault().fiIDSolicitud;
                     var fiIDEquifax = model.FirstOrDefault().fiIDEquifax;
-
-
                     var modelDbDetalle = contexto.sp_Equifax_Garantia_Listar(fiIDEquifax, fiIDSolicitud).ToList();
-
-
-
+                    var productosAntes = string.Join(",", modelDbDetalle.Select(x => x.fcProducto.Trim()));
 
                     foreach (var item in modelDbDetalle)
                     {
@@ -1058,12 +1177,9 @@ namespace OrionCoreCableColor.Controllers
                         }
                         else
                         {
-
                             contexto.sp_Equifax_Garantia_MantoEliminar(item.fiIDSolicitud, item.fiIDEquifax, item.fcToken);
                         }
                     }
-
-
 
                     foreach (var item in model.Where(x => x.fbNuevo == true).ToList())
                     {
@@ -1073,24 +1189,53 @@ namespace OrionCoreCableColor.Controllers
                             item.fiIDProducto,
                             GetIdUser());
                     }
+                    var productosDespuesList = contexto.sp_Equifax_Garantia_Listar(fiIDEquifax, fiIDSolicitud) .Select(x => x.fcProducto.Trim()).ToList();
+                    var productosAntesList = productosAntes.Split(',').Select(p => p.Trim()).ToList();
+                    var productosMarcados = productosDespuesList.Select(p => productosAntesList.Contains(p) ? p : p).ToList();
+                    var fcValorAntes = string.Join(",", productosAntesList);
+                    var fcValorDespues = string.Join(",", productosMarcados);
 
+                    string jsonCampos = JsonConvert.SerializeObject(new List<CampoAfectadoViewModel>
+                    {
+                        new CampoAfectadoViewModel
+                        {
+                            fcNombreCampo = "fcProducto",
+                            fcValorAntes = fcValorAntes,
+                            fcValorDespues = fcValorDespues
+                        }
+                    });
 
+                    var connection = (SqlConnection)contexto.Database.Connection;
+                    using (var command = new SqlCommand("sp_Solicitudes_Token_Maestro_CamposAfectados_Insertar", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@fiIDSolicitud", fiIDSolicitud);
+                        command.Parameters.AddWithValue("@jsonCamposAfectados", jsonCampos);
 
-                    return EnviarResultado(true, "", $"GARANTIA MODIFICADA CON EXITO");
+                        var mensajeSalida = new SqlParameter("@MensajeSalida", SqlDbType.NVarChar, 500)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
 
+                        command.Parameters.Add(mensajeSalida);
+
+                        if (connection.State != ConnectionState.Open)
+                            connection.Open();
+
+                        command.ExecuteNonQuery();
+                        Console.WriteLine("Bitácora: " + mensajeSalida.Value?.ToString());
+                    }
+
+                    return EnviarResultado(true, "", "GARANTIA MODIFICADA CON EXITO");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return EnviarException(ex, "Error");
                 }
-
-                    
-
             }
-            
-            
-            
         }
+
+
 
         public ActionResult BandejaMantenimientoCliente(int idsolicitud)
         {

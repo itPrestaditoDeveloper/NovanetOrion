@@ -66,7 +66,22 @@
                     CerrarModal();
                     $("#fcMensaje").val("");
                     if ('@Model.CodigoSeccionToken' == 'N001') {
-                        VerModalConObjetoDeParametro({ Nombre: "", IDCliente: @Model.IdCliente, IDSolicitud: @Model.IDSolicitud}, "@Url.Action("ConfrimacionNumero", "Manto")");
+                         $.ajax({
+                            url: '@Url.Action("InsertarBitacoraToken", "Manto")',
+                            type: 'POST',
+                            data: {
+                                fiIDSolicitud: @Model.IDSolicitud,
+                                fcTokenAplicado: Token,
+                                fcCodigoToken: '@Model.CodigoSeccionToken'
+                            },
+                            success: function (data) {
+
+                                VerModalConObjetoDeParametro({ Nombre: "", IDCliente: @Model.IdCliente, IDSolicitud: @Model.IDSolicitud}, "@Url.Action("ConfrimacionNumero", "Manto")");
+                            },
+                            error: function () {
+                                ToastrError("Error", "No se pudo insertar la bitácora");
+                            }
+                        });
                     }
 
                    if ('@Model.CodigoSeccionToken' == 'N002') {
@@ -89,7 +104,24 @@
                            });
                     }
                     if ('@Model.CodigoSeccionToken' == 'N004') {
-                        VerModalScrollConObjetoDeParametro({ IDSolicitud: @Model.IDSolicitud, idEquifaxCliente: @Model.IdCliente }, "@Url.Action("ViewDetalleGarantia","Manto")");
+
+                         $.ajax({
+                            url: '@Url.Action("InsertarBitacoraToken", "Manto")',
+                            type: 'POST',
+                            data: {
+                                fiIDSolicitud: @Model.IDSolicitud,
+                                fcTokenAplicado: Token,
+                                fcCodigoToken: '@Model.CodigoSeccionToken'
+                            },
+                            success: function (data) {
+
+                               VerModalScrollConObjetoDeParametro({ IDSolicitud: @Model.IDSolicitud, idEquifaxCliente: @Model.IdCliente }, "@Url.Action("ViewDetalleGarantia","Manto")");
+                            },
+                            error: function () {
+                                ToastrError("Error", "No se pudo insertar la bitácora");
+                            }
+                        });
+
 
                     }
 
