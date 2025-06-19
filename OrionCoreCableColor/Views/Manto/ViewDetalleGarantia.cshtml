@@ -33,6 +33,21 @@
 
         </div>
 
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="form-control-plaintext font-weight-bold">Observaciones</label>
+                    <div class="input-group mar-btm">
+
+                        <input id="txtobservaciones" class="form-control mascara-enteros text-left" type="tel" style="text-align: right;">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
         <div class="modal-footer">
             <div class="clearfix" style="width:100%;">
                 <button data-dismiss="modal" class="btn btn-link waves-effect waves-themed float-left btn-lg text-danger" type="button"><i class="text-lg ion-close-round"></i></button>
@@ -47,6 +62,7 @@
     var idSolicitud = @ViewBag.IDSolicitud;
     var idEquifaxCliente = @ViewBag.idEquifaxCliente;
     var listProductos = @Html.Raw(Json.Encode(ViewBag.ListarProductos));
+
 
     function NuevaLinea() {
         let tabla = $.fn.dataTable.Api("#TblDetalleInstalacion");
@@ -206,16 +222,16 @@
         $("#btnGuardarForm").hide();
         var tabla = $.fn.DataTable.Api("#TblDetalleInstalacion");
         var data = tabla.rows().data().toArray();
-
+        var obser = $(`#txtobservaciones`).val();
         if (data.some(x => x.fiIDProducto == 0)) {
             $("#btnGuardarForm").show();
             ToastrError("Error", "Seleccione un producto");
             return;
         }
-
-
-        
-
+        if (obser == "") {
+            ToastrError("Error", "Debe escribir una observación.");
+            return;
+        }
 
        var url = "@Url.Action("ActualizarProductosGarantia","Manto")";
 
@@ -223,7 +239,7 @@
         $.ajax({
             url: url,
             type: "Post",
-            data: { model: data },
+            data: { model: data, Token: '@ViewBag.Token', codigo: '@ViewBag.Codigo', comentario: obser },
             success: function (resp) {
                 if (resp.Estado) {
                     ToastrSuccess("Instalacion", resp.Mensaje);

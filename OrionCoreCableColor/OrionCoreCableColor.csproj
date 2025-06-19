@@ -1872,6 +1872,7 @@
     <Compile Include="Models\Mantenimiento\ListPaqueteDetalleViewModel.cs" />
     <Compile Include="Models\Mantenimiento\CrearPaqueteViewModel.cs" />
     <Compile Include="Models\Mantenimiento\ListPlazoPorPaqueteViewModel.cs" />
+    <Compile Include="Models\Manto\CrearBitacoraTokenViewModel.cs" />
     <Compile Include="Models\Manto\DetalleInstalacionViewModel.cs" />
     <Compile Include="Models\Manto\EditPaqueteViewModel.cs" />
     <Compile Include="Models\Manto\ListarEquifaxGarantiaViewModel.cs" />
@@ -3659,6 +3660,7 @@
     <Content Include="Views\PrecalificaCliente\DetalleDistribuidor.cshtml" />
     <Content Include="Views\Soporte\BandejaRespuestaApiCpheus.cshtml" />
     <Content Include="Views\Contratista\ShowAsignacionTecnico.cshtml" />
+    <Content Include="Views\Manto\ConfirmacionTokenHabilitarBtns.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

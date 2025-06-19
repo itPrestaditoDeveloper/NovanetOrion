@@ -1488,6 +1488,7 @@ namespace OrionCoreCableColor.Controllers
         {
             using (var _connection = new ORIONDBEntities())
             {
+                ViewBag.contratoVendedor = GetConfiguracion<string>("UrlPrevisualizarContratoVendedor", ',')?.FirstOrDefault();
                 ViewBag.fiIDVendedorRepartidor = id;
                 return View(id);
             }
@@ -1574,6 +1575,7 @@ namespace OrionCoreCableColor.Controllers
         {
             using (var _connection = new ORIONDBEntities())
             {
+                ViewBag.contratoDistribuidor = GetConfiguracion<string>("UrlPrevisualizarContratoDistribuidor", ',')?.FirstOrDefault();
                 ViewBag.fiIDDistribuidor = id;
                 return View(id);
             }

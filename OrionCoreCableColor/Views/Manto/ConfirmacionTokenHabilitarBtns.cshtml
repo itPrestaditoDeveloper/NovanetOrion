@@ -10,11 +10,7 @@
 </div>
 
 <div class="modal-body">
-
-
-
     <div class="row">
-
         <div class="col-sm-12">
             <div class="form-group">
                 @Html.LabelFor(model => model.fcMensaje, htmlAttributes: new { @class = "control-label" })
@@ -28,9 +24,6 @@
                 @Html.ValidationMessageFor(model => model.fcMensaje, "", new { @class = "text-danger" })
             </div>
         </div>
-
-
-
 
     </div>
 
@@ -53,7 +46,7 @@
             return;
         }
         var Token = $("#fcMensaje").val();
-      var codigoToken = '@Model.CodigoSeccionToken';
+        var codigoToken = '@Model.CodigoSeccionToken';
         var url = "@Url.Action("VerificarToken", "Manto")";
         $.ajax({
             url: url,
@@ -65,49 +58,11 @@
                     ToastrSuccess("Token Autorizado!", "Token Autorizado!");
                     CerrarModal();
                     $("#fcMensaje").val("");
-                    if ('@Model.CodigoSeccionToken' == 'N001') {
-                         VerModalConObjetoDeParametro({ Nombre: "", IDCliente: @Model.IdCliente, IDSolicitud: @Model.IDSolicitud, Token: Token, codigo: codigoToken  }, "@Url.Action("ConfrimacionNumero", "Manto")");
+                    if ('@Model.CodigoSeccionToken' == 'N009') {
+                        //habilitar botones
+                        $('#divInformacionSolicitud .FormatoBotonesIconoCuadrado').prop('disabled', false);
+                        $('#btnBotonesSolicitud').hide();
                     }
-
-                   if ('@Model.CodigoSeccionToken' == 'N002') {
-                        VerModalConObjetoDeParametro({ Nombre: "", IDCliente: @Model.IdCliente, IDSolicitud: @Model.IDSolicitud}, "@Url.Action("ConfrimacionNumero", "Manto")");
-                    }
-
-                   if ('@Model.CodigoSeccionToken' == 'N003') {
-
-                        $.ajax({
-                            url: "@Url.Action("InfoCliente", "Manto")",
-                            type: "POST",
-                            data: { idssolicitud: '@Model.IDSolicitud'},
-                            success: function (datas) {
-                                ShowModalBigScroll(datas);
-                            },
-                            error: function (datae) {
-                                var dataerror = { Titulo: "Error", Mensaje: "Error Al querer Mostrar los Datos", Estado: false }
-                                AlertaAjax(dataerror)
-                            }
-                           });
-                    }
-                    if ('@Model.CodigoSeccionToken' == 'N004') {
-
-                         VerModalScrollConObjetoDeParametro({ IDSolicitud: @Model.IDSolicitud, idEquifaxCliente: @Model.IdCliente, Token: Token, codigo: codigoToken }, "@Url.Action("ViewDetalleGarantia","Manto")");
-
-
-                    }
-
-                    if ('@Model.CodigoSeccionToken' == 'N005') {
-                        debugger;
-                        VerModalConObjetoDeParametro({ Nombre: "@(Html.Raw(Model.Nombre))", IDSolicitud: @Model.IDSolicitud }, "@Url.Action("ViewReinicioSolicitud", "Manto")");
-
-                    }
-                   if ('@Model.CodigoSeccionToken' == 'N006') {
-                        debugger;
-                       VerModalConObjetoDeParametro({ Nombre: "@(Html.Raw(Model.Nombre))", Identidad: "@Model.Identidad", IDSolicitud: @Model.IDSolicitud , idCliente: @Model.IdCliente, ValorMonedaNacional: @Model.fnCuotaMensualMonedaNacional}, "@Url.Action("ModalEnviarComprobantePago", "Manto")");
-
-                    }
-
-
-
                 } else {
                     ToastrWarning("Advertencia", "Token Invalido");
 

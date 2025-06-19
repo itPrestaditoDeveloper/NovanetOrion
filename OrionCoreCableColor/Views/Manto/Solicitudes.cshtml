@@ -3,35 +3,47 @@
     ViewBag.Title = "Solicitudes";
 }
 
-<style>
-    .FormatoBotonesIconoCuadrado {
-        position: absolute;
-        background-color: white;
-        border-style: solid;
-        /*color: white;*/
-        /*padding: 5px 5px;*/
-        border-color: lightgray;
-        border-width: 1px;
-        margin: 0;
-        white-space: normal !important;
-        vertical-align: text-top;
-        text-align: center;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-top: 55px;
-        padding-bottom: 5px;
-        height: 95px;
-        width: 80px;
-        font-size: 12px;
-        cursor: pointer;
-        background-repeat: no-repeat;
-        background-position-y: 10px;
-        background-position-x: center;
-        display: inline-block;
-        text-wrap: normal;
-        color: #808080;
-    }
-</style>
+<head>
+
+    <style>
+        .FormatoBotonesIconoCuadrado {
+            position: absolute;
+            background-color: white;
+            border-style: solid;
+            /*color: white;*/
+            /*padding: 5px 5px;*/
+            border-color: lightgray;
+            border-width: 1px;
+            margin: 0;
+            white-space: normal !important;
+            vertical-align: text-top;
+            text-align: center;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 55px;
+            padding-bottom: 5px;
+            height: 95px;
+            width: 80px;
+            font-size: 12px;
+            cursor: pointer;
+            background-repeat: no-repeat;
+            background-position-y: 10px;
+            background-position-x: center;
+            display: inline-block;
+            text-wrap: normal;
+            color: #808080;
+        }
+
+            .FormatoBotonesIconoCuadrado:disabled {
+                background-color: #e0e0e0 !important; /* fondo gris */
+                color: #a0a0a0 !important; /* texto gris */
+                filter: grayscale(100%) !important; /* icono desaturado */
+                opacity: 0.7; /* un poco más opaco */
+                cursor: not-allowed !important; /* cursor de prohibido */
+            }
+    </style>
+
+</head>
 
 
 <h2>Mantenimiento de solicitud de crédito <span id="lblIdSolicitud" style=""></span><span id="lblMensajeEstadoPrestamo" style="display: none;"></span></h2>
@@ -47,6 +59,11 @@
             <button id="btnBuscarSolicitud" type="button" onclick="BuscarSolicitud()" class="btn btn-md btn-secondary">
                 Buscar
             </button>
+
+            <button id="btnBotonesSolicitud" type="button" onclick="ModalToken()" class="btn btn-sm btn-success" style="display: none; margin-left: 50%;">
+                Habilitar Botones
+            </button>
+
         </div>
         <div class="row mt-3 mb-0">
             <div class="col-6">
@@ -166,18 +183,20 @@
                             <button id="btnEditarCuota" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/edit_file_50px.png');">
                                 Editar Cuota Mensual
                             </button>
-                            @if (User.IsInRole("Orion_Acceso_MantoSolicitudes_EditarGarantia"))
+                            @if (User.IsInRole("Orion_Acceso_MantoSolicitudes_EditarGarantia") && ViewBag.RolesAdmin)
                             {
+
+
                                 <button id="btnEditarGarantia" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
                                     Editar Garantia
                                 </button>
                             }
-
-                            @if (User.IsInRole("Orion_Acceso_Manto_EditarGarantia_Supervisor"))
+                            else if(User.IsInRole("Orion_Acceso_Manto_EditarGarantia_Supervisor"))
                             {
-                                <button id="btnEditarGarantiaToken" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
-                                    Editar Garantia
-                                </button>
+                                
+                                    <button id="btnEditarGarantiaToken" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
+                                        Editar Garantia
+                                    </button>                             
                             }
 
                             <button id="btnEditarInstalacion" type="button" class="FormatoBotonesIconoCuadrado" style="position: relative; margin-top: 5px; margin-left: 5px; background-image: url('/Imagenes/reiniciarValidacion.png');">
@@ -256,7 +275,7 @@
 @section Scripts{
 
     <script>
-
+       
         var idsol = 0;
         var fnValorPagadoPrimerPago = 0;
         var idPlazo = 0;
@@ -273,6 +292,7 @@
 
             idsol = $(`#txtNoSolicitud`).val();
             CargarDatatable(idsol);
+            GetDatosDeshabilitarBotones(idsol);
             //tablaPrincipal.ajax.destroy();
             //tablaPrincipal.ajax.reload()
 
@@ -658,7 +678,7 @@
         });
 
         $(`#btnPrimerPago`).on("click", function () {
-            
+
             debugger
             var idclien = $(`#txtidclientedbd`).val();
             var nom = $(`#lblNombreCliente`).text();
@@ -764,7 +784,53 @@
         }
 
 
+    //Deshabilitar botones
+    function GetDatosDeshabilitarBotones(idsol) {
+        $.ajax({
+            url: '@Url.Action("GetDeshabilitar_Botones_Manto", "Manto")',
+            type: 'GET',
+            data: { fiIDSolicitud: idsol },
+            success: function (resp) {
+                const $botones = $('#divInformacionSolicitud .FormatoBotonesIconoCuadrado');
 
+                if (resp.fbEsAdmin === true || resp.fbEsAdmin === 1) {
+                    $botones.prop('disabled', false).show();
+                    return;
+                }
+                // si no es admin y continene fiIDEstadoInstalacion=(4,7,10)
+                if (resp.fbInstalada === true || resp.fbInstalada === 1) {
+                    bootbox.alert({
+                        title: `<h5 style="color: #007bff;"></i> Información</h5>`,
+                        message: `
+                            Esta solicitud ya ha sido instalada.<br/><br/>
+                            Algunos botones se han deshabilitado.
+                            Para poder utilizarlos nuevamente, debe solicitar un token.`,
+                        className: "modal-alert"
+                    });
+
+
+
+                    $botones.prop('disabled', true).show();
+                    $('#btnEditarInstalacion').prop('disabled', false).show();
+                    $("#btnBotonesSolicitud").show();
+                }
+                else {
+                    // No es admin y NO está instalada
+                    // $botones.hide();
+                    $botones.prop('disabled', true).show();
+                    $("#btnBotonesSolicitud").show();
+                }
+            },
+            error: function () {
+                console.error('Error al deshabilitar/ocultar botones según permisos.');
+            }
+        });
+    }
+
+     function ModalToken() {
+          var idsol = $(`#txtNoSolicitudbd`).val();
+         VerModalSmConObjetoDeParametro({ IDSolicitud: idsol, codigoToken: 'N009' }, '@Url.Action("ConfirmacionTokenHabilitarBtns", "Manto")');
+     }
 
     </script>
 }
