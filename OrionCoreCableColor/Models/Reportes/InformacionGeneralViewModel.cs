@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace OrionCoreCableColor.Models.Reportes
 {
@@ -18,6 +15,7 @@ namespace OrionCoreCableColor.Models.Reportes
         public int fiClientesReconectados { get; set; }
         public int fiClientesEnAtraso { get; set; }
         public int fiClientesNuevosMes { get; set; }
+        public int fiClientesCambioServicioMes { get; set; }
         public int fiClientesPrecalificadosDelMes { get; set; }
         public decimal fnIngresosdelMes { get; set; }
         public decimal fnIngresosdelGlobales { get; set; }
@@ -39,7 +37,7 @@ namespace OrionCoreCableColor.Models.Reportes
         public int fiMes { get; set; }
         public string fcMes { get; set; }
         public int fiConteoVentas { get; set; }
-        public decimal fnMontoVentas { get; set; }      
+        public decimal fnMontoVentas { get; set; }
 
     }
     public class MoraMesViewModel
@@ -77,7 +75,7 @@ namespace OrionCoreCableColor.Models.Reportes
         public int fiMes { get; set; }
         public string fcMes { get; set; }
         public decimal fnValorAbono { get; set; }
-        public decimal fnValorAbonoAcumulado { get; set; }       
+        public decimal fnValorAbonoAcumulado { get; set; }
 
     }
 }
