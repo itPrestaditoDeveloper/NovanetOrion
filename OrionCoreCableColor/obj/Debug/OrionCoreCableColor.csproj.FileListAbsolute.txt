@@ -1475,3 +1475,4 @@ C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCor
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.pdb
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\roslyn\csc.exe
+C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.csproj.AssemblyReference.cache
