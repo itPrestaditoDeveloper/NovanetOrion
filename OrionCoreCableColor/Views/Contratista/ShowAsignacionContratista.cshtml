@@ -135,6 +135,7 @@
 
 
     $("#btnConfirmarEnvio").click(function () {
+        H5_loading.show();
         debugger;
         let fiIDSolicitudInstalacion = '@Model.fiIDSolicitudInstalacion';
         let fiIDTecnico = $(`#fptecnico`).is(`:visible`) ? $("#fiIDTecnico").val() : 0;
@@ -158,16 +159,24 @@
             },
             success: function (resp) {
                 if (resp.fiCodeStatus == 200) {
+                    
                     ToastrSuccess("Exito", resp.Mensaje);
                     CerrarModal();
+                    tablaPrincipal2.ajax.reload();
+                    tablaPrincipal.ajax.reload();
                 } else {
+                    
                     ToastrError("Error", resp.fcMessageStatus);
                 }
+                H5_loading.hide();
             },
             error: function (data) {
+                
                 ToastrError("Error", data.fcMessageStatus);
+                H5_loading.hide();
             },
         });
+        
 
     });
 </script>

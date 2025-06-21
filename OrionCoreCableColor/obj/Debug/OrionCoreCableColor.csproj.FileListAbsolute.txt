@@ -1140,10 +1140,10 @@ D:\Repositorios\CoreCableColor\OrionCoreCableColor\bin\roslyn\csc.exe
 C:\Users\PC\Documents\corecablecolor\OrionCoreCableColor\bin\RestSharp.dll
 C:\Users\PC\Documents\corecablecolor\OrionCoreCableColor\bin\RestSharp.xml
 C:\Users\PC\Documents\corecablecolor\OrionCoreCableColor\bin\roslyn\csc.exe
+C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\Spire.Doc.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\OrionCoreCableColor.dll.config
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\OrionCoreCableColor.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\OrionCoreCableColor.pdb
-C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\roslyn\csc.exe
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\roslyn\csc.exe.config
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\roslyn\csc.rsp
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\roslyn\csi.exe.config
@@ -1342,7 +1342,6 @@ C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\QRCoder.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\RBush.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\RestSharp.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\SixLabors.Fonts.dll
-C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\Spire.Doc.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\System.Buffers.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\System.Diagnostics.DiagnosticSource.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\System.IO.Packaging.dll
@@ -1470,9 +1469,9 @@ C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\es\Microsoft.O
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\es\Microsoft.Owin.Security.Google.resources.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\es\Microsoft.Owin.Security.Twitter.resources.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\es\Microsoft.Owin.Security.MicrosoftAccount.resources.dll
-C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.csproj.AssemblyReference.cache
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.csproj.ResolveComReference.cache
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.csproj.CoreCompileInputs.cache
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.csproj.CopyComplete
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.dll
 C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\obj\Debug\OrionCoreCableColor.pdb
+C:\Users\PC\Documents\GitHub\NovanetOrion\OrionCoreCableColor\bin\roslyn\csc.exe

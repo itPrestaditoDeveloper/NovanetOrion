@@ -10394,23 +10394,6 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("sp_OrionVentas_VendedorExterno_Guardar", pcNombreVendedorParameter, pcTelefonoParameter, pcIdentidadVendedorParameter, fiIDOcupacionParameter, fiIDTipoVendedorParameter, pcCiudadParameter, pcDireccionParameter, pcLongitudParameter, pcfcLatitudParameter, pdFechaNacimientoParameter, pcCorreoParameter, pcPrimerNombreParameter, pcSegundoNombreParameter, pcPrimerApellidoParameter, pcSegundoApellidoParameter, fiIDUsuarioParameter);
         }
     
-        public virtual int sp_AsignarSolicitud_Contratista(Nullable<int> fiIDContratistaSolicitud, Nullable<int> fiIDTecnico, Nullable<int> piIdContratista)
-        {
-            var fiIDContratistaSolicitudParameter = fiIDContratistaSolicitud.HasValue ?
-                new ObjectParameter("fiIDContratistaSolicitud", fiIDContratistaSolicitud) :
-                new ObjectParameter("fiIDContratistaSolicitud", typeof(int));
-    
-            var fiIDTecnicoParameter = fiIDTecnico.HasValue ?
-                new ObjectParameter("fiIDTecnico", fiIDTecnico) :
-                new ObjectParameter("fiIDTecnico", typeof(int));
-    
-            var piIdContratistaParameter = piIdContratista.HasValue ?
-                new ObjectParameter("piIdContratista", piIdContratista) :
-                new ObjectParameter("piIdContratista", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AsignarSolicitud_Contratista", fiIDContratistaSolicitudParameter, fiIDTecnicoParameter, piIdContratistaParameter);
-        }
-    
         public virtual int sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar(Nullable<int> piIDUsuario, Nullable<int> piIDClienteEquifax, Nullable<int> piIDSolicitud, Nullable<int> piIDAgenciaInstalacion, Nullable<int> piIDAgenciaContratista, string pcCometarioContratista, string pcfcCodigoCliente, string pcNumeroOrdenCfeus, Nullable<int> piIDTipoSolicitud, string pcNumeroOrdenTrabajo, Nullable<System.DateTime> fdFechaInstalacionAsignada, Nullable<int> piIDTipoGestion)
         {
             var piIDUsuarioParameter = piIDUsuario.HasValue ?
@@ -10464,17 +10447,22 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar", piIDUsuarioParameter, piIDClienteEquifaxParameter, piIDSolicitudParameter, piIDAgenciaInstalacionParameter, piIDAgenciaContratistaParameter, pcCometarioContratistaParameter, pcfcCodigoClienteParameter, pcNumeroOrdenCfeusParameter, piIDTipoSolicitudParameter, pcNumeroOrdenTrabajoParameter, fdFechaInstalacionAsignadaParameter, piIDTipoGestionParameter);
         }
     
-        public virtual ObjectResult<sp_Solicitudes_Bandeja_Result> sp_Solicitudes_Bandeja(Nullable<int> piIDRol, Nullable<int> piIDUsuario)
+        public virtual ObjectResult<sp_BitacoraOLT_ListarPorIDOLT_Result> sp_BitacoraOLT_ListarPorIDOLT(Nullable<int> piIDOLT)
         {
-            var piIDRolParameter = piIDRol.HasValue ?
-                new ObjectParameter("piIDRol", piIDRol) :
-                new ObjectParameter("piIDRol", typeof(int));
+            var piIDOLTParameter = piIDOLT.HasValue ?
+                new ObjectParameter("piIDOLT", piIDOLT) :
+                new ObjectParameter("piIDOLT", typeof(int));
     
-            var piIDUsuarioParameter = piIDUsuario.HasValue ?
-                new ObjectParameter("piIDUsuario", piIDUsuario) :
-                new ObjectParameter("piIDUsuario", typeof(int));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BitacoraOLT_ListarPorIDOLT_Result>("sp_BitacoraOLT_ListarPorIDOLT", piIDOLTParameter);
+        }
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Solicitudes_Bandeja_Result>("sp_Solicitudes_Bandeja", piIDRolParameter, piIDUsuarioParameter);
+        public virtual ObjectResult<sp_BitacoraONU_ListarPorSolicitud_Result> sp_BitacoraONU_ListarPorSolicitud(Nullable<int> piIDSolicitud)
+        {
+            var piIDSolicitudParameter = piIDSolicitud.HasValue ?
+                new ObjectParameter("piIDSolicitud", piIDSolicitud) :
+                new ObjectParameter("piIDSolicitud", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BitacoraONU_ListarPorSolicitud_Result>("sp_BitacoraONU_ListarPorSolicitud", piIDSolicitudParameter);
         }
     
         public virtual ObjectResult<sp_AsignarSolicitud_Contratista_Y_Tecnico_Result> sp_AsignarSolicitud_Contratista_Y_Tecnico(Nullable<int> fiIDContratistaSolicitud, Nullable<int> fiIDTecnico, Nullable<int> piIdContratista)
@@ -10494,22 +10482,17 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_AsignarSolicitud_Contratista_Y_Tecnico_Result>("sp_AsignarSolicitud_Contratista_Y_Tecnico", fiIDContratistaSolicitudParameter, fiIDTecnicoParameter, piIdContratistaParameter);
         }
     
-        public virtual ObjectResult<sp_BitacoraOLT_ListarPorIDOLT_Result> sp_BitacoraOLT_ListarPorIDOLT(Nullable<int> piIDOLT)
+        public virtual ObjectResult<sp_Solicitudes_Bandeja_Result> sp_Solicitudes_Bandeja(Nullable<int> piIDRol, Nullable<int> piIDUsuario)
         {
-            var piIDOLTParameter = piIDOLT.HasValue ?
-                new ObjectParameter("piIDOLT", piIDOLT) :
-                new ObjectParameter("piIDOLT", typeof(int));
+            var piIDRolParameter = piIDRol.HasValue ?
+                new ObjectParameter("piIDRol", piIDRol) :
+                new ObjectParameter("piIDRol", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BitacoraOLT_ListarPorIDOLT_Result>("sp_BitacoraOLT_ListarPorIDOLT", piIDOLTParameter);
-        }
+            var piIDUsuarioParameter = piIDUsuario.HasValue ?
+                new ObjectParameter("piIDUsuario", piIDUsuario) :
+                new ObjectParameter("piIDUsuario", typeof(int));
     
-        public virtual ObjectResult<sp_BitacoraONU_ListarPorSolicitud_Result> sp_BitacoraONU_ListarPorSolicitud(Nullable<int> piIDSolicitud)
-        {
-            var piIDSolicitudParameter = piIDSolicitud.HasValue ?
-                new ObjectParameter("piIDSolicitud", piIDSolicitud) :
-                new ObjectParameter("piIDSolicitud", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_BitacoraONU_ListarPorSolicitud_Result>("sp_BitacoraONU_ListarPorSolicitud", piIDSolicitudParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Solicitudes_Bandeja_Result>("sp_Solicitudes_Bandeja", piIDRolParameter, piIDUsuarioParameter);
         }
     }
 }
