@@ -551,72 +551,86 @@ namespace OrionCoreCableColor.Controllers
                 var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
 
                 solicitudes.Nombre = cliente;
-                solicitudes.IDSolicitud = fiIDSolicitudInstalacion;
+                solicitudes.IDSolicitud = (int)InformacionPaquete.fiIDSolicitud;
                 solicitudes.IdCliente = (int)InfoCliente.fiIDEquifax;
-                await EnviarSolicitudContratista(solicitudes,"");
+                if (fiIDTecnico != 0)
+                {
+                    //esto Genera error a cantaros
+                    //await EnviarSolicitudContratista(solicitudes,"");
+                }
                 //var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
 
                 string informacion = $"Servicio a instalar: {InformacionPaquete.fcArticulosdelContrato} ";
                 var InformacionTecnico = _connection.OrionContext.sp_InformacionTecnico(fiIDTecnico).FirstOrDefault();
                 bool fbPrueba = false;
-                if (asignarcosas.fiCodeStatus == 200 && !fbPrueba )
+                if (asignarcosas.fiCodeStatus == 200 && !fbPrueba)
                 {
-                    string lat = ubicacion.Split(',')[0];
-                    string longi = ubicacion.Split(',')[1];
-                    string urlMaps = $"https://www.google.com/maps?z=12&t=k&q={lat},{longi}";
-                    //email a tecnico
-                    var modelCorreo = new SendEmailViewModel();
-                    modelCorreo.DestinationEmail = InformacionTecnico.fcCorreoTecnico;
-                    // modelCorreo.DestinationEmail = "denis.saavedra@miprestadito.com";    
-                    modelCorreo.Subject = "Instalacion de servicio";
-                    var bod = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",Cliente: " + cliente + "" + informacion + "Ubicacion:" + urlMaps;
-                    modelCorreo.Body = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",<br>Cliente: <b>" + cliente + "</b><br>" + informacion + "<br>Ubicacion:" + urlMaps; ;
-                    modelCorreo.EmailName = "Novanet";
-                    var correoTecnicoJefe = _connection.OrionContext.sp_Configuraciones().FirstOrDefault(a => a.NombreLlave == "CorreoTecnicoJefe").ValorLLave;
-                    modelCorreo.List_CC.Add("brayan.sierra@miprestadito.com");
-                    await ServicioCorreo.SendEmailAsync(modelCorreo);
-                    //telegram a tecnico
-
-                    var numeroTecnicoJefe = _connection.OrionContext.sp_Configuraciones().FirstOrDefault(a => a.NombreLlave == "NumeroTecnicoJefe").ValorLLave;
-
-                    //sms a cliente
-                    try
+                    var bod = "";
+                    if (InformacionTecnico == null)
                     {
-                        MensajeriaApi.EnviarMensajeInstalacionaCliente(cliente, InformacionPaquete.fiIDSolicitud ?? 0, InfoCliente.fcTelefono, InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil, InformacionTecnico.fcIdentidadTecnico);
+
                     }
-                    catch(Exception ex)
+                    else
                     {
 
 
-                    }
+                        string lat = ubicacion.Split(',')[0];
+                        string longi = ubicacion.Split(',')[1];
+                        string urlMaps = $"https://www.google.com/maps?z=12&t=k&q={lat},{longi}";
+                        //email a tecnico
+                        var modelCorreo = new SendEmailViewModel();
+                        modelCorreo.DestinationEmail = InformacionTecnico.fcCorreoTecnico;
+                        // modelCorreo.DestinationEmail = "denis.saavedra@miprestadito.com";    
+                        modelCorreo.Subject = "Instalacion de servicio";
+                        bod = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",Cliente: " + cliente + "" + informacion + "Ubicacion:" + urlMaps;
+                        modelCorreo.Body = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",<br>Cliente: <b>" + cliente + "</b><br>" + informacion + "<br>Ubicacion:" + urlMaps; ;
+                        modelCorreo.EmailName = "Novanet";
+                        var correoTecnicoJefe = _connection.OrionContext.sp_Configuraciones().FirstOrDefault(a => a.NombreLlave == "CorreoTecnicoJefe").ValorLLave;
+                        //modelCorreo.List_CC.Add("brayan.sierra@miprestadito.com");
+                        modelCorreo.List_CC.Add("eromero@novanetgroup.com");
+                        await ServicioCorreo.SendEmailAsync(modelCorreo);
+                        //telegram a tecnico
+                    
+                        var numeroTecnicoJefe = _connection.OrionContext.sp_Configuraciones().FirstOrDefault(a => a.NombreLlave == "NumeroTecnicoJefe").ValorLLave;
+
+                        //sms a cliente
+                        try
+                        {
+                            MensajeriaApi.EnviarMensajeInstalacionaCliente(cliente, InformacionPaquete.fiIDSolicitud ?? 0, InfoCliente.fcTelefono, InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil, InformacionTecnico.fcIdentidadTecnico);
+                        }
+                        catch (Exception ex)
+                        {
+
+
+                        }
+
+
+                        //mensaje al Tecnico Superior
+                        MensajeriaApi.MensajesDigitales(numeroTecnicoJefe, bod);
+                        //mensaje a los tecnicos 
+                        MensajeriaApi.MensajesDigitales(InformacionTecnico.fcTelefonoMovil, bod);
                     
 
-                    //mensaje al Tecnico Superior
-                    MensajeriaApi.MensajesDigitales(numeroTecnicoJefe, bod);
-                    //mensaje a los tecnicos 
-                    MensajeriaApi.MensajesDigitales(InformacionTecnico.fcTelefonoMovil, bod);
+                        //MensajeDeTexto.EnviarMensajeInstalacionaCliente(cliente, InfoCliente.fiIDEquifax ?? 0, InfoCliente.fcTelefono, InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil,InformacionTecnico.fcIdentidadTecnico);
+                        //MensajeDeTexto.EnviarMensajeInstalacionaCliente(cliente, InfoCliente.fiIDEquifax ?? 0, "99521461", InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil,InformacionTecnico.fcIdentidadTecnico);
 
 
-                    //MensajeDeTexto.EnviarMensajeInstalacionaCliente(cliente, InfoCliente.fiIDEquifax ?? 0, InfoCliente.fcTelefono, InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil,InformacionTecnico.fcIdentidadTecnico);
-                    //MensajeDeTexto.EnviarMensajeInstalacionaCliente(cliente, InfoCliente.fiIDEquifax ?? 0, "99521461", InformacionTecnico.fcNombreTecnico.Replace('.', ' '), informacion, InformacionTecnico.fcTelefonoMovil,InformacionTecnico.fcIdentidadTecnico);
+                        //email a cliente
+                        var modelCorreoCliente = new SendEmailViewModel();
+
+                        modelCorreoCliente.DestinationEmail = InfoCliente.fcCorreo;
+                        //modelCorreoCliente.DestinationEmail = "denis.saavedra@miprestadito.com";
+                        modelCorreoCliente.Subject = "Instalacion de servicio";
+                        modelCorreoCliente.Body = "Estimado  " + cliente + " se le notifica que la instalacion de su servicio sera realizada por el tecnico: " + "<br>" + InformacionTecnico.fcNombreTecnico.Replace('.', ' ') + "</b>,Con identidad " + InformacionTecnico.fcIdentidadTecnico + "<br>Se contactara con usted del telefono: " + InformacionTecnico.fcTelefonoMovil + "<br>Se le adjunta el codigo QR de su instalacion:" + MemoryLoadManager.UrlWeb + "/DatosCliente/ViewFormQR/" + InformacionPaquete.fiIDSolicitud;
+                        modelCorreoCliente.EmailName = "Novanet";
+                        await ServicioCorreo.SendEmailAsync(modelCorreoCliente);
+                        //telegram a cliente
 
 
-                    //email a cliente
-                    var modelCorreoCliente = new SendEmailViewModel();
-
-                    modelCorreoCliente.DestinationEmail = InfoCliente.fcCorreo;
-                    //modelCorreoCliente.DestinationEmail = "denis.saavedra@miprestadito.com";
-                    modelCorreoCliente.Subject = "Instalacion de servicio";
-                    modelCorreoCliente.Body = "Estimado  " + cliente + " se le notifica que la instalacion de su servicio sera realizada por el tecnico: " + "<br>" + InformacionTecnico.fcNombreTecnico.Replace('.', ' ') + "</b>,Con identidad " + InformacionTecnico.fcIdentidadTecnico + "<br>Se contactara con usted del telefono: " + InformacionTecnico.fcTelefonoMovil + "<br>Se le adjunta el codigo QR de su instalacion:" + MemoryLoadManager.UrlWeb + "/DatosCliente/ViewFormQR/" + InformacionPaquete.fiIDSolicitud;
-                    modelCorreoCliente.EmailName = "Novanet";
-                    await ServicioCorreo.SendEmailAsync(modelCorreoCliente);
-                    //telegram a cliente
-
-
-                    //Generar bitacora
-                    var bitacora = _connection.OrionContext.sp_Solicitud_Instalacion_Bitacoras_Crear(fiIDSolicitudInstalacion, "Se asigno al tecnico " + InformacionTecnico.fcNombreTecnico, GetIdUser());
-                    var tecnicoaMostrarNotif = _connection.OrionContext.sp_GetUsuario_Tecnico(fiIDTecnico).FirstOrDefault();
-
+                        //Generar bitacora
+                        var bitacora = _connection.OrionContext.sp_Solicitud_Instalacion_Bitacoras_Crear(fiIDSolicitudInstalacion, "Se asigno al tecnico " + InformacionTecnico.fcNombreTecnico, GetIdUser());
+                        var tecnicoaMostrarNotif = _connection.OrionContext.sp_GetUsuario_Tecnico(fiIDTecnico).FirstOrDefault();
+                    }
                     //EnviarNotificacion($"Se te asigno una instalacion, revisa tu bandeja {  InformacionTecnico.fcNombreTecnico }");
                 }
                 return EnviarListaJson(asignarcosas);
@@ -637,11 +651,22 @@ namespace OrionCoreCableColor.Controllers
                 // ubicacion = ubicacion.Replace('A', ',');
                 var actualizaraAsignado = _connection.OrionContext.sp_ActualizarInstalacion_Tecnico(fiIDSolicitudInstalacion, 2, 0, "_");
                 var InformacionPaquete = _connection.OrionContext.sp_InformacionInstalacion_Tecnico(fiIDSolicitudInstalacion).FirstOrDefault();
-                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia) > 0;
+
+                var Asignar = _connection.OrionContext.sp_AsignarSolicitud_Contratista_Y_Tecnico(fiIDSolicitudInstalacion, fiIDTecnico, fiidAgencia).FirstOrDefault();
+                SolicitudesViewModel solicitudes = new SolicitudesViewModel();
+
+                var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
+
+                solicitudes.Nombre = cliente;
+                solicitudes.IDSolicitud = fiIDSolicitudInstalacion;
+                solicitudes.IdCliente = (int)InfoCliente.fiIDEquifax;
+                await EnviarSolicitudContratista(solicitudes, "");
+
+
                 string informacion = $"Servicio a instalar: {InformacionPaquete.fcArticulosdelContrato} ";
                 var InformacionTecnico = _connection.OrionContext.sp_InformacionTecnico(fiIDTecnico).FirstOrDefault();
-                var InfoCliente = _connection.OrionContext.sp_InformacionCliente_BySolicitudInstalacion(fiIDSolicitudInstalacion).FirstOrDefault();
-                if (Asignar)
+                
+                if (Asignar.fiCodeStatus == 200)
                 {
                     string lat = ubicacion.Split(',')[0];
                     string longi = ubicacion.Split(',')[1];
@@ -650,7 +675,7 @@ namespace OrionCoreCableColor.Controllers
                     var bod = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",Cliente: " + cliente + "" + informacion + "Ubicacion:" + urlMaps;
 
                     var modelCorreo = new SendEmailViewModel();
-                    modelCorreo.DestinationEmail = InformacionTecnico.fcCorreoTecnico;
+                    modelCorreo.DestinationEmail = InformacionTecnico.fcCorreoTecnico?? "Edgardo.Macia@miprestadito.com";
                     // modelCorreo.DestinationEmail = "denis.saavedra@miprestadito.com";    
                     modelCorreo.Subject = "Instalacion de servicio";
                     modelCorreo.Body = "Estimado " + InformacionTecnico.fcNombreTecnico + " se le informa que se le ha asignado una instalacion " + ",<br>Cliente: <b>" + cliente + "</b><br>" + informacion + "<br>Ubicacion:" + urlMaps;
@@ -685,7 +710,8 @@ namespace OrionCoreCableColor.Controllers
                     var tecnicoaMostrarNotif = _connection.OrionContext.sp_GetUsuario_Tecnico(fiIDTecnico).FirstOrDefault();
                     EnviarNotificacion($"Se te asigno una instalacion, revisa tu bandeja {InformacionTecnico.fcNombreTecnico}");
                 }
-                return EnviarResultado(Asignar, "Se asigno correctamente la instalación");
+                
+                return EnviarResultado(true, "Se asigno correctamente la instalación");
 
             }
             catch (Exception e)

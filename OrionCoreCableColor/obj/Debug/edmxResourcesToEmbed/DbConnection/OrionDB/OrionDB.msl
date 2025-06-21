@@ -7118,8 +7118,49 @@
     <FunctionImportMapping FunctionImportName="sp_Firmas_Orion_Vendedores_Insertar" FunctionName="OrionDB.Store.sp_Firmas_Orion_Vendedores_Insertar" />
     <FunctionImportMapping FunctionImportName="sp_OrionDistribuidor_Documentos_Insertar" FunctionName="OrionDB.Store.sp_OrionDistribuidor_Documentos_Insertar" />
     <FunctionImportMapping FunctionImportName="sp_OrionVentas_VendedorExterno_Guardar" FunctionName="OrionDB.Store.sp_OrionVentas_VendedorExterno_Guardar" />
-    <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista" />
     <FunctionImportMapping FunctionImportName="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" FunctionName="OrionDB.Store.sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar" />
+    <FunctionImportMapping FunctionImportName="sp_BitacoraOLT_ListarPorIDOLT" FunctionName="OrionDB.Store.sp_BitacoraOLT_ListarPorIDOLT">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OrionDB.sp_BitacoraOLT_ListarPorIDOLT_Result">
+          <ScalarProperty Name="fiIDOlt" ColumnName="fiIDOlt" />
+          <ScalarProperty Name="fcDescripcionOLT" ColumnName="fcDescripcionOLT" />
+          <ScalarProperty Name="fcIPOLT" ColumnName="fcIPOLT" />
+          <ScalarProperty Name="fbEstadoConexion" ColumnName="fbEstadoConexion" />
+          <ScalarProperty Name="fdFechaHoraCreacionRegistro" ColumnName="fdFechaHoraCreacionRegistro" />
+          <ScalarProperty Name="fdFechaHoraActualizacionRegistro" ColumnName="fdFechaHoraActualizacionRegistro" />
+          <ScalarProperty Name="fcEstadoConexion" ColumnName="fcEstadoConexion" />
+          <ScalarProperty Name="fcUltimaConexion" ColumnName="fcUltimaConexion" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_BitacoraONU_ListarPorSolicitud" FunctionName="OrionDB.Store.sp_BitacoraONU_ListarPorSolicitud">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OrionDB.sp_BitacoraONU_ListarPorSolicitud_Result">
+          <ScalarProperty Name="fiIDDetalleCliente_Servicio" ColumnName="fiIDDetalleCliente_Servicio" />
+          <ScalarProperty Name="fiIDSolicitud" ColumnName="fiIDSolicitud" />
+          <ScalarProperty Name="fcNombre" ColumnName="fcNombre" />
+          <ScalarProperty Name="fcCodigoCepheus" ColumnName="fcCodigoCepheus" />
+          <ScalarProperty Name="fcMac" ColumnName="fcMac" />
+          <ScalarProperty Name="fcIP" ColumnName="fcIP" />
+          <ScalarProperty Name="fcPom" ColumnName="fcPom" />
+          <ScalarProperty Name="fcNombreWifi" ColumnName="fcNombreWifi" />
+          <ScalarProperty Name="fbEstadoConexion" ColumnName="fbEstadoConexion" />
+          <ScalarProperty Name="fdFechaHoraCreacionRegistro" ColumnName="fdFechaHoraCreacionRegistro" />
+          <ScalarProperty Name="fdFechaHoraActualizacionRegistro" ColumnName="fdFechaHoraActualizacionRegistro" />
+          <ScalarProperty Name="fcEstadoConexion" ColumnName="fcEstadoConexion" />
+          <ScalarProperty Name="fcUltimaConexion" ColumnName="fcUltimaConexion" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista_Y_Tecnico" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista_Y_Tecnico">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
+          <ScalarProperty Name="fiCodeStatus" ColumnName="fiCodeStatus" />
+          <ScalarProperty Name="fcMessageStatus" ColumnName="fcMessageStatus" />
+          <ScalarProperty Name="fjValorDevuelto" ColumnName="fjValorDevuelto" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_Solicitudes_Bandeja" FunctionName="OrionDB.Store.sp_Solicitudes_Bandeja">
       <ResultMapping>
         <ComplexTypeMapping TypeName="OrionDB.sp_Solicitudes_Bandeja_Result">
@@ -7167,48 +7208,7 @@
           <ScalarProperty Name="fiIdOperacionSolicitud" ColumnName="fiIdOperacionSolicitud" />
           <ScalarProperty Name="fiMesesCondicion" ColumnName="fiMesesCondicion" />
           <ScalarProperty Name="fcOperacionTipoSolicitud" ColumnName="fcOperacionTipoSolicitud" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_AsignarSolicitud_Contratista_Y_Tecnico" FunctionName="OrionDB.Store.sp_AsignarSolicitud_Contratista_Y_Tecnico">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
-          <ScalarProperty Name="fiCodeStatus" ColumnName="fiCodeStatus" />
-          <ScalarProperty Name="fcMessageStatus" ColumnName="fcMessageStatus" />
-          <ScalarProperty Name="fjValorDevuelto" ColumnName="fjValorDevuelto" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_BitacoraOLT_ListarPorIDOLT" FunctionName="OrionDB.Store.sp_BitacoraOLT_ListarPorIDOLT">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="OrionDB.sp_BitacoraOLT_ListarPorIDOLT_Result">
-          <ScalarProperty Name="fiIDOlt" ColumnName="fiIDOlt" />
-          <ScalarProperty Name="fcDescripcionOLT" ColumnName="fcDescripcionOLT" />
-          <ScalarProperty Name="fcIPOLT" ColumnName="fcIPOLT" />
-          <ScalarProperty Name="fbEstadoConexion" ColumnName="fbEstadoConexion" />
-          <ScalarProperty Name="fdFechaHoraCreacionRegistro" ColumnName="fdFechaHoraCreacionRegistro" />
-          <ScalarProperty Name="fdFechaHoraActualizacionRegistro" ColumnName="fdFechaHoraActualizacionRegistro" />
-          <ScalarProperty Name="fcEstadoConexion" ColumnName="fcEstadoConexion" />
-          <ScalarProperty Name="fcUltimaConexion" ColumnName="fcUltimaConexion" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_BitacoraONU_ListarPorSolicitud" FunctionName="OrionDB.Store.sp_BitacoraONU_ListarPorSolicitud">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="OrionDB.sp_BitacoraONU_ListarPorSolicitud_Result">
-          <ScalarProperty Name="fiIDDetalleCliente_Servicio" ColumnName="fiIDDetalleCliente_Servicio" />
-          <ScalarProperty Name="fiIDSolicitud" ColumnName="fiIDSolicitud" />
-          <ScalarProperty Name="fcNombre" ColumnName="fcNombre" />
-          <ScalarProperty Name="fcCodigoCepheus" ColumnName="fcCodigoCepheus" />
-          <ScalarProperty Name="fcMac" ColumnName="fcMac" />
-          <ScalarProperty Name="fcIP" ColumnName="fcIP" />
-          <ScalarProperty Name="fcPom" ColumnName="fcPom" />
-          <ScalarProperty Name="fcNombreWifi" ColumnName="fcNombreWifi" />
-          <ScalarProperty Name="fbEstadoConexion" ColumnName="fbEstadoConexion" />
-          <ScalarProperty Name="fdFechaHoraCreacionRegistro" ColumnName="fdFechaHoraCreacionRegistro" />
-          <ScalarProperty Name="fdFechaHoraActualizacionRegistro" ColumnName="fdFechaHoraActualizacionRegistro" />
-          <ScalarProperty Name="fcEstadoConexion" ColumnName="fcEstadoConexion" />
-          <ScalarProperty Name="fcUltimaConexion" ColumnName="fcUltimaConexion" />
+          <ScalarProperty Name="DepartamentoVenta" ColumnName="DepartamentoVenta" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>

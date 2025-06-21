@@ -2988,11 +2988,6 @@
       <Parameter Name="pcSegundoApellido" Mode="In" Type="String" />
       <Parameter Name="fiIDUsuario" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_AsignarSolicitud_Contratista">
-      <Parameter Name="fiIDContratistaSolicitud" Mode="In" Type="Int32" />
-      <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
-      <Parameter Name="piIdContratista" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_OrionSolicitud_ContratistaSolicitudInstalacio__Insertar">
       <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
       <Parameter Name="piIDClienteEquifax" Mode="In" Type="Int32" />
@@ -3007,20 +3002,20 @@
       <Parameter Name="fdFechaInstalacionAsignada" Mode="In" Type="DateTime" />
       <Parameter Name="piIDTipoGestion" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_Solicitudes_Bandeja" ReturnType="Collection(OrionDB.sp_Solicitudes_Bandeja_Result)">
-      <Parameter Name="piIDRol" Mode="In" Type="Int32" />
-      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
+    <FunctionImport Name="sp_BitacoraOLT_ListarPorIDOLT" ReturnType="Collection(OrionDB.sp_BitacoraOLT_ListarPorIDOLT_Result)">
+      <Parameter Name="piIDOLT" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_BitacoraONU_ListarPorSolicitud" ReturnType="Collection(OrionDB.sp_BitacoraONU_ListarPorSolicitud_Result)">
+      <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="sp_AsignarSolicitud_Contratista_Y_Tecnico" ReturnType="Collection(OrionDB.sp_AsignarSolicitud_Contratista_Y_Tecnico_Result)">
       <Parameter Name="fiIDContratistaSolicitud" Mode="In" Type="Int32" />
       <Parameter Name="fiIDTecnico" Mode="In" Type="Int32" />
       <Parameter Name="piIdContratista" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_BitacoraOLT_ListarPorIDOLT" ReturnType="Collection(OrionDB.sp_BitacoraOLT_ListarPorIDOLT_Result)">
-      <Parameter Name="piIDOLT" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_BitacoraONU_ListarPorSolicitud" ReturnType="Collection(OrionDB.sp_BitacoraONU_ListarPorSolicitud_Result)">
-      <Parameter Name="piIDSolicitud" Mode="In" Type="Int32" />
+    <FunctionImport Name="sp_Solicitudes_Bandeja" ReturnType="Collection(OrionDB.sp_Solicitudes_Bandeja_Result)">
+      <Parameter Name="piIDRol" Mode="In" Type="Int32" />
+      <Parameter Name="piIDUsuario" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="ListadoTecnicos_PorContratista_Result">
@@ -8349,6 +8344,36 @@
     <Property Type="Int32" Name="fiIDFirmado" Nullable="false" />
     <Property Type="String" Name="fcDocumentosJSON" Nullable="false" />
   </ComplexType>
+  <ComplexType Name="sp_BitacoraOLT_ListarPorIDOLT_Result">
+    <Property Type="Int32" Name="fiIDOlt" Nullable="true" />
+    <Property Type="String" Name="fcDescripcionOLT" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="fcIPOLT" Nullable="true" MaxLength="20" />
+    <Property Type="Boolean" Name="fbEstadoConexion" Nullable="true" />
+    <Property Type="DateTime" Name="fdFechaHoraCreacionRegistro" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaHoraActualizacionRegistro" Nullable="false" Precision="23" />
+    <Property Type="String" Name="fcEstadoConexion" Nullable="false" MaxLength="12" />
+    <Property Type="String" Name="fcUltimaConexion" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="sp_BitacoraONU_ListarPorSolicitud_Result">
+    <Property Type="Int32" Name="fiIDDetalleCliente_Servicio" Nullable="true" />
+    <Property Type="Int32" Name="fiIDSolicitud" Nullable="true" />
+    <Property Type="String" Name="fcNombre" Nullable="true" MaxLength="80" />
+    <Property Type="String" Name="fcCodigoCepheus" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="fcMac" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="fcIP" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="fcPom" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="fcNombreWifi" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="fbEstadoConexion" Nullable="true" />
+    <Property Type="DateTime" Name="fdFechaHoraCreacionRegistro" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="fdFechaHoraActualizacionRegistro" Nullable="false" Precision="23" />
+    <Property Type="String" Name="fcEstadoConexion" Nullable="false" MaxLength="12" />
+    <Property Type="String" Name="fcUltimaConexion" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
+    <Property Type="Int32" Name="fiCodeStatus" Nullable="true" />
+    <Property Type="String" Name="fcMessageStatus" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="fjValorDevuelto" Nullable="true" />
+  </ComplexType>
   <ComplexType Name="sp_Solicitudes_Bandeja_Result">
     <Property Type="Int32" Name="fiIDSolicitud" Nullable="false" />
     <Property Type="Int32" Name="fiIDCliente" Nullable="false" />
@@ -8394,35 +8419,6 @@
     <Property Type="Int32" Name="fiIdOperacionSolicitud" Nullable="false" />
     <Property Type="Int32" Name="fiMesesCondicion" Nullable="false" />
     <Property Type="String" Name="fcOperacionTipoSolicitud" Nullable="false" MaxLength="50" />
-  </ComplexType>
-  <ComplexType Name="sp_AsignarSolicitud_Contratista_Y_Tecnico_Result">
-    <Property Type="Int32" Name="fiCodeStatus" Nullable="true" />
-    <Property Type="String" Name="fcMessageStatus" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="fjValorDevuelto" Nullable="true" />
-  </ComplexType>
-  <ComplexType Name="sp_BitacoraOLT_ListarPorIDOLT_Result">
-    <Property Type="Int32" Name="fiIDOlt" Nullable="true" />
-    <Property Type="String" Name="fcDescripcionOLT" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="fcIPOLT" Nullable="true" MaxLength="20" />
-    <Property Type="Boolean" Name="fbEstadoConexion" Nullable="true" />
-    <Property Type="DateTime" Name="fdFechaHoraCreacionRegistro" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="fdFechaHoraActualizacionRegistro" Nullable="false" Precision="23" />
-    <Property Type="String" Name="fcEstadoConexion" Nullable="false" MaxLength="12" />
-    <Property Type="String" Name="fcUltimaConexion" Nullable="true" MaxLength="100" />
-  </ComplexType>
-  <ComplexType Name="sp_BitacoraONU_ListarPorSolicitud_Result">
-    <Property Type="Int32" Name="fiIDDetalleCliente_Servicio" Nullable="true" />
-    <Property Type="Int32" Name="fiIDSolicitud" Nullable="true" />
-    <Property Type="String" Name="fcNombre" Nullable="true" MaxLength="80" />
-    <Property Type="String" Name="fcCodigoCepheus" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="fcMac" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="fcIP" Nullable="true" MaxLength="20" />
-    <Property Type="String" Name="fcPom" Nullable="true" MaxLength="20" />
-    <Property Type="String" Name="fcNombreWifi" Nullable="true" MaxLength="50" />
-    <Property Type="Boolean" Name="fbEstadoConexion" Nullable="true" />
-    <Property Type="DateTime" Name="fdFechaHoraCreacionRegistro" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="fdFechaHoraActualizacionRegistro" Nullable="false" Precision="23" />
-    <Property Type="String" Name="fcEstadoConexion" Nullable="false" MaxLength="12" />
-    <Property Type="String" Name="fcUltimaConexion" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="DepartamentoVenta" Nullable="false" MaxLength="25" />
   </ComplexType>
 </Schema>

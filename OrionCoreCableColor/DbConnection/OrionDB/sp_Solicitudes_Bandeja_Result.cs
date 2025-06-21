@@ -57,5 +57,6 @@ namespace OrionCoreCableColor.DbConnection.OrionDB
         public int fiIdOperacionSolicitud { get; set; }
         public int fiMesesCondicion { get; set; }
         public string fcOperacionTipoSolicitud { get; set; }
+        public string DepartamentoVenta { get; set; }
     }
 }

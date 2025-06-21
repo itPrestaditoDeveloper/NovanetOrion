@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "ContratistaBandeja";
 }
-
+<link href="~/Content/js/loading/loading.css" rel="stylesheet" />
 <style>
     .dropdown {
         position: relative;
@@ -18,15 +18,15 @@
         z-index: 1;
     }
 
-    .dropdown-content div {
-        padding: 10px;
-        cursor: pointer;
-        border-bottom: 1px solid #ddd;
-    }
+        .dropdown-content div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
 
-    .dropdown-content div:hover {
-        background-color: #f1f1f1;
-    }
+            .dropdown-content div:hover {
+                background-color: #f1f1f1;
+            }
 
     .show {
         display: block;
@@ -45,7 +45,6 @@
     .dataTables_length {
         float: right;
     }
-
 </style>
 
 
@@ -89,7 +88,7 @@
                                 </div>
                             </div>
                             @*<input type="text" class="form-control" id="dateInput" placeholder="Selecciona una fecha" autocomplete="off" onclick="toggleDropdown()" />*@
-                            
+
                         </div>
                     </div>
                     <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudes">
@@ -146,30 +145,30 @@
                             </select>
                         </div>
                     </div>
-                        
-                        <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudesPendientes">
-                            <thead>
-                                <tr>
-                                    <th>Acciones</th>
-                                    <th></th>
-                                    <th>Solicitud</th>
-                                    <th>Orden Cepheus</th>
-                                    <th>Codigo Cliente</th>
-                                    <th>Cliente</th>
-                                    <th>Departamento</th>
-                                    <th>Articulos</th>
-                                    <th>Agencia</th>
-                                    <th>Tecnico</th>
-                                    <th>Tipo de Instalación</th>
-                                    <th>Fecha instalación</th>
-                                    <th>Comentario</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
+
+                    <table class="table table-bordered table-hover table-striped w-100 dataTable dtr-inline" style="width:100%;" id="BandejaSolicitudesPendientes">
+                        <thead>
+                            <tr>
+                                <th>Acciones</th>
+                                <th></th>
+                                <th>Solicitud</th>
+                                <th>Orden Cepheus</th>
+                                <th>Codigo Cliente</th>
+                                <th>Cliente</th>
+                                <th>Departamento</th>
+                                <th>Articulos</th>
+                                <th>Agencia</th>
+                                <th>Tecnico</th>
+                                <th>Tipo de Instalación</th>
+                                <th>Fecha instalación</th>
+                                <th>Comentario</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
+            </div>
 
             <div class="tab-pane fade" id="nav_pills_default-3" role="tabpanel">
                 <div class="col-lg-12">
@@ -210,6 +209,7 @@
     </div>
 
 </div>
+<script src="~/Content/js/loading/loading.js"></script>
 
 @section Scripts{
 
@@ -865,7 +865,7 @@
 						                </a>`;
 
 
-                        
+
                         opt += `</div></div>`;
 
 

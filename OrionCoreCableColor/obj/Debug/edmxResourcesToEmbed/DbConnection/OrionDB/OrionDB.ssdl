@@ -160,11 +160,6 @@
     <Parameter Name="pcIdentidad" Type="varchar" Mode="In" />
     <Parameter Name="piIDUsuarioAsignado" Type="int" Mode="In" />
   </Function>
-  <Function Name="sp_AsignarSolicitud_Contratista" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
-    <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
-    <Parameter Name="piIdContratista" Type="int" Mode="In" />
-  </Function>
   <Function Name="sp_AsignarSolicitud_Contratista_Y_Tecnico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="fiIDContratistaSolicitud" Type="int" Mode="In" />
     <Parameter Name="fiIDTecnico" Type="int" Mode="In" />
