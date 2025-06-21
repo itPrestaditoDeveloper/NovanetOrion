@@ -126,6 +126,7 @@ namespace OrionCoreCableColor.Controllers
 
                 using (var context = new OrionSecurityEntities())
                 {
+                    var RolesAdmin = GetConfiguracion<int>("Orion_Admin", ',').FirstOrDefault();
                     var usuarioLogueado = GetUser();
                     var rol = GetRol(usuarioLogueado.IdRol);
                     var permisos = GetPermisos(usuarioLogueado.IdRol);
@@ -133,13 +134,15 @@ namespace OrionCoreCableColor.Controllers
                     if (rol == "Orion_Admin")
                     {
                         ViewBag.ListaEmpresas = contextOrion.sp_Empresas_Maestro_Listar().ToList().Select(x => new SelectListItem { Value = x.fiIDEmpresa.ToString(), Text = x.fcNombreComercial }).ToList();
+                        ViewBag.ListaRoles = context.Roles.Where(x => x.Activo).Select(x => new SelectListItem { Value = x.Pk_IdRol.ToString(), Text = x.Nombre }).ToList();
                     }
                     else
                     {
+                        ViewBag.ListaRoles = context.Roles.Where(x => x.Activo && x.Pk_IdRol != RolesAdmin).Select(x => new SelectListItem { Value = x.Pk_IdRol.ToString(), Text = x.Nombre }).ToList();
                         ViewBag.ListaEmpresas = contextOrion.sp_Empresas_Maestro_Listar().Where(a => a.fiIDEmpresa == usuarioLogueado.fiIDEmpresa).ToList().Select(x => new SelectListItem { Value = x.fiIDEmpresa.ToString(), Text = x.fcNombreComercial }).ToList();
                     }
-                    
-                    ViewBag.ListaRoles = context.Roles.Where(x => x.Activo).Select(x => new SelectListItem { Value = x.Pk_IdRol.ToString(), Text = x.Nombre }).ToList();
+
+                  
                     ViewBag.ListaDistribuidores = contextOrion.sp_Orion_Ventas_Distribuidor_Listado().Where(x => !string.IsNullOrEmpty(x.fcNombreComercial)).Select(x => new SelectListItem { Value = x.fiIDDistribuidor.ToString(), Text = x.fcNombreComercial }).ToList();
                     ViewBag.Rol = rol;
                     if (rol == "Orion_Contratista")
@@ -648,7 +651,8 @@ namespace OrionCoreCableColor.Controllers
         {
             using (var context = new OrionSecurityEntities())
             {
-                ViewBag.ListaRoles = context.Roles.Where(x => x.Activo).Select(x => new SelectListItem { Value = x.Pk_IdRol.ToString(), Text = x.Nombre }).ToList();
+                var RolesAdmin = GetConfiguracion<int>("Orion_Admin", ',').FirstOrDefault();
+                ViewBag.ListaRoles = context.Roles.Where(x => x.Activo && x.Pk_IdRol!= RolesAdmin).Select(x => new SelectListItem { Value = x.Pk_IdRol.ToString(), Text = x.Nombre }).ToList();
 
                 var usuario = context.Usuarios.Find(Id);
                 var roles = await UserManager.GetRolesAsync(usuario.fcIdAspNetUser);
