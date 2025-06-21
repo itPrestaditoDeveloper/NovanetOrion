@@ -132,24 +132,34 @@
                     <ul>
                         @if (User.IsInRole("coreseguridad_AccesoAlSistema"))
                         {
-                            <li>
-                                <a href="@Url.Action("index","usuario")" data-filter-tags="blank page">
-                                    <i class="fal fa-user"></i>
-                                    <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Registrar Usuario</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("index","role")" data-filter-tags="blank page">
-                                    <i class="fal fa-lock fa-fw"></i>
-                                    <span class="nav-link-text" style="color:white;"><strong>Roles</strong></span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("index","permiso")" data-filter-tags="blank page">
-                                    <i class="fal fa-lock fa-fw"></i>
-                                    <span class="nav-link-text" style="color:white;"><strong>Permisos</strong></span>
-                                </a>
-                            </li>
+                            if (User.IsInRole("Coreseguridad_AccessoAlSistema_Usuarios"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("index","usuario")" data-filter-tags="blank page">
+                                        <i class="fal fa-user"></i>
+                                        <span class="nav-link-text" data-i18n="nav.blankpage" style="color:white;">Registrar Usuario</span>
+                                    </a>
+                                </li>
+                            }
+                            if (User.IsInRole("Coreseguridad_AccessoAlSistema_Roles"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("index","role")" data-filter-tags="blank page">
+                                        <i class="fal fa-lock fa-fw"></i>
+                                        <span class="nav-link-text" style="color:white;"><strong>Roles</strong></span>
+                                    </a>
+                                </li>
+                            }
+                            if (User.IsInRole("Coreseguridad_AccessoAlSistema_Permisos"))
+                            {
+                                <li>
+                                    <a href="@Url.Action("index","permiso")" data-filter-tags="blank page">
+                                        <i class="fal fa-lock fa-fw"></i>
+                                        <span class="nav-link-text" style="color:white;"><strong>Permisos</strong></span>
+                                    </a>
+                                </li>
+                            }
+
                         }
                         @if (User.IsInRole("coreseguridad_AccesoSeguridadTecnicos"))
                         {
@@ -160,7 +170,7 @@
                                 </a>
                             </li>
                         }
-                        
+
                     </ul>
                 </li>
             }
